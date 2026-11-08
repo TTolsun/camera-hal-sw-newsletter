@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "generated_at": "2026-11-08T16:55:13.404Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 3,
+    "hit_count": 0,
+    "miss_count": 3,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 3
+    }
+  ],
+  "entries": [
+    {
+      "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-03",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+        "url_hash": "b81a6646e18ae11df963032e873fda07b2de069d4f67161f0c1a170f7dee3490",
+        "published_date": "2026-11-03",
+        "content_hash": "a77e1eff964a8fbea655237cd87e0967eb212bc7578082346395a2ef93254ed1"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-03",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+        "url_hash": "018a904786e0a4089c8da308aadc9603f27077a341f7d09f137f66c0a4d4acbe",
+        "published_date": "2026-11-03",
+        "content_hash": "744966a606fb1f564026877fe5530b8227a273b7e31f1bf32bdfa37fd44b936f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-07",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+        "url_hash": "548166ca13ab2898b56b4d8aae2a1c4af20d6c300e7e5660995ed6ff98ac588b",
+        "published_date": "2026-11-07",
+        "content_hash": "84c14b3d3369d5b4047890e6335a735daef96633f96651c9ea3385406c4c91ba"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

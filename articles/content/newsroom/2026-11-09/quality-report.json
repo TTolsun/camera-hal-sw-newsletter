@@ -1,0 +1,1165 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "score": 94,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+        "source_candidate_hash": "018a904786e0a4089c8da308aadc9603f27077a341f7d09f137f66c0a4d4acbe",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+        "source_candidate_hash": "548166ca13ab2898b56b4d8aae2a1c4af20d6c300e7e5660995ed6ff98ac588b",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+        "source_candidate_hash": "b81a6646e18ae11df963032e873fda07b2de069d4f67161f0c1a170f7dee3490",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 11,
+    "total_claims": 11,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 3,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "claim_id": "c-4365755-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4365755는 platform/frameworks/support 브랜치 androidx-main에 2026-11-03 병합되었습니다.",
+      "evidence_ids": [
+        "seed-01-018a904786-primary-01"
+      ],
+      "resolved_evidence_ids": [
+        "seed-01-018a904786-primary-01"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "seed-01-018a904786-primary-01",
+          "resolved_evidence_id": "seed-01-018a904786-primary-01",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "claim_id": "c-4365755-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CapturePipeline#waitForResult는 untracked sequentialScope.launch 대신 finally 블록에서 리스너 제거 및 close()를 호출합니다.",
+      "evidence_ids": [
+        "source-body:57711905fe3db5712bc7"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:57711905fe3db5712bc7"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:57711905fe3db5712bc7",
+          "resolved_evidence_id": "source-body:57711905fe3db5712bc7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "claim_id": "c-4365755-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "3A 수렴 및 잠금 대기 로직에 500ms 버퍼(CHECK_3A_TIMEOUT_BUFFER_IN_MS)가 포함된 wall-clock withTimeoutOrNull이 도입되었습니다.",
+      "evidence_ids": [
+        "source-body:50a147f3591c1347d318",
+        "source-body:57711905fe3db5712bc7"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:50a147f3591c1347d318",
+        "source-body:57711905fe3db5712bc7"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:50a147f3591c1347d318",
+          "resolved_evidence_id": "source-body:50a147f3591c1347d318",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:57711905fe3db5712bc7",
+          "resolved_evidence_id": "source-body:57711905fe3db5712bc7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "claim_id": "c-4365755-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CameraCaptureSession에 의해 중단된 캡처 시퀀스를 처리하기 위해 onRequestSequenceAborted 핸들러가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:57711905fe3db5712bc7",
+        "source-body:0f9786e7fea19109be7a"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:57711905fe3db5712bc7",
+        "source-body:0f9786e7fea19109be7a"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:57711905fe3db5712bc7",
+          "resolved_evidence_id": "source-body:57711905fe3db5712bc7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:0f9786e7fea19109be7a",
+          "resolved_evidence_id": "source-body:0f9786e7fea19109be7a",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "claim_id": "c-4423978-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4423978은 platform/frameworks/support 브랜치 androidx-main에 2026-11-07 병합되었습니다.",
+      "evidence_ids": [
+        "seed-02-548166ca13-primary-01"
+      ],
+      "resolved_evidence_ids": [
+        "seed-02-548166ca13-primary-01"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "seed-02-548166ca13-primary-01",
+          "resolved_evidence_id": "seed-02-548166ca13-primary-01",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "claim_id": "c-4423978-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Api37Compat에 isConcurrentReadersSupported, buildMultiResolutionImageReader, setOnActiveOutputSurfacesListener 메서드가 신규 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:4d91d99bd5c887537995",
+          "resolved_evidence_id": "source-body:4d91d99bd5c887537995",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "claim_id": "c-4423978-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Camera2MultiResolutionStreamConfigurationMap.isConcurrentReadersSupported는 Build.VERSION.SDK_INT 37 이상에서 Api37Compat을 호출하고 미만에서는 false를 반환합니다.",
+      "evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:4d91d99bd5c887537995",
+          "resolved_evidence_id": "source-body:4d91d99bd5c887537995",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "claim_id": "c-4423978-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "AndroidMultiResolutionImageReader 및 ImageReaderImageSources에서 PlatformApiCompat 매개변수가 제거되고 Api37Compat 직결 호출로 변경되었습니다.",
+      "evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:4d91d99bd5c887537995"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:4d91d99bd5c887537995",
+          "resolved_evidence_id": "source-body:4d91d99bd5c887537995",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "claim_id": "c-4223279-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4223279는 platform/frameworks/support 브랜치 androidx-main에 2026-11-03 병합되었습니다.",
+      "evidence_ids": [
+        "seed-03-b81a6646e1-primary-01"
+      ],
+      "resolved_evidence_ids": [
+        "seed-03-b81a6646e1-primary-01"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "seed-03-b81a6646e1-primary-01",
+          "resolved_evidence_id": "seed-03-b81a6646e1-primary-01",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "claim_id": "c-4223279-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "해당 변경으로 8개 카메라 소스 파일이 수정되었으며 2933줄 추가 및 2줄 삭제가 발생했습니다.",
+      "evidence_ids": [
+        "seed-03-b81a6646e1-primary-01"
+      ],
+      "resolved_evidence_ids": [
+        "seed-03-b81a6646e1-primary-01"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "seed-03-b81a6646e1-primary-01",
+          "resolved_evidence_id": "seed-03-b81a6646e1-primary-01",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "claim_id": "c-4223279-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "LowLightBoostEffect는 CameraEffect를 상속하며 생성자, LiveData 상태, 활성화 메서드, 지원 확인 메서드를 노출합니다.",
+      "evidence_ids": [
+        "candidate:b81a6646e18ae11d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b81a6646e18ae11d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b81a6646e18ae11d:source-summary",
+          "resolved_evidence_id": "candidate:b81a6646e18ae11d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 2,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 3,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 3,
+      "camerax_app_compatibility": 1,
+      "stream_buffer_metadata": 2
+    },
+    "actionability_level_counts": {
+      "measurable_test": 1,
+      "owner_metric_log": 1,
+      "concrete_check": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 1,
+      "owner_metric_log": 1,
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 2,
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "HAL 3A 알고리즘 자체를 개선한 것이 아니며 프레임워크 타임아웃 예외 처리 강화에 한정됩니다.",
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts.",
+        "하부 드라이버의 프레임 전송 지연이나 하드웨어 결함 자체가 수정된 것은 아니며, 프레임워크 수준의 안전 타임아웃 추가로 한정됩니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraX CapturePipeline 및 CameraPipe 세션 락 제어",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "HAL 계약 자체의 변경이나 새 드라이버 요구사항을 의미하지 않으며 상위 호환 레이어 코드 전환입니다.",
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts.",
+        "HAL 구현이나 드라이버 인터페이스가 변경된 것이 아니며, CameraPipe 내부의 컴파일 타깃 승격에 따른 API 브리지 교체입니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "MultiResolutionImageReader 및 CameraPipe Surface 매핑",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "HAL 하드웨어 저조도 제어 인터페이스 변경을 의미하지 않습니다.",
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts.",
+        "하드웨어 ISP 제어나 드라이버 레벨의 야간 모드 제어 계약 변경이 아니며 상위 라이브러리 효과 추가입니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraX CameraEffect 및 SurfaceProcessor 파이프라인",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 3,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 3,
+    "direct_aosp_camera_count": 3,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 3,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+        "source_candidate_hash": "018a904786e0a4089c8da308aadc9603f27077a341f7d09f137f66c0a4d4acbe",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+        "source_candidate_hash": "548166ca13ab2898b56b4d8aae2a1c4af20d6c300e7e5660995ed6ff98ac588b",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+        "source_candidate_hash": "b81a6646e18ae11df963032e873fda07b2de069d4f67161f0c1a170f7dee3490",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 3,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 3,
+      "supporting": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 6,
+    "article_gate_counts": {
+      "PASS": 3,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 3,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 3
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 11,
+      "total_claims": 11,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 3,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 3,
+      "strong_signal_count": 2,
+      "usable_signal_count": 1,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 3,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 3,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 3,
+        "camerax_app_compatibility": 1,
+        "stream_buffer_metadata": 2
+      },
+      "actionability_level_counts": {
+        "measurable_test": 1,
+        "owner_metric_log": 1,
+        "concrete_check": 1
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 1,
+        "owner_metric_log": 1,
+        "concrete_check": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 2,
+        "usable_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "HAL 3A 알고리즘 자체를 개선한 것이 아니며 프레임워크 타임아웃 예외 처리 강화에 한정됩니다.",
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts.",
+          "하부 드라이버의 프레임 전송 지연이나 하드웨어 결함 자체가 수정된 것은 아니며, 프레임워크 수준의 안전 타임아웃 추가로 한정됩니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "CameraX CapturePipeline 및 CameraPipe 세션 락 제어",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "HAL 계약 자체의 변경이나 새 드라이버 요구사항을 의미하지 않으며 상위 호환 레이어 코드 전환입니다.",
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts.",
+          "HAL 구현이나 드라이버 인터페이스가 변경된 것이 아니며, CameraPipe 내부의 컴파일 타깃 승격에 따른 API 브리지 교체입니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "MultiResolutionImageReader 및 CameraPipe Surface 매핑",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "HAL 하드웨어 저조도 제어 인터페이스 변경을 의미하지 않습니다.",
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts.",
+          "하드웨어 ISP 제어나 드라이버 레벨의 야간 모드 제어 계약 변경이 아니며 상위 라이브러리 효과 추가입니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "CameraX CameraEffect 및 SurfaceProcessor 파이프라인",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
+        "category": "image-fallback",
+        "count": 3
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}
