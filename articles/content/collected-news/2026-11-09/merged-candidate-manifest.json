@@ -8,9 +8,9 @@
   "status_detail": "",
   "merge_mode": "seed_evidence_plus_gemini_discovery",
   "candidate_artifact": "articles/content/collected-news/2026-11-09/merged-candidates.json",
-  "candidate_artifact_hash": "fa1c4ba96197b28acea09c027fc8c777f515a13b4ebc6437658c145f6406962c",
-  "artifact_hash": "fa1c4ba96197b28acea09c027fc8c777f515a13b4ebc6437658c145f6406962c",
-  "candidate_count": 66,
+  "candidate_artifact_hash": "d258656ef927bfb51bdce080c895e4778e32672230c916c50985533d15940bb0",
+  "artifact_hash": "d258656ef927bfb51bdce080c895e4778e32672230c916c50985533d15940bb0",
+  "candidate_count": 3,
   "source_candidate_artifact": "articles/content/collected-news/2026-11-09/manual-candidates.json",
   "source_candidate_artifact_hash": "f93d08309cbed3cccf81ebf0a2f3ba555f554de5eaed5b79df7c1d6b7b4f9059",
   "source_manifest": "articles/content/collected-news/2026-11-09/raw-candidate-manifest.json",
@@ -21,8 +21,8 @@
   "github_sha": "e5a752c11595dfcd3572472be60869a7cccc39ff",
   "manual_candidate_count": 50,
   "manual_unique_url_count": 50,
-  "merged_candidate_count": 66,
-  "merged_unique_url_count": 66,
+  "merged_candidate_count": 3,
+  "merged_unique_url_count": 3,
   "seed_candidate_count": 3,
   "seed_unique_url_count": 3,
   "seed_new_unique_url_count": 3,
@@ -53,5 +53,14 @@
   "coverage_week_key": "2026-W45",
   "carry_forward_status": "missing_expected",
   "not_yet_eligible_count": 0,
-  "not_yet_eligible_overflow": false
+  "not_yet_eligible_overflow": false,
+  "editor_curation": {
+    "reason": "Owner selected the three AndroidX Gerrit changes for the 2026-W46 issue; other candidates were removed before generation.",
+    "kept_urls": [
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+    ],
+    "removed_candidate_count": 63
+  }
 }
