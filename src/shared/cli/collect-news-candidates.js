@@ -2374,9 +2374,11 @@ async function main() {
   const usedKeywordFallback = triage.report.mode === 'keyword_fallback';
   const rankedCandidates = usedKeywordFallback ? keywordRanked : triageRanked;
   const seriesCandidates = usedKeywordFallback ? collapseSeriesRepresentatives(keywordRanked) : triageSeries;
+  // LLM 모드의 상한 손실 = 판단 풀 상한 + LLM이 골랐지만 최종 소스별 상한에 걸린 후보.
+  const sourceCapRejectedUrls = new Set((triage.report.source_cap_rejected || []).map(entry => entry.url));
   const sourceCappedCandidates = usedKeywordFallback
     ? capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE)
-    : triagePool;
+    : triagePool.filter(item => !sourceCapRejectedUrls.has(String(item.url || '')));
   const collectionCountsBySource = buildCollectionCountsAfterTriage([
     { items: rawCandidates },
     { reason: 'duplicate', items: deduplicatedCandidates },
