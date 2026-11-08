@@ -1,5 +1,81 @@
 [
   {
+    "weeklyKey": "2026-W46",
+    "weekStartDate": "2026-11-09",
+    "weekEndDate": "2026-11-15",
+    "date": "2026-11-09",
+    "title": "2026 W46",
+    "summary": "프레임 누락으로 인한 3A 세션 교착 방지, CameraX 타임아웃 메커니즘 보강\nAndroid 37 API 대응, CameraPipe 다중 해상도 ImageReader 브리지 정비\nCameraX 저조도 처리 효과 확장, LowLightBoostEffect 도입",
+    "html": "newsletters/2026-W46/index.html",
+    "md": "newsletters/2026-W46/newsletter.md",
+    "tags": [
+      "Camera HAL"
+    ],
+    "article_count": 3,
+    "article_images": [
+      "assets/images/fallback/android.svg"
+    ],
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주 뉴스레터에서는 CameraX의 안정성과 기능 확장에 대한 소식을 전해드립니다. 먼저, 프레임 누락으로 인한 3A 세션 교착 방지를 위해 CameraX 타임아웃 메커니즘이 보강되어 안정성이 향상되었습니다. 또한, Android 37 API 대응을 위해 CameraPipe 다중 해상도 ImageReader 브리지가 정비되었으며, CameraX 저조도 처리 효과 확장을 위해 LowLightBoostEffect가 도입되어 앱 레벨에서 저조도 환경 이미지 화질을 보정할 수 있게 되었습니다.",
+      "items": [
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+          "href": "newsletters/2026-W46/index.html#article-3a-camerax",
+          "headline": "프레임 누락으로 인한 3A 세션 교착 방지, CameraX 타임아웃 메커니즘 보강",
+          "lead": "하부 카메라 HAL이 프레임 전송을 멈추더라도 상위 세션이 무한히 멈추지 않도록, CameraX 3A 대기 제어에 절대 시간 기준의 안전 타임아웃이 적용되었습니다.",
+          "takeaway": "하부 HAL 및 센서 드라이버가 3A 수렴 결과 전달을 지연하거나 드롭하더라도, 프레임워크 레벨에서 500ms 버퍼 타임아웃으로 세션 락을 안전하게 해제하도록 방어 로직이 구축되었습니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+          "href": "newsletters/2026-W46/index.html#article-android-37-api-camerapipe-imagereader",
+          "headline": "Android 37 API 대응, CameraPipe 다중 해상도 ImageReader 브리지 정비",
+          "lead": "CameraX의 내부 구현체인 CameraPipe가 compileSdk 37 승격에 맞춰 다중 해상도 리더 및 활성 Surface 감지 기능을 Android 37 정식 API로 전환했습니다.",
+          "takeaway": "Android 37 환경에서 MultiResolutionImageReader의 동시 리더 지원 여부 및 활성 Surface 콜백이 프레임워크 정식 API로 직결되므로, 관련 스트림 구성 시 버퍼 처리 흐름을 확인해 둘 필요가 있습니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+          "href": "newsletters/2026-W46/index.html#article-camerax-lowlightboosteffect",
+          "headline": "CameraX 저조도 처리 효과 확장, LowLightBoostEffect 도입",
+          "lead": "앱 레벨에서 저조도 환경 이미지 화질을 보정할 수 있도록 CameraEffect를 확장한 LowLightBoostEffect가 CameraX 메인 트리에 병합되었습니다.",
+          "takeaway": "CameraX의 후처리 이펙트 파이프라인 확장이지만 HAL 레벨의 직접적인 인터페이스 계약 변경은 아니며, 상위 프레임 처리 경로 변화로 파악해 둘 수 있습니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
+    },
+    "lead_article_image": "assets/images/fallback/android.svg",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W45",
+    "coverage_start_date": "2026-11-02",
+    "coverage_end_date": "2026-11-08",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-11-09"
+  },
+  {
     "weeklyKey": "2026-W45",
     "weekStartDate": "2026-11-02",
     "weekEndDate": "2026-11-08",

@@ -7,6 +7,64 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "title": "Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "title": "Android 37 API 대응, CameraPipe 다중 해상도 ImageReader 브리지 정비",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-11-09",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30"
+    },
+    {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
       "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
       "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",

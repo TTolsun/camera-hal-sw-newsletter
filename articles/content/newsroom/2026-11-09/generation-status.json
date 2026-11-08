@@ -1,0 +1,846 @@
+{
+  "status": "PASS",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "failure_kind": "",
+  "failure_class": "",
+  "quality_status": "PASS",
+  "quality_score": 94,
+  "quality_threshold": 60,
+  "publish_ready": true,
+  "selection_publish_ready": true,
+  "final_publish_ready": true,
+  "editor_review_required": true,
+  "date": "2026-11-09",
+  "failure_stage": "",
+  "failure_reason": "",
+  "quality_attempt_count": 1,
+  "quality_deduction_count": 6,
+  "stage_status_log": [
+    {
+      "stage_id": "reporter",
+      "role": "reporter",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "reporter attempt 1/2"
+    },
+    {
+      "stage_id": "background_context",
+      "role": "background-context",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "background-context attempt 1/2"
+    },
+    {
+      "stage_id": "editorial_plan",
+      "role": "editor",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editorial-plan attempt 1/2"
+    },
+    {
+      "stage_id": "editor",
+      "role": "editor",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2"
+    },
+    {
+      "stage_id": "editor.semantic_repair",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 semantic repair"
+    },
+    {
+      "stage_id": "editor.public_article_judge",
+      "role": "judge",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 public article judge"
+    },
+    {
+      "stage_id": "fact_checker",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "fact-checker attempt 1/2"
+    },
+    {
+      "stage_id": "article_source_review",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "article-source-review attempt 1/2"
+    },
+    {
+      "stage_id": "quality_gate",
+      "role": "quality_gate",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "quality_gate"
+    },
+    {
+      "stage_id": "render",
+      "role": "render",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "render"
+    },
+    {
+      "stage_id": "intro_letter",
+      "role": "intro-letter",
+      "attempt": 0,
+      "status": "passed",
+      "stage": "intro-letter"
+    },
+    {
+      "stage_id": "intro_letter_review",
+      "role": "intro-letter",
+      "attempt": 0,
+      "status": "passed",
+      "stage": "intro-letter-review"
+    }
+  ],
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "stage_key_format": "canonical-v1",
+  "model_usage": {
+    "reporter#1": {
+      "stage_key": "reporter#1",
+      "stage_id": "reporter",
+      "quality_attempt": 1,
+      "label": "reporter attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "background_context#1": {
+      "stage_key": "background_context#1",
+      "stage_id": "background_context",
+      "quality_attempt": 1,
+      "label": "background-context attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editorial_plan#1": {
+      "stage_key": "editorial_plan#1",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 1,
+      "label": "editorial-plan attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 2,
+          "successes": 2,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor#1": {
+      "stage_key": "editor#1",
+      "stage_id": "editor",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.semantic_repair#1": {
+      "stage_key": "editor.semantic_repair#1",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 semantic repair",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.public_article_judge#1": {
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "fact_checker#1": {
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "article_source_review#1": {
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 4,
+          "successes": 4,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "intro_letter#0": {
+      "stage_key": "intro_letter#0",
+      "stage_id": "intro_letter",
+      "quality_attempt": 0,
+      "label": "intro-letter",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "intro_letter_review#0": {
+      "stage_key": "intro_letter_review#0",
+      "stage_id": "intro_letter_review",
+      "quality_attempt": 0,
+      "label": "intro-letter-review",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    }
+  },
+  "model_routing": {
+    "reporter#1": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "reporter#1",
+      "stage_id": "reporter",
+      "quality_attempt": 1,
+      "label": "reporter attempt 1/2",
+      "parent_run_key": null
+    },
+    "background_context#1": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "background_context#1",
+      "stage_id": "background_context",
+      "quality_attempt": 1,
+      "label": "background-context attempt 1/2",
+      "parent_run_key": null
+    },
+    "editorial_plan#1": {
+      "stage_group": "editorialPlan",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editorial_plan#1",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 1,
+      "label": "editorial-plan attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor#1": {
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor#1",
+      "stage_id": "editor",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor.semantic_repair#1": {
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.semantic_repair#1",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 semantic repair",
+      "parent_run_key": "editor#1"
+    },
+    "editor.public_article_judge#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1"
+    },
+    "fact_checker#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null
+    },
+    "article_source_review#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null
+    },
+    "intro_letter#0": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "intro_letter#0",
+      "stage_id": "intro_letter",
+      "quality_attempt": 0,
+      "label": "intro-letter",
+      "parent_run_key": null
+    },
+    "intro_letter_review#0": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "intro_letter_review#0",
+      "stage_id": "intro_letter_review",
+      "quality_attempt": 0,
+      "label": "intro-letter-review",
+      "parent_run_key": null
+    }
+  },
+  "candidate_input": {
+    "mode": "artifact",
+    "candidate_artifact": "articles/content/collected-news/2026-11-09/merged-candidates.json",
+    "candidate_artifact_hash": "d258656ef927bfb51bdce080c895e4778e32672230c916c50985533d15940bb0",
+    "manifest": "articles/content/collected-news/2026-11-09/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
+    "manifest_status": "validated",
+    "llm_used": true,
+    "merge_mode": "seed_evidence_plus_gemini_discovery",
+    "candidate_count": 3
+  },
+  "run_context": {
+    "github_run_id": "42502243320",
+    "github_sha": "ee750dfeed718fc4be1b28e6cae8ce1e176ad57b",
+    "github_ref": "refs/heads/main"
+  },
+  "locked_article_count": 3,
+  "repaired_section_count": 0,
+  "failed_section_count": 0,
+  "skipped_repair_section_count": 2,
+  "rejected_duplicate_article_count": 0,
+  "validate_ok": true,
+  "public_output_expected": true,
+  "weekly_output_status": "written",
+  "weekly_output_failure_reason": "",
+  "intro_letter_status": "generated",
+  "intro_letter_reason": "",
+  "todo_found": false,
+  "empty_source_sections": [],
+  "source_gap_count": 0,
+  "stale_claim_status": "PASS",
+  "stale_claim_removed_count": 0,
+  "stale_claim_hard_failure_count": 0,
+  "completion_fallback_to_prepass": false,
+  "editor_semantic_validation": {
+    "name": "EditorSemanticValidationError",
+    "message": "Editor output failed article section contract validation.",
+    "details": {
+      "field": "sections.article_sections",
+      "expectedKeys": [
+        "verified_facts",
+        "background_context",
+        "hal_driver_impact",
+        "action_items",
+        "team_share_points"
+      ],
+      "allowedKeys": [
+        "verified_facts",
+        "background_context",
+        "hal_driver_impact",
+        "action_items",
+        "team_share_points",
+        "known_limitations",
+        "watch_items",
+        "do_not_claim"
+      ],
+      "actualCount": 1,
+      "sectionCount": 3,
+      "issues": [
+        {
+          "index": 3,
+          "headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+          "type": "empty_article_sections",
+          "keys": [
+            "action_items"
+          ]
+        }
+      ]
+    },
+    "field": "sections.article_sections",
+    "stage": "editor attempt 1/2",
+    "attempt": 1
+  },
+  "editor_public_article_judge": {
+    "date": "2026-11-09",
+    "overall_pass": true,
+    "section_count_expected": 3,
+    "section_count_actual": 3,
+    "sections": [
+      {
+        "section_index": 1,
+        "headline": "CameraX CapturePipeline과 3A 제어 대기에 절대 시간 타임아웃 추가",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "CameraPipe, compileSdk 37 승격 대응 Api37Compat 전환 병합",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 3,
+        "headline": "CameraX LowLightBoostEffect 및 세션 관리자 신규 병합",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      }
+    ]
+  },
+  "editor_desk_advisory": [],
+  "repairAttempted": true,
+  "repairSucceeded": true,
+  "input_candidate_count": 3,
+  "eligible_candidate_count": 3,
+  "eligible_candidate_urls": [
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+  ],
+  "selected_article_count": 3,
+  "deterministic_selected_count": 3,
+  "rendered_main_article_count": 3,
+  "selected_group_count": 3,
+  "rendered_group_count": 3,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "rendered_outside_selection_count": 0,
+  "explicitly_demoted_outside_selection_count": 0,
+  "hard_blocked_outside_selection_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+  ],
+  "rendered_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "rendered_outside_selection_group_keys": [],
+  "explicitly_demoted_outside_selection_group_keys": [],
+  "hard_blocked_outside_selection_group_keys": [],
+  "group_coverage_ok": true,
+  "deterministic_selected_representative_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978"
+  ],
+  "reconciliation_demoted_group_keys": [],
+  "reconciliation_demoted_groups": [],
+  "editorial_plan_scored_candidates": [
+    {
+      "candidate_key": "b81a6646e18ae11df963032e873fda07b2de069d4f67161f0c1a170f7dee3490",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "018a904786e0a4089c8da308aadc9603f27077a341f7d09f137f66c0a4d4acbe",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "548166ca13ab2898b56b4d8aae2a1c4af20d6c300e7e5660995ed6ff98ac588b",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    }
+  ],
+  "reconciliation_promoted_group_keys": [],
+  "reserve_candidate_count": 0,
+  "demoted_article_count": 0,
+  "fallback_topic_count": 0,
+  "reporter_candidate_count": 3,
+  "reporter_selected_count": 3,
+  "final_input_candidate_count": 3,
+  "final_eligible_candidate_count": 3,
+  "final_selected_article_count": 3,
+  "reporter_selected_but_final_excluded_count": 0,
+  "ai_selected_article_count": 3,
+  "underfilled": false,
+  "review_gate_passed": true,
+  "publish_gate_passed": true,
+  "min_final_articles": 1,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 0,
+  "min_non_fallback_publish_ready_articles": 0,
+  "composition_mode": "NORMAL",
+  "publish_mode": "DEEP",
+  "publish_mode_detail": {
+    "mode": "DEEP",
+    "core_count": 3,
+    "adjacent_count": 0,
+    "context_count": 0,
+    "context_min_signals": 1
+  },
+  "selection_composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 3,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 3,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 3,
+    "fallback_topic_count": 0
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 3,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 3,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 3,
+    "fallback_topic_count": 0
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 3,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 0,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 3,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 3,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 3,
+    "camera_adjacent_candidate_count": 0,
+    "supporting_candidate_count": 0,
+    "selected_article_count": 3,
+    "selected_primary_camera_stack_count": 3
+  },
+  "shortage_reason_codes": [],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 0,
+    "directAospCameraOrDriverMinRequired": 0,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible camera driver candidate is available in this pool. Check dated Linux camera, V4L2, libcamera, sensor and ISP signals and their exclusion reasons."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "non_fallback_reviewable_article_count": 3,
+  "eligible_non_fallback_reviewable_article_count": 3,
+  "primary_camera_stack_topic_count": 3,
+  "supporting_main_article_count": 0,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 3,
+  "camera_driver_image_pipeline_count": 0,
+  "android_count": 0,
+  "android_multimedia_camera_output_count": 0,
+  "soc_platform_signal_count": 0,
+  "cpp_ai_tooling_fallback_count": 0,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
+    "No eligible camera driver candidate is available in this pool. Check dated Linux camera, V4L2, libcamera, sensor and ISP signals and their exclusion reasons.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "headline_decision": {
+    "decision": "latest_camera_hal_article",
+    "reason": "latest_camera_hal_article",
+    "current_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+    "replacement_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-11-09",
+    "retained": false,
+    "replaced": true,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-07-27",
+    "backfill_included": true
+  },
+  "release_class_catch_up": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate",
+    "evidence_unchecked_skips": 0
+  },
+  "release_class_catch_up_after_reconciliation": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate"
+  },
+  "republication_cooldown_blocked": {
+    "history_loaded": true,
+    "history_main_article_count": 60,
+    "count": 0,
+    "urls": []
+  },
+  "evidence_unchecked_main_blocked": {
+    "count": 0,
+    "candidate_urls": []
+  },
+  "exclusion_reason_summary": [],
+  "final_exclusion_reason_summary": [],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "coverage_week_key": "2026-W45",
+  "coverage_start_date": "2026-11-02",
+  "coverage_end_date": "2026-11-08",
+  "generation_anchor_date": "2026-11-09",
+  "carry_forward_status": "missing_expected",
+  "carry_source": null,
+  "not_yet_eligible_count": 0,
+  "not_yet_eligible_overflow": false,
+  "public_output_lane": "weekly",
+  "legacy_dated_output_enabled": false,
+  "weekly_page_structure_status": "ok",
+  "weekly_page_structure_key": "2026-W46",
+  "weekly_page_structure_errors": [],
+  "public_newsletter_ready": true,
+  "review_publication_ready": false,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "PUBLISH_READY",
+  "run_mode": "publish_ready",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "latest_public_ready",
+  "public_artifact_source": "latest_run",
+  "reconciliation_required": false,
+  "reconciliation_action": "none_latest_public_ready",
+  "reconciliation_reason": "latest run is final publish-ready and public structure is valid"
+}
