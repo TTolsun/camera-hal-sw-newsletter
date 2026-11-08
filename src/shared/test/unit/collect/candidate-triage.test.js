@@ -225,3 +225,48 @@ test('coverage prefers recent eligible evidence without hardcoding a model or so
   assert.deepEqual(alreadySelected.candidates, [items[1]]);
   assert.equal(alreadySelected.report.coverage_preserved.length, 0);
 });
+
+// 판단 풀은 일부 소스에 소스별 상한보다 많은 후보를 줄 수 있다(TRIAGE_POOL_CAP_OVERRIDES). 그래도
+// 넘기는 후보는 소스당 maxPerSource를 넘지 않고, LLM이 앞에 둔 후보부터 남는다.
+test('the llm chooses which candidates of a wide source pass, but never more than maxPerSource', async () => {
+  const wide = Array.from({ length: 6 }, (_, index) => candidate(index, { source_id: 'wide' }));
+  const others = Array.from({ length: 4 }, (_, index) => candidate(10 + index, { source_id: `other-${index}` }));
+  const items = [...wide, ...others];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 5,
+    maxPerSource: 2,
+    // 폴백(키워드 순서)도 wide를 앞세우지만, 채움에서도 상한을 지킨다.
+    keywordFallback: [wide[0], wide[1], others[0], others[1], others[2]],
+    callLlm: async () => ({ selected: [{ id: 'c6' }, { id: 'c5' }, { id: 'c4' }] }) // id는 1부터: wide[5], wide[4], wide[3]
+  });
+
+  assert.equal(result.report.mode, TRIAGE_MODES.LLM);
+  assert.deepEqual(result.candidates.map(item => item.url), [
+    'https://example.com/5', 'https://example.com/4',
+    'https://example.com/10', 'https://example.com/11', 'https://example.com/12'
+  ]);
+  // LLM이 고른 것은 그대로 보고하고, 상한에 걸린 선택은 따로 남긴다.
+  assert.equal(result.report.llm_selected_count, 3);
+  assert.deepEqual(result.report.source_cap_rejected.map(entry => entry.url), ['https://example.com/3']);
+  assert.equal(result.report.not_selected.find(entry => entry.url === 'https://example.com/3').reason, 'source_cap_after_llm');
+});
+
+// 전체가 상한 안에 들어가도 소스별 상한이 누군가를 떨어뜨려야 하면 키워드 순서가 아니라 LLM이 고른다.
+test('a pool that fits but overflows a source cap goes to the llm', async () => {
+  const items = Array.from({ length: 4 }, (_, index) => candidate(index, { source_id: 'wide' }));
+  const result = await triageCandidatePool(items, {
+    maxFinal: 5, maxPerSource: 2, keywordFallback: items, callLlm: async () => ({ selected: [{ id: 'c4' }, { id: 'c3' }] })
+  });
+  assert.equal(result.report.mode, TRIAGE_MODES.LLM);
+  assert.deepEqual(result.candidates, [items[3], items[2]]);
+});
+
+test('independent coverage does not push a source past maxPerSource', async () => {
+  const items = [candidate(0, { source_id: 'tools' }), qualifiedTool(1, { source_id: 'tools' }), candidate(2, { source_id: 'other' })];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 2, maxPerSource: 1, keywordFallback: [],
+    callLlm: async () => ({ selected: [{ id: 'c1' }, { id: 'c3' }] })
+  });
+  assert.equal(result.candidates.filter(item => item.source_id === 'tools').length, 1);
+  assert.deepEqual(result.report.coverage_preserved, []);
+});

@@ -125,7 +125,7 @@ function reportEntry(candidate, extra = {}) {
 // Preserve an opportunity for policy-defined independent main topics before the
 // irreversible collection cap. This reserves candidate input, never publication.
 // Only already-qualified candidates in the bounded, source-capped pool can enter.
-function preserveIndependentCoverage(selected, pool, maxFinal) {
+function preserveIndependentCoverage(selected, pool, maxFinal, maxPerSource) {
   const result = [...selected];
   const added = [];
   const displaced = [];
@@ -140,6 +140,8 @@ function preserveIndependentCoverage(selected, pool, maxFinal) {
     for (const candidate of available) {
       if (count >= articlePolicy.collectionIndependentBucketMin) break;
       if (result.some(item => candidateKey(item) === candidateKey(candidate))) continue;
+      if (Number.isFinite(maxPerSource) && maxPerSource > 0 &&
+        result.filter(item => sourceKey(item) === sourceKey(candidate)).length >= maxPerSource) continue;
       if (result.length >= maxFinal) {
         const index = result.findLastIndex(item => editorialPriority(item) > editorialPriority(candidate));
         if (index < 0) break;
@@ -154,17 +156,37 @@ function preserveIndependentCoverage(selected, pool, maxFinal) {
   return { selected: result, added, displaced };
 }
 
+// 최종 후보의 소스별 상한을 세는 판정기. 판단 풀은 일부 소스에 이 상한보다 많은 후보를 줄 수
+// 있으므로(collect-news-candidates.js TRIAGE_POOL_CAP_OVERRIDES), 넘기는 쪽에서 다시 센다.
+// 호출할 때마다 그 후보를 센다 — 받아들일 후보에만 호출해야 한다.
+function sourceKey(candidate) {
+  return text(candidate.source_id || candidate.source);
+}
+
+function sourceCapCounter(maxPerSource) {
+  const counts = new Map();
+  return candidate => {
+    if (!Number.isFinite(maxPerSource) || maxPerSource <= 0) return true;
+    const key = sourceKey(candidate);
+    const count = counts.get(key) || 0;
+    if (count >= maxPerSource) return false;
+    counts.set(key, count + 1);
+    return true;
+  };
+}
+
 /**
  * 판단 풀에서 다음 단계로 넘길 후보를 고른다.
  *
  * @param {object[]} pool 판단 대상. 소스별 상한까지 적용한 목록이며 키워드 순서로 정렬돼 있어야 한다.
  * @param {object} options
  * @param {number} options.maxFinal 넘길 최대 건수.
+ * @param {number} [options.maxPerSource] 넘기는 후보의 소스별 상한. LLM이 한 소스를 더 골라도 앞쪽부터 이만큼만 넘긴다.
  * @param {object[]} options.keywordFallback LLM을 못 쓸 때 쓰는 예전 결과(키워드 하한·순서·상한 적용).
  * @param {Function|null} options.callLlm (systemInstruction, prompt, schema) => Promise<json>. 없으면 폴백.
  * @returns {Promise<{candidates: object[], report: object}>}
  */
-async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = null } = {}) {
+async function triageCandidatePool(pool, { maxFinal, maxPerSource, keywordFallback, callLlm = null } = {}) {
   const usable = Array.isArray(pool) ? pool : [];
   const fallback = Array.isArray(keywordFallback) ? keywordFallback : usable.slice(0, maxFinal);
   const baseReport = { pool_size: usable.length, max_final: maxFinal };
@@ -183,7 +205,8 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
 
   // LLM이 없으면 풀 크기와 상관없이 예전 결과를 그대로 쓴다(relevance 하한 포함).
   if (typeof callLlm !== 'function') return fallbackResult('llm_unavailable');
-  if (usable.length <= maxFinal) {
+  // 다 들어가도 소스별 상한이 누군가를 떨어뜨려야 하면, 어느 후보를 남길지는 LLM이 정한다.
+  if (usable.length <= maxFinal && usable.every(sourceCapCounter(maxPerSource))) {
     return {
       candidates: usable,
       report: { ...baseReport, mode: TRIAGE_MODES.ALL_FIT, selected_count: usable.length, filled_by_keyword_count: 0 }
@@ -191,14 +214,20 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
   }
 
   const items = triageItems(triagePool);
-  let picks;
+  let llmPicks;
   try {
     const response = await callLlm(SYSTEM_INSTRUCTION, buildTriagePrompt(items, maxFinal), RESPONSE_SCHEMA);
-    picks = parseTriageSelection(response, items, maxFinal);
+    llmPicks = parseTriageSelection(response, items, maxFinal);
   } catch (error) {
     return fallbackResult(`llm_call_failed: ${text(error?.message).slice(0, 300)}`);
   }
-  if (picks.length === 0) return fallbackResult('llm_selected_nothing');
+  if (llmPicks.length === 0) return fallbackResult('llm_selected_nothing');
+  // LLM이 앞에 둔 순서대로 소스별 상한까지만 넘긴다. 넘친 선택은 보고서에 따로 남긴다.
+  const underSourceCap = sourceCapCounter(maxPerSource);
+  const picks = [];
+  const sourceCapRejected = [];
+  for (const pick of llmPicks) (underSourceCap(triagePool[pick.index]) ? picks : sourceCapRejected).push(pick);
+  const sourceCapRejectedKeys = new Set(sourceCapRejected.map(pick => candidateKey(triagePool[pick.index])));
 
   // 채움은 URL로 겹침을 판단하고, 판단 풀에 있는 후보만 쓴다. 폴백 목록은 relevance 하한을 건 뒤
   // 시리즈 접기와 소스별 상한을 따로 다시 적용해 만들므로, 풀에 없는 후보(같은 소스의 9번째 글,
@@ -206,10 +235,13 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
   const picked = picks.map(pick => triagePool[pick.index]);
   const pickedUrls = new Set(picked.map(candidateKey));
   const poolUrls = new Set(triagePool.map(candidateKey));
-  const filled = fallback
-    .filter(candidate => poolUrls.has(candidateKey(candidate)) && !pickedUrls.has(candidateKey(candidate)))
-    .slice(0, maxFinal - picks.length);
-  const coverage = preserveIndependentCoverage([...picked, ...filled], triagePool, maxFinal);
+  const filled = [];
+  for (const candidate of fallback) {
+    if (filled.length >= maxFinal - picks.length) break;
+    if (!poolUrls.has(candidateKey(candidate)) || pickedUrls.has(candidateKey(candidate))) continue;
+    if (underSourceCap(candidate)) filled.push(candidate);
+  }
+  const coverage = preserveIndependentCoverage([...picked, ...filled], triagePool, maxFinal, maxPerSource);
   const selected = coverage.selected;
   const selectedUrls = new Set(selected.map(candidateKey));
 
@@ -220,9 +252,11 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
       mode: TRIAGE_MODES.LLM,
       triage_pool_size: triagePool.length,
       selected_count: selected.length,
-      llm_selected_count: picks.length,
+      llm_selected_count: llmPicks.length,
       filled_by_keyword_count: filled.length,
-      llm_selected: picks.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
+      llm_selected: llmPicks.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
+      // LLM이 골랐지만 소스별 상한(maxPerSource)을 넘어 넘기지 않은 후보.
+      source_cap_rejected: sourceCapRejected.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
       keyword_filled: filled.map(candidate => reportEntry(candidate)),
       coverage_preserved: coverage.added.map(candidate => reportEntry(candidate, { reason: 'independent_main_bucket_coverage' })),
       coverage_displaced: coverage.displaced.map(candidate => reportEntry(candidate, { reason: 'lower_editorial_priority' })),
@@ -232,6 +266,7 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
         ...reportEntry(candidate),
         reason: coverage.displaced.some(item => candidateKey(item) === candidateKey(candidate))
           ? 'coverage_priority_displaced'
+          : sourceCapRejectedKeys.has(candidateKey(candidate)) ? 'source_cap_after_llm'
           : index < triagePool.length ? 'not_selected_by_llm_or_keyword_fill' : 'triage_pool_cap',
         ...(index < triagePool.length ? { triage_input: items[index] } : {})
       }])
