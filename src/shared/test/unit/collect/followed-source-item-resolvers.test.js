@@ -592,8 +592,10 @@ test('the page-walking resolvers receive onDiagnostic so their truncation is not
     url: 'https://android-review.googlesource.com/changes/?q=x&n=100',
     sourceUrl: 'https://android-review.googlesource.com/changes/?q=x&n=100'
   });
-  // 창 안 항목 하나뿐인 목록은 "이 페이지가 창을 못 덮었다"가 참이라 목록 절단이 난다.
+  // 창 안 항목 하나뿐이고 _more_changes가 붙은 목록은 다음 페이지 조회가 실패하면 창을 다 못 읽은
+  // 채 끝나 목록 절단이 난다.
   const gerritListBody = ")]}'\n" + JSON.stringify([{
+    _more_changes: true,
     _number: 4228183,
     project: 'platform/frameworks/av',
     branch: 'android17-release',
