@@ -129,6 +129,16 @@ const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 const MAX_FINAL_CANDIDATES = 50;
 const MAX_CANDIDATES_PER_SOURCE = 8;
 
+// LLM 1차 선별(#1258) 판단 풀에서만 소스별 상한을 넓히는 소스. 최종 후보는 이 소스도
+// MAX_CANDIDATES_PER_SOURCE를 넘지 않는다(triageCandidatePool의 maxPerSource) — 넓히는 것은 "어느 8건을
+// 넘길지"를 키워드 점수가 아니라 LLM이 고르게 하는 범위뿐이다.
+// AndroidX camera는 한 주에 병합 변경이 25~53건이다(2026-06~11 실측, 11-02 주 53건·카메라 파일 범위
+// 47건). 우선순위·신뢰도·이번 주 여부가 모두 같아 키워드 점수만으로 8건이 남았고, 2026-11-09 수집에서
+// 3A 무한 대기 수정(4365755)·Api37Compat 전환(4423978)·LowLightBoostEffect(4223279)가 기기별 quirk와
+// 스킬 문서 변경에 밀려 LLM 판단 전에 사라졌다. 60건은 측정된 최대 주간 건수를 덮는다(판단 풀은
+// 이번 주 후보부터 채운다). 풀이 커져도 MAX_TRIAGE_POOL(400) 안이다(2026-11-09 풀 178건 + 52건).
+const TRIAGE_POOL_CAP_OVERRIDES = new Map([['androidx-gerrit-camera-changes', 60]]);
+
 // coverage 경계 밖([E, U))에서 분리해 다음 실행 carry-forward로 넘기는 목록의 상한. 소스가
 // 폭주해도 collect payload가 무한정 커지지 않게 건수와 바이트 양쪽에 상한을 둔다.
 const NOT_YET_ELIGIBLE_MAX_COUNT = 60;
@@ -1754,14 +1764,16 @@ function collapseSeriesRerolls(candidates) {
   return result;
 }
 
-function capPerSource(candidates, maxPerSource) {
+// capsBySource는 소스 id별 예외 상한이다(없으면 모든 소스에 maxPerSource).
+function capPerSource(candidates, maxPerSource, capsBySource = null) {
   if (!Number.isFinite(maxPerSource) || maxPerSource <= 0) return [...candidates];
   const perSourceCount = new Map();
   const result = [];
   for (const item of candidates) {
     const key = item.source_id || item.source || '';
     const count = perSourceCount.get(key) || 0;
-    if (count >= maxPerSource) continue;
+    const cap = (capsBySource && capsBySource.get(key)) || maxPerSource;
+    if (count >= cap) continue;
     perSourceCount.set(key, count + 1);
     result.push(item);
   }
@@ -2344,7 +2356,7 @@ async function main() {
   // 적용한 목록이다. 키워드 순서는 풀의 정렬, 프롬프트 크기 제한, LLM을 못 쓸 때의 폴백으로만 쓴다.
   const triageRanked = [...datedCandidates].sort(candidateRankOrder(now, coverage));
   const triageSeries = collapseSeriesRepresentatives(triageRanked);
-  const triagePool = capPerSource(triageSeries, MAX_CANDIDATES_PER_SOURCE);
+  const triagePool = capPerSource(triageSeries, MAX_CANDIDATES_PER_SOURCE, TRIAGE_POOL_CAP_OVERRIDES);
   // 폴백 = 예전 결과 그대로: relevance 하한(30, high 소스 면제) -> 키워드 순서 -> 상한.
   const keywordRanked = triageRanked
     .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high');
@@ -2352,6 +2364,7 @@ async function main() {
     .slice(0, MAX_FINAL_CANDIDATES);
   const triage = await triageCandidatePool(triagePool, {
     maxFinal: MAX_FINAL_CANDIDATES,
+    maxPerSource: MAX_CANDIDATES_PER_SOURCE,
     keywordFallback,
     callLlm: candidateTriageLlmCall()
   });
@@ -2361,7 +2374,9 @@ async function main() {
   const usedKeywordFallback = triage.report.mode === 'keyword_fallback';
   const rankedCandidates = usedKeywordFallback ? keywordRanked : triageRanked;
   const seriesCandidates = usedKeywordFallback ? collapseSeriesRepresentatives(keywordRanked) : triageSeries;
-  const sourceCappedCandidates = capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE);
+  const sourceCappedCandidates = usedKeywordFallback
+    ? capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE)
+    : triagePool;
   const collectionCountsBySource = buildCollectionCountsAfterTriage([
     { items: rawCandidates },
     { reason: 'duplicate', items: deduplicatedCandidates },
@@ -2460,6 +2475,7 @@ module.exports = {
   candidateRankOrder,
   capNotYetEligible,
   capPerSource,
+  TRIAGE_POOL_CAP_OVERRIDES,
   collapseSeriesRepresentatives,
   collectFromSource,
   componentFromText,

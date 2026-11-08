@@ -225,3 +225,33 @@ test('coverage prefers recent eligible evidence without hardcoding a model or so
   assert.deepEqual(alreadySelected.candidates, [items[1]]);
   assert.equal(alreadySelected.report.coverage_preserved.length, 0);
 });
+
+// 판단 풀은 일부 소스에 소스별 상한보다 많은 후보를 줄 수 있다(TRIAGE_POOL_CAP_OVERRIDES). 그래도
+// 넘기는 후보는 소스당 maxPerSource를 넘지 않고, LLM이 앞에 둔 후보부터 남는다.
+test('the llm chooses which candidates of a wide source pass, but never more than maxPerSource', async () => {
+  const wide = Array.from({ length: 6 }, (_, index) => candidate(index, { source_id: 'wide' }));
+  const others = Array.from({ length: 4 }, (_, index) => candidate(10 + index, { source_id: `other-${index}` }));
+  const items = [...wide, ...others];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 5,
+    maxPerSource: 2,
+    // 폴백(키워드 순서)도 wide를 앞세우지만, 채움에서도 상한을 지킨다.
+    keywordFallback: [wide[0], wide[1], others[0], others[1], others[2]],
+    callLlm: async () => ({ selected: [{ id: 'c6' }, { id: 'c5' }, { id: 'c4' }] }) // id는 1부터: wide[5], wide[4], wide[3]
+  });
+
+  assert.equal(result.report.mode, TRIAGE_MODES.LLM);
+  assert.deepEqual(result.candidates.map(item => item.url), [
+    'https://example.com/5', 'https://example.com/4',
+    'https://example.com/10', 'https://example.com/11', 'https://example.com/12'
+  ]);
+});
+
+test('an all-fit pool still applies maxPerSource', async () => {
+  const items = Array.from({ length: 4 }, (_, index) => candidate(index, { source_id: 'wide' }));
+  const result = await triageCandidatePool(items, {
+    maxFinal: 5, maxPerSource: 2, keywordFallback: items, callLlm: async () => ({ selected: [] })
+  });
+  assert.equal(result.report.mode, TRIAGE_MODES.ALL_FIT);
+  assert.equal(result.candidates.length, 2);
+});

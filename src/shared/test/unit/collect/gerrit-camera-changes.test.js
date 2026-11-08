@@ -12,7 +12,9 @@ const {
   reviewSignals,
   subjectIsNoise
 } = require('../../../collect/gerrit-camera-changes');
-const { normalizeCandidate, capPerSource, MAX_CANDIDATES_PER_SOURCE } = require('../../../cli/collect-news-candidates');
+const {
+  normalizeCandidate, capPerSource, MAX_CANDIDATES_PER_SOURCE, TRIAGE_POOL_CAP_OVERRIDES
+} = require('../../../cli/collect-news-candidates');
 const { resolveFollowedSourceItems } = require('../../../collect/followed-source-item-resolvers');
 const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 const registry = require('../../../data/news-sources.json');
@@ -170,6 +172,23 @@ test('CameraX candidates cannot exhaust the separate HeifWriter source cap befor
   const capped = capPerSource(normalized, MAX_CANDIDATES_PER_SOURCE);
   assert.equal(capped.filter(item => item.source_id === camera.id).length, MAX_CANDIDATES_PER_SOURCE);
   assert.equal(capped.filter(item => item.source_id === heif.id).length, 1);
+});
+
+// 2026-11-09 수집: AndroidX camera는 이번 주 카메라 변경만 47건이었고, 우선순위·신뢰도·이번 주 여부가
+// 같아 키워드 점수 상위 8건만 판단 풀에 남았다. 3A 무한 대기 수정(4365755) 같은 변경은 키워드 점수가
+// 낮아 LLM이 보기도 전에 사라졌다. 판단 풀은 이 소스에 한 주를 덮는 폭을 주고, 다른 소스는 8건 그대로다.
+test('the triage pool keeps a full week of AndroidX camera changes while other sources stay at the normal cap', () => {
+  const androidx = registry.sources.find(source => source.id === 'androidx-gerrit-camera-changes');
+  const weekly = 47;
+  const ranked = [
+    ...Array.from({ length: weekly }, (_, index) => ({ source_id: androidx.id, url: `https://x/${index}` })),
+    ...Array.from({ length: MAX_CANDIDATES_PER_SOURCE + 3 }, (_, index) => ({ source_id: 'lore-linux-media-list', url: `https://l/${index}` }))
+  ];
+  const pool = capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE, TRIAGE_POOL_CAP_OVERRIDES);
+  assert.equal(pool.filter(item => item.source_id === androidx.id).length, weekly, '키워드 순서 꼴찌인 이번 주 변경도 LLM 판단에 들어간다');
+  assert.ok(pool.some(item => item.url === `https://x/${weekly - 1}`));
+  assert.equal(pool.filter(item => item.source_id === 'lore-linux-media-list').length, MAX_CANDIDATES_PER_SOURCE);
+  assert.ok(TRIAGE_POOL_CAP_OVERRIDES.get(androidx.id) <= MIN_LIST_PAGE_SIZE, '상세 조회 상한보다 넓은 풀은 의미가 없다');
 });
 
 test('AndroidX reads past the platform detail budget but retains a bounded page and truncation diagnostics', async () => {
