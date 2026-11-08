@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "android-version-features",
-  "updated_at": "2026-11-02T00:00:00.000Z",
+  "updated_at": "2026-11-09T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "android-version-features:053d08e47e296aef3b799286d58855ac",
@@ -9,13 +9,13 @@
       "canonical_url": "https://developer.android.com/about/versions/17/features",
       "title": "Features and APIs | Android Developers",
       "visible_date": "",
-      "visible_last_updated": "2026-10-28",
+      "visible_last_updated": "2026-11-05",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-10-28",
-      "content_hash": "93e0104e33921a36bf2acc9c4fcf3cdbbc940ffb412b65aef6b3d019725147ab",
-      "normalized_content_hash": "fbbe02627f5b05b9b60dcc22e705de6bb98ffec62a5241c9128a1ac5b2d81f0e",
+      "http_last_modified": "2026-11-05",
+      "content_hash": "aa6b86a33d1e9685b47eb4fbd2c710dbca5b0b67035d896e02545c5cb2c031f2",
+      "normalized_content_hash": "ef68ed621926ba865df9307e209a057e1e2e91fa7a74b28e45800489d403183a",
       "release_note_sections": [],
       "anchors": [],
       "release_row_date": "",
@@ -24,8 +24,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-11-02T00:00:00.000Z",
-      "seen_count": 23,
+      "last_seen_at": "2026-11-09T00:00:00.000Z",
+      "seen_count": 24,
       "status": 200
     },
     {
@@ -76,8 +76,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-11-02T00:00:00.000Z",
-      "seen_count": 23,
+      "last_seen_at": "2026-11-09T00:00:00.000Z",
+      "seen_count": 24,
       "status": 200
     }
   ],
