@@ -41,6 +41,13 @@ const DETAIL_FETCH_TIMEOUT_MS = 8000;
 // 수집 창을 못 덮는 쪽으로 되돌아가므로 gerrit-camera-changes.test.js가 이 값을 잠근다.
 const MIN_LIST_PAGE_SIZE = 100;
 
+// 첫 페이지가 수집 창을 다 못 덮으면 _more_changes를 따라 다음 페이지(S=offset)를 읽는다.
+// 2026-11-09 실측에서 AndroidX camera 목록(n=100)은 첫 페이지가 10-23까지만 덮었고(35일 창 시작은
+// 10-05), 300건이면 08-31까지 내려갔다. 5페이지(500건)는 그 소스가 창을 덮는 데 필요한 양의
+// 두 배가 넘는다. 상한에 걸리면 조용히 멈추지 않고 절단으로 알린다.
+const MAX_LIST_PAGES = 5;
+const LIST_PAGE_FETCH_TIMEOUT_MS = 8000;
+
 // 요약에 나열할 파일 수 상한. 나머지는 건수로만 말한다(요약이 500자에서 잘리면 뒤 문장이 통째로 사라진다).
 const MAX_SUMMARY_FILES = 4;
 
@@ -375,18 +382,67 @@ function buildCandidate(source, origin, detail, scope, review, dateInfo, revisio
   return candidate;
 }
 
+function listPageUrl(listUrl, offset) {
+  return `${listUrl}${listUrl.includes('?') ? '&' : '?'}S=${offset}`;
+}
+
+// 목록은 updated 내림차순이다. 읽은 목록에 창 시작보다 엄격히 이른 updated가 있으면 창을 다 읽은
+// 것이다(effective date는 updated보다 이르거나 같으므로 updated로 경계를 판단할 수 있다). updated가
+// 창 시작과 같은 변경은 창 안일 수 있고, 읽을 수 있는 updated가 하나도 없으면 경계를 판단할 수
+// 없으므로 둘 다 "아직 못 닿음"으로 보고 다음 페이지를 읽는다. 그 전에
+// Gerrit이 마지막 항목에 _more_changes를 붙이지 않았다면 질의 결과 전체를 이미 받은 것이다.
+// 페이지 사이에 새 변경이 병합되면 offset이 밀려 같은 변경이 두 번 올 수 있어 _number로 거른다.
+async function readListThroughWindow(firstPage, listUrl, fetchTextImpl, cutoffMs) {
+  const changes = [];
+  const seen = new Set();
+  let received = 0;
+  let pages = 0;
+  let moreAfterLastPage = false;
+  const add = page => {
+    received += page.length;
+    pages += 1;
+    const lastOfPage = page[page.length - 1];
+    moreAfterLastPage = Boolean(lastOfPage && lastOfPage._more_changes === true);
+    for (const change of page) {
+      const key = change && change._number;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      changes.push(change);
+    }
+  };
+  const reachesWindowStart = () => {
+    return changes.some(change => gerritTimeMs(change && change.updated) < cutoffMs);
+  };
+  const done = (reachedWindowStart, stopReason = '') => ({ changes, pages, reachedWindowStart, stopReason });
+
+  add(firstPage);
+  for (;;) {
+    if (reachesWindowStart()) return done(true);
+    if (!moreAfterLastPage) return done(true);
+    if (pages >= MAX_LIST_PAGES) return done(false, `stopped at the ${MAX_LIST_PAGES}-page cap`);
+    const url = listPageUrl(listUrl, received);
+    let page;
+    try {
+      page = parseGerritChangeList(await fetchTextImpl(url, LIST_PAGE_FETCH_TIMEOUT_MS));
+    } catch (error) {
+      return done(false, `next page ${url} fetch failed: ${error.message}`);
+    }
+    if (!page || page.length === 0) return done(false, `next page ${url} returned no change array`);
+    add(page);
+  }
+}
+
 /**
  * Gerrit /changes 목록 JSON을 받아 카메라 변경 후보를 반환한다.
  *
- * 목록(collector가 이미 받아 둔 `text`)은 상태와 세 날짜만 담고 파일·리뷰는 담지 않는다. 그래서
- * 상태와 수집 창으로 먼저 좁힌 뒤, 남은 변경에만 상세를 건다. 목록 한 페이지(n=100)는 2026-09-02
- * 실측에서 AOSP 약 24개월, ChromeOS 약 22개월을 덮었다 - 35일 창은 그 안에 깊이 들어간다. 그래도
- * 페이지가 창을 다 못 덮으면 조용히 넘기지 않고 알린다(그 상태는 "이번 주 신호 없음"과 산출물에서
- * 똑같이 보인다).
+ * 목록(collector가 이미 받아 둔 `text`, 첫 페이지)은 상태와 세 날짜만 담고 파일·리뷰는 담지 않는다.
+ * 첫 페이지가 수집 창을 다 못 덮으면 _more_changes를 따라 MAX_LIST_PAGES까지 이어 읽는다. 그다음
+ * 상태와 수집 창으로 좁힌 뒤, 남은 변경에만 상세를 건다. 그래도 창을 다 못 덮으면 조용히 넘기지
+ * 않고 알린다(그 상태는 "이번 주 신호 없음"과 산출물에서 똑같이 보인다).
  */
 async function resolveGerritCameraChangeItems(text = '', source = {}, options = {}) {
-  const changes = parseGerritChangeList(text);
-  if (!changes) {
+  const firstPage = parseGerritChangeList(text);
+  if (!firstPage) {
     console.warn('gerrit-camera-changes: source index did not return a Gerrit change array; skipping.');
     return [];
   }
@@ -420,15 +476,14 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
     detail
   });
 
-  // 목록은 updated 내림차순이다. 페이지의 가장 오래된 updated가 아직 창 안이면 창을 다 읽지 못한
-  // 것이다(effective date는 updated보다 이르거나 같으므로 updated로 경계를 판단할 수 있다).
-  const listedUpdateTimes = changes.map(change => gerritTimeMs(change && change.updated)).filter(Number.isFinite);
-  if (listedUpdateTimes.length > 0 && Math.min(...listedUpdateTimes) > cutoffMs) {
-    console.warn(`gerrit-camera-changes: the ${changes.length}-change list page does not reach back to the `
-      + `${lookbackDays}-day window; the collected changes are a lower bound, not the whole window.`);
-    announceTruncation(`the ${changes.length}-change list page does not reach back to the ${lookbackDays}-day window; `
-      + 'the collected changes are a lower bound, not the whole window');
+  const list = await readListThroughWindow(firstPage, listUrl, fetchTextImpl, cutoffMs);
+  if (!list.reachedWindowStart) {
+    const what = `the ${list.changes.length}-change list (${list.pages} page(s)) does not reach back to the `
+      + `${lookbackDays}-day window (${list.stopReason})`;
+    console.warn(`gerrit-camera-changes: ${what}; the collected changes are a lower bound, not the whole window.`);
+    announceTruncation(`${what}; the collected changes are a lower bound, not the whole window`);
   }
+  const changes = list.changes;
 
   const collectable = changes
     .filter(change => hasEligibleState(change))
@@ -571,6 +626,7 @@ async function resolveGerritChangeUrl(url, sources = [], { fetchTextImpl } = {})
 
 module.exports = {
   MAX_DETAIL_FETCHES,
+  MAX_LIST_PAGES,
   MIN_LIST_PAGE_SIZE,
   cameraFileScope,
   effectiveDate,

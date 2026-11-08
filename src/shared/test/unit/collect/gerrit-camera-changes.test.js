@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   MAX_DETAIL_FETCHES,
+  MAX_LIST_PAGES,
   MIN_LIST_PAGE_SIZE,
   cameraFileScope,
   effectiveDate,
@@ -84,12 +85,19 @@ function detailFor(change, { files = ['services/camera/virtualcamera/VirtualCame
 }
 
 // 목록 한 건 + 그 상세 한 건을 돌려주는 fetch stub. 요청 URL을 기록해 상세 조회 횟수를 잰다.
-function stubFetch(detailsByNumber) {
+// pagesByOffset: 목록 다음 페이지(S=offset) 응답. 없는 offset을 요청하면 실패로 던진다.
+function stubFetch(detailsByNumber, pagesByOffset = {}) {
   const requested = [];
   return {
     requested,
     fetchTextImpl: async url => {
       requested.push(url);
+      const pageMatch = String(url).match(/[?&]S=(\d+)$/);
+      if (pageMatch) {
+        const page = pagesByOffset[pageMatch[1]];
+        if (!page) throw new Error(`no stub list page at offset ${pageMatch[1]}`);
+        return listBody(page);
+      }
       const match = String(url).match(/\/changes\/(\d+)\/detail/);
       if (!match) throw new Error(`unexpected url ${url}`);
       const detail = detailsByNumber[match[1]];
@@ -450,7 +458,8 @@ test('detail fetches are bounded and the truncation is reported', async () => {
 
 test('a list page that does not reach the window boundary is reported, not silently accepted', async () => {
   // 모든 항목의 updated가 창 안이면 이 페이지 뒤에 더 있을 수 있다는 뜻이다.
-  const changes = [listChange({ created: '2026-08-30 00:00:00.000000000', updated: '2026-08-31 00:00:00.000000000' })];
+  // _more_changes가 없으면 Gerrit이 질의 결과를 다 준 것이라 절단이 아니다. 다음 페이지도 못 읽는 경우다.
+  const changes = [listChange({ created: '2026-08-30 00:00:00.000000000', updated: '2026-08-31 00:00:00.000000000', _more_changes: true })];
   const stub = stubFetch({ '4228183': detailFor(changes[0]) });
   const warnings = [];
   const originalWarn = console.warn;
@@ -463,6 +472,92 @@ test('a list page that does not reach the window boundary is reported, not silen
     console.warn = originalWarn;
   }
   assert.ok(warnings.some(message => message.includes('does not reach back to the')));
+});
+
+function mergedSupportChange(number, day, extra = {}) {
+  const stamp = `2026-08-${String(day).padStart(2, '0')} 00:00:00.000000000`;
+  return listChange({ _number: number, project: 'platform/frameworks/support', status: 'MERGED', submitted: stamp, updated: stamp, ...extra });
+}
+
+test('a first page short of the window follows _more_changes until the window start', async () => {
+  // 2026-11-09 실측: AndroidX camera 첫 페이지(n=100)는 창 시작 10-05보다 늦은 10-23까지만 덮었다.
+  const firstPage = [mergedSupportChange(9001, 31), mergedSupportChange(9002, 30, { _more_changes: true })];
+  // 페이지 사이에 새 병합이 생겨 offset이 밀리면 이미 받은 변경이 다시 온다.
+  const secondPage = [mergedSupportChange(9002, 30), mergedSupportChange(9003, 20),
+    mergedSupportChange(9004, 1, { submitted: '2026-07-01 00:00:00.000000000', updated: '2026-07-01 00:00:00.000000000' })];
+  const details = Object.fromEntries([...firstPage, ...secondPage].map(change => [change._number, detailFor(change, { files: ['camera/Session.kt'] })]));
+  const stub = stubFetch(details, { 2: secondPage });
+  const events = [];
+  const items = await resolveGerritCameraChangeItems(listBody(firstPage), SOURCE, {
+    fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS, onDiagnostic: event => events.push(event)
+  });
+  assert.deepEqual(stub.requested.filter(url => /[?&]S=/.test(url)), [`${SOURCE.sourceUrl}&S=2`]);
+  assert.deepEqual(items.map(item => item.url.split('/+/')[1]), ['9001', '9002', '9003'], '2쪽의 창 안 변경까지 읽고 중복은 한 번만 낸다');
+  assert.deepEqual(events, [], '창 시작까지 읽었으면 절단이 아니다');
+});
+
+test('a page whose oldest updated equals the window start, or carries no updated, keeps paging', async () => {
+  const cutoff = new Date(NOW.getTime() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString().replace('T', ' ').replace('Z', '000000');
+  const onBoundary = [mergedSupportChange(9301, 31), mergedSupportChange(9302, 1, { submitted: cutoff, updated: cutoff, _more_changes: true })];
+  const tied = [mergedSupportChange(9303, 1, { submitted: cutoff, updated: cutoff }), mergedSupportChange(9304, 1, { submitted: '2026-07-01 00:00:00.000000000', updated: '2026-07-01 00:00:00.000000000' })];
+  const undated = [mergedSupportChange(9305, 31, { updated: undefined, _more_changes: true })];
+  const all = [...onBoundary, ...tied, ...undated];
+  const details = Object.fromEntries(all.map(change => [change._number, detailFor(change, { files: ['camera/Session.kt'] })]));
+
+  const boundaryStub = stubFetch(details, { 2: tied });
+  const boundaryItems = await resolveGerritCameraChangeItems(listBody(onBoundary), SOURCE, {
+    fetchTextImpl: boundaryStub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+  });
+  assert.ok(boundaryItems.some(item => item.url.endsWith('/9303')), '창 시작과 같은 시각의 변경이 다음 페이지에 있어도 읽는다');
+
+  const undatedStub = stubFetch(details, {});
+  const events = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await resolveGerritCameraChangeItems(listBody(undated), SOURCE, {
+      fetchTextImpl: undatedStub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS, onDiagnostic: event => events.push(event)
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.deepEqual(undatedStub.requested.filter(url => /[?&]S=/.test(url)), [`${SOURCE.sourceUrl}&S=1`]);
+  assert.equal(events.length, 1, 'updated가 없어 경계를 못 판단한 채 멈추면 절단으로 알린다');
+});
+
+test('a list without _more_changes is complete even when every change is inside the window', async () => {
+  const changes = [mergedSupportChange(9101, 31)];
+  const stub = stubFetch({ 9101: detailFor(changes[0], { files: ['camera/Session.kt'] }) });
+  const events = [];
+  const items = await resolveGerritCameraChangeItems(listBody(changes), SOURCE, {
+    fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS, onDiagnostic: event => events.push(event)
+  });
+  assert.equal(items.length, 1);
+  assert.equal(stub.requested.filter(url => /[?&]S=/.test(url)).length, 0);
+  assert.deepEqual(events, []);
+});
+
+test('list paging stops at MAX_LIST_PAGES and reports the window as truncated', async () => {
+  const pageOf = offset => [mergedSupportChange(9200 + offset, 31, { _more_changes: true })];
+  const pages = Object.fromEntries(Array.from({ length: MAX_LIST_PAGES + 2 }, (_, offset) => [offset, pageOf(offset)]));
+  const details = Object.fromEntries(Object.values(pages).flat().map(change => [change._number, detailFor(change, { files: ['camera/Session.kt'] })]));
+  const stub = stubFetch(details, pages);
+  const events = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await resolveGerritCameraChangeItems(listBody(pages[0]), SOURCE, {
+      fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS, onDiagnostic: event => events.push(event)
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  // 상한을 이 테스트가 따로 잠근다. 상한이 1로 줄면 위 기대값이 함께 줄어 조기 절단을 못 잡는다.
+  assert.equal(MAX_LIST_PAGES, 5);
+  assert.equal(stub.requested.filter(url => /[?&]S=/.test(url)).length, 4);
+  assert.equal(events.length, 1);
+  assert.equal(events[0].kind, 'collection_window_truncated');
+  assert.match(events[0].detail, new RegExp(`does not reach back to the .*${MAX_LIST_PAGES}-page cap`));
 });
 
 test('a detail fetch failure skips only that change', async () => {
@@ -664,7 +759,7 @@ async function collectTruncationEvents(text, options) {
 }
 
 test('the list page and detail-fetch truncations reach the committed diagnostics (#1059)', async () => {
-  const shortOfWindow = [listChange({ created: '2026-08-30 00:00:00.000000000', updated: '2026-08-31 00:00:00.000000000' })];
+  const shortOfWindow = [listChange({ created: '2026-08-30 00:00:00.000000000', updated: '2026-08-31 00:00:00.000000000', _more_changes: true })];
   const listEvents = await collectTruncationEvents(listBody(shortOfWindow), {
     fetchTextImpl: stubFetch({ '4228183': detailFor(shortOfWindow[0]) }).fetchTextImpl,
     now: NOW,
