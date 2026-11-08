@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W46/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W45 Camera SW Newsletter (Published W46)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W46/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W46/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W46/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week&#39;s newsletter brings news on CameraX stability and feature expansion. First, CameraX&#39;s timeout mechanism has been strengthened to prevent 3A session deadlocks caused by dropped frames, improving stability. Additionally, the CameraPipe multi-resolution ImageReader bridge has been refactored to support Android 37 API, and LowLightBoostEffect has been introduced to extend CameraX&#39;s low-light processing capabilities, allowing app-level image quality correction in low-light environments." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W46/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W45 Camera SW Newsletter (Published W46)" />
+  <meta property="og:description" content="This week&#39;s newsletter brings news on CameraX stability and feature expansion. First, CameraX&#39;s timeout mechanism has been strengthened to prevent 3A session deadlocks caused by dropped frames, improving stability. Additionally, the CameraPipe multi-resolution ImageReader bridge has been refactored to support Android 37 API, and LowLightBoostEffect has been introduced to extend CameraX&#39;s low-light processing capabilities, allowing app-level image quality correction in low-light environments." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W46/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W45 Camera SW Newsletter (Published W46)" />
+  <meta name="twitter:description" content="This week&#39;s newsletter brings news on CameraX stability and feature expansion. First, CameraX&#39;s timeout mechanism has been strengthened to prevent 3A session deadlocks caused by dropped frames, improving stability. Additionally, the CameraPipe multi-resolution ImageReader bridge has been refactored to support Android 37 API, and LowLightBoostEffect has been introduced to extend CameraX&#39;s low-light processing capabilities, allowing app-level image quality correction in low-light environments." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.11.02 – 11.08</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W45</span></h1>
+        <p class="issue-publish-badge">Published W46</p>
+        
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop">CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames</a>
+            <p class="reader-brief-takeaway">Defensive logic has been implemented at the framework level to safely release session locks with a 500ms buffer timeout, even if the underlying HAL and sensor drivers delay or drop 3A convergence results.</p>
+          </li><li>
+            <a href="#article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api">CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API</a>
+            <p class="reader-brief-takeaway">In an Android 37 environment, MultiResolutionImageReader&#39;s concurrent reader support and active Surface callbacks are directly linked to the official framework API, so it is necessary to check the buffer processing flow when configuring related streams.</p>
+          </li><li>
+            <a href="#article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect">CameraX low-light processing effects expanded with LowLightBoostEffect</a>
+            <p class="reader-brief-takeaway">This is an extension of CameraX&#39;s post-processing effect pipeline, but it does not involve direct interface contract changes at the HAL level; it can be understood as a change in the higher-level frame processing path.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week&#39;s newsletter brings news on CameraX stability and feature expansion. First, CameraX&#39;s timeout mechanism has been strengthened to prevent 3A session deadlocks caused by dropped frames, improving stability. Additionally, the CameraPipe multi-resolution ImageReader bridge has been refactored to support Android 37 API, and LowLightBoostEffect has been introduced to extend CameraX&#39;s low-light processing capabilities, allowing app-level image quality correction in low-light environments.</p></details>
+        </div>
+        
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop" tabindex="-1" aria-labelledby="article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop-title" class="article-title">CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4365755)</p>
+        <p class="article-lead">CameraX 3A wait control now uses an absolute time-based safety timeout to prevent higher-level sessions from freezing indefinitely, even if the underlying camera HAL stops transmitting frames.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Defensive logic has been implemented at the framework level to safely release session locks with a 500ms buffer timeout, even if the underlying HAL and sensor drivers delay or drop 3A convergence results.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames image" loading="lazy" decoding="async">
+        </figure>
+        <p>A change to enhance CameraX&#39;s CapturePipeline and 3A control logic was merged into the AndroidX main branch on November 3, 2026. Previously, CameraPipe&#39;s 3A state listener evaluated timeouts based on the interval between sensor timestamps of repeating frames. This created a vulnerability where asynchronous operations could wait indefinitely, holding a session lock, if frame transmission stopped in the underlying HAL or driver pipeline while the camera device was open.</p>
+        <p>This patch introduced withTimeoutOrNull, an absolute time-based timeout, across all waiting paths for lock3AForCapture, lockAf, unlockAf, startFocusAndMeteringAsync, and cancelFocusAndMeteringAsync. The timeout duration is the existing nanosecond limit plus a 500-millisecond buffer. Additionally, to prevent leaks that occurred in the CapturePipeline&#39;s result waiting coroutine, the code was refactored into a finally block structure that ensures listeners are cleaned up and completion signals are closed upon exception or termination.</p>
+        <p>The patch also modified the system to immediately propagate session closed errors by capturing the onRequestSequenceAborted event, which is called when a capture sequence is canceled due to a camera session interruption. This reduces the risk of framework deadlocks where the session might halt without recovery at higher layers if a driver fault or hardware delay occurs.</p>
+        <p>This change improves the robustness of the framework layer and does not directly fix 3A algorithm bugs in the camera HAL or kernel driver itself. To monitor whether sessions are properly reclaimed when 3A results are delayed, regression checks that artificially trigger a repeating request abort sequence can be proposed. The confirmed scope is currently the merged state in the androidx-main source tree; actual binary distribution and application to device product builds require separate verification of release schedules.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755">Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api" aria-label="Next article: CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api" tabindex="-1" aria-labelledby="article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api-title" class="article-title">CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4423978)</p>
+        <p class="article-lead">CameraPipe, CameraX&#39;s internal implementation, has transitioned its multi-resolution reader and active Surface detection features to the official Android 37 API, aligning with the compileSdk 37 upgrade.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>In an Android 37 environment, MultiResolutionImageReader&#39;s concurrent reader support and active Surface callbacks are directly linked to the official framework API, so it is necessary to check the buffer processing flow when configuring related streams.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API image" loading="lazy" decoding="async">
+        </figure>
+        <p>A commit to replace CameraPipe&#39;s internal compatibility layer with the official Android 37 API was merged into the platform/frameworks/support branch on November 7, 2026. As the project&#39;s compileSdk was upgraded to 37, the system now directly calls platform framework functions via the Api37Compat class instead of the temporary abstraction PlatformApiCompat.</p>
+        <p>The main changes are in the control of MultiResolutionImageReader. Api37Compat now includes isConcurrentReadersSupported, buildMultiResolutionImageReader, and setOnActiveOutputSurfacesListener. Consequently, Camera2MultiResolutionStreamConfigurationMap directly queries the framework for concurrent reader support on API level 37 and above, and explicitly returns false for versions below that.</p>
+        <p>Additionally, validation logic was refined for AndroidMultiResolutionImageReader creation to bind Api37Compat&#39;s active Surface listener only in environments where concurrent output is enabled. When the reader receives a list of active Surfaces, it maps the expected output identifiers and passes them to the higher-level pipeline, clarifying buffer pipeline processing during resolution switching on devices with multiple physical cameras.</p>
+        <p>This commit refactored CameraPipe&#39;s internal platform bridging code and does not mandate new camera HAL interface bindings or immediate driver modifications. For devices targeting an API 37 environment, it is useful to observe whether frame drops or format mismatches occur when applying MultiResolutionImageReader stream configurations and concurrent output flags. This patch is currently reflected in the androidx-main source tree, and its product release timing is separate.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978">Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop" aria-label="Previous article: CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect" aria-label="Next article: CameraX low-light processing effects expanded with LowLightBoostEffect">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect" tabindex="-1" aria-labelledby="article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect-title" class="article-title">CameraX low-light processing effects expanded with LowLightBoostEffect</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4223279)</p>
+        <p class="article-lead">LowLightBoostEffect, an extension of CameraEffect that allows app-level image quality correction in low-light environments, has been merged into the CameraX main tree.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This is an extension of CameraX&#39;s post-processing effect pipeline, but it does not involve direct interface contract changes at the HAL level; it can be understood as a change in the higher-level frame processing path.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX low-light processing effects expanded with LowLightBoostEffect image" loading="lazy" decoding="async">
+        </figure>
+        <p>A major patch introducing LowLightBoostEffect and its associated session manager was merged into the AndroidX main branch on November 3, 2026. This change added over 2,900 lines of code across 8 source files, integrating a new effect into the CameraX effects ecosystem.</p>
+        <p>The newly added LowLightBoostEffect inherits from the existing CameraEffect abstract class. Application developers can create an instance through a constructor that takes a context and a target, and control the effect using LiveData-based state observation and the setLowLightBoostEnabled method. Additionally, isSupportedAsync and isSupported methods are exposed to asynchronously and synchronously determine effect support based on device and camera information.</p>
+        <p>This feature operates by post-processing camera frames through a framework-level Surface Processor and session manager. It does not directly change the camera HAL&#39;s interface specifications or require new driver control code. However, frame delays or memory bandwidth consumption may occur during effect processing, so changes in the higher-level image processing pipeline should be noted.</p>
+        <p>The scope confirmed in the original source is that the source code has been merged into the androidx-main tree. Specific post-processing algorithm specifications or commercial release artifact distribution schedules are not yet confirmed, so subsequent release notes should be monitored.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279">Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api" aria-label="Previous article: CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          
+        </nav>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755">Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978">Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279">Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

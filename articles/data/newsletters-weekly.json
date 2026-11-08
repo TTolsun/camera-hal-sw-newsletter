@@ -73,7 +73,65 @@
     "coverage_start_date": "2026-11-02",
     "coverage_end_date": "2026-11-08",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-11-09"
+    "generation_anchor_date": "2026-11-09",
+    "en": {
+      "title": "2026 W46",
+      "summary": "CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames\nCameraPipe multi-resolution ImageReader bridge refactored for Android 37 API\nCameraX low-light processing effects expanded with LowLightBoostEffect",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week's newsletter brings news on CameraX stability and feature expansion. First, CameraX's timeout mechanism has been strengthened to prevent 3A session deadlocks caused by dropped frames, improving stability. Additionally, the CameraPipe multi-resolution ImageReader bridge has been refactored to support Android 37 API, and LowLightBoostEffect has been introduced to extend CameraX's low-light processing capabilities, allowing app-level image quality correction in low-light environments.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+            "href": "en/newsletters/2026-W46/index.html#article-camerax-timeout-mechanism-strengthened-to-prevent-3a-session-deadlocks-from-drop",
+            "headline": "CameraX timeout mechanism strengthened to prevent 3A session deadlocks from dropped frames",
+            "lead": "CameraX 3A wait control now uses an absolute time-based safety timeout to prevent higher-level sessions from freezing indefinitely, even if the underlying camera HAL stops transmitting frames.",
+            "takeaway": "Defensive logic has been implemented at the framework level to safely release session locks with a 500ms buffer timeout, even if the underlying HAL and sensor drivers delay or drop 3A convergence results.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+            "href": "en/newsletters/2026-W46/index.html#article-camerapipe-multi-resolution-imagereader-bridge-refactored-for-android-37-api",
+            "headline": "CameraPipe multi-resolution ImageReader bridge refactored for Android 37 API",
+            "lead": "CameraPipe, CameraX's internal implementation, has transitioned its multi-resolution reader and active Surface detection features to the official Android 37 API, aligning with the compileSdk 37 upgrade.",
+            "takeaway": "In an Android 37 environment, MultiResolutionImageReader's concurrent reader support and active Surface callbacks are directly linked to the official framework API, so it is necessary to check the buffer processing flow when configuring related streams.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+            "href": "en/newsletters/2026-W46/index.html#article-camerax-low-light-processing-effects-expanded-with-lowlightboosteffect",
+            "headline": "CameraX low-light processing effects expanded with LowLightBoostEffect",
+            "lead": "LowLightBoostEffect, an extension of CameraEffect that allows app-level image quality correction in low-light environments, has been merged into the CameraX main tree.",
+            "takeaway": "This is an extension of CameraX's post-processing effect pipeline, but it does not involve direct interface contract changes at the HAL level; it can be understood as a change in the higher-level frame processing path.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      },
+      "html": "en/newsletters/2026-W46/index.html",
+      "md": "en/newsletters/2026-W46/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W45",
