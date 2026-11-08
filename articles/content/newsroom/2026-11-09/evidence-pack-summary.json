@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "generated_at": "2026-11-08T16:16:51.560Z",
+  "inputs": {
+    "required": [],
+    "preferred": [
+      "articles/content/newsroom/2026-11-09/generation-status.json",
+      "articles/content/newsroom/2026-11-09/selection-report.json",
+      "articles/content/newsroom/2026-11-09/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-11-09/candidates.json"
+    ],
+    "optional": [
+      "articles/content/newsroom/2026-11-09/article-capsules.json",
+      "articles/content/newsroom/2026-11-09/reporter-candidates.json",
+      "articles/content/newsroom/2026-11-09/quality-report.json",
+      "articles/content/newsroom/2026-11-09/fact-check-report.json",
+      "articles/content/newsroom/2026-11-09/source-effectiveness-report.json",
+      "articles/content/source-events/2026-11-09/source-change-events.json",
+      "articles/content/newsroom/2026-11-09/repair-failure.json",
+      "articles/content/newsroom/2026-11-09/stale-claim-report.json"
+    ],
+    "missing": [
+      "articles/content/newsroom/2026-11-09/generation-status.json",
+      "articles/content/newsroom/2026-11-09/selection-report.json",
+      "articles/content/newsroom/2026-11-09/shortlisted-candidates.json",
+      "articles/content/newsroom/2026-11-09/article-capsules.json",
+      "articles/content/newsroom/2026-11-09/reporter-candidates.json",
+      "articles/content/newsroom/2026-11-09/quality-report.json",
+      "articles/content/newsroom/2026-11-09/fact-check-report.json",
+      "articles/content/newsroom/2026-11-09/source-effectiveness-report.json",
+      "articles/content/newsroom/2026-11-09/repair-failure.json",
+      "articles/content/newsroom/2026-11-09/stale-claim-report.json"
+    ],
+    "used": [
+      "articles/content/collected-news/2026-11-09/candidates.json",
+      "articles/content/source-events/2026-11-09/source-change-events.json"
+    ]
+  },
+  "publish_status": {
+    "status": "unknown",
+    "run_mode": "unknown",
+    "quality_score": null,
+    "quality_threshold": null,
+    "fact_check_status": "UNKNOWN",
+    "final_publish_ready": null,
+    "public_newsletter_ready": null,
+    "review_pr_ready": null
+  },
+  "selection_summary": {
+    "raw_candidate_count": 50,
+    "eligible_candidate_count": null,
+    "selected_main_article_count": null,
+    "reserve_candidate_count": null,
+    "excluded_candidate_count": 50,
+    "primary_camera_stack_count": null,
+    "android_multimedia_camera_output_count": null,
+    "supporting_bucket_count": null,
+    "fallback_window_used": null,
+    "fallback_window_consulted": null,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": null,
+    "fallback_bucket_used": null,
+    "candidate_shortage_hints": []
+  },
+  "claim_validation_summary": {
+    "status": "not_available",
+    "bound_claims": null,
+    "total_claims": null,
+    "overclaim_risk": "unknown",
+    "available_article_count": 0,
+    "not_available_article_count": 0
+  },
+  "hal_impact_summary": {
+    "axes": [],
+    "article_count_with_axes": 0,
+    "article_count_without_axes": 0
+  },
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 0,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 0,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 0,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {},
+    "actionability_level_counts": {},
+    "effective_actionability_level_counts": {},
+    "signal_quality_status_counts": {}
+  },
+  "main_article_signal_checks": [],
+  "selected_main_articles": [],
+  "reserve_candidates": [],
+  "excluded_candidates_top": [
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "source": "CameraX Release Notes",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_release_note_anchor",
+      "freshness_window": "unknown",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "source": "CameraX Release Notes",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_release_note_anchor",
+      "freshness_window": "unknown",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected."
+    },
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4389385",
+      "title": "Use per-image metadata when saving DNG files - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4389385",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418104",
+      "title": "Map processed audio PTS to capture time - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418104",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403037",
+      "title": "Fix AudioRecord frame count and A/V sync test - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403037",
+      "source": "AndroidX Gerrit Camera",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://lore.kernel.org/linux-media/20261106-camss-isp-ope-v14-0-49c426cd2715@oss.qualcomm.com/",
+      "title": "[PATCH v14 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
+      "url": "https://lore.kernel.org/linux-media/20261106-camss-isp-ope-v14-0-49c426cd2715@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for main article selection."
+    },
+    {
+      "candidate_id": "https://lore.kernel.org/linux-media/20261104202313.72494-1-allan@fatecpompeia.edu.br/",
+      "title": "[PATCH 0/4] media: qcom: camss: fixes for SoCs without IOMMU, RDI and CSID1 streaming",
+      "url": "https://lore.kernel.org/linux-media/20261104202313.72494-1-allan@fatecpompeia.edu.br/",
+      "source": "lore.kernel.org linux-media list",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for main article selection."
+    }
+  ],
+  "excluded_candidates_truncated": true,
+  "failure_diagnostics": {
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
+    "candidate_shortage_hints": [],
+    "source_gap_warnings": [],
+    "missing_artifacts": [
+      "articles/content/newsroom/2026-11-09/generation-status.json",
+      "articles/content/newsroom/2026-11-09/selection-report.json",
+      "articles/content/newsroom/2026-11-09/shortlisted-candidates.json",
+      "articles/content/newsroom/2026-11-09/article-capsules.json",
+      "articles/content/newsroom/2026-11-09/reporter-candidates.json",
+      "articles/content/newsroom/2026-11-09/quality-report.json",
+      "articles/content/newsroom/2026-11-09/fact-check-report.json",
+      "articles/content/newsroom/2026-11-09/source-effectiveness-report.json",
+      "articles/content/newsroom/2026-11-09/repair-failure.json",
+      "articles/content/newsroom/2026-11-09/stale-claim-report.json"
+    ],
+    "invalid_artifacts": []
+  },
+  "warnings": [
+    "Missing preferred artifact: articles/content/newsroom/2026-11-09/generation-status.json",
+    "Missing preferred artifact: articles/content/newsroom/2026-11-09/selection-report.json",
+    "Missing preferred artifact: articles/content/newsroom/2026-11-09/shortlisted-candidates.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/article-capsules.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/reporter-candidates.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/quality-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/fact-check-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/source-effectiveness-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/repair-failure.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-09/stale-claim-report.json"
+  ]
+}
