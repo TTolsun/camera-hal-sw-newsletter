@@ -477,6 +477,35 @@ test('a first page short of the window follows _more_changes until the window st
   assert.deepEqual(events, [], '창 시작까지 읽었으면 절단이 아니다');
 });
 
+test('a page whose oldest updated equals the window start, or carries no updated, keeps paging', async () => {
+  const cutoff = new Date(NOW.getTime() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString().replace('T', ' ').replace('Z', '000000');
+  const onBoundary = [mergedSupportChange(9301, 31), mergedSupportChange(9302, 1, { submitted: cutoff, updated: cutoff, _more_changes: true })];
+  const tied = [mergedSupportChange(9303, 1, { submitted: cutoff, updated: cutoff }), mergedSupportChange(9304, 1, { submitted: '2026-07-01 00:00:00.000000000', updated: '2026-07-01 00:00:00.000000000' })];
+  const undated = [mergedSupportChange(9305, 31, { updated: undefined, _more_changes: true })];
+  const all = [...onBoundary, ...tied, ...undated];
+  const details = Object.fromEntries(all.map(change => [change._number, detailFor(change, { files: ['camera/Session.kt'] })]));
+
+  const boundaryStub = stubFetch(details, { 2: tied });
+  const boundaryItems = await resolveGerritCameraChangeItems(listBody(onBoundary), SOURCE, {
+    fetchTextImpl: boundaryStub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+  });
+  assert.ok(boundaryItems.some(item => item.url.endsWith('/9303')), '창 시작과 같은 시각의 변경이 다음 페이지에 있어도 읽는다');
+
+  const undatedStub = stubFetch(details, {});
+  const events = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await resolveGerritCameraChangeItems(listBody(undated), SOURCE, {
+      fetchTextImpl: undatedStub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS, onDiagnostic: event => events.push(event)
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.deepEqual(undatedStub.requested.filter(url => /[?&]S=/.test(url)), [`${SOURCE.sourceUrl}&S=1`]);
+  assert.equal(events.length, 1, 'updated가 없어 경계를 못 판단한 채 멈추면 절단으로 알린다');
+});
+
 test('a list without _more_changes is complete even when every change is inside the window', async () => {
   const changes = [mergedSupportChange(9101, 31)];
   const stub = stubFetch({ 9101: detailFor(changes[0], { files: ['camera/Session.kt'] }) });
@@ -504,7 +533,9 @@ test('list paging stops at MAX_LIST_PAGES and reports the window as truncated', 
   } finally {
     console.warn = originalWarn;
   }
-  assert.equal(stub.requested.filter(url => /[?&]S=/.test(url)).length, MAX_LIST_PAGES - 1);
+  // 상한을 이 테스트가 따로 잠근다. 상한이 1로 줄면 위 기대값이 함께 줄어 조기 절단을 못 잡는다.
+  assert.equal(MAX_LIST_PAGES, 5);
+  assert.equal(stub.requested.filter(url => /[?&]S=/.test(url)).length, 4);
   assert.equal(events.length, 1);
   assert.equal(events[0].kind, 'collection_window_truncated');
   assert.match(events[0].detail, new RegExp(`does not reach back to the .*${MAX_LIST_PAGES}-page cap`));

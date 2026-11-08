@@ -386,8 +386,10 @@ function listPageUrl(listUrl, offset) {
   return `${listUrl}${listUrl.includes('?') ? '&' : '?'}S=${offset}`;
 }
 
-// 목록은 updated 내림차순이다. 읽은 목록의 가장 오래된 updated가 창 시작보다 이르면 창을 다 읽은
-// 것이다(effective date는 updated보다 이르거나 같으므로 updated로 경계를 판단할 수 있다). 그 전에
+// 목록은 updated 내림차순이다. 읽은 목록에 창 시작보다 엄격히 이른 updated가 있으면 창을 다 읽은
+// 것이다(effective date는 updated보다 이르거나 같으므로 updated로 경계를 판단할 수 있다). updated가
+// 창 시작과 같은 변경은 창 안일 수 있고, 읽을 수 있는 updated가 하나도 없으면 경계를 판단할 수
+// 없으므로 둘 다 "아직 못 닿음"으로 보고 다음 페이지를 읽는다. 그 전에
 // Gerrit이 마지막 항목에 _more_changes를 붙이지 않았다면 질의 결과 전체를 이미 받은 것이다.
 // 페이지 사이에 새 변경이 병합되면 offset이 밀려 같은 변경이 두 번 올 수 있어 _number로 거른다.
 async function readListThroughWindow(firstPage, listUrl, fetchTextImpl, cutoffMs) {
@@ -409,8 +411,7 @@ async function readListThroughWindow(firstPage, listUrl, fetchTextImpl, cutoffMs
     }
   };
   const reachesWindowStart = () => {
-    const updateTimes = changes.map(change => gerritTimeMs(change && change.updated)).filter(Number.isFinite);
-    return updateTimes.length === 0 || Math.min(...updateTimes) <= cutoffMs;
+    return changes.some(change => gerritTimeMs(change && change.updated) < cutoffMs);
   };
   const done = (reachedWindowStart, stopReason = '') => ({ changes, pages, reachedWindowStart, stopReason });
 
