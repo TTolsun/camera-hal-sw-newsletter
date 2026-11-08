@@ -67,6 +67,8 @@ const DEFAULT_LIMITS = Object.freeze({
   maxBytesPerPage: 200000,
   maxRedirects: 5
 });
+// Gerrit REST 상세 JSON 전용 상한. 잘린 JSON은 쓸 수 없으므로 HTML 본문 상한과 따로 둔다.
+const GERRIT_DETAIL_MAX_BYTES = 4000000;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 class SeedEvidenceError extends Error {
@@ -741,8 +743,12 @@ async function runSeedEvidenceExpansion({
     try {
       if (isGerritUrl(seed.url)) {
         // Gerrit 변경 페이지 HTML에는 제목·날짜·본문이 없다. 같은 SSRF 검사를 거쳐 REST 상세를 읽는다.
+        // 상세는 JSON이라 HTML 페이지 상한으로 자르면 파싱이 깨진다(파일이 많은 변경은 500KB를 넘는다).
         const resolved = await resolveGerritChangeUrl(seed.url, sourceRegistry.sources, {
-          fetchTextImpl: async url => (await fetchPublicText(fetchImpl, url, fetchOptions)).body
+          fetchTextImpl: async url => (await fetchPublicText(fetchImpl, url, {
+            ...fetchOptions,
+            maxBytes: GERRIT_DETAIL_MAX_BYTES
+          })).body
         });
         if (!resolved.candidate) {
           fetchRows.push({ seed_id: seed.seed_id, url: seed.url, status: 'failed', reason: resolved.reason, details: {} });
