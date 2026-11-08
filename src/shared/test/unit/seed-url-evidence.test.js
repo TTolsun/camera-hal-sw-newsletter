@@ -779,6 +779,51 @@ test('Gerrit seed scope reads the full summary so camera file paths past 220 cha
   assert.equal(candidate.relevance_bucket, collected.relevance_bucket);
 });
 
+test('Gerrit seed detail larger than the HTML page cap is read whole, not cut into unparseable JSON', async () => {
+  // 2026-11-09 LowLightBoost(4223279)의 REST 상세는 524KB였다. HTML 페이지 상한 200KB로 자르면
+  // JSON 끝이 잘려 gerrit_detail_unparseable로 떨어지고 seed 후보가 사라졌다.
+  const root = tempRoot();
+  const date = '2026-11-09';
+  const sha = 'e'.repeat(40);
+  const files = { '/COMMIT_MSG': {} };
+  for (let index = 0; index < 4000; index += 1) {
+    files[`camera/camera-effects/src/main/java/androidx/camera/effects/lowlight/Generated${index}.kt`] = { lines_inserted: 10 };
+  }
+  const detail = {
+    _number: 4223279,
+    project: 'platform/frameworks/support',
+    branch: 'androidx-main',
+    status: 'MERGED',
+    change_id: 'I' + 'f'.repeat(40),
+    subject: 'Add LowLightBoostEffect, surface processor and session manager',
+    created: '2026-10-01 10:00:00.000000000',
+    submitted: '2026-11-03 08:29:00.000000000',
+    insertions: 900,
+    deletions: 0,
+    labels: { 'Code-Review': { approved: { _account_id: 1 } } },
+    current_revision: sha,
+    revisions: { [sha]: { commit: { message: 'Subject\n\nIntroduces LowLightBoostEffect extending CameraEffect.\n\nChange-Id: I3' }, files } }
+  };
+  const body = ")]}'\n" + JSON.stringify(detail);
+  assert.ok(body.length > 200000, 'fixture must exceed the 200KB HTML page cap');
+
+  const result = await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: { schema_version: 5, date, newsletter_date: date, candidates: [] },
+    collectionIntent: { payload: { schema_version: 1, newsletter_date: date, keyword_hints: [], seed_urls: [
+      { seed_id: 'seed-llb', url: 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279' }
+    ] } },
+    sourceRegistryPath: path.join(__dirname, '..', '..', 'data', 'news-sources.json'),
+    lookupImpl: publicLookup,
+    fetchImpl: async url => ({ ok: true, url, text: async () => body })
+  });
+
+  assert.equal(result.stats.seed_fetch_failed_count, 0);
+  assert.equal(result.stats.seed_candidate_count, 1);
+  assert.equal(result.seedCandidates[0].gerrit_commit_sha, sha);
+});
+
 test('seed expansion source_extraction_ref uses actual pack index after blocked first seed', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
