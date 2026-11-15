@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-16",
+  "source_of_truth": "articles/content/newsroom/2026-11-16/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-W47/newsletter.md",
+    "html": "newsletters/2026-W47/index.html"
+  },
+  "mode": "publish-target",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 5,
+    "rendered_image_count": 5,
+    "markdown_image_count": 5,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 15,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 5,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+      "selectedImage": "",
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1eG2SV.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "og",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579d635a54d6e1f40caad46ce407560c5106c8915e5ff7e6341f5b13eb245c5a/android/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1N5Hb5.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+      "selectedImage": "",
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1eG2SV.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "og",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579d635a54d6e1f40caad46ce407560c5106c8915e5ff7e6341f5b13eb245c5a/android/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1N5Hb5.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+      "selectedImage": "",
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1eG2SV.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "og",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579d635a54d6e1f40caad46ce407560c5106c8915e5ff7e6341f5b13eb245c5a/android/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1N5Hb5.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+      "selectedImage": "",
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1eG2SV.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "og",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579d635a54d6e1f40caad46ce407560c5106c8915e5ff7e6341f5b13eb245c5a/android/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1N5Hb5.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+      "selectedImage": "",
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1eG2SV.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "og",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v579d635a54d6e1f40caad46ce407560c5106c8915e5ff7e6341f5b13eb245c5a/android/images/lockup.png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        },
+        {
+          "candidate_url": "https://developer.android.com/static/blog/assets/1007_ABL_134_How_Smile_ID_Scaled_Identity_Verification_with_Camera_X_Strapi_788bf73f23_1N5Hb5.webp",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/webp",
+          "validationStatus": "ok",
+          "sourceUrl": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "canonicalSourceUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}

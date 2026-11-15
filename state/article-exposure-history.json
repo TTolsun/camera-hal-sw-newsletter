@@ -7,6 +7,102 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "newsletter_date": "2026-11-16",
+      "newsletter_url": "newsletters/2026-W47/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-16",
+      "newsletter_article_date": "2026-11-16",
+      "cooldown_until": "2026-12-07",
+      "first_exposed_at": "2026-11-16",
+      "last_exposed_at": "2026-11-16",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "newsletter_date": "2026-11-16",
+      "newsletter_url": "newsletters/2026-W47/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-16",
+      "newsletter_article_date": "2026-11-16",
+      "cooldown_until": "2026-12-07",
+      "first_exposed_at": "2026-11-16",
+      "last_exposed_at": "2026-11-16",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "newsletter_date": "2026-11-16",
+      "newsletter_url": "newsletters/2026-W47/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-16",
+      "newsletter_article_date": "2026-11-16",
+      "cooldown_until": "2026-12-07",
+      "first_exposed_at": "2026-11-16",
+      "last_exposed_at": "2026-11-16",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "newsletter_date": "2026-11-16",
+      "newsletter_url": "newsletters/2026-W47/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-16",
+      "newsletter_article_date": "2026-11-16",
+      "cooldown_until": "2026-12-07",
+      "first_exposed_at": "2026-11-16",
+      "last_exposed_at": "2026-11-16",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "title": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "newsletter_date": "2026-11-16",
+      "newsletter_url": "newsletters/2026-W47/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-11-16",
+      "first_exposed_at": "2026-11-16",
+      "last_exposed_at": "2026-11-16",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-11-16",
+      "cooldown_until": "2026-12-07"
+    },
+    {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
       "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
       "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",

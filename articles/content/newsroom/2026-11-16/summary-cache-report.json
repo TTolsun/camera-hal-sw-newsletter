@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-16",
+  "generated_at": "2026-11-15T16:33:13.748Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 8,
+    "miss_count": 4,
+    "by_url_hit_count": 7,
+    "by_content_hit_count": 1,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "url-hit",
+      "count": 7
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-13",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+        "url_hash": "07c27fe5a0d9df17adb03794af8d6baad0d614f09698d2ae36c8a01e6f7c3b28",
+        "published_date": "2026-11-13",
+        "content_hash": "4283dc9cf4dc5a4349aac99095cab221eb031f9b7ebf40b9db896c6ae1eb2053"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/4283dc9cf4dc5a4349aac99095cab221eb031f9b7ebf40b9db896c6ae1eb2053.json"
+    },
+    {
+      "title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-09",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+        "url_hash": "d5280bf1a2693a5d15ec3536e5bca88a6d5cf3bbd0689233d8b05657e75acd8a",
+        "published_date": "2026-11-09",
+        "content_hash": "02f1c179e7f64dbf57ced9fd20827e4f80dbc13bbbbdc1a7183f3993b6a9e128"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-12",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "url_hash": "4768d871d397e19b8a40f073f9b2484fcb8ae506b3b6181a7fb21ad18c06fa33",
+        "published_date": "2026-11-12",
+        "content_hash": "17f02f2fdc77ab75ea38fab82c0e0546e2ae8a9fe6a28469f425ac6b1498e3bd"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-13",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+        "url_hash": "69dc1a32faa34898435c8f19c85f3ba17e79f19fa45b78dd05707caa63d5d39e",
+        "published_date": "2026-11-13",
+        "content_hash": "5783f5e811abe2d9cbd29854568a53341f75466166432002d723098b91618633"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-10",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+        "url_hash": "7a3ea6cb439d878f6a35271c24e69dc296abf25b25f878f6f397924696a5146a",
+        "published_date": "2026-11-10",
+        "content_hash": "a663e2c92195cb832e76e9c1b8d0a06125ee8d10548b87e1aa4323c8d156a5f1"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-09",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+        "url_hash": "ff135ce6e3b1f65084033ee66612bf2661a6366f6fdb680be3125cdec0d19b03",
+        "published_date": "2026-11-09",
+        "content_hash": "cf338949c2a46eb89621bbe904bbfd3347df094ab016147008c8550b781b0b4a"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ff135ce6e3b1f65084033ee66612bf2661a6366f6fdb680be3125cdec0d19b03.json"
+    },
+    {
+      "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-10",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+        "url_hash": "4bd256ff5a057dd70ba14828449e0fbfd079e6524d353448c1765340bf51ceae",
+        "published_date": "2026-11-10",
+        "content_hash": "958f1f91c1e0653860b7d517b53bf5500822aa63413a8e0a39226419d344d46e"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/4bd256ff5a057dd70ba14828449e0fbfd079e6524d353448c1765340bf51ceae.json"
+    },
+    {
+      "title": "Sync PreviewView with display rotation - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-12",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+        "url_hash": "76e8015edab963566d11ae595ba9f4ad9b41e9d6fb78b5f599362967b3db2918",
+        "published_date": "2026-11-12",
+        "content_hash": "fb6cc488ab8c9226213bfaa219a520a729f95d2db4d629f8b7d2520ea491d7fc"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/76e8015edab963566d11ae595ba9f4ad9b41e9d6fb78b5f599362967b3db2918.json"
+    },
+    {
+      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "source": "Android Developers Blog",
+      "published_date": "2026-11-11",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+        "url_hash": "ca0244e3d958a93360ccd4f28c50d74ba7b73896fc8800ad012022e65172320e",
+        "published_date": "2026-11-11",
+        "content_hash": "9f07dba658b68d0717c8b3b268eed584a5f7771167593a6fbb2193316c4cf2b8"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ca0244e3d958a93360ccd4f28c50d74ba7b73896fc8800ad012022e65172320e.json"
+    },
+    {
+      "title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+      "source": "AndroidX Gerrit HeifWriter",
+      "published_date": "2026-11-09",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+        "url_hash": "b9ae0e67c209d9be8caa20cf50a0ac6bce30afd465b1b4d17ac363dae42ec49a",
+        "published_date": "2026-11-09",
+        "content_hash": "3b52e7505f9eb543d96ead00559f6b972b9bdc9781e79d6676b8bbcca50361c2"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/b9ae0e67c209d9be8caa20cf50a0ac6bce30afd465b1b4d17ac363dae42ec49a.json"
+    },
+    {
+      "title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
+      "url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-11-10T02:05:31Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/cagesz8hvy-jde6k7vl4b4m=hpzptyz2a1d_qza81uyhd=fr8sw@mail.gmail.com",
+        "url_hash": "2005c04eb81ac4ed7cfd6634aad6920fc1181095967d81916fb54927e278a2ab",
+        "published_date": "2026-11-10T02:05:31Z",
+        "content_hash": "82fac30e20353674e273a0c4e8be0f756566a23691ed1a7eb1318f4a257b0b61"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/2005c04eb81ac4ed7cfd6634aad6920fc1181095967d81916fb54927e278a2ab.json"
+    },
+    {
+      "title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+      "url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-11-14T19:55:33Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se",
+        "url_hash": "9a2a7d62f833b1a4861b02430850be25a549d89941a69ba4cf2b8307c046f285",
+        "published_date": "2026-11-14T19:55:33Z",
+        "content_hash": "4de37b64a303b899bcd5357a2128a331cee1da52ec0f55b6b9d282ef6195d085"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/9a2a7d62f833b1a4861b02430850be25a549d89941a69ba4cf2b8307c046f285.json"
+    }
+  ]
+}
