@@ -25,7 +25,7 @@ const REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
 // 통과한다"이므로, 픽스처가 그 사실 자체를 회귀로 잠근다. W37이 나중에 표적 패치되어 계약을
 // 어기게 되면 이 테스트는 게이트 회귀가 아니라 픽스처 사유로 깨진다 — 그때는 통과하는 다른
 // 발행 호로 WEEKLY_KEY를 교체한다.
-function stageWeeklyIssue(root, { html } = {}) {
+function stageWeeklyIssue(root, { html, entry = {} } = {}) {
   const issueDir = path.join(root, 'articles', 'newsletters', WEEKLY_KEY);
   fs.mkdirSync(issueDir, { recursive: true });
   writeText(
@@ -42,7 +42,8 @@ function stageWeeklyIssue(root, { html } = {}) {
     date: '2026-09-07',
     title: `Camera HAL / SW Newsletter - ${WEEKLY_KEY}`,
     html: `newsletters/${WEEKLY_KEY}/index.html`,
-    md: `newsletters/${WEEKLY_KEY}/newsletter.md`
+    md: `newsletters/${WEEKLY_KEY}/newsletter.md`,
+    ...entry
   }]);
 }
 
@@ -151,4 +152,66 @@ test('REQUIRE_PUBLIC_NEWSLETTER_CONTRACT promotes historical weekly violations t
     if (previous === undefined) delete process.env.REQUIRE_PUBLIC_NEWSLETTER_CONTRACT;
     else process.env.REQUIRE_PUBLIC_NEWSLETTER_CONTRACT = previous;
   }
+});
+
+// 번역 PR(#1378)이 색인 항목에 붙이는 en 하위 객체는 한국어 필드의 번역이다. '폴백' -> 'fallback'처럼 원문이 옮긴
+// 카메라 기술 용어만 면제하고, 짝이 되는 한국어 필드에 대응어가 없거나 순수 파이프라인 용어이면 계속 막는다.
+function weeklyEntryErrors(entry) {
+  const root = tempRoot('weekly-lane-en-');
+  stageWeeklyIssue(root, { entry });
+  return validateIndexedWeeklyNewsletters({ rootDir: root, strictKeys: new Set([WEEKLY_KEY]) }).errors;
+}
+
+const KOREAN_BRIEF = {
+  intro: '소개',
+  items: [{ id: 'url:https://example.com/a', headline: 'SurfaceControl 및 TextureView 폴백', lead: '폴백 경로가 추가되었습니다.' }]
+};
+
+test('en index fields may carry the English term for a Korean counterpart in the paired field', () => {
+  const errors = weeklyEntryErrors({
+    summary: 'SurfaceControl 및 TextureView 폴백',
+    reader_brief: KOREAN_BRIEF,
+    en: {
+      summary: 'SurfaceControl and TextureView fallback when CameraEffect is applied',
+      reader_brief: {
+        intro: 'Intro',
+        items: [{ id: 'url:https://example.com/a', headline: 'SurfaceControl and TextureView fallback', lead: 'A fallback path was added.' }]
+      }
+    }
+  });
+  assert.deepEqual(errors, []);
+});
+
+test('en index fields are blocked when the paired Korean field has no counterpart', () => {
+  const errors = weeklyEntryErrors({
+    summary: '요약',
+    reader_brief: { ...KOREAN_BRIEF, items: [{ id: 'url:https://example.com/a', headline: '제목', lead: '본문' }] },
+    en: {
+      summary: 'A fallback was added',
+      reader_brief: { intro: 'Intro', items: [{ id: 'url:https://example.com/a', headline: 'Title', lead: 'A fallback path was added.' }] }
+    }
+  });
+  assert.ok(errors.some(error => /en\.summary/.test(error) && /Fallback/i.test(error)), JSON.stringify(errors));
+  assert.ok(errors.some(error => /en\.reader_brief\.items\.0\.lead/.test(error)), JSON.stringify(errors));
+});
+
+test('en index fields are blocked when a repeated term exceeds the Korean counterparts', () => {
+  const errors = weeklyEntryErrors({
+    summary: '폴백 한 번',
+    en: { summary: 'fallback and fallback' }
+  });
+  assert.ok(errors.some(error => /en\.summary/.test(error)), JSON.stringify(errors));
+});
+
+test('en index fields still block pure pipeline terms even when Korean text has a fallback counterpart', () => {
+  const errors = weeklyEntryErrors({
+    summary: '폴백',
+    en: { summary: 'fallback publish gate' }
+  });
+  assert.ok(errors.length > 0, JSON.stringify(errors));
+});
+
+test('Korean index fields keep the unchanged leakage check', () => {
+  const errors = weeklyEntryErrors({ summary: 'Review-only quality gate output' });
+  assert.ok(errors.some(error => error.startsWith(`weekly ${WEEKLY_KEY}:`)), JSON.stringify(errors));
 });

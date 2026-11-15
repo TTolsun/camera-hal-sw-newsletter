@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyTranslation } = require('../render/apply-translation');
-const { isFaithfulTechnicalTerm } = require('../reporter/translated-technical-terms');
+const { KOREAN_COUNTERPARTS, leakedTerm, isFaithfulTechnicalTerm } = require('../reporter/translated-technical-terms');
 
 const {
   readJson,
@@ -20,6 +20,7 @@ const {
 } = require('../reporter/validation-targets');
 const {
   validatePublicNewsletterArtifacts,
+  validatePublicJsonText,
   validatePublicNewsletterFiles
 } = require('../quality/public-newsletter');
 const {
@@ -243,6 +244,52 @@ function validateDateArtifacts(date) {
   return errors;
 }
 
+// 색인 항목의 한국어 값에서 영어 값(en)과 같은 자리의 값을 찾는다. 배열 원소는 id가 있으면 id로, 없으면 위치로 짝짓는다.
+function pairedValue(root, englishRoot, pathParts) {
+  let korean = root;
+  let english = englishRoot;
+  for (const part of pathParts) {
+    if (korean == null || english == null) return { korean: undefined, english: undefined };
+    english = english[part];
+    if (Array.isArray(korean)) {
+      const id = english && typeof english === 'object' ? english.id : undefined;
+      korean = id === undefined ? korean[part] : korean.find(entry => entry?.id === id);
+    } else {
+      korean = korean[part];
+    }
+  }
+  return { korean, english };
+}
+
+function stringLeafPaths(value, pathParts = []) {
+  if (typeof value === 'string') return [pathParts];
+  if (value == null || typeof value !== 'object') return [];
+  return Object.entries(value).flatMap(([key, child]) => stringLeafPaths(child, pathParts.concat(key)));
+}
+
+// 주간 색인 항목의 en 하위 객체는 같은 항목의 한국어 필드를 번역한 것이다. 한국어 필드는 '폴백'처럼 영어 누출 규칙을
+// 피하지만 번역문은 'fallback'으로 걸리므로, 걸린 용어를 한국어 짝 필드가 충실히 옮긴 경우에만(번역 검사와 같은
+// isFaithfulTechnicalTerm) 면제한다. 면제 후보가 아닌 이슈(금지 필드명, 순수 파이프라인 용어, placeholder 등)는 en 전체
+// 검사 결과 그대로 남긴다.
+function indexedEnglishIssues(item, label) {
+  if (!item?.en || typeof item.en !== 'object') return [];
+  const exemptionCandidate = message => Boolean(KOREAN_COUNTERPARTS[leakedTerm({ type: 'public_article_leakage', message })]);
+  const errors = validatePublicJsonText(item.en, label + '.en').filter(message => !exemptionCandidate(message));
+  for (const pathParts of stringLeafPaths(item.en)) {
+    const key = pathParts.join('.');
+    const { korean, english } = pairedValue(item, item.en, pathParts);
+    const leaf = pathParts.reduceRight((inner, part) => ({ [part]: inner }), english);
+    for (const message of validatePublicJsonText(leaf, 'public_article.' + key)) {
+      if (!exemptionCandidate(message)) continue;
+      const issue = { type: 'public_article_leakage', key, message };
+      if (!isFaithfulTechnicalTerm(issue, { public_article: { [key]: korean } }, { public_article: { [key]: english } })) {
+        errors.push(label + '.en.' + message.replace(/^public_article\./, ''));
+      }
+    }
+  }
+  return errors;
+}
+
 function validateIndexedNewsletters() {
   const errors = [];
   const warnings = [];
@@ -312,10 +359,12 @@ function validateIndexedWeeklyNewsletters({ rootDir = root, strictKeys = null } 
       }
       continue;
     }
-    const result = validatePublicNewsletterFiles(markdownPath, htmlPath, {
-      json: item,
-      jsonLabel: 'data/newsletters-weekly.json:' + (weeklyKey || 'entry')
-    }).map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
+    const jsonLabel = 'data/newsletters-weekly.json:' + (weeklyKey || 'entry');
+    const { en, ...koreanItem } = item;
+    const result = [
+      ...validatePublicNewsletterFiles(markdownPath, htmlPath, { json: koreanItem, jsonLabel }),
+      ...indexedEnglishIssues(item, jsonLabel)
+    ].map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
     if (result.length === 0) continue;
     if (requireAll || strict.has(weeklyKey)) {
       errors.push(...result);
