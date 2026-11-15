@@ -103,7 +103,95 @@
     "coverage_start_date": "2026-11-09",
     "coverage_end_date": "2026-11-15",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-11-16"
+    "generation_anchor_date": "2026-11-16",
+    "en": {
+      "title": "2026 W47",
+      "summary": "Quirk merged to bypass abortCaptures to prevent Camera HAL SIGSEGV during session stops on Galaxy A54 5G\nExtended functions added to Camera2-pipe CameraMetadata to query 3A mode and flash support\nCameraX SessionConfig fast session switch Phase 1: Dynamic UseCase subset switching without session reconfiguration merged\nCamera2-pipe FrameGraph Buffer Frame Filtering Overhaul: TagBundle-Based Precise Routing Support\nPreviewView PERFORMANCE mode rotation distortion fix: SurfaceControl and TextureView fallback when CameraEffect is applied",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week's newsletter covers various updates that enhance the stability and efficiency of the camera framework. Notably, the merge of a quirk to bypass abortCaptures to prevent SIGSEGV during session stops on the Galaxy A54 5G improves stability on specific devices. Additionally, the merge of CameraX SessionConfig's fast session switch Phase 1 and the Camera2-pipe FrameGraph's buffer frame filtering overhaul will significantly improve camera use case switching and buffer processing efficiency. Finally, the fix for PreviewView PERFORMANCE mode rotation distortion and the addition of extended functions to Camera2-pipe CameraMetadata for querying 3A mode and flash support are important changes that improve developer convenience and user experience.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+            "href": "en/newsletters/2026-W47/index.html#article-quirk-merged-to-bypass-abortcaptures-to-prevent-camera-hal-sigsegv-during-sessio",
+            "headline": "Quirk merged to bypass abortCaptures to prevent Camera HAL SIGSEGV during session stops on Galaxy A54 5G",
+            "lead": "To prevent abnormal termination of the driver process during rapid camera switching or lifecycle termination, a quirk that omits the abortCaptures call during session stops on Galaxy A54 5G devices has been applied to the AndroidX main branch.",
+            "takeaway": "If a synchronization defect occurs between abortCaptures and stream release timing during the buffer pipeline cleanup process within the vendor HAL, the upper framework can block the call itself. SoC driver and HAL development teams should re-verify the lower stack for null pointer references or use-after-free issues when discarding in-flight buffers in the WNC-LmeMcscRepr scaler and representer modules.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+            "href": "en/newsletters/2026-W47/index.html#article-extended-functions-added-to-camera2-pipe-camerametadata-to-query-3a-mode-and-fla",
+            "headline": "Extended functions added to Camera2-pipe CameraMetadata to query 3A mode and flash support",
+            "lead": "Extended functions that query static metadata arrays have been introduced in Camera2-pipe, allowing code to easily check if a camera device supports specific 3A settings or flash.",
+            "takeaway": "Camera2-pipe's upper layer has wrapped the static 3A and flash support arrays of CameraCharacteristics into an easy-to-query interface. Sensor driver and HAL development teams should verify during bring-up that the arrays of supported AE, AF, and AWB modes are fully populated in the static metadata.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+            "href": "en/newsletters/2026-W47/index.html#article-camerax-sessionconfig-fast-session-switch-phase-1-dynamic-usecase-subset-switchi",
+            "headline": "CameraX SessionConfig fast session switch Phase 1: Dynamic UseCase subset switching without session reconfiguration merged",
+            "lead": "To reduce screen flickering and delays caused by reopening sessions every time camera use cases were changed, a fast session switching infrastructure that maintains the existing session and only modifies repeating requests has been merged.",
+            "takeaway": "CameraX is building a path for dynamic UseCase switching by updating repeating requests without session reconfiguration. At the HAL level, the frequency of configureStreams re-calls will decrease, but the stability of the pipeline in smoothly handling repeating requests where stream targets change within a single session becomes crucial.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+            "href": "en/newsletters/2026-W47/index.html#article-camera2-pipe-framegraph-buffer-frame-filtering-overhaul-tagbundle-based-precise-",
+            "headline": "Camera2-pipe FrameGraph Buffer Frame Filtering Overhaul: TagBundle-Based Precise Routing Support",
+            "lead": "To resolve issues where unintended frames entered buffers sharing the same stream, displacing existing buffer data, precise filtering based on request parameters and tags has been added.",
+            "takeaway": "This change prevents buffers produced by the HAL driver from being unnecessarily wasted or corrupted within the framework's higher-level FrameGraph when sharing the same stream. HAL engineers should verify that framework request metadata is returned without loss in scenarios where a single stream is shared by multiple buffer consumers.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+            "href": "en/newsletters/2026-W47/index.html#article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev",
+            "headline": "PreviewView PERFORMANCE mode rotation distortion fix: SurfaceControl and TextureView fallback when CameraEffect is applied",
+            "lead": "To fix the issue of camera screens appearing stretched or rotated sideways when effects or stream sharing were enabled, a rendering layer that corrects rotation based on the system version has been added to PreviewView.",
+            "takeaway": "This is an example of fixing upper-view defects that occur when metadata transformations are lost as buffers output by the driver and HAL pass through intermediate framework processors. HAL developers need to verify that buffer flags and transformation metadata are consistently delivered to the framework consumer layer.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      },
+      "html": "en/newsletters/2026-W47/index.html",
+      "md": "en/newsletters/2026-W47/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W46",
