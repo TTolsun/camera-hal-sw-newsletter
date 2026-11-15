@@ -866,6 +866,49 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     'Gerrit change 123 MERGED로 CVE-2026-0001 패치 반영.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
+  // 2026-11-16 실측: 제출 시각(UTC)을 넣은 문장도 메타데이터와 일치하면 1차 변경의 상태다.
+  const timed = 'Gerrit change 123은 2026-01-02 12:00:00 UTC에 main 브랜치에 MERGED 상태입니다.';
+  for (const variant of [timed, 'Gerrit change 123(2026-01-02 MERGED)', 'Gerrit change 123 (2026-01-02 MERGED)',
+    'main 브랜치의 Gerrit change 123은 12:00 UTC(2026-01-02)에 MERGED되었습니다.',
+    'Gerrit change 123, platform/example, 2026-01-02 12:00:00.000000000 UTC MERGED',
+    // 구간 밖에 기술 식별자가 길게 이어져도 구간만 판정한다(2026-11-16 실측 형태).
+    'AndroidX Gerrit change 123(2026-01-02 MERGED, branch main)을 통해 Samsung Galaxy A54 5G(a54x, SM-A546*)에서 native HAL SIGSEGV를 피하기 위해 DisableAbortCapturesOnStopQuirk 대상에 추가했습니다.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [variant] }), false, variant);
+  }
+  for (const invalid of [timed.replace('12:00:00', '12:00:01'), timed.replace('12:00:00', '21:00:00'),
+    timed.replace('01-02 12:00:00', '01-02 21:00:00 KST'), timed.replace('12:00:00 UTC', '12:00:00 UTC and verified'),
+    timed.replace('MERGED 상태', 'MERGED verified 상태'), timed.replace('2026-01-02', '2026-01-02 (Gerrit change 456)'),
+    timed.replace('main 브랜치에', 'main 브랜치에 release'), timed.replace('12:00:00', '12:00:00 b/42'),
+    timed.replace('123', '1234'),
+    // 구간 안의 한국어도 조사·브랜치·병합·상태 말고는 허용하지 않는다(영어만 보는 차단 정규식 보완).
+    'Gerrit change 123은 연결된 버그를 해결하고 MERGED', 'Gerrit 변경 123이 b/42 수정 확인 후 MERGED',
+    // 한자·가나·전각 영문·이모지는 낱말 검사를 비켜 가므로 구간 문자 목록으로 막는다.
+    'Gerrit change 123 解決 MERGED.', 'Gerrit change 123은 リンク先 修正済み MERGED.',
+    'Gerrit change 123 ｆｉｘｅｄ MERGED.', 'Gerrit change 123 ✅ MERGED.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
+  }
+  // 소수 초는 metadata 시각의 앞부분과 정확히 같을 때만 허용한다.
+  assert.equal(blocked({ ...article, confirmed_facts: [timed.replace('12:00:00', '12:00:00.000')] }), false);
+  // 불일치 소수('12:00:00.5')는 isGerritMergedSpan이 거부하지만, 차단 정규식이 마침표를 넘지 못해 게이트 결과로는 관찰되지 않는다.
+  // 앞 구간이 거부돼도 그 안에서 시작하는 뒤쪽 유효 구간은 따로 판정한다.
+  assert.equal(blocked({ ...article, confirmed_facts: [
+    'Gerrit change 123은 b/42와 연결되어 있고, Gerrit change 123은 2026-01-02에 MERGED 상태입니다.'] }), false);
+  assert.equal(blocked({ ...article, confirmed_facts: [
+    'Gerrit change 123은 b/42와 연결되어 있고, Gerrit change 123은 2026-01-03에 MERGED 상태입니다.'] }), true);
+  // metadata.submitted가 문자열이 아니거나 시각이 없으면 throw 없이 차단을 유지한다.
+  const withMetadata = (changed, documentUrl = url) => linkedEvidenceCandidate(documentUrl, 'direct_aosp_camera', {
+    article_source_reading: { status: 'read', documents: [{ ...document, url: documentUrl,
+      text: document.text.replace(/\{[\s\S]*?\n\}/, JSON.stringify({ ...metadata, ...changed }, null, 2)) }] },
+    linked_evidence_summary: candidate.linked_evidence_summary, impact_classification: candidate.impact_classification
+  });
+  for (const submitted of [['2026-01-02 12:00:00'], '2026-01-02', { date: '2026-01-02' }]) {
+    assert.equal(blocked({ ...article, confirmed_facts: [timed] }, withMetadata({ submitted })), true, JSON.stringify(submitted));
+  }
+  // chromium-review 변경도 소스 리더가 지원하므로 같은 사실 대조를 적용한다.
+  const chromiumUrl = 'https://chromium-review.googlesource.com/c/chromium/src/+/123';
+  const chromium = withMetadata({ project: 'chromium/src' }, chromiumUrl);
+  assert.equal(blocked({ ...section({ url: chromiumUrl, what_changed: 'x', evidence_summary: 'x' }), confirmed_facts: [timed] }, chromium), false);
+  assert.equal(blocked({ ...section({ url: chromiumUrl, what_changed: 'x', evidence_summary: 'x' }), confirmed_facts: [timed + ' Gerrit linked evidence verified.'] }, chromium), true);
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
     expandedClaim.replace('01-02', '01-03'), expandedClaim + ' Linked evidence verified.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);

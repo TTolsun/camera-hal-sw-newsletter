@@ -37,6 +37,7 @@ const {
   LINKED_EVIDENCE_HIGH_IMPACT_CLAIM,
   LINKED_EVIDENCE_LIMITATION_NOTE
 } = require('../../shared/common/quality-gate-policy');
+const { gerritTarget } = require('../reporter/gerrit-source-reader');
 const { text } = require('./quality-text');
 // claim 이슈 카테고리 매핑은 레지스트리 모듈로 분리했다(OCP). 여기서는 그대로 재노출한다.
 const { claimIssueCategory } = require('./claim-issue-category');
@@ -270,30 +271,6 @@ function linkedEvidenceNotesText(section) {
   return text(section?.source_verification_notes);
 }
 
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// 기자가 1차 변경의 병합 상태를 옮겨 적은 구절. 이전에는 정확한 문구 5개만 인정해, 같은 사실을
-// `Gerrit Change`처럼 대소문자나 조사만 바꿔 적어도 linked evidence 확정 주장으로 차단했다
-// (2026-10-26 실측: 기사 3건이 각 8점 차단). 이제 구절을 메타데이터 값으로만 이루어진 구조로
-// 판정한다: 변경 번호 뒤에 제출일(UTC)·프로젝트·브랜치와 괄호·쉼표만 오고 MERGED 표기로 끝나야
-// 한다. 메타데이터와 다른 번호·날짜·브랜치·프로젝트나 그 밖의 낱말이 끼면 맞지 않아 차단이 남는다.
-function gerritMergedStatePattern(changeId, metadata) {
-  const slot = [
-    `${escapeRegExp(metadata.submitted.slice(0, 10))}(?:에)?`,
-    `${escapeRegExp(metadata.project)}(?:의)?`,
-    `${escapeRegExp(metadata.branch)}(?:\\s*브랜치(?:에|의|로)?)?`,
-    '\\(',
-    ','
-  ].join('|');
-  return new RegExp(
-    `Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)(?:은|는|이|가)?(?:\\s*(?:${slot}))*\\s*` +
-    '(?:status=MERGED\\)?|병합\\(MERGED\\)|MERGED\\)?)',
-    'gi'
-  );
-}
-
 // 같은 문장 안에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면, 앞이든 뒤든 그 문장의
 // MERGED는 1차 변경의 상태가 아니라 linked evidence에 대한 주장일 수 있으므로 지우지 않는다.
 // 예: 'Linked evidence b/42 — Gerrit change 123 MERGED.', 'Gerrit change 123 MERGED로 CVE-… 반영.'
@@ -302,30 +279,89 @@ function gerritMergedStatePattern(changeId, metadata) {
 const LINKED_EVIDENCE_SUBJECT = /\b(?:IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
 const SENTENCE_END = /[.!?](?=\s|$)|\n/g;
 
-// lead는 바로 앞 필드가 문장부호 없이 끝났을 때 그 마지막 문장이다(제목이나 'Linked evidence b/42 상태:'
-// 같은 라벨). 그런 앞 필드는 뒤 내용을 이끌므로 같은 문장으로 본다. 뒤 필드는 별개의 진술이라 보지 않는다.
-function sentenceOutside(text, start, end, lead = '') {
-  let sentenceStart = 0;
-  let sentenceEnd = text.length;
-  for (const boundary of text.matchAll(SENTENCE_END)) {
-    if (boundary.index < start) sentenceStart = boundary.index + 1;
-    else if (boundary.index >= end) { sentenceEnd = boundary.index; break; }
-  }
-  const leading = sentenceStart === 0 ? `${lead} ` : '';
-  return `${leading}${text.slice(sentenceStart, start)} ${text.slice(end, sentenceEnd)}`;
-}
-
 function unterminatedLastSentence(text) {
   if (!text || /[.!?]\s*$/.test(text)) return '';
   const boundaries = [...text.matchAll(SENTENCE_END)];
   return boundaries.length ? text.slice(boundaries.at(-1).index + 1) : text;
 }
 
+// 기자가 1차 변경의 병합 상태를 옮겨 적은 구간인지 사실 대조로 판정한다. 이전에는 허용 문구를 나열해
+// 시각 한 칸만 더 써도 차단했다(2026-10-26 #1357, 2026-11-16 기사 5건 중 4건 거짓 차단). 이제 같은
+// 문장에서 'Gerrit change N'(N은 1차 변경 번호)부터 처음 나오는 MERGED까지를 구간으로 잡고, 구간 안의
+// 모든 ASCII 낱말이 공식 metadata에서 나온 사실이거나 고정 허용어일 때만 그 구간을 지운다. 구간 밖의
+// 기술 식별자(기기명·quirk 이름 등)는 상관없다. 한국어는 조사·브랜치·병합·상태·변경만 허용하고, 문자는 ASCII 낱말 문자·공백·한글·괄호·쉼표만 허용한다. 구간 안에 다른 번호·
+// 브랜치·날짜·시각이나 b/42 같은 낱말이 있으면 지우지 않고, 구간 뒤에 'and verified'가 이어지면 치환어에
+// 남은 'Gerrit' 때문에 기존 확정 주장 정규식이 계속 잡는다.
+const GERRIT_STATE_WORD = /[A-Za-z0-9/._=:-]+/g;
+const GERRIT_STATE_FIXED_WORDS = new Set(['gerrit', 'change', 'merged', 'status=merged', 'status', 'utc']);
+const GERRIT_STATE_SPAN_LIMIT = 120;
+// 구간에 허용하는 문자: ASCII 낱말 문자, 공백, 한글 음절, 괄호·쉼표. 한자·가나·전각 문자·이모지 등은
+// 낱말 검사를 비켜 가므로 이 목록 밖의 문자가 하나라도 있으면 치환하지 않는다(fail-closed).
+const GERRIT_STATE_SPAN_CHARS = /^[A-Za-z0-9/._=:\s가-힣(),-]+$/;
+// 구간 안의 한국어도 제한한다. 확정 주장 정규식은 영어만 보므로 '해결하고' 같은 한국어 낱말이 끼면 막을 수 없다.
+const GERRIT_STATE_KOREAN_WORD = /^(?:(?:브랜치|병합|상태|변경)(?:은|는|이|가|에|의|로|으로)?|은|는|이|가|에|의|로|으로)$/;
+
+// submitted는 'YYYY-MM-DD HH:MM:SS[.fff]' 문자열이어야 한다. 아니면 null(치환하지 않음 = 차단 유지).
+function gerritSubmittedParts(metadata) {
+  const match = typeof metadata?.submitted === 'string' &&
+    metadata.submitted.match(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}(?:\.\d+)?)$/);
+  return match ? { date: match[1], time: match[2] } : null;
+}
+
+function isGerritMergedSpan(span, changeId, metadata, { date, time }) {
+  const clock = time.split('.')[0];
+  const allowed = new Set([changeId, metadata.project, metadata.branch, date, clock, clock.slice(0, 5)]);
+  if (!GERRIT_STATE_SPAN_CHARS.test(span)) return false;
+  const koreanAllowed = (span.match(/[가-힣]+/g) || []).every(word => GERRIT_STATE_KOREAN_WORD.test(word));
+  return koreanAllowed && (span.match(GERRIT_STATE_WORD) || [])
+    .map(word => word.replace(/^[.:=-]+|[.:=-]+$/g, '')).filter(Boolean)
+    .every(word => allowed.has(word) || GERRIT_STATE_FIXED_WORDS.has(word.toLowerCase()) ||
+      // 소수 초는 metadata 시각의 앞부분과 정확히 같을 때만 허용한다('12:00:00.000'은 허용, '12:00:00.5'는 거부).
+      (/^\d{2}:\d{2}:\d{2}\.\d+$/.test(word) && time.startsWith(word)));
+}
+
+// 'Gerrit change N' 출현 위치마다 독립적으로 구간(첫 MERGED까지)을 잡아 판정한다. 앞 구간이 거부되면
+// 그 안에 있는 뒤쪽 'Gerrit change N … MERGED'도 다음 출현 위치로서 따로 판정한다. 치환된 구간은 건너뛴다.
+function neutralizeGerritMergedSentence(sentence, changeId, metadata, parts) {
+  const startPattern = new RegExp(`Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)`, 'gi');
+  const tailPattern = new RegExp(`[^]{0,${GERRIT_STATE_SPAN_LIMIT}}?(?:status=)?MERGED`, 'iy');
+  let result = '';
+  let copied = 0;
+  for (let found = startPattern.exec(sentence); found; found = startPattern.exec(sentence)) {
+    tailPattern.lastIndex = found.index + found[0].length;
+    if (!tailPattern.test(sentence)) continue;
+    const end = tailPattern.lastIndex;
+    if (!isGerritMergedSpan(sentence.slice(found.index, end), changeId, metadata, parts)) continue;
+    result += sentence.slice(copied, found.index) + 'Gerrit primary source state';
+    copied = end;
+    startPattern.lastIndex = end;
+  }
+  return result + sentence.slice(copied);
+}
+
+// 문장 단위로 구간을 찾는다. 같은 문장에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면, 앞이든
+// 뒤든 그 문장의 MERGED는 linked evidence에 대한 주장일 수 있어 지우지 않는다. lead는 앞 필드가 문장부호
+// 없이 끝난 경우(제목·'Linked evidence b/42 상태:' 같은 라벨)의 마지막 문장으로, 첫 문장과 같은 문장으로 본다.
 function neutralizeGerritMergedState(articleText, changeId, metadata, lead = '') {
-  return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) =>
-    LINKED_EVIDENCE_SUBJECT.test(sentenceOutside(whole, offset, offset + match.length, lead))
-      ? match
-      : 'Gerrit primary source state');
+  const parts = gerritSubmittedParts(metadata);
+  if (!parts) return articleText;
+  let result = '';
+  let start = 0;
+  for (const boundary of [...articleText.matchAll(SENTENCE_END), { index: articleText.length }]) {
+    const sentence = articleText.slice(start, boundary.index);
+    const context = start === 0 ? `${lead} ${sentence}`: sentence;
+    result += LINKED_EVIDENCE_SUBJECT.test(context)
+      ? sentence
+      : neutralizeGerritMergedSentence(sentence, changeId, metadata, parts);
+    result += articleText.slice(boundary.index, boundary.index + 1);
+    start = boundary.index + 1;
+  }
+  return result;
+}
+
+// 소스 리더가 지원하는 Gerrit 호스트(android-review·chromium-review)의 변경 번호. 그 밖의 URL이면 ''.
+function primaryGerritChangeId(url) {
+  try { return gerritTarget(String(url || ''))?.number || ''; } catch { return ''; }
 }
 
 function hasUnresolvedConfirmationClaim(section, candidate) {
@@ -373,9 +409,9 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     if (!match) continue;
     let metadata;
     try { metadata = JSON.parse(match[1]); } catch { continue; }
-    const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
+    const changeId = primaryGerritChangeId(candidate.url);
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
-      !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
+      !metadata.project || !metadata.branch || !gerritSubmittedParts(metadata)) continue;
     pieces = pieces.map((piece, index) =>
       neutralizeGerritMergedState(piece, changeId, metadata, unterminatedLastSentence(leaves[index - 1])));
   }
