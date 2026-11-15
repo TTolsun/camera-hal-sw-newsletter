@@ -1,0 +1,994 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 61,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-overclaim",
+        "points": 8,
+        "reason": "Article describes unresolved linked evidence as confirmed detail.",
+        "location": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-overclaim",
+        "points": 8,
+        "reason": "Article describes unresolved linked evidence as confirmed detail.",
+        "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-overclaim",
+        "points": 8,
+        "reason": "Article describes unresolved linked evidence as confirmed detail.",
+        "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-overclaim",
+        "points": 8,
+        "reason": "Article describes unresolved linked evidence as confirmed detail.",
+        "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+      "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환",
+      "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원",
+      "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+      "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장"
+    ],
+    "locked_article_headlines": [
+      "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "source_titles": [
+          "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870"
+        ],
+        "source_titles": [
+          "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "repair-section(patch): CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "linked-evidence-overclaim",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-overclaim",
+            "points": 8,
+            "reason": "Article describes unresolved linked evidence as confirmed detail.",
+            "reason_code": "",
+            "location": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX SessionConfig 빠른 세션 전환 1단계 병합: 세션 재구성 없는 UseCase 서브셋 동적 전환"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "linked-evidence-overclaim",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-overclaim",
+            "points": 8,
+            "reason": "Article describes unresolved linked evidence as confirmed detail.",
+            "reason_code": "",
+            "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 2,
+          "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 로직 개편: TagBundle 기반 정밀 라우팅 지원",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "Camera2-pipe의 FrameGraph가 모든 프레임을 연결된 FrameBuffer에 일괄 분배하던 기존 방식에서 벗어나, 요청 파라미터(Request.parameters/extras)가 버퍼 설정과 일치할 때만 프레임을 유입하도록 필터링을 도입하고, 다중 버퍼의 태그를 반복 요청 메타데이터에 합집합으로 자동 합성하는 TagBundle 인터페이스를 추가함.",
+            "article_explanation": "기존에 단발성 요청 프레임이 무관한 순환 버퍼에 유입되어 프레임을 밀어내던 문제와, 패치 후 파라미터 일치 검사 및 TagBundle 합집합 병합 원리를 상세히 설명함. 검증 관점으로 동일 스트림 내 연속 버퍼와 태그 지정 단발 캡처 동시 구동 시의 격리 확인을 제시하였으나, 반영 한계에서는 androidx-main 머지 날짜만 밝히고 라이브러리 릴리스 및 완제품 빌드 미반영 범위를 설명하지 않음.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710 (\"status\": \"MERGED\", \"branch\": \"androidx-main\"): 원문 증거는 androidx-main 브랜치 머지 상태까지만 보증하므로, 실제 Jetpack 라이브러리 버전 릴리스 및 기기 상용 제품 빌드 반영 여부는 미확인 상태라는 한계를 독자 본문에 명시해야 배포 상태의 오인을 방지할 수 있습니다.",
+              "release_limitations: 2026년 11월 13일 androidx-main 소스 트리에 머지된 날짜만 기재되었을 뿐, 라이브러리 정식 릴리스 버전 포함 및 제품 빌드 반영 상태가 미확인이라는 한계 범위가 본문에서 누락되었습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:1",
+                  "2:body_markdown:3",
+                  "2:body_markdown:4"
+                ],
+                "reason": "FrameGraph가 모든 프레임을 브로드캐스트하여 기존 버퍼를 밀어내던 변경 전 문제와, 파라미터 일치 검사 및 TagBundle 합집합 머지를 통해 선별 격리하는 변경 후 원리가 충실히 서술되었습니다.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:1",
+                    "text": "이전 구조에서는 FrameGraph가 시작된 모든 프레임을 연결된 모든 FrameBuffer에 일괄 전달했습니다. 이 때문에 다른 파라미터로 요청된 단발성 캡처 프레임이 일반 연속 버퍼에 유입되어 큐를 채우고 유효 프레임을 방출시키는 부작용이 있었습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:3",
+                    "text": "머지된 패치에 따라 FrameGraph는 프레임의 Request 파라미터가 버퍼 부착 시 지정한 파라미터와 정확히 일치할 때만 버퍼에 프레임을 추가합니다. 단발 캡처와 반복 요청 모두 동일한 규칙으로 비교되며, 파라미터가 맞지 않는 프레임은 버퍼에 들어가지도 않고 내부 프레임을 방출하지도 않습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:4",
+                    "text": "아울러 새로 도입된 TagBundle은 소비자를 구분하는 태그 집합 역할을 합니다. 일반 파라미터는 버퍼 간 값이 다르면 충돌 오류가 나지만, TagBundle은 연결된 모든 버퍼의 태그를 합집합으로 합쳐 반복 요청의 메타데이터에 자동으로 실어 보냅니다. 버퍼는 자신의 태그 번들을 완전히 포함하는 요청 결과 프레임만 받아들입니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:7"
+                ],
+                "reason": "동일 스트림에서 연속 버퍼와 특정 태그 단발 캡처를 동시 실행하는 입력 조건과, 버퍼 크기 유지 및 프레임 번호 격리 상태를 확인하는 관찰 결과가 구체적으로 제시되었습니다.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:7",
+                    "text": "해당 변경은 2026년 11월 13일 androidx-main 소스 트리에 병합된 상태까지 확인되었습니다. 이 메커니즘을 검증하려면 연속 프레임 수신 버퍼와 특정 태그를 지정한 단발 캡처를 동일 스트림에서 동시에 실행하고 버퍼 크기와 프레임 번호 격리 상태를 관찰하면 됩니다."
+                  }
+                ]
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "2026년 11월 13일 androidx-main 소스 트리에 머지된 날짜만 기재되었을 뿐, 라이브러리 정식 릴리스 버전 포함 및 제품 빌드 반영 상태가 미확인이라는 한계 범위가 본문에서 누락되었습니다."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:6",
+                  "2:camera_hal_takeaway:0"
+                ],
+                "reason": "HAL 계층의 DMA-BUF나 V4L2 드라이버 계약 수정이 아닌 상위 Camera2-pipe 파이프라인 프레임 분배 로직에 한정됨을 명확히 한정하고, 버퍼 락 경합 완화 효과의 범위를 올바르게 제한했습니다.",
+                "source_behavior": "FrameBufferImpl.onFrameStarted에서 Request.parameters 및 Request.extras의 TagBundle 일치 여부를 대조하여 불일치 프레임은 버퍼 진입 및 방출(eviction) 없이 무시함.",
+                "article_behavior": "Camera HAL 계약 변경 없이 Camera2-pipe 프레임 분배 로직 수준에서 상위 중복 획득 및 순환 오버헤드를 막는 것으로 제한하여 서술함.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:6",
+                    "text": "이 변경은 Camera HAL 자체의 DMA-BUF 큐 관리나 V4L2 드라이버 계약을 바꾸는 것은 아니며, Camera2-pipe 파이프라인의 프레임 분배 로직에 적용됩니다. 다만 프레임워크가 단일 스트림을 가상화해 여러 버퍼로 나눌 때 상위에서 불필요한 프레임 획득과 버퍼 순환 오버헤드를 막아주므로 메모리 경합 완화에 기여합니다."
+                  },
+                  {
+                    "id": "2:camera_hal_takeaway:0",
+                    "text": "HAL로부터 올라온 단일 카메라 스트림 프레임이 상위 Camera2-pipe 계층에서 파라미터와 TagBundle 기반으로 정밀 필터링됩니다. HAL 수준의 인터페이스 변경은 없으나 상위에서 무의미한 이미지 획득과 해제가 줄어들므로, 캡처와 프리뷰 동시 구동 시 버퍼 락 경합 및 지연 현상을 줄이는 데 긍정적으로 작용합니다."
+                  }
+                ]
+              }
+            }
+          },
+          "reason": "Camera2-pipe의 프레임 분배 및 버퍼 오염 방지 로직 개편을 상세히 분석하여 상위 프레임워크의 스트림/버퍼 라우팅 메커니즘을 명확히 전달함. / 소스트리 머지 일자만 기술되고 공식 라이브러리 릴리스 및 제품 빌드 반영의 미확인 한계가 본문에 명시되지 않아 release_limitations 요건을 충족하지 못했습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710 (\"status\": \"MERGED\", \"branch\": \"androidx-main\"): 원문 증거는 androidx-main 브랜치 머지 상태까지만 보증하므로, 실제 Jetpack 라이브러리 버전 릴리스 및 기기 상용 제품 빌드 반영 여부는 미확인 상태라는 한계를 독자 본문에 명시해야 배포 상태의 오인을 방지할 수 있습니다. / release_limitations: 2026년 11월 13일 androidx-main 소스 트리에 머지된 날짜만 기재되었을 뿐, 라이브러리 정식 릴리스 버전 포함 및 제품 빌드 반영 상태가 미확인이라는 한계 범위가 본문에서 누락되었습니다."
+        }
+      },
+      {
+        "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "linked-evidence-overclaim",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-overclaim",
+            "points": 8,
+            "reason": "Article describes unresolved linked evidence as confirmed detail.",
+            "reason_code": "",
+            "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 3,
+          "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "PreviewView의 PERFORMANCE 모드에서 CameraEffect나 스트림 공유로 인해 카메라 변환이 누락된 스트림에 setTargetRotation 등으로 잔여 회전이 발생할 때 화면이 누워 늘어나는 문제를 해결하기 위해, API 29 이상에서는 SurfaceView 하위에 중간 SurfaceControl을 두어 지오메트리를 회전시키고(API 31+에서는 View 변환과 동기화), API 29 미만에서는 TextureView로 전환하도록 분기 로직을 구현함.",
+            "article_explanation": "적용 조건: PERFORMANCE 모드에서 CameraEffect 및 스트림 공유 사용 시, API 29 이상과 미만의 버전 조건 명시. 변경 전후: 잔여 회전 미적용으로 인한 왜곡에서 SurfaceControl 지오메트리 회전 및 TextureView 강제 전환으로 정상 표시되도록 수정. 관찰 대상: 회전 전환 시 프레임 깜빡임과 동기화 점검만 언급되고 구체적인 재현 및 정상 렌더링 관찰 조건은 구체화되지 않음. 반영 한계: androidx-main 브랜치 머지 완료 및 라이브러리 릴리스 전 상태 명시.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107 ('in PERFORMANCE mode, PreviewView didn't apply the remaining rotation in the TransformationInfo of a stream without the camera transform, e.g. from a CameraEffect or stream sharing... after Preview.setTargetRotation()'): PERFORMANCE 모드에서 CameraEffect나 스트림 공유를 켜고 setTargetRotation()으로 회전각을 변경했을 때 화면이 옆으로 누워 늘어나는 왜곡이 사라지는지, API 버전에 따라 SurfaceControl 회전 또는 TextureView 전환이 정상 적용되는지 점검할 구체적 관찰 조건이 공개 본문에 빠져 있습니다.",
+              "public_verification: 본문의 확인 제안이 '회전 전환 시 프레임 깜빡임이나 동기화 상태 점검'으로만 축약되어 있어, PERFORMANCE 모드에서 이펙트/스트림 공유 활성화 및 회전 변경을 유발했을 때 화면 왜곡 해소와 렌더러 전환 여부를 확인하는 구체적인 입력 조건과 관찰 결과가 제시되지 않았습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:0",
+                  "3:body_markdown:1",
+                  "3:body_markdown:3",
+                  "3:body_markdown:4"
+                ],
+                "reason": "PERFORMANCE 모드에서 CameraEffect나 스트림 공유 시 발생하는 회전 왜곡 현상과 API 29 이상 SurfaceControl 활용, API 29 미만 TextureView 전환이라는 변경 전후 동작 및 범위를 명확히 설명했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:0",
+                    "text": "고성능 프리뷰를 위해 SurfaceView를 사용하는 PERFORMANCE 모드에서 실시간 필터(CameraEffect)를 적용하거나 스트림 공유를 켜면 프리뷰 비율이 비정상적으로 일그러지는 버그가 발견되었습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:1",
+                    "text": "근본 원인은 SurfaceView의 렌더링 방식에 있었습니다. SurfaceView는 버퍼 자체가 전달하는 카메라 변환(camera transform)만 처리할 수 있습니다. 하지만 CameraEffect나 스트림 공유를 거친 스트림은 버퍼 내 카메라 변환 정보가 이미 제거되어 올라오기 때문에, 목표 회전값(target rotation) 변경에 따른 잔여 회전 각도가 적용되지 못하고 화면이 회전되거나 늘어난 상태로 표시되었습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:3",
+                    "text": "AndroidX 팀은 이를 해결하기 위해 API 레벨에 따른 이원화 전략을 구현했습니다. 안드로이드 10(API 29) 이상 기기에서는 SurfaceView 아래에 중간 SurfaceControl 계층을 생성하고, 잔여 회전값에 맞춰 지오메트리를 회전시킵니다. API 31 이상에서는 View 변환과 완벽히 동기화되어 다음 그려지는 프레임에 매끄럽게 반영됩니다."
+                  },
+                  {
+                    "id": "3:body_markdown:4",
+                    "text": "반면 중간 SurfaceControl 조작이 제한적인 API 29 미만 환경에서는 해당 스트림에 대해 SurfaceView 대신 TextureView를 사용하도록 강제 전환합니다. 또한 PreviewView가 스트림 내부의 카메라 변환 정보 유무를 파악할 수 있도록 SurfaceRequest.getTransformationInfo 메서드를 신규로 도입했습니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "본문의 확인 제안이 '회전 전환 시 프레임 깜빡임이나 동기화 상태 점검'으로만 축약되어 있어, PERFORMANCE 모드에서 이펙트/스트림 공유 활성화 및 회전 변경을 유발했을 때 화면 왜곡 해소와 렌더러 전환 여부를 확인하는 구체적인 입력 조건과 관찰 결과가 제시되지 않았습니다."
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:7"
+                ],
+                "reason": "2026년 11월 10일 androidx-main 브랜치 머지 사실과 함께 라이브러리 릴리스 전 상태임을 밝혀 소스 머지와 배포 단계를 명확히 구분했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:7",
+                    "text": "해당 패치는 2026년 11월 10일 androidx-main 브랜치에 머지되었으며, 실제 라이브러리 릴리스 전까지는 테스트 앱 기반으로 회전 전환 시 프레임 깜빡임이나 동기화 상태를 점검하는 것이 좋습니다."
+                  }
+                ]
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:6"
+                ],
+                "reason": "이번 패치가 HAL 계층 버퍼 생성을 바꾸는 것이 아니라 AndroidX 상위 디스플레이 렌더링 파이프라인의 보정 조치임을 명시하여 효과 범위를 과장하지 않았습니다.",
+                "source_behavior": "PreviewView 및 SurfaceViewImplementation에서 SurfaceRequest.getTransformationInfo를 참조하여 API 29+는 중간 SurfaceControl 지오메트리 회전, API 29 미만은 TextureView로 전환하여 상위 렌더링 왜곡을 보정함.",
+                "article_behavior": "HAL 계층 버퍼 생성 로직 변경이 아닌 상위 UI 렌더링 파이프라인에서의 보정 조치로 설명하며 계층적 한계를 명시함.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:6",
+                    "text": "이 수정은 HAL 계층의 버퍼 생성 로직을 바꾸지 않고 상위 디스플레이 렌더링 파이프라인에서 왜곡을 바로잡는 조치입니다. 그러나 효과 처리 과정에서 버퍼의 메타데이터 변환 플래그가 손실될 경우 상위 렌더러가 SurfaceControl 또는 TextureView로 전환해야 하므로, HAL과 드라이버는 GraphicBuffer의 변환 속성을 정확히 보존하는지 점검할 가치가 있습니다."
+                  }
+                ]
+              }
+            }
+          },
+          "reason": "CameraEffect 및 스트림 공유 시 SurfaceView 렌더링 왜곡 문제와 OS 버전별 회전 계층 분기 아키텍처를 하위 버퍼 변환 관점에서 충실히 해석함. / 버그 수정의 핵심 원리와 OS 분기 구조는 충실히 설명되었으나, 공개 본문의 점검 제안이 구체적인 입력 조건과 관찰 대상 없이 일반적인 깜빡임·동기화 확인에 머물러 있어 검증 설명 보완이 필요합니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107 ('in PERFORMANCE mode, PreviewView didn't apply the remaining rotation in the TransformationInfo of a stream without the camera transform, e.g. from a CameraEffect or stream sharing... after Preview.setTargetRotation()'): PERFORMANCE 모드에서 CameraEffect나 스트림 공유를 켜고 setTargetRotation()으로 회전각을 변경했을 때 화면이 옆으로 누워 늘어나는 왜곡이 사라지는지, API 버전에 따라 SurfaceControl 회전 또는 TextureView 전환이 정상 적용되는지 점검할 구체적 관찰 조건이 공개 본문에 빠져 있습니다. / public_verification: 본문의 확인 제안이 '회전 전환 시 프레임 깜빡임이나 동기화 상태 점검'으로만 축약되어 있어, PERFORMANCE 모드에서 이펙트/스트림 공유 활성화 및 회전 변경을 유발했을 때 화면 왜곡 해소와 렌더러 전환 여부를 확인하는 구체적인 입력 조건과 관찰 결과가 제시되지 않았습니다."
+        }
+      },
+      {
+        "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "linked-evidence-overclaim",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-overclaim",
+            "points": 8,
+            "reason": "Article describes unresolved linked evidence as confirmed detail.",
+            "reason_code": "",
+            "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 4,
+          "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 확인 유틸리티 함수 확장",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "AndroidX Camera2-pipe의 CameraMetadata에 CONTROL_AE/AF/AWB/CONTROL_AVAILABLE_MODES 및 FLASH_INFO_AVAILABLE을 기반으로 지원 여부를 Boolean으로 반환하는 isSupported 확장 함수와 프로퍼티 추가",
+            "article_explanation": "변경 전후로 3A 및 플래시 모드 확인 헬퍼 함수가 추가된 규칙(FlashMode.OFF는 상시 지원, SINGLE/TORCH는 hasFlashUnit 필요 등)을 다루었으나, 프레임워크 요청 차단이라는 근거 없는 효과 단정과 함께 릴리스 한계 및 구체적인 관찰 방법 설명이 결여됨.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489 ('\"status\": \"MERGED\"'): androidx-main 브랜치 병합 사실만 확인되었을 뿐, 실제 배포 라이브러리 릴리스 및 기기 제품 빌드 반영 여부는 미확인이라는 한계 설명 누락.",
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489 ('public fun CameraMetadata.isSupported'): 패치 변경은 단순 조회 헬퍼 추가에 불과하므로 모드 설정이 파이프라인에서 원천 차단된다는 기사 주장의 근거가 없다는 점과 실제 조회 유틸리티 호출을 통한 검증 절차 설명 누락.",
+              "public_verification: 신규 보드 bring-up 시 점검 기준으로 활용할 수 있다는 추상적 언급만 있고, 구체적인 입력 조건과 isSupported 반환값을 확인하는 관찰 결과가 제시되지 않았습니다.",
+              "release_limitations: androidx-main 머지 날짜만 언급되었을 뿐, 실제 라이브러리 배포본 릴리스 및 상용 제품 빌드 반영은 미확인이라는 한계 구분이 공개 본문에 누락되었습니다.",
+              "effect_boundaries: 원문은 조회 확장 함수 추가일 뿐 요청 파이프라인의 차단 로직을 변경하지 않았으나, 본문은 메타데이터 누락 시 프레임워크 수준에서 모드 설정이 원천 차단된다고 효과를 과장했습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "4:body_markdown:1",
+                  "4:body_markdown:3"
+                ],
+                "reason": "CameraCharacteristics 키 조회 및 플래시 모드 판정 규칙(OFF는 상시 지원, SINGLE/TORCH는 hasFlashUnit 필요, 기타 false)을 구체적으로 설명했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "4:body_markdown:1",
+                    "text": "AndroidX Camera2-pipe 라이브러리에 병합된 패치 4439489는 CameraMetadata 클래스에 3A 모드 가용성을 즉시 확인할 수 있는 isSupported 확장 함수들을 도입했습니다. 이 함수들은 CameraCharacteristics의 CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES, CONTROL_AWB_AVAILABLE_MODES 및 CONTROL_AVAILABLE_MODES 키를 조회하여 요청하려는 모드가 실제 하드웨어 지원 목록에 들어있는지 확인합니다."
+                  },
+                  {
+                    "id": "4:body_markdown:3",
+                    "text": "플래시 모드(FlashMode) 지원 검사에는 별도의 하드웨어 규칙이 적용되었습니다. FlashMode.OFF는 모든 카메라에서 항상 지원되는 것으로 판정됩니다. 반면 FlashMode.SINGLE 및 FlashMode.TORCH는 CameraCharacteristics.FLASH_INFO_AVAILABLE이 참이고 hasFlashUnit 플래그가 켜져 있을 때만 true를 반환합니다. 그 외 비표준 모드나 벤더 모드는 false로 처리됩니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "신규 보드 bring-up 시 점검 기준으로 활용할 수 있다는 추상적 언급만 있고, 구체적인 입력 조건과 isSupported 반환값을 확인하는 관찰 결과가 제시되지 않았습니다."
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "androidx-main 머지 날짜만 언급되었을 뿐, 실제 라이브러리 배포본 릴리스 및 상용 제품 빌드 반영은 미확인이라는 한계 구분이 공개 본문에 누락되었습니다."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "원문은 조회 확장 함수 추가일 뿐 요청 파이프라인의 차단 로직을 변경하지 않았으나, 본문은 메타데이터 누락 시 프레임워크 수준에서 모드 설정이 원천 차단된다고 효과를 과장했습니다.",
+                "source_behavior": "CameraMetadata에 availableAeModes 등 정적 키를 읽어 Contains 여부 및 플래시 지원 여부를 반환하는 isSupported 확장 함수만 추가됨.",
+                "article_behavior": "3A 지원 배열 누락 시 프레임워크 수준에서 모드 설정이 원천 차단된다고 단정하여 파이프라인 강제 동작으로 확대 해석함."
+              }
+            }
+          },
+          "reason": "상위 파이프라인에서 정적 메타데이터를 기반으로 3A 및 플래시 모드를 검증하는 유틸리티의 동작과 정적 메타데이터 일관성의 중요성을 실무 관점에서 잘 전달함. / 단순 메타데이터 조회 헬퍼 함수 추가를 프레임워크의 모드 설정 원천 차단으로 과장했고, 배포 릴리스 및 제품 반영 미확인 한계를 명시하지 않았습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489 ('\"status\": \"MERGED\"'): androidx-main 브랜치 병합 사실만 확인되었을 뿐, 실제 배포 라이브러리 릴리스 및 기기 제품 빌드 반영 여부는 미확인이라는 한계 설명 누락. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489 ('public fun CameraMetadata.isSupported'): 패치 변경은 단순 조회 헬퍼 추가에 불과하므로 모드 설정이 파이프라인에서 원천 차단된다는 기사 주장의 근거가 없다는 점과 실제 조회 유틸리티 호출을 통한 검증 절차 설명 누락. / public_verification: 신규 보드 bring-up 시 점검 기준으로 활용할 수 있다는 추상적 언급만 있고, 구체적인 입력 조건과 isSupported 반환값을 확인하는 관찰 결과가 제시되지 않았습니다. / release_limitations: androidx-main 머지 날짜만 언급되었을 뿐, 실제 라이브러리 배포본 릴리스 및 상용 제품 빌드 반영은 미확인이라는 한계 구분이 공개 본문에 누락되었습니다. / effect_boundaries: 원문은 조회 확장 함수 추가일 뿐 요청 파이프라인의 차단 로직을 변경하지 않았으나, 본문은 메타데이터 누락 시 프레임워크 수준에서 모드 설정이 원천 차단된다고 효과를 과장했습니다."
+        }
+      },
+      {
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "source_titles": [
+          "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 5,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  },
+  {
+    "attempt": 2,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 5,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "source": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+      "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+      "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+      "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+      "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백"
+    ],
+    "locked_article_headlines": [
+      "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+      "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+      "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+      "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+      "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "source_titles": [
+          "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489"
+        ],
+        "source_titles": [
+          "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870"
+        ],
+        "source_titles": [
+          "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710"
+        ],
+        "source_titles": [
+          "Filter FrameGraph buffer frames by parameters - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 5,
+        "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107"
+        ],
+        "source_titles": [
+          "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+        ],
+        "source_titles": [
+          "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489"
+        ],
+        "source_titles": [
+          "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870"
+        ],
+        "source_titles": [
+          "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710"
+        ],
+        "source_titles": [
+          "Filter FrameGraph buffer frames by parameters - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 5,
+        "headline": "PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107"
+        ],
+        "source_titles": [
+          "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 2,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+        "source": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

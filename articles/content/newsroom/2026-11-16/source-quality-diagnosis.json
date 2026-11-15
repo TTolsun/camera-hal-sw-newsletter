@@ -1,0 +1,2771 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality_diagnosis",
+  "date": "2026-11-16",
+  "input_refs": {
+    "candidate_input": "articles/content/collected-news/2026-11-16/merged-candidates.json",
+    "shortlisted_candidates": "articles/content/newsroom/2026-11-16/shortlisted-candidates.json",
+    "selection_report": "articles/content/newsroom/2026-11-16/selection-report.json",
+    "generation_status": "articles/content/newsroom/2026-11-16/generation-status.json",
+    "source_effectiveness_report": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+    "source_quality_report": "articles/content/newsroom/2026-11-16/source-quality-report.json",
+    "source_discovery_feedback_report": "articles/content/newsroom/2026-11-16/source-discovery-feedback-report.json",
+    "merged_candidate_manifest": "articles/content/collected-news/2026-11-16/merged-candidate-manifest.json",
+    "evidence_pack_summary": null
+  },
+  "evidence_completeness": {
+    "candidate_input": true,
+    "shortlisted_candidates": true,
+    "selection_report": true,
+    "generation_status": true,
+    "source_effectiveness_report": true,
+    "source_quality_report": true,
+    "source_discovery_feedback_report": true,
+    "merged_candidate_manifest": true,
+    "evidence_pack_summary": false
+  },
+  "raw_candidate_count": 50,
+  "eligible_candidate_count": 12,
+  "primary_camera_stack_count": 9,
+  "android_multimedia_camera_output_count": 0,
+  "diagnosis": {
+    "actual_news_shortage": false,
+    "parser_extraction_failure": false,
+    "source_gap_risk": true,
+    "taxonomy_missing": false,
+    "fallback_only_composition": false
+  },
+  "diagnosis_reasons": {
+    "actual_news_shortage": [],
+    "parser_extraction_failure": [],
+    "source_gap_risk": [
+      {
+        "reason": "android-developers-blog has source coverage risk: source_gap_count=4.",
+        "source_artifact": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+        "severity": "medium",
+        "source_id": "android-developers-blog"
+      },
+      {
+        "reason": "android-developers-latest-updates has source coverage risk: source_gap_count=1.",
+        "source_artifact": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+        "severity": "medium",
+        "source_id": "android-developers-latest-updates"
+      },
+      {
+        "reason": "android-ndk-releases has source coverage risk: source_gap_count=0.",
+        "source_artifact": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+        "severity": "medium",
+        "source_id": "android-ndk-releases"
+      },
+      {
+        "reason": "androidx-media3-release-notes has source coverage risk: source_gap_count=1.",
+        "source_artifact": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+        "severity": "medium",
+        "source_id": "androidx-media3-release-notes"
+      },
+      {
+        "reason": "anthropic-news has source coverage risk: source_gap_count=0.",
+        "source_artifact": "articles/content/newsroom/2026-11-16/source-effectiveness-report.json",
+        "severity": "medium",
+        "source_id": "anthropic-news"
+      }
+    ],
+    "taxonomy_missing": [],
+    "fallback_only_composition": []
+  },
+  "source_breakdown": [
+    {
+      "source_id": "android-compatibility-definition-document",
+      "source_name": "Android Compatibility Definition Document",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-developer-newsletter",
+      "source_name": "Android Developer Newsletter",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-developers-blog",
+      "source_name": "Android Developers Blog",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 4,
+      "blocked_count": 4,
+      "main_eligible_count": 1,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "android-developers-blog-camera",
+      "source_name": "Android Developers Blog - Camera",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-developers-latest-updates",
+      "source_name": "Android Developers Latest Updates",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false",
+        "main_eligible=false"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "android-mediacodec-reference",
+      "source_name": "MediaCodec Reference",
+      "reliability": "official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-mediarecorder-reference",
+      "source_name": "MediaRecorder Documentation",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-mediastore-reference",
+      "source_name": "MediaStore Reference",
+      "reliability": "official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-ndk-releases",
+      "source_name": "Android NDK Releases",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "android-photo-picker-reference",
+      "source_name": "Photo Picker Documentation",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-security-bulletin",
+      "source_name": "Android Security Bulletin",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-supported-formats-reference",
+      "source_name": "Android Supported Media Formats",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-weekly",
+      "source_name": "Android Weekly",
+      "reliability": "newsletter",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "source_name": "AndroidX Gerrit Camera",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 8,
+      "blocked_count": 0,
+      "main_eligible_count": 5,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP"
+    },
+    {
+      "source_id": "androidx-gerrit-heifwriter-changes",
+      "source_name": "AndroidX Gerrit HeifWriter",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 4,
+      "eligible_count": 4,
+      "blocked_count": 0,
+      "main_eligible_count": 1,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "androidx-media3-release-notes",
+      "source_name": "Media3 Release Notes",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "anthropic-news",
+      "source_name": "Anthropic News",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "aosp-camera-documentation",
+      "source_name": "AOSP Camera Documentation",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "aosp-gerrit-camera-changes",
+      "source_name": "AOSP Gerrit (camera changes under review)",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "aosp-release-camera-changes",
+      "source_name": "AOSP Release Source Drop (camera changes)",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "aosp-site-updates",
+      "source_name": "AOSP Site Updates",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "aosp-whats-new-release-notes",
+      "source_name": "AOSP What's New / Release Notes",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "arm-community-blogs",
+      "source_name": "Arm Community Blogs",
+      "reliability": "vendor-blog",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "camerax-release-notes",
+      "source_name": "CameraX Release Notes",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 2,
+      "eligible_count": 1,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false",
+        "main_eligible=false"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "chromeos-gerrit-camera-changes",
+      "source_name": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 2,
+      "eligible_count": 1,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "claude-blog",
+      "source_name": "Claude Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "claude-code-changelog",
+      "source_name": "Claude Code Changelog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "codex-releases",
+      "source_name": "Codex Releases",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "collabora-blog",
+      "source_name": "Collabora Blog",
+      "reliability": "engineering-blog",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "cppcon-news",
+      "source_name": "CppCon News",
+      "reliability": "conference",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "edge-ai-vision-alliance",
+      "source_name": "Edge AI and Vision Alliance",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "ee-times-embedded",
+      "source_name": "EE Times - Embedded",
+      "reliability": "electronics-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "ee-times-semiconductors",
+      "source_name": "EE Times - Semiconductors",
+      "reliability": "electronics-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "embedded-com",
+      "source_name": "Embedded.com",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "google-cloud-ai-ml-blog",
+      "source_name": "Google Cloud AI & Machine Learning Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "google-deepmind-blog",
+      "source_name": "Google DeepMind Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "google-open-source-blog",
+      "source_name": "Google Open Source Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "google-research-blog",
+      "source_name": "Google Research Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "google-security-blog",
+      "source_name": "Google Security Blog",
+      "reliability": "official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "hacker-news",
+      "source_name": "Hacker News",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "huggingface-blog",
+      "source_name": "Hugging Face Blog",
+      "reliability": "engineering-blog",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "ieee-spectrum-embedded-ai",
+      "source_name": "IEEE Spectrum - Embedded AI",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "ieee-spectrum-embedded-systems",
+      "source_name": "IEEE Spectrum - Embedded Systems",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "infoq",
+      "source_name": "InfoQ",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "iso-cpp-blog",
+      "source_name": "ISO C++ Blog",
+      "reliability": "official-community",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "source_name": "kernel.org Linux Releases",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "kernelnewbies-linuxchanges",
+      "source_name": "KernelNewbies LinuxChanges",
+      "reliability": "community-doc",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "libcamera-blog",
+      "source_name": "libcamera Blog",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "libcamera-documentation",
+      "source_name": "libcamera Documentation",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "libcamera-release-announcements",
+      "source_name": "libcamera Release Announcements",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "libcamera-upstream-releases",
+      "source_name": "libcamera Upstream Releases",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 1,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "llvm-project-blog",
+      "source_name": "LLVM Project Blog",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "llvm-release-notes",
+      "source_name": "LLVM Release Notes",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "lore-linux-media-ipu",
+      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "source_name": "lore.kernel.org linux-media list",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 6,
+      "blocked_count": 2,
+      "main_eligible_count": 1,
+      "top_blockers": [
+        "Excluded or low-confidence item below the main/short candidate tier.",
+        "finalSelectionEligibility=exclude",
+        "main_eligible=false",
+        "source_gap_risk=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "lwn-camera-media-articles",
+      "source_name": "LWN Camera / Media Articles",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "mediatek-security-bulletin",
+      "source_name": "MediaTek Security Bulletin",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "microisp-neural-isp",
+      "source_name": "MicroISP — On-Device Neural ISP (RAW to RGB)",
+      "reliability": "project-official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "microsoft-cpp-team-blog",
+      "source_name": "Microsoft C++ Team Blog",
+      "reliability": "vendor-blog",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "mobile-ai-learned-isp-challenge",
+      "source_name": "Mobile AI (MAI) Workshop — Learned Smartphone ISP",
+      "reliability": "conference",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "naver-deview",
+      "source_name": "NAVER DEVIEW",
+      "reliability": "conference",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "openai-news",
+      "source_name": "OpenAI News",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 3,
+      "eligible_count": 0,
+      "blocked_count": 3,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "source_name": "libcamera Patchwork (patch review)",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 3,
+      "blocked_count": 5,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "Excluded or low-confidence item below the main/short candidate tier.",
+        "finalSelectionEligibility=exclude",
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "phoronix-linux-camera-media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "pynet-learned-isp",
+      "source_name": "PyNET — Replacing Mobile Camera ISP with a Deep Learning Model",
+      "reliability": "project-official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "qualcomm-security-bulletins",
+      "source_name": "Qualcomm Security Bulletins",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "raspberry-pi-blog",
+      "source_name": "Raspberry Pi Blog",
+      "reliability": "engineering-blog",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "raspberrypi-libcamera-releases",
+      "source_name": "Raspberry Pi libcamera Releases",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 2,
+      "eligible_count": 1,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false",
+        "main_eligible=false"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-android-camera",
+      "source_name": "Reddit r/Android",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-androiddev-camera",
+      "source_name": "Reddit r/androiddev",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-artificial-camera",
+      "source_name": "Reddit r/artificial",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-camera-community",
+      "source_name": "Reddit r/Camera",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-cpp-camera",
+      "source_name": "Reddit r/cpp",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "reddit-linux-camera",
+      "source_name": "Reddit r/linux",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "samsung-mobile-security-updates",
+      "source_name": "Samsung Mobile Security Updates",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "samsung-newsroom-korea",
+      "source_name": "Samsung Newsroom Korea",
+      "reliability": "vendor-blog",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "software-engineering-daily",
+      "source_name": "Software Engineering Daily",
+      "reliability": "engineering-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "the-new-stack",
+      "source_name": "The New Stack",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "the-register",
+      "source_name": "The Register",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "tldr",
+      "source_name": "TLDR",
+      "reliability": "newsletter",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "tomshardware-ai",
+      "source_name": "Tom's Hardware - AI",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "venturebeat-ai",
+      "source_name": "VentureBeat AI",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "yozm-it",
+      "source_name": "요즘IT",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
+      "source_id": "zdnet-korea",
+      "source_name": "ZDNet Korea",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    }
+  ],
+  "candidate_dispositions": [
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "published_date": "2026-11-13",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+      "published_date": "2026-11-10",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "published_date": "2026-11-10",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "published_date": "2026-11-13",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Sync PreviewView with display rotation - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "published_date": "2026-11-11",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "camerax-release-notes",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "published_date": "October 21, 2026",
+      "freshness_window": "reference",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "outside_main_window",
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-latest-updates",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "published_date": "November 04, 2026",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "androidx-gerrit-heifwriter-changes",
+      "title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-heifwriter-changes",
+      "title": "Add testAvifEncoderAvailable to AvifWriterTest - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "Powering Seamless Player Sign-In: Introducing the Open-Source Sign in with Google Plugin for Unity",
+      "url": "https://developer.android.com/blog/posts/open-source-google-sign-in-unity",
+      "published_date": "2026-11-10",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "What’s new in intelligent apps at the Android Developer Summit",
+      "url": "https://developer.android.com/blog/posts/android-intelligence-system-in-app-agents-ads",
+      "published_date": "2026-11-05",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "Agentic and Flexible: A next era of Android development",
+      "url": "https://developer.android.com/blog/posts/build-it-your-way-a-next-era-of-android-development",
+      "published_date": "2026-10-28",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "Developing for Today: 50+ New Developer Sessions on Building Apps Today",
+      "url": "https://developer.android.com/blog/posts/building-apps-developer-sessions",
+      "published_date": "2026-11-02",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "camerax-release-notes",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "published_date": "November 04, 2026",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-heifwriter-changes",
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "published_date": "2026-10-16",
+      "freshness_window": "reference",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "outside_main_window"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "Build for an expanding lineup of Android XR devices with production-ready tools from Android Developer Summit",
+      "url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+      "published_date": "2026-11-06",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "Build for every screen with the latest Jetpack Compose updates from Android Developer Summit",
+      "url": "https://developer.android.com/blog/posts/build-for-every-screen-jetpack-compose-updates",
+      "published_date": "2026-11-04",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "What's new in Android developer tools and performance at Android Dev Summit",
+      "url": "https://developer.android.com/blog/posts/android-dev-summit-26-developer-tools-performance",
+      "published_date": "2026-10-28",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-heifwriter-changes",
+      "title": "Add API files for heifwriter 1.2.0-rc02 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+      "published_date": "2026-10-23",
+      "freshness_window": "reference",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "outside_main_window"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+      "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+      "published_date": "2026-11-12T00:47:12Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+      "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+      "published_date": "2026-11-09T22:38:44Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+      "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "published_date": "2026-11-13T05:33:55Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
+      "url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
+      "published_date": "2026-11-10T02:05:31Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+      "url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
+      "published_date": "2026-11-14T19:55:33Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+      "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+      "published_date": "2026-11-14T11:29:45Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+      "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+      "published_date": "2026-11-14T09:58:30Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+      "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+      "published_date": "2026-11-11T16:03:02Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "libcamera: rkisp1: Ensure a raw format is found with sensorConfig",
+      "url": "https://patchwork.libcamera.org/patch/28876/",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[RFC,v2,1/2] libcamera: software_isp: Use shared stats",
+      "url": "https://patchwork.libcamera.org/patch/28867/",
+      "published_date": "2026-11-11",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v2,1/3] libipa: camera_sensor_helper: Add OV9734",
+      "url": "https://patchwork.libcamera.org/patch/28870/",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v4,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+      "url": "https://patchwork.libcamera.org/patch/28888/",
+      "published_date": "2026-11-13",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[1/2] ipa: libipa: camera_sensor_helper: Add IMX363, S5K3M3 and S5KGD1",
+      "url": "https://patchwork.libcamera.org/patch/28839/",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v2] libcamera: pipeline: simple: Set planesCount for the capture format",
+      "url": "https://patchwork.libcamera.org/patch/28837/",
+      "published_date": "2026-11-09",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v2,1/5] ipa: rpi: cam_helper: Add Mira016 cam helper",
+      "url": "https://patchwork.libcamera.org/patch/28878/",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing",
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "libcamera: controls: Set the ColourTemperature direction to inout",
+      "url": "https://patchwork.libcamera.org/patch/28874/",
+      "published_date": "2026-11-12",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "raspberrypi-libcamera-releases",
+      "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "published_date": "2026-11-01",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project"
+      ],
+      "reason_codes": []
+    },
+    {
+      "source_id": "libcamera-upstream-releases",
+      "title": "v0.8.0",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "published_date": "2026-11-01T07:25:30+00:00",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project"
+      ],
+      "reason_codes": []
+    },
+    {
+      "source_id": "raspberrypi-libcamera-releases",
+      "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+      "published_date": "2026-11-04",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "chromeos-gerrit-camera-changes",
+      "title": "camera: Update capability rules - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
+      "published_date": "2026-11-11",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "openai-news",
+      "title": "How Amplitude ships product improvements in 1–2 days with OpenAI",
+      "url": "https://openai.com/business/customer-stories/amplitude",
+      "published_date": "Thu, 12 Nov 2026 20:00:00 GMT",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "reason_codes": []
+    },
+    {
+      "source_id": "chromeos-gerrit-camera-changes",
+      "title": "camera: tools: mctk: include for errno/ENOSPC - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8778820",
+      "published_date": "2026-11-10",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-media3-release-notes",
+      "title": "Media3 Release Notes - Media3 1.12.0-beta01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-beta01",
+      "published_date": "November 11, 2026",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "codex-releases",
+      "title": "Codex rust-v0.169.0",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "published_date": "2026-11-13T08:37:05Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "openai-news",
+      "title": "Cogent and OpenAI build cyber defense factories for enterprises",
+      "url": "https://openai.com/index/cogent-security",
+      "published_date": "Tue, 10 Nov 2026 00:00:00 GMT",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "openai-news",
+      "title": "CodeRabbit scales agentic software development and ships 20x more",
+      "url": "https://openai.com/index/coderabbit-codex-daybreak",
+      "published_date": "Mon, 09 Nov 2026 08:00:00 GMT",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "claude-code-changelog",
+      "title": "Claude Code v2.1.321",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+      "published_date": "2026-11-09T19:22:30Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/563673593",
+      "url": "https://issuetracker.google.com/issues/563673593",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/558819242",
+      "url": "https://issuetracker.google.com/issues/558819242",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/556807521",
+      "url": "https://issuetracker.google.com/issues/556807521",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/551348846",
+      "url": "https://issuetracker.google.com/issues/551348846",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/545866947",
+      "url": "https://issuetracker.google.com/issues/545866947",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/543937345",
+      "url": "https://issuetracker.google.com/issues/543937345",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/575161911",
+      "url": "https://issuetracker.google.com/issues/575161911",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "b/573671138",
+      "url": "https://issuetracker.google.com/issues/573671138",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com/",
+      "url": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de/",
+      "url": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "https://github.com/gauravsuman007/nura-g8x",
+      "url": "https://github.com/gauravsuman007/nura-g8x",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com/",
+      "url": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "url": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+      "url": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me/",
+      "url": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org/",
+      "url": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me/",
+      "url": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "title": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com/",
+      "url": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "#3485",
+      "url": "https://github.com/androidx/media/issues/3485",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    },
+    {
+      "source_id": "android-developers-blog",
+      "title": "#3005",
+      "url": "https://github.com/androidx/media/issues/3005",
+      "published_date": "",
+      "freshness_window": "unknown",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": [
+        "missing_date_evidence"
+      ]
+    }
+  ],
+  "collection_failures": [
+    {
+      "source_id": "iso-cpp-blog",
+      "source": "ISO C++ Blog",
+      "message": "403 Forbidden"
+    },
+    {
+      "source_id": "libcamera-documentation",
+      "source": "libcamera Documentation",
+      "message": "404 Not Found"
+    },
+    {
+      "source_id": "llvm-project-blog",
+      "source": "LLVM Project Blog",
+      "message": "404 Not Found"
+    },
+    {
+      "source_id": "yozm-it",
+      "source": "요즘IT",
+      "message": "405 Not Allowed"
+    },
+    {
+      "source_id": "reddit-androiddev-camera",
+      "source": "Reddit r/androiddev",
+      "message": "403 Forbidden"
+    },
+    {
+      "source_id": "reddit-android-camera",
+      "source": "Reddit r/Android",
+      "message": "429 Too Many Requests"
+    },
+    {
+      "source_id": "reddit-artificial-camera",
+      "source": "Reddit r/artificial",
+      "message": "429 Too Many Requests"
+    },
+    {
+      "source_id": "reddit-cpp-camera",
+      "source": "Reddit r/cpp",
+      "message": "429 Too Many Requests"
+    },
+    {
+      "source_id": "reddit-linux-camera",
+      "source": "Reddit r/linux",
+      "message": "429 Too Many Requests"
+    },
+    {
+      "source_id": "reddit-camera-community",
+      "source": "Reddit r/Camera",
+      "message": "429 Too Many Requests"
+    }
+  ],
+  "candidate_counts": {
+    "raw": 50,
+    "merged_records": 78,
+    "merged_unique_urls": 78,
+    "derived_new_unique_urls": 28,
+    "derived_publishable": 0
+  },
+  "publication_counts": {
+    "deterministic_selected": 5,
+    "rendered": 5,
+    "hard_blocked_groups": 0,
+    "explicitly_demoted_groups": 0
+  },
+  "recommended_issues": [
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "patchwork-libcamera-patches",
+      "source_name": "libcamera Patchwork (patch review)",
+      "reason": "main_eligible=false",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "project-official",
+      "blocked_count": 5,
+      "raw_count": 8
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "android-developers-blog",
+      "source_name": "Android Developers Blog",
+      "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 4,
+      "raw_count": 8
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "openai-news",
+      "source_name": "OpenAI News",
+      "reason": "main_eligible=false",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 3,
+      "raw_count": 3
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "lore-linux-media-list",
+      "source_name": "lore.kernel.org linux-media list",
+      "reason": "Excluded or low-confidence item below the main/short candidate tier.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "project-official",
+      "blocked_count": 2,
+      "raw_count": 8
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "camerax-release-notes",
+      "source_name": "CameraX Release Notes",
+      "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 2
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "chromeos-gerrit-camera-changes",
+      "source_name": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 2
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "raspberrypi-libcamera-releases",
+      "source_name": "Raspberry Pi libcamera Releases",
+      "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "project-official",
+      "blocked_count": 1,
+      "raw_count": 2
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "android-developers-latest-updates",
+      "source_name": "Android Developers Latest Updates",
+      "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "androidx-media3-release-notes",
+      "source_name": "Media3 Release Notes",
+      "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "claude-code-changelog",
+      "source_name": "Claude Code Changelog",
+      "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    }
+  ],
+  "warnings": [
+    {
+      "type": "missing_optional_artifact",
+      "message": "articles/content/newsroom/2026-11-16/evidence-pack-summary.json not found; partial diagnosis will continue.",
+      "source_artifact": "articles/content/newsroom/2026-11-16/evidence-pack-summary.json"
+    }
+  ]
+}

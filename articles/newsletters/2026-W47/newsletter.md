@@ -1,0 +1,240 @@
+# 2026 W46 (11.09 ~ 11.15)
+
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이번 주 핵심
+
+이번 주 뉴스레터에서는 카메라 프레임워크의 안정성과 효율성을 높이는 다양한 업데이트를 다룹니다. 특히, Galaxy A54 5G에서 세션 중지 시 발생하는 SIGSEGV를 방지하기 위한 abortCaptures 우회 쿼크 병합 소식은 특정 장치에서의 안정성 개선을 보여줍니다. 또한, CameraX SessionConfig의 빠른 세션 전환 1단계 병합과 Camera2-pipe FrameGraph의 버퍼 프레임 필터링 개편은 카메라 사용 사례 전환 및 버퍼 처리 효율성을 크게 향상시킬 것입니다. 마지막으로, PreviewView PERFORMANCE 모드 회전 왜곡 수정과 Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가는 개발 편의성과 사용자 경험을 개선하는 중요한 변화입니다.
+
+- [Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합](#article-galaxy-a54-5g-camera-hal-sigsegv-abortcaptures)
+
+  벤더 HAL 내부의 버퍼 파이프라인 정리 과정에서 abortCaptures와 스트림 해제 타이밍 간 동기화 결함이 발생할 경우 상위 프레임워크에서 호출 자체를 차단할 수 있습니다. SoC 드라이버 및 HAL 개발팀은 WNC-LmeMcscRepr 스케일러 및 리프레젠터 모듈에서 비행 중인 버퍼 폐기 처리 시 널 포인터 참조나 메모리 해제 후 참조가 없는지 하위 스택을 재검증해야 합니다.
+
+- [Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가](#article-camera2-pipe-camerametadata-3a)
+
+  Camera2-pipe 상위 계층이 CameraCharacteristics의 정적 3A 및 플래시 지원 배열을 질의하기 쉬운 인터페이스로 래핑했습니다. 센서 드라이버 및 HAL 개발팀은 지원 가능한 AE, AF, AWB 모드 배열이 정적 메타데이터에 온전히 채워져 있는지 브링업 시 확인해야 합니다.
+
+- [CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합](#article-camerax-sessionconfig-1-usecase)
+
+  CameraX가 세션 재구성 없이 반복 요청 갱신으로 UseCase를 동적 전환하는 경로를 구축하고 있습니다. HAL 수준에서는 configureStreams 재호출 빈도가 줄어드는 대신 단일 세션 내에서 스트림 타깃이 변동되는 반복 요청을 매끄럽게 처리하는 파이프라인 안정성이 중요해집니다.
+
+- [Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원](#article-camera2-pipe-framegraph-tagbundle)
+
+  HAL 드라이버가 동일 스트림으로 생산한 버퍼들이 프레임워크 상위 FrameGraph에서 불필요하게 낭비되거나 오염되지 않도록 정리되었습니다. HAL 엔지니어는 단일 스트림을 다중 버퍼 소비자가 공유하는 시나리오에서 프레임워크 요청 메타데이터가 누락 없이 결과로 반환되는지 확인해야 합니다.
+
+- [PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백](#article-previewview-performance-cameraeffect-surfacecontrol-textureview)
+
+  드라이버와 HAL이 출력한 버퍼가 프레임워크 중간 프로세서를 거치며 메타데이터 변환이 소실될 때 발생하는 상위 뷰 결함을 해결한 사례입니다. HAL 개발자는 버퍼 플래그 및 변환 메타데이터가 프레임워크 소비자 계층까지 일관되게 전달되는지 점검할 필요가 있습니다.
+
+
+
+
+<a id="article-galaxy-a54-5g-camera-hal-sigsegv-abortcaptures"></a>
+
+## 2. Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합
+
+_AndroidX Gerrit Camera (change 4430441)_
+
+빠른 카메라 전환이나 라이프사이클 종료 시 드라이버 프로세스가 비정상 종료되는 현상을 막기 위해, Galaxy A54 5G 장치에서 세션 중지 시 abortCaptures 호출을 생략하는 쿼크가 AndroidX 메인 브랜치에 적용되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+벤더 HAL 내부의 버퍼 파이프라인 정리 과정에서 abortCaptures와 스트림 해제 타이밍 간 동기화 결함이 발생할 경우 상위 프레임워크에서 호출 자체를 차단할 수 있습니다. SoC 드라이버 및 HAL 개발팀은 WNC-LmeMcscRepr 스케일러 및 리프레젠터 모듈에서 비행 중인 버퍼 폐기 처리 시 널 포인터 참조나 메모리 해제 후 참조가 없는지 하위 스택을 재검증해야 합니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
+
+카메라 앱이 화면을 닫거나 다른 카메라로 빠르게 전환할 때 프레임워크가 세션을 정리하는 과정에서 프로세스 전체가 갑자기 중단되는 현상이 보고되었습니다.
+
+커밋 메시지와 코드에 따르면 Samsung Galaxy A54 5G 장치(Exynos s5e8835 칩셋, 디바이스 식별자 a54x 및 모델 접두사 SM-A546)에서 캡처 세션을 멈출 때 CameraCaptureSession.abortCaptures 함수를 호출하면, 벤더 카메라 라이브러리인 camera.s5e8835.so 내부의 WNC-LmeMcscRepr 루틴에서 간헐적으로 네이티브 SIGSEGV 오류가 발생했습니다. 이로 인해 카메라 프로바이더 프로세스가 완전히 죽어버리는 문제가 있었습니다.
+
+### 상위 계층에서의 우회 동작과 조건
+
+AndroidX 팀은 DisableAbortCapturesOnStopQuirk 클래스에 Samsung Galaxy A54 5G 장치 판별 조건을 추가했습니다. 제조사가 Samsung이고 디바이스명이 a54x이거나 모델명이 SM-A546으로 시작하는 경우 이 쿼크가 활성화됩니다. 쿼크가 켜지면 CameraPipe 그래프 설정에서 세션 중지 시 abortCaptures 호출을 수행하지 않도록 플래그를 내립니다.
+
+원문에서 확인된 적용 범위는 Tecno 기기 일부, Galaxy Note 10+, Poco X3 Pro에 이어 Galaxy A54 5G의 세부 변종(SM-A546E, SM-A546U1, SC-53D, a54xnsxx 등)까지입니다. 반면 동일 제조사의 A53이나 A55, S24 계열은 이 쿼크 활성화 대상에 포함되지 않습니다.
+
+### 현장 점검과 확인의 한계
+
+해당 단말에서 카메라 생명주기를 반복해서 시작하고 종료하거나 전후면 카메라를 빠르게 교차 전환할 때 camera provider 프로세스 크래시 로그(SIGSEGV in camera.s5e8835.so)가 사라지는지 관찰할 수 있습니다. 다만 이 패치는 상위 프레임워크 수준의 우회책이며 벤더 HAL 라이브러리 내부 메모리 오류의 근본 원인을 수정한 것은 아닙니다.
+
+현재 확인된 상태는 2026년 11월 12일 androidx-main 소스 트리에 커밋이 병합된 상태까지이며, 실제 CameraX 공식 배포 버전 릴리스나 기기 펌웨어 업데이트 적용 여부는 별도 추적이 필요합니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441)
+
+---
+
+<a id="article-camera2-pipe-camerametadata-3a"></a>
+
+## 3. Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가
+
+_AndroidX Gerrit Camera (Change 4439489)_
+
+카메라 장치가 특정 3A 설정이나 플래시를 지원하는지 코드가 간단히 확인할 수 있도록, 정적 메타데이터 배열을 조회하는 확장 함수들이 Camera2-pipe에 도입되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Camera2-pipe 상위 계층이 CameraCharacteristics의 정적 3A 및 플래시 지원 배열을 질의하기 쉬운 인터페이스로 래핑했습니다. 센서 드라이버 및 HAL 개발팀은 지원 가능한 AE, AF, AWB 모드 배열이 정적 메타데이터에 온전히 채워져 있는지 브링업 시 확인해야 합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+카메라 요청을 구성할 때 장치가 지원하지 않는 3A 모드를 지정하면 예상치 못한 동작이 나타날 수 있어 사전에 가용성을 조회하는 작업이 필요합니다.
+
+AndroidX 패치 4439489는 CameraMetadata 클래스에 3A 모드 가용성을 조회할 수 있는 isSupported 확장 함수들을 추가했습니다. 이 함수들은 CameraCharacteristics의 CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES, CONTROL_AWB_AVAILABLE_MODES 및 CONTROL_AVAILABLE_MODES 정적 키를 읽어 인자로 전달된 모드 값이 해당 정수 배열에 포함되어 있는지 확인하여 참 또는 거짓을 반환합니다.
+
+### 플래시 모드 판정 규칙과 헬퍼의 역할
+
+플래시 모드 지원 검사에는 별도의 규칙이 적용됩니다. FlashMode.OFF는 장치 사양과 무관하게 항상 지원되는 것으로 판정됩니다. 반면 FlashMode.SINGLE과 FlashMode.TORCH는 정적 메타데이터의 FLASH_INFO_AVAILABLE을 기반으로 구성된 hasFlashUnit 속성이 참일 때만 참을 반환하며, 비표준 모드는 거짓을 반환합니다.
+
+이 변경은 단순한 조회용 헬퍼 함수를 추가한 것으로, 캡처 요청 파이프라인에서 지원되지 않는 모드를 강제로 검증하거나 요청 전송을 원천 차단하는 로직을 포함하지는 않습니다. 호출자가 요청을 빌드하기 전에 하드웨어 지원 여부를 질의할 수 있는 편의 인터페이스를 제공하는 성격입니다.
+
+### 검증 방법과 반영 한계
+
+이 유틸리티를 점검할 때는 특정 모드가 포함된 CameraMetadata 인스턴스에 AeMode.ON 또는 FlashMode.SINGLE을 전달하여 기대한 boolean 결과가 반환되는지 단위 테스트 수준에서 확인할 수 있습니다. 이 확인은 조회 헬퍼 함수의 반환값 점검이며 실제 드라이버 캡처 요청의 성공 여부를 보장하는 것은 아닙니다. 또한 2026년 11월 13일 androidx-main 소스 브랜치에 병합된 상태일 뿐이며, 공식 AndroidX 라이브러리 배포나 상용 단말 빌드에 포함되었는지는 확인되지 않았습니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489)
+
+---
+
+<a id="article-camerax-sessionconfig-1-usecase"></a>
+
+## 4. CameraX SessionConfig 빠른 세션 전환 1단계: 세션 재구성 없는 UseCase 서브셋 동적 전환 병합
+
+_AndroidX Gerrit Camera (Change 4381870)_
+
+카메라 사용 사례를 바꿀 때마다 세션을 다시 열며 발생하던 화면 깜빡임과 지연을 줄이기 위해, 기존 세션을 유지한 채 반복 요청만 변경하는 빠른 세션 전환 인프라가 병합되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+CameraX가 세션 재구성 없이 반복 요청 갱신으로 UseCase를 동적 전환하는 경로를 구축하고 있습니다. HAL 수준에서는 configureStreams 재호출 빈도가 줄어드는 대신 단일 세션 내에서 스트림 타깃이 변동되는 반복 요청을 매끄럽게 처리하는 파이프라인 안정성이 중요해집니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
+
+미리보기 중에 비디오 녹화나 이미지 캡처 같은 추가 사용 사례를 결합하거나 해제할 때 세션을 완전히 재구성하면 상당한 시간 지연이 발생합니다.
+
+AndroidX 패치 4381870은 바인딩된 전체 UseCase 중에서 실제로 동작할 활성 하위 집합을 세션 재생성 없이 교체하는 1단계 구조를 도입했습니다. SessionConfig.Builder에 추가된 initialEnabledUseCases 메서드는 초기에 활성화할 UseCase 목록을 순서를 유지하며 중복 없이 구성합니다. 이와 함께 도입된 CameraControl.setEnabledUseCasesAsync 함수는 실행 중인 CameraCaptureSession을 닫지 않고 반복 요청의 대상 출력 서브셋만 업데이트합니다.
+
+### 전환 완료 시점과 프레임워크 수준의 검증 로직
+
+이 비동기 전환 호출은 갱신된 UseCase 집합이 반영된 반복 요청의 첫 번째 캡처 결과가 수신되는 시점에 완료됩니다. 프레임워크 내부에서는 고속 촬영, 확장 기능, 동시 카메라, 제로 셔터 랙 및 다양한 하드웨어 쿼크와의 호환성을 사전 검증하는 검사기들을 거쳐 안전성을 확인합니다. 또한 비활성화된 서브셋에 반복 스트림이 누락될 경우를 대비해 측광용 반복 스트림을 자동으로 사전 연결하는 안전장치도 포함되었습니다.
+
+이 변경은 현재 1단계 단계로서 라이브러리 내부 전용으로 제한되어 있으며, Camera HAL 계층의 configureStreams 계약 자체를 수정한 것이 아니라 프레임워크 상위 세션 운용 방식을 최적화한 것입니다.
+
+### 실무 확인 제안과 반영 범위
+
+이 기능이 동작할 때 상위 세션이 닫히지 않고 setRepeatingBurst 또는 setRepeatingRequest만 재호출되는지 관찰하는 형태로 프레임워크 동작을 점검할 수 있습니다. 이는 커밋 내용에 기반한 동작 검증 제안이며 실제 단말 측정치가 확인된 것은 아닙니다. 2026년 11월 9일 androidx-main 브랜치에 소스가 머지되었으나, 공식 AndroidX 릴리스나 상용 단말 펌웨어 빌드 반영 여부는 별도로 확인해야 합니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Add SessionConfig fast session switch Phase 1 - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870)
+
+---
+
+<a id="article-camera2-pipe-framegraph-tagbundle"></a>
+
+## 5. Camera2-pipe FrameGraph 버퍼 프레임 필터링 개편: TagBundle 기반 정밀 라우팅 지원
+
+_AndroidX Gerrit Camera (Change 4371710)_
+
+여러 버퍼가 같은 스트림을 공유할 때 의도치 않은 프레임이 유입되어 기존 버퍼 데이터가 밀려나던 문제를 해결하기 위해, 요청 파라미터와 태그를 대조하는 정밀 필터링이 추가되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL 드라이버가 동일 스트림으로 생산한 버퍼들이 프레임워크 상위 FrameGraph에서 불필요하게 낭비되거나 오염되지 않도록 정리되었습니다. HAL 엔지니어는 단일 스트림을 다중 버퍼 소비자가 공유하는 시나리오에서 프레임워크 요청 메타데이터가 누락 없이 결과로 반환되는지 확인해야 합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+동일한 카메라 스트림을 여러 버퍼가 참조할 때 서로 다른 설정으로 요청된 프레임이 원치 않는 버퍼에 들어가면 버퍼가 조기에 가득 차 프레임이 손실될 수 있습니다.
+
+이전 구조에서는 FrameGraph가 시작된 모든 프레임을 연결된 모든 FrameBuffer에 무조건 전달했습니다. 이로 인해 특정 단발성 캡처나 개별 설정을 가진 프레임이 다른 버퍼에 들어가 기존 프레임을 덮어쓰고 퇴출하는 부작용이 있었습니다.
+
+### TagBundle 도입과 파라미터 일치 검사 규칙
+
+AndroidX 패치 4371710은 프레임의 Request가 버퍼에 지정된 파라미터 및 태그와 일치할 때만 프레임을 버퍼에 추가하도록 검사 로직을 개편했습니다. 새로 추가된 TagBundle은 변경 불가능한 태그 집합을 나타내며, Metadata.Key의 타입으로 지정되어 프레임 소비자를 식별합니다. Request.extras에 들어 있는 TagBundle이 버퍼의 모든 태그를 포함해야 프레임이 수신됩니다.
+
+또한 일반 CaptureRequest.Key 파라미터에 대해서도 요청에 담긴 값이 버퍼에 바인딩된 값과 같아야 유입이 허용됩니다. 반면 FrameGraph가 만드는 반복 요청은 연결된 모든 버퍼의 파라미터와 TagBundle 합집합을 포함하므로, 정상 실행 중인 반복 프레임은 조건을 충족하는 모든 버퍼에 안정적으로 도달합니다.
+
+### 확인 조건과 반영 상태
+
+이 동작은 동일 스트림에 서로 다른 TagBundle을 지정한 두 개의 버퍼를 연결하고 특정 태그를 가진 단발 캡처를 요청했을 때, 해당 태그를 가진 버퍼에만 프레임이 들어가고 다른 버퍼의 큐 크기에는 변동이 없는지 단위 테스트나 통합 테스트로 확인할 수 있습니다. 이 검증은 커밋 diff에 명시된 동작 원리에 따른 점검 제안입니다. 2026년 11월 13일 androidx-main 브랜치에 병합되었으며, 최종 라이브러리 릴리스나 제품 펌웨어 빌드 반영 여부는 확인되지 않았습니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Filter FrameGraph buffer frames by parameters - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710)
+
+---
+
+<a id="article-previewview-performance-cameraeffect-surfacecontrol-textureview"></a>
+
+## 6. PreviewView PERFORMANCE 모드 회전 왜곡 수정: CameraEffect 적용 시 SurfaceControl 및 TextureView 폴백
+
+_AndroidX Gerrit Camera (Change 4418107)_
+
+이펙트나 스트림 공유를 켰을 때 카메라 화면이 늘어나거나 옆으로 누워 출력되던 현상을 해결하기 위해, 시스템 버전에 맞춰 회전을 보정하는 렌더링 계층이 PreviewView에 추가되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+드라이버와 HAL이 출력한 버퍼가 프레임워크 중간 프로세서를 거치며 메타데이터 변환이 소실될 때 발생하는 상위 뷰 결함을 해결한 사례입니다. HAL 개발자는 버퍼 플래그 및 변환 메타데이터가 프레임워크 소비자 계층까지 일관되게 전달되는지 점검할 필요가 있습니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+고성능 미리보기를 위해 SurfaceView를 사용하는 PERFORMANCE 모드에서 그래픽 효과나 스트림 공유를 적용하면 화면 방향이 어긋나는 경우가 있었습니다.
+
+SurfaceView는 기본적으로 버퍼 자체에 담긴 카메라 변환 메타데이터만 화면에 반영합니다. 그러나 CameraEffect나 스트림 공유 파이프라인을 통과한 스트림은 카메라 하드웨어 변환 정보가 버퍼에서 제거되거나 변경될 수 있습니다. 이로 인해 남은 회전 각도가 정상적으로 적용되지 못하고 미리보기가 옆으로 회전되거나 가로세로 비율이 늘어나는 결함이 나타났습니다.
+
+### 시스템 버전별 렌더링 경로 분기와 회전 보정
+
+AndroidX 패치 4418107은 스트림에 카메라 변환이 누락되었는지를 판단하여 API 레벨에 따라 렌더링 방식을 분기했습니다. API 29 이상 기기에서는 SurfaceView 아래에 중간 SurfaceControl 계층을 생성하여 남은 회전 각도만큼 지오메트리를 회전시킵니다. API 31 이상에서는 View 변환과 동기화되어 다음 프레임이 그려질 때 즉시 반영됩니다.
+
+반면 SurfaceControl 세부 제어가 어려운 API 29 미만 구형 기기에서는 이러한 스트림에 대해 TextureView를 사용하도록 전환합니다. 이 결정은 스트림의 카메라 변환 유무에 따라 최초에 정해지므로, 이후 단순 화면 회전이 발생해도 서피스를 불필요하게 파괴하고 재생성하지 않습니다.
+
+### 점검 방법과 반영 상태
+
+이 수정 사항은 CameraEffect가 적용된 상태에서 Preview.setTargetRotation을 호출하고 단말 화면을 회전시켰을 때, 서피스 재생성 없이 미리보기 화면의 왜곡이나 회전 오류가 없는지 뷰 테스트 환경에서 검증할 수 있습니다. 이는 커밋 메시지에 명시된 동작 원리에 기초한 확인 제안입니다. 2026년 11월 10일 androidx-main 브랜치에 머지되었으며, 라이브러리 릴리스 및 실제 제품 펌웨어 반영 여부는 별도로 확인해야 합니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107)
+
+
+## 참고 / 더 읽을거리
+
+- [Sync PreviewView with display rotation - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911>) — AndroidX Gerrit Camera (2026-11-12) · AOSP Camera 프레임워크 관련 참고
+- [How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX](<https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification>) — Android Developers Blog (2026-11-11) · AOSP Camera 프레임워크 관련 참고
+- [Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978>) — AndroidX Gerrit Camera (2026-11-10) · AOSP Camera 프레임워크 관련 참고
+- [Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038>) — AndroidX Gerrit Camera (2026-11-09) · AOSP Camera 프레임워크 관련 참고
+
+## 참고자료
+
+- [Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441)
+- [Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489)
+- [Add SessionConfig fast session switch Phase 1 - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870)
+- [Filter FrameGraph buffer frames by parameters - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710)
+- [Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107)
