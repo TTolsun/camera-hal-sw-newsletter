@@ -469,3 +469,32 @@ test('a Korean counterpart only counts in the paired source field, as a whole wo
   faithful.overlay.sections[0].body_markdown += '\n\nInternally, the framework ensures safety by passing through validators that pre-verify.';
   assert.doesNotThrow(() => translationChecks(faithful.target.issue, faithful.overlay, faithful.target.sourceText));
 });
+
+test('a Korean counterpart must be a whole word with only particles after it, and the English term may not outnumber it', t => {
+  // '검증기준'은 검증기가 아니다. '검사기들을'은 검사기 + 복수 접미사 + 조사다.
+  const compound = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검증기준을 확인합니다.'; }));
+  compound.overlay.sections[0].body_markdown += '\n\nInternally, the validator checks the request.';
+  assert.throws(() => translationChecks(compound.target.issue, compound.overlay, compound.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*validator/);
+
+  const particle = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검사기들을 거칩니다.'; }));
+  particle.overlay.sections[0].body_markdown += '\n\nInternally, validators are used.';
+  assert.doesNotThrow(() => translationChecks(particle.target.issue, particle.overlay, particle.target.sourceText));
+
+  // 한국어 대응어가 한 번뿐이면 영어 용어도 한 번까지만 옮긴 것으로 본다. 둘째는 원문에 없던 사용이다.
+  const extra = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n폴백 경로를 확인합니다.'; }));
+  extra.overlay.sections[0].body_markdown += '\n\nThe fallback path is checked.\n\nThe release also has a fallback lane for the newsroom.';
+  assert.throws(() => translationChecks(extra.target.issue, extra.overlay, extra.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*Fallback/);
+});
+
+test('backtick stripping leaves ids alone and removes long fences with their info string', t => {
+  const { target, overlay } = storySample(t);
+  const input = translationInput(target.issue, target.sourceText);
+  const wrapped = structuredClone(overlay);
+  wrapped.sections[0].id = `\`${wrapped.sections[0].id}\``;
+  assert.throws(() => translationChecks(target.issue, normalizeTranslationResponse(wrapped, input), target.sourceText), /Unknown or duplicate translation ID/);
+
+  const fenced = structuredClone(overlay);
+  fenced.sections[0].body_markdown = `\`\`\`\`c\n${overlay.sections[0].body_markdown}\n\`\`\`\``;
+  const normalized = normalizeTranslationResponse(fenced, input);
+  assert.equal(normalized.sections[0].body_markdown, overlay.sections[0].body_markdown);
+});

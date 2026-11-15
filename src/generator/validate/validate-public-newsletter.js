@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyTranslation } = require('../render/apply-translation');
-const { isFaithfulTechnicalTerm } = require('../translate/translation-checks');
+const { isFaithfulTechnicalTerm } = require('../reporter/translated-technical-terms');
 
 const {
   readJson,

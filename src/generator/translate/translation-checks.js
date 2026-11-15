@@ -4,7 +4,7 @@ const { applyTranslation } = require('../render/apply-translation');
 const { translationInput } = require('./translation-schema');
 const { hasKoreanText } = require('../../shared/common/korean-text');
 const { validatePublicArticle } = require('../reporter/public-article-contract');
-const { publicProseLeakageIssues } = require('../reporter/public-prose-leakage');
+const { KOREAN_COUNTERPARTS, leakedTerm, isFaithfulTechnicalTerm } = require('../reporter/translated-technical-terms');
 
 function urls(text) {
   const matches = String(text || '').match(/https?:\/\/[^\s<>"\]가-힣]+/g) || [];
@@ -32,54 +32,6 @@ function protectedTokens(text) {
 function contractIssueSignature(item) {
   // 위치는 빼고 종류만 본다. 번역은 문장을 나눌 수 있어 같은 위반의 블록 번호가 달라질 수 있다.
   return [item.type, item.key, item.construct].map(value => value ?? '').join('|');
-}
-
-// 공개 기사 계약의 내부 용어 금지어 중 카메라 기술 용어로도 쓰이는 것만 둔 고정 표다. 한국어 원문이 왼쪽 용어의
-// 한국어 대응어를 쓰면 그 번역은 새로 끼워 넣은 내부 용어가 아니라 원문을 옮긴 것이다(2026-W47: 폴백 → fallback,
-// 검사기 → validators). 한국어판은 한국어 낱말이라 이 영어 규칙을 피했을 뿐이다. 'Review-only', 'publish gate',
-// 'candidate shortage' 같은 순수 파이프라인 용어는 원문과 무관하게 계속 막아야 하므로 넣지 않는다.
-const KOREAN_COUNTERPARTS = Object.freeze({
-  fallback: ['폴백'],
-  validator: ['검사기', '검증기', '밸리데이터']
-});
-
-// 누출 이슈 메시지("... contains internal public-forbidden term: Fallback", "... contextual internal term:
-// validator+internal_marker")에서 걸린 용어만 꺼낸다. 문맥 marker는 판정 대상이 아니다.
-function leakedTerm(item) {
-  if (item.type !== 'public_article_leakage') return '';
-  const match = /contains (?:internal public-forbidden term|contextual internal term): ([^+]+?)(?:\+\w+)?$/.exec(item.message || '');
-  return match ? match[1].toLowerCase() : '';
-}
-
-// 문맥 금지어는 같은 문장·근처의 marker(internal 등)와 함께 걸린다. 일반 기술 문장에서도 자연스러운 marker만
-// 한국어 대응어와 함께 둔다. debug, schema, pipeline, report, output, gate, policy, contract, public_article
-// 같은 marker는 일부러 넣지 않아 원문과 무관하게 계속 막는다.
-const KOREAN_MARKER_COUNTERPARTS = Object.freeze({
-  internal: ['내부']
-});
-
-// 대응어 뒤에 '간'이 오면 다른 낱말이다('검증기간'은 검증기가 아니다).
-function hasKoreanWord(words, value) {
-  const serialized = JSON.stringify(value ?? '');
-  return words.some(word => new RegExp(`${word}(?!간)`).test(serialized));
-}
-
-// 번역문에서 걸린 누출 이슈가 한국어 원문의 짝이 되는 필드(item.key)에 있는 대응어를 충실히 옮긴 것이면 true다.
-// 다른 필드나 번역 대상이 아닌 필드(editorial_story 등)의 대응어는 보지 않는다. 문맥 이슈는 용어뿐 아니라 그
-// 문맥을 만든 marker도 원문에 대응어가 있어야 한다. 어떤 marker가 걸렸는지는 메시지에 없으므로, 원문에 대응어가
-// 있는 marker만 번역문 필드에서 지우고 같은 판정(publicProseLeakageIssues)을 다시 돌려 이슈가 사라지는지 본다.
-// debug 같은 다른 marker가 남아 있으면 이슈가 그대로여서 막힌다.
-// 번역 검사와 validate:public의 translation.en.json 검사가 같은 판정을 쓰도록 내보낸다.
-function isFaithfulTechnicalTerm(item, sourceSection, englishSection) {
-  const term = leakedTerm(item);
-  const sourceValue = sourceSection?.public_article?.[item.key];
-  if (!term || !hasKoreanWord(KOREAN_COUNTERPARTS[term] || [], sourceValue)) return false;
-  if (!item.message.includes('contextual internal term')) return true;
-  let serialized = JSON.stringify(englishSection?.public_article?.[item.key] ?? '');
-  for (const [marker, words] of Object.entries(KOREAN_MARKER_COUNTERPARTS)) {
-    if (hasKoreanWord(words, sourceValue)) serialized = serialized.replace(new RegExp(marker, 'gi'), 'inward');
-  }
-  return !publicProseLeakageIssues(JSON.parse(serialized), `public_article.${item.key}`).includes(item.message);
 }
 
 // 재시도 피드백용 문장이다. 코드명(public_article_leakage 등)은 모델에게 보일 필요가 없어 뺀다.
@@ -202,4 +154,4 @@ function translationChecks(issue, overlay, sourceText) {
   return { issue: english, checks: { ids: true, urls: true, english: true, tokens: true } };
 }
 
-module.exports = { translationChecks, urls, protectedTokens, isFaithfulTechnicalTerm };
+module.exports = { translationChecks, urls, protectedTokens };
