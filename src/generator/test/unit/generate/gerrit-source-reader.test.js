@@ -17,7 +17,7 @@ function setup(host = 'android-review.googlesource.com', project = 'platform/fra
   const input = { selected_articles: [{ ...candidate }], shortlisted_candidates: [{ ...candidate }] };
   const detail = { _number: 42, project, branch: 'main', status: 'NEW',
     created: '2026-10-07 12:00:00.000000000', current_revision: revision,
-    revisions: { [revision]: { files: { 'camera/test.cc': {} } } } };
+    revisions: { [revision]: { files: { 'camera/test.cc': {} }, commit: { message: 'Type platform handles\n\nKeep the ownership condition.\n' } } } };
   const seen = [];
   const fetchImpl = async (target, init) => {
     seen.push(target);
@@ -89,21 +89,69 @@ for (const [name, mutate, error] of [
   });
 }
 
-for (const [name, body, status, error] of [
+for (const [name, body, status, error, mutate] of [
   ['HTTP failure', '', 404, 'gerrit_patch:http_404'],
   ['HTML shell', shell, 200, 'invalid_gerrit_patch_encoding'],
   ['base64 shell', Buffer.from(shell).toString('base64'), 200, 'invalid_gerrit_patch_content'],
   ['wrong patch revision', Buffer.from(patch.replace(revision, otherRevision)).toString('base64'), 200, 'invalid_gerrit_patch_content'],
-  ['document budget', Buffer.from(patch + 'x'.repeat(64000)).toString('base64'), 200, 'gerrit_source_exceeds_document_budget'],
+  ['commit message beyond the document budget', Buffer.from(patch.replace('Keep the ownership condition.', 'x'.repeat(64000))).toString('base64'), 200, 'gerrit_source_exceeds_document_budget', d => { d.revisions[revision].commit.message = 'x'.repeat(64000); }],
   ['network byte budget', 'x'.repeat(800 * 1024), 200, 'gerrit_patch:truncated_at_byte_limit']
 ]) {
   test(`${name} stays unavailable without an HTML or summary fallback`, async () => {
-    const { input, fetchImpl } = setup();
+    const { input, detail, fetchImpl } = setup();
+    if (mutate) mutate(detail);
     await readArticleSources(input, { fetchImpl: (url, init) => url.endsWith('/patch') ? response(body, status) : fetchImpl(url, init) });
     const c = input.selected_articles[0];
     assert.deepEqual(c.article_source_reading, { status: 'unavailable', error, documents: [] });
     assert.deepEqual(c.source_extraction.evidence_blocks, []);
     assert.equal(c.source_gap_risk, true);
+  });
+}
+
+function omittedDiffText(detail, revisionKey, patchLength) {
+  const metadata = {
+    change_number: 42, project: detail.project, branch: 'main', status: 'NEW',
+    created: '2026-10-07 12:00:00.000000000', submitted: '', revision: revisionKey,
+    files: ['camera/test.cc']
+  };
+  const message = detail.revisions[revisionKey].commit.message;
+  return 'Official Gerrit metadata (UTC timestamps):\n' + JSON.stringify(metadata, null, 2) +
+    '\n\nRevision commit message (diff omitted):\n' + message +
+    `\nDiff omitted: the complete patch (${patchLength} chars) exceeds the 64000-char document budget. ` +
+    'Only the commit message and file list above are source evidence; do not infer code behavior from omitted diff lines.\n';
+}
+
+for (const [name, message] of [
+  ['plain', 'Type platform handles\n\nKeep the ownership condition.\n'],
+  ['a line starting with diff --git', 'Type platform handles\n\ndiff --git a/quoted b/quoted\nKeep the ownership condition.\n']
+]) {
+  test(`a patch beyond the document budget keeps the whole commit message (${name}) and file list but no diff lines`, async () => {
+    const { input, detail, fetchImpl } = setup();
+    detail.revisions[revision].commit.message = message;
+    const bigPatch = patch + '+added line\n'.repeat(8000);
+    await readArticleSources(input, { fetchImpl: (url, init) => url.endsWith('/patch')
+      ? response(Buffer.from(bigPatch).toString('base64')) : fetchImpl(url, init) });
+    const c = input.selected_articles[0];
+    assert.equal(c.article_source_reading.status, 'read');
+    const docs = c.article_source_reading.documents;
+    const text = docs.map(d => d.text).join('');
+    assert.equal(text, omittedDiffText(detail, revision, bigPatch.length));
+    assert.ok(docs.every(d => d.revision === revision && d.truncated === false && d.diff_omitted === true));
+  });
+}
+
+for (const [name, mutate] of [
+  ['missing', d => { delete d.revisions[revision].commit; }],
+  ['non-string', d => { d.revisions[revision].commit = { message: 7 }; }],
+  ['empty', d => { d.revisions[revision].commit = { message: '  ' }; }]
+]) {
+  test(`an over-budget patch with a ${name} commit message in the detail stays unavailable`, async () => {
+    const { input, detail, fetchImpl } = setup();
+    mutate(detail);
+    await readArticleSources(input, { fetchImpl: (url, init) => url.endsWith('/patch')
+      ? response(Buffer.from(patch + '+added line\n'.repeat(8000)).toString('base64')) : fetchImpl(url, init) });
+    assert.deepEqual(input.selected_articles[0].article_source_reading,
+      { status: 'unavailable', error: 'gerrit_source_exceeds_document_budget', documents: [] });
   });
 }
 

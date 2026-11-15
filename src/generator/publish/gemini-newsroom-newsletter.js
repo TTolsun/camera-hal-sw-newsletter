@@ -360,7 +360,8 @@ const {
 // 원래 두 `return;`을 그대로 재현한다. 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접
 // import하는 clean importer라 god-file-local 주입이 없다.
 const {
-  runRepairAndCompletionPasses
+  runRepairAndCompletionPasses,
+  salvageUnpublishableAfterReview
 } = require('./orchestrator-repair-completion');
 
 // render/headline 기록 직후, terminal recovery routing 직전의 결정론적 발행 가부 결정 +
@@ -820,6 +821,22 @@ async function main() {
     );
     generationRunState.factCheck = factCheck;
     ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'attempt', qualityGateContext));
+
+    // repair 뒤 재검토가 일부 기사만 unpublishable로 막았다면, 이미 통과한 나머지까지 다음 attempt에서
+    // 전부 다시 생성하지 않고 그 기사만 강등해 같은 게이트를 다시 통과시킨다(원인이 unpublishable뿐이고
+    // 기사 수 하한을 지키며 게이트가 PASS일 때만; 아니면 null이라 기존 경로). 첫 게이트(위)의 NEEDS_FIX는
+    // 그대로 repair로 간다.
+    const reviewSalvage = salvageUnpublishableAfterReview({
+      date, editor, reporter, factCheck, qualityReport, shortlistReport, seedEvidencePack,
+      attempt, qualityGateContext
+    });
+    if (reviewSalvage) {
+      console.warn(`Quality attempt ${attempt}/${totalAttempts}: source review blocked ${reviewSalvage.droppedSections.length} article(s) only; demoting them and keeping ${ensureArray(reviewSalvage.editor.sections).length}.`);
+      ({ editor, factCheck, qualityReport } = reviewSalvage);
+      generationRunState.factCheck = factCheck;
+      demotedSections = appendUniqueSections(demotedSections, reviewSalvage.droppedSections);
+      repairActions = repairActions.concat(reviewSalvage.droppedActions);
+    }
 
     excludedSections = appendUniqueSections(excludedSections, demotedSections);
     const lockSelection = selectLockedArticles(editor, qualityReport, factCheck);

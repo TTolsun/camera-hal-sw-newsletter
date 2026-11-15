@@ -51,10 +51,22 @@ async function readGerritSource(target, candidate, client) {
     files: Object.keys(detail.revisions[revision].files || {})
   };
   // Never strip HTML from a diff: handle<platform>, template types and +/- lines are evidence.
-  const body = 'Official Gerrit metadata (UTC timestamps):\n' + JSON.stringify(metadata, null, 2) +
-    '\n\nComplete revision patch (commit message and diff):\n' + patch;
-  if (body.length > MAX_GERRIT_CHARS) return unavailable('gerrit_source_exceeds_document_budget');
-  return { status: 'read', error: '', body, fetched_from: [detailUrl, patchUrl], revision };
+  const header = 'Official Gerrit metadata (UTC timestamps):\n' + JSON.stringify(metadata, null, 2);
+  let body = header + '\n\nComplete revision patch (commit message and diff):\n' + patch;
+  let diffOmitted = false;
+  if (body.length > MAX_GERRIT_CHARS) {
+    // Never cut a diff: a partial diff hides rejection and exception paths. Keep only the commit
+    // message and say plainly that the diff was not read. Take the message from the detail response,
+    // not by cutting the patch at the first "diff --git " line, which a message body may contain.
+    const message = detail.revisions[revision].commit?.message;
+    if (typeof message !== 'string' || !message.trim()) return unavailable('gerrit_source_exceeds_document_budget');
+    diffOmitted = true;
+    body = header + '\n\nRevision commit message (diff omitted):\n' + message +
+      `\nDiff omitted: the complete patch (${patch.length} chars) exceeds the ${MAX_GERRIT_CHARS}-char document budget. ` +
+      'Only the commit message and file list above are source evidence; do not infer code behavior from omitted diff lines.\n';
+    if (body.length > MAX_GERRIT_CHARS) return unavailable('gerrit_source_exceeds_document_budget');
+  }
+  return { status: 'read', error: '', body, fetched_from: [detailUrl, patchUrl], revision, diffOmitted };
 }
 
 module.exports = { GERRIT_REVISION: SHA, gerritTarget, readGerritSource };

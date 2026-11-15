@@ -104,6 +104,7 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
             evidence_id: `source-body:${createHash('sha256').update(url + '\n' + source.revision + '\n' + offset + '\n' + content).digest('hex').slice(0, 20)}`,
             url, text: content, truncated: false, revision: source.revision,
             fetched_from: source.fetched_from,
+            ...(source.diffOmitted ? { diff_omitted: true } : {}),
             part: result.blocks.length + 1, parts: Math.ceil(source.body.length / MAX_DOCUMENT_CHARS)
           });
         }

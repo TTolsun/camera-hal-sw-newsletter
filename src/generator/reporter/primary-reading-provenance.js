@@ -22,6 +22,8 @@ function bindPrimaryReadingNotes(section, candidate = {}) {
     const match = String(note).match(/^Verified against (?:primary )?Gerrit change (\d+) (?:documents?(?: and commit message)?|commit message and patch diff)\.?$/i);
     // Only this exact primary-reading statement is scoped. Other URLs, bugs,
     // blanket confirmations and factual assertions remain untouched for the gate.
+    // A document whose diff was omitted never supports a statement that the patch diff was read.
+    if (document.diff_omitted && /patch diff/i.test(String(note))) return note;
     return match && match[1] === changeId ? `Primary source: ${note}` : note;
   });
   return [...scopedNotes, `Source URL: ${document.url}`, `Evidence ID: ${document.evidence_id}`];

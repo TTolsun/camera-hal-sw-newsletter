@@ -825,6 +825,10 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
   const article = section({ url, what_changed: claim, evidence_summary: summary });
   const blocked = (a, c = candidate) => linkedDeductions(reportWithTargetSection(a, c), 'linked-evidence-overclaim').some(d => d.blocking);
   assert.equal(blocked(article), false);
+  // diff를 생략한 큰 패치 문서도 같은 공식 메타데이터를 담으므로 1차 변경 상태로 인정한다.
+  const diffOmitted = { ...document, diff_omitted: true,
+    text: document.text.replace('Complete revision patch (commit message and diff):', 'Revision commit message (diff omitted):') };
+  assert.equal(blocked(article, { ...candidate, article_source_reading: { status: 'read', documents: [diffOmitted] } }), false);
   const expandedClaim = 'Gerrit change 123이 2026-01-02에 platform/example main 브랜치에 status=MERGED로 병합됨';
   const koreanClaim = 'Gerrit 변경 123은 2026-01-02에 platform/example의 main 브랜치에 병합(MERGED)되었습니다.';
   assert.equal(blocked({ ...article, confirmed_facts: [koreanClaim] }), false);
@@ -972,4 +976,28 @@ test('weak linked evidence limitation wording is soft and explicit limitation av
     })
   );
   assert.equal(linkedDeductions(explicit, 'linked-evidence-limitation').length, 0);
+});
+
+test('a document whose diff was omitted does not back a note claiming the patch diff was read', () => {
+  const url = 'https://android-review.googlesource.com/c/platform/example/+/123';
+  const document = { url, evidence_id: 'source-body:primary', truncated: false, diff_omitted: true,
+    text: 'Official Gerrit metadata (UTC timestamps):\n{}\n\nRevision commit message (diff omitted):\nUpdate the request.' };
+  const candidate = linkedEvidenceCandidate(url, 'direct_aosp_camera', {
+    article_source_reading: { status: 'read', documents: [document] },
+    linked_evidence_summary: linkedEvidenceSummary({ by_fetch_status: { unsupported: 1 }, has_unresolved_evidence: true }),
+    impact_classification: impactClassification({ impact_type: 'unknown', recommended_article_type: 'unknown' })
+  });
+  const blocked = notes => linkedDeductions(reportWithTargetSection(section({ url, source_verification_notes: notes }), candidate),
+    'linked-evidence-overclaim').some(d => d.blocking);
+  const labels = [`Source URL: ${url}`, 'Evidence ID: source-body:primary'];
+  // diff를 읽었다는 노트는 라벨로 묶였든 evidence id를 직접 인용했든 면제받지 못한다.
+  assert.equal(blocked([...labels, 'Verified against Gerrit change 123 commit message and patch diff.']), true);
+  assert.equal(blocked(['Verified from Gerrit commit message and patch diff (source-body:primary).']), true);
+  // 커밋 메시지만 말하는 노트는 면제가 유지된다.
+  assert.equal(blocked([...labels, 'Verified against Gerrit change 123 commit message.']), false);
+  assert.equal(blocked(['Verified from Gerrit commit message (source-body:primary).']), false);
+  // 같은 노트도 diff가 생략되지 않은 문서에서는 면제된다.
+  const full = { ...candidate, article_source_reading: { status: 'read', documents: [{ ...document, diff_omitted: undefined }] } };
+  assert.equal(linkedDeductions(reportWithTargetSection(section({ url, source_verification_notes:
+    [...labels, 'Verified against Gerrit change 123 commit message and patch diff.'] }), full), 'linked-evidence-overclaim').some(d => d.blocking), false);
 });
