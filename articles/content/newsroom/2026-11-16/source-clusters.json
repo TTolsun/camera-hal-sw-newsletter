@@ -1,0 +1,1208 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-11-16",
+  "clusters": [
+    {
+      "cluster_id": "69dc1a32faa34898",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "canonical_title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+          "title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4768d871d397e19b",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "canonical_title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+          "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4bd256ff5a057dd7",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+      "canonical_title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+          "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ff135ce6e3b1f650",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+      "canonical_title": "Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+          "title": "Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7a3ea6cb439d878f",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "canonical_title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+          "title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "07c27fe5a0d9df17",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "canonical_title": "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+          "title": "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d5280bf1a2693a5d",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "canonical_title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+          "title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "76e8015edab96356",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+      "canonical_title": "Sync PreviewView with display rotation - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+          "title": "Sync PreviewView with display rotation - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+      "candidate_count": 5,
+      "duplicate_count": 4,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "title": "1.6.2",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ca0244e3d958a933",
+      "cluster_key": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "canonical_url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "canonical_title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7efb892ff84fa9c7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+      "canonical_title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+          "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e0de6164415e31a7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+      "canonical_title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+          "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "907f6cef86ac5666",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+          "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dd41a1fe9fef6f49",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+          "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb7f05cba921f730",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+      "canonical_title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+          "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "be2b6255fc43ef14",
+      "cluster_key": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+      "canonical_title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+          "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5c7917e5b52fcd37",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "canonical_title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+          "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1bff7254dcd7b771",
+      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_title": "v0.8.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+          "title": "v0.8.0",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9cbb453ced6c0805",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2brpt20261104",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+          "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b9ae0e67c209d9be",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+      "canonical_title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+          "title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "061a561f41da02e0",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+      "canonical_title": "Add testAvifEncoderAvailable to AvifWriterTest - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+          "title": "Add testAvifEncoderAvailable to AvifWriterTest - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f967f9b0009e7ce5",
+      "cluster_key": "https://developer.android.com/blog/posts/open-source-google-sign-in-unity",
+      "canonical_url": "https://developer.android.com/blog/posts/open-source-google-sign-in-unity",
+      "canonical_title": "Powering Seamless Player Sign-In: Introducing the Open-Source Sign in with Google Plugin for Unity",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/open-source-google-sign-in-unity",
+          "title": "Powering Seamless Player Sign-In: Introducing the Open-Source Sign in with Google Plugin for Unity",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "019f4212ce24f09b",
+      "cluster_key": "https://developer.android.com/blog/posts/android-intelligence-system-in-app-agents-ads",
+      "canonical_url": "https://developer.android.com/blog/posts/android-intelligence-system-in-app-agents-ads",
+      "canonical_title": "What’s new in intelligent apps at the Android Developer Summit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/android-intelligence-system-in-app-agents-ads",
+          "title": "What’s new in intelligent apps at the Android Developer Summit",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "87c5f673c2d3cb37",
+      "cluster_key": "https://developer.android.com/blog/posts/build-it-your-way-a-next-era-of-android-development",
+      "canonical_url": "https://developer.android.com/blog/posts/build-it-your-way-a-next-era-of-android-development",
+      "canonical_title": "Agentic and Flexible: A next era of Android development",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/build-it-your-way-a-next-era-of-android-development",
+          "title": "Agentic and Flexible: A next era of Android development",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9ddd5f596bd8e867",
+      "cluster_key": "https://developer.android.com/blog/posts/building-apps-developer-sessions",
+      "canonical_url": "https://developer.android.com/blog/posts/building-apps-developer-sessions",
+      "canonical_title": "Developing for Today: 50+ New Developer Sessions on Building Apps Today",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/building-apps-developer-sessions",
+          "title": "Developing for Today: 50+ New Developer Sessions on Building Apps Today",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "22c52551573c50ee",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "canonical_title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+          "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3fa6a4f132f49358",
+      "cluster_key": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+      "canonical_url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+      "canonical_title": "Build for an expanding lineup of Android XR devices with production-ready tools from Android Developer Summit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+          "title": "Build for an expanding lineup of Android XR devices with production-ready tools from Android Developer Summit",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "15c3741bd38d8e18",
+      "cluster_key": "https://developer.android.com/blog/posts/build-for-every-screen-jetpack-compose-updates",
+      "canonical_url": "https://developer.android.com/blog/posts/build-for-every-screen-jetpack-compose-updates",
+      "canonical_title": "Build for every screen with the latest Jetpack Compose updates from Android Developer Summit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/build-for-every-screen-jetpack-compose-updates",
+          "title": "Build for every screen with the latest Jetpack Compose updates from Android Developer Summit",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c9012ada3d8ab081",
+      "cluster_key": "https://developer.android.com/blog/posts/android-dev-summit-26-developer-tools-performance",
+      "canonical_url": "https://developer.android.com/blog/posts/android-dev-summit-26-developer-tools-performance",
+      "canonical_title": "What's new in Android developer tools and performance at Android Dev Summit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/android-dev-summit-26-developer-tools-performance",
+          "title": "What's new in Android developer tools and performance at Android Dev Summit",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cbc247f860032c68",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+      "canonical_title": "Add API files for heifwriter 1.2.0-rc02 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+          "title": "Add API files for heifwriter 1.2.0-rc02 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2005c04eb81ac4ed",
+      "cluster_key": "https://lore.kernel.org/linux-media/cagesz8hvy-jde6k7vl4b4m=hpzptyz2a1d_qza81uyhd=fr8sw@mail.gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
+      "canonical_title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
+          "title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9a2a7d62f833b1a4",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
+      "canonical_title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
+          "title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0878aa14ba5bf6e3",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28876",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28876/",
+      "canonical_title": "libcamera: rkisp1: Ensure a raw format is found with sensorConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28876/",
+          "title": "libcamera: rkisp1: Ensure a raw format is found with sensorConfig",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4f381ba6c1ff1747",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28867",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28867/",
+      "canonical_title": "[RFC,v2,1/2] libcamera: software_isp: Use shared stats",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28867/",
+          "title": "[RFC,v2,1/2] libcamera: software_isp: Use shared stats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2843afee2b467cb4",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28870",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28870/",
+      "canonical_title": "[v2,1/3] libipa: camera_sensor_helper: Add OV9734",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28870/",
+          "title": "[v2,1/3] libipa: camera_sensor_helper: Add OV9734",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f35ad4d55f509f2c",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28888",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28888/",
+      "canonical_title": "[v4,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28888/",
+          "title": "[v4,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8ddf6a1b6c4da1cc",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28839",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28839/",
+      "canonical_title": "[1/2] ipa: libipa: camera_sensor_helper: Add IMX363, S5K3M3 and S5KGD1",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28839/",
+          "title": "[1/2] ipa: libipa: camera_sensor_helper: Add IMX363, S5K3M3 and S5KGD1",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9f3b03d87b48d19b",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28837",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28837/",
+      "canonical_title": "[v2] libcamera: pipeline: simple: Set planesCount for the capture format",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28837/",
+          "title": "[v2] libcamera: pipeline: simple: Set planesCount for the capture format",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "365edb9756ba738a",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28878",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28878/",
+      "canonical_title": "[v2,1/5] ipa: rpi: cam_helper: Add Mira016 cam helper",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28878/",
+          "title": "[v2,1/5] ipa: rpi: cam_helper: Add Mira016 cam helper",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9344ed7dc573e263",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28874",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28874/",
+      "canonical_title": "libcamera: controls: Set the ColourTemperature direction to inout",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28874/",
+          "title": "libcamera: controls: Set the ColourTemperature direction to inout",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e2f07a9cd8a2ace",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
+      "canonical_title": "camera: Update capability rules - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
+          "title": "camera: Update capability rules - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "67672a694e389b29",
+      "cluster_key": "https://openai.com/business/customer-stories/amplitude",
+      "canonical_url": "https://openai.com/business/customer-stories/amplitude",
+      "canonical_title": "How Amplitude ships product improvements in 1–2 days with OpenAI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/business/customer-stories/amplitude",
+          "title": "How Amplitude ships product improvements in 1–2 days with OpenAI",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8612de799288e96e",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8778820",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8778820",
+      "canonical_title": "camera: tools: mctk: include for errno/ENOSPC - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8778820",
+          "title": "camera: tools: mctk: include for errno/ENOSPC - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-beta01",
+      "canonical_title": "Media3 Release Notes - Media3 1.12.0-beta01",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-beta01",
+          "title": "Media3 Release Notes - Media3 1.12.0-beta01",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a0c08c461d827e1c",
+      "cluster_key": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "canonical_url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "canonical_title": "Codex rust-v0.169.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+          "title": "Codex rust-v0.169.0",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "37e4452e64c861cf",
+      "cluster_key": "https://openai.com/index/cogent-security",
+      "canonical_url": "https://openai.com/index/cogent-security",
+      "canonical_title": "Cogent and OpenAI build cyber defense factories for enterprises",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/cogent-security",
+          "title": "Cogent and OpenAI build cyber defense factories for enterprises",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3b165b9d2cb3a6f8",
+      "cluster_key": "https://android-review.googlesource.com/q/i3235c1d64aa76a9084bdac63d81faa408e2f132f",
+      "canonical_url": "https://android-review.googlesource.com/q/I3235c1d64aa76a9084bdac63d81faa408e2f132f",
+      "canonical_title": "I3235c",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/q/I3235c1d64aa76a9084bdac63d81faa408e2f132f",
+          "title": "I3235c",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "903fa89bcee76bf9",
+      "cluster_key": "https://issuetracker.google.com/issues/575161911",
+      "canonical_url": "https://issuetracker.google.com/issues/575161911",
+      "canonical_title": "b/575161911",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/575161911",
+          "title": "b/575161911",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d11ee961a289de89",
+      "cluster_key": "https://issuetracker.google.com/issues/573671138",
+      "canonical_url": "https://issuetracker.google.com/issues/573671138",
+      "canonical_title": "b/573671138",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/573671138",
+          "title": "b/573671138",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eecb951418bf32d6",
+      "cluster_key": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com",
+      "canonical_url": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com",
+      "canonical_title": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com",
+          "title": "https://lore.kernel.org/all/20260626000715.1111803-1-vincent.cloutier@icloud.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3f5c2ee62cf03375",
+      "cluster_key": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de",
+      "canonical_title": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de",
+          "title": "https://lore.kernel.org/all/d80cecc3f317e4493207ea3c347dd144390d299f.camel@pengutronix.de/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eee63d65387d7504",
+      "cluster_key": "https://github.com/gauravsuman007/nura-g8x",
+      "canonical_url": "https://github.com/gauravsuman007/nura-g8x",
+      "canonical_title": "https://github.com/gauravsuman007/nura-g8x",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/gauravsuman007/nura-g8x",
+          "title": "https://github.com/gauravsuman007/nura-g8x",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c1cbcfeddc138a7c",
+      "cluster_key": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260928-kaanapali-camss-v17-0-dcf3fd37f76c@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7eb73d3fbf2f4858",
+      "cluster_key": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9d47dd782cad4bb7",
+      "cluster_key": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260720-kaanapali-camss-v15-0-c0b1c1167c5d@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e2b84c352e40c4d8",
+      "cluster_key": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260601-kaanapali-camss-v14-0-e76f26aa6691@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "68c7b638f0e130d2",
+      "cluster_key": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260508-kaanapali-camss-v13-0-2541d8e55651@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2d67f3358c71b428",
+      "cluster_key": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/all/20260112-kaanapali-camss-v12-0-15b7af73401e@oss.qualcomm.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b3cb9beb41195160",
+      "cluster_key": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260112-kaanapali-camss-v11-0-81e4f59a5d08@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4ed82c44c5c1a294",
+      "cluster_key": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20251211-add-support-for-camss-on-kaanapali-v10-0-39e8874dcd27@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e06f1665b7c79408",
+      "cluster_key": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/all/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "055c6b472ff594f4",
+      "cluster_key": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260721-add-support-for-camss-on-sm8750-v6-0-a5f841061d18@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "190802cc6b02f166",
+      "cluster_key": "https://github.com/stmicroelectronics/vd55g0-linux-driver",
+      "canonical_url": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+      "canonical_title": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+          "title": "https://github.com/STMicroelectronics/vd55g0-linux-driver",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1483d57e720cd97c",
+      "cluster_key": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me",
+      "canonical_url": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me",
+      "canonical_title": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me",
+          "title": "https://lore.kernel.org/all/20261111063351.96951-1-lsa.uz@pm.me/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4997adce6909ba94",
+      "cluster_key": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org",
+      "canonical_url": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org",
+      "canonical_title": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org",
+          "title": "https://lore.kernel.org/all/179439345249.5.16817789862917866412@debian.org/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1daa81710df0aa09",
+      "cluster_key": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me",
+      "canonical_url": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me",
+      "canonical_title": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me",
+          "title": "https://lore.kernel.org/all/20261110195454.48176-1-lsa.uz@pm.me/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6a69007bd3bf057a",
+      "cluster_key": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com",
+      "canonical_url": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com",
+      "canonical_title": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com",
+          "title": "https://lore.kernel.org/all/20251208035122.2147678-1-hao.yao@intel.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7a465c4834b952a8",
+      "cluster_key": "https://github.com/androidx/media/issues/3485",
+      "canonical_url": "https://github.com/androidx/media/issues/3485",
+      "canonical_title": "#3485",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/androidx/media/issues/3485",
+          "title": "#3485",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "71b794e671e99d9d",
+      "cluster_key": "https://github.com/androidx/media/issues/3005",
+      "canonical_url": "https://github.com/androidx/media/issues/3005",
+      "canonical_title": "#3005",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/androidx/media/issues/3005",
+          "title": "#3005",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}

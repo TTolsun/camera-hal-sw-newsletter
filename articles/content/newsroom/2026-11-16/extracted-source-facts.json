@@ -1,0 +1,556 @@
+{
+  "sources": [
+    {
+      "id": "95893d973b4b20e4",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710",
+      "title": "Filter FrameGraph buffer frames by parameters - platform/frameworks/support",
+      "published_at": "2026-11-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4371710 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-13). Change-Id I31ce2c654783b3b8d659ec950a5ce5f071d9e0a9; current revision 7c0d601622e9. Reviewed: Code-Review carries an approving or recommending vote. It changes 8 file(s) +938/-5, of which 8 are camera paths: platform/frameworks/support/camera/camera-camera2-pipe/src/test/java/androidx/camera/camera2/pipe/TagBundleTest.kt, platform/frameworks/support/camera/camera-camera2-pipe/src/main/ja",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"T-pQeQHWyc1SAxcKVgb8DQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.968,
+      "warnings": []
+    },
+    {
+      "id": "d9667bb84ffde784",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "title": "Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support",
+      "published_at": "2026-11-12",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4430441 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-12). Change-Id I06d84c4a7d72a40088c309346bfb47e738b6e24c; current revision 538276ce0a8e. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +148/-6, of which 2 are camera paths: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/compat/quirk/DisableAbortCapturesOnStopQuirkTest.kt, platform/frameworks/support/camera/camera",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"7yrLttOpkRVn33FuyfCt7Q\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.968,
+      "warnings": []
+    },
+    {
+      "id": "d9c9e598438d1c08",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
+      "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+      "published_at": "2026-11-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4425978 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-10). Change-Id I3d500bbee699c6d4a49dff03b9811ff6100890b8; current revision d53eb4c14497. Reviewed: Code-Review carries an approving or recommending vote. It changes 7 file(s) +420/-0, of which 7 are camera paths: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/compat/quirk/CameraCrashWhenHlg10UhdWithVideoStabilizationQuirkTest.kt, platform/frameworks/su",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"fAvh0PitEsUWQlnOX1mwjg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.968,
+      "warnings": []
+    },
+    {
+      "id": "fc076c06446fcf16",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038",
+      "title": "Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support",
+      "published_at": "2026-11-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4426038 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-09). Change-Id I25fb54a26fa59a1b3102025cd306ea767b2743fa; current revision a79726fee8ac. Reviewed: Code-Review carries an approving or recommending vote. It changes 5 file(s) +360/-1, of which 5 are camera paths: platform/frameworks/support/camera/camera-core/src/main/java/androidx/camera/core/internal/compat/quirk/DeviceQuirksLoader.java, platform/frameworks/support/camera/camera-core/src/te",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"bFJOvyqvFiBU9t9iu_lrBQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.96,
+      "android_hal_relevance": 0.96,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.952,
+      "warnings": []
+    },
+    {
+      "id": "75644e0b5722e7df",
+      "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+      "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+      "published_at": "2026-11-12T00:47:12Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Vincent Cloutier <vincent@cloutier.co> Add initial support for the Samsung S5K3L6 raw Bayer image sensor and describe the Purism Librem 5 rear camera and second CSI-2 capture path. The driver targets the validated Librem 5 configuration: a 25 MHz input clock, two CSI-2 lanes, and RAW8/RAW10 SGRBG modes at 1052x780, 2104x1560 and 4208x3120. It uses CCI regmap, runtime PM, endpoint validation and the subdev stream API, with exposure, gain, blanking, link-frequency, pixel-rate, test-pattern a",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera - Vincent Cloutier</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6acd7480 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "35a7d054d305bdf2",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107",
+      "title": "Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support",
+      "published_at": "2026-11-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4418107 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-10). Change-Id I0749c197ea0e78008716107cfee6c7ea55dae5f4; current revision 27a22d483a74. Reviewed: Code-Review carries an approving or recommending vote. It changes 11 file(s) +1125/-12, of which 11 are camera paths: platform/frameworks/support/camera/camera-view/src/test/java/androidx/camera/view/PreviewTransformationTest.kt, platform/frameworks/support/camera/camera-view/src/main/java/andro",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"IJbM5AILdeHR5hf7qnkg8Q\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.9,
+      "android_hal_relevance": 0.9,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.927,
+      "warnings": []
+    },
+    {
+      "id": "9da274f60bc34317",
+      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "published_at": "2026-11-11",
+      "source_type": "blog_post_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX 4 min read 11 Nov 2026 Donovan McMurray Developer Relations Engineer Identity verification apps for banking and SIM registration require clear, high-resolution face captures to detect spoofing and deepfakes. Capturing frames sharp enough for liveness and anti-spoofing checks, without crashing low-memory devices, is a common challenge for Android camera developers.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.84,
+      "android_hal_relevance": 0.84,
+      "ai_relevance": 0,
+      "technical_depth": 0.903,
+      "warnings": []
+    },
+    {
+      "id": "8bc5bfe3b9f33525",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+      "title": "Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support",
+      "published_at": "2026-11-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4439489 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-13). Change-Id I5a3424931f7344b342359eab51446d8c8c001b10; current revision 622ed42a6730. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +204/-0, of which 2 are camera paths: platform/frameworks/support/camera/camera-camera2-pipe/src/test/java/androidx/camera/camera2/pipe/CameraMetadataTest.kt, platform/frameworks/support/camera/camera-camera2-pipe/src/ma",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"dktHLsXIbs9imHI6NkBSvg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.78,
+      "android_hal_relevance": 0.78,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.879,
+      "warnings": []
+    },
+    {
+      "id": "e4f79cf648893c5d",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
+      "title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
+      "published_at": "2026-11-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4408215 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-09). Change-Id Idc1ce23df285644ced9c3e1e79f84e7f96b266e5; current revision 0fddf920dab7. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +46/-0, of which 1 are camera paths: platform/frameworks/support/heifwriter/heifwriter/src/androidTest/java/androidx/heifwriter/HeifWriterTest.java.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"P6c3pHJjZ1Xka9M7dq2VQQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.83,
+      "android_hal_relevance": 0.83,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "616f02c87f7ca796",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911",
+      "title": "Sync PreviewView with display rotation - platform/frameworks/support",
+      "published_at": "2026-11-12",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4433911 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-12). Change-Id I5656498cddaac54049c3e775955f54b64c901e5a; current revision c99660b149b0. Reviewed: Code-Review carries an approving or recommending vote. It changes 7 file(s) +2429/-21, of which 7 are camera paths: platform/frameworks/support/camera/camera-view/src/test/java/androidx/camera/view/PreviewTransformationTest.kt, platform/frameworks/support/camera/camera-view/src/androidTest/java/",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"2cvHO4Lpq793ytNemrqC3A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.66,
+      "android_hal_relevance": 0.66,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.831,
+      "warnings": []
+    },
+    {
+      "id": "b4d0d1ff5ebbf524",
+      "url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
+      "title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
+      "published_at": "2026-11-10T02:05:31Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Fix the core IRQ lifetime before changing resource-error handling. Patch 1 delays IRQ registration and releases it after I/O drain but before RPPX1 destruction. Patch 2 distinguishes an absent optional core from initialization failures and preserves deferred probing. Apply in this order so resource-error cleanup cannot invoke the shared IRQ handler after core->base is cleared. Both stages: Clang 23.1.4, ARM64 W=1 object builds. No hardware testing. AI assistance: Codex prepared the split and des",
+          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling - Myeonghun Pak</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6acd7480 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "6d3aa91e44f9e528",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870",
+      "title": "Add SessionConfig fast session switch Phase 1 - platform/frameworks/support",
+      "published_at": "2026-11-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4381870 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-09). Change-Id I044a90a1d9d142861bb899d9e66d52e92cbe0527; current revision 628b8f6ff0d7. Reviewed: Code-Review carries an approving or recommending vote. It changes 41 file(s) +5460/-225, of which 41 are camera paths: platform/frameworks/support/camera/camera-core/src/main/java/androidx/camera/core/impl/UseCaseAdditionSimulator.kt, platform/frameworks/support/camera/camera-core/src/main/java/",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"Aq_ckMB_BnU9uZcC3OnUBA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "9dc4b9bd58ec2e2e",
+      "url": "https://patchwork.libcamera.org/patch/28876/",
+      "title": "libcamera: rkisp1: Ensure a raw format is found with sensorConfig",
+      "published_at": "2026-11-12",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Jacopo Mondi); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: rkisp1: Ensure a raw format is found with sensorConfig - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "f7220fd0316ed6e7",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+      "title": "Add testAvifEncoderAvailable to AvifWriterTest - platform/frameworks/support",
+      "published_at": "2026-11-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4408216 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-09). Change-Id I1489b390276cc0d90616e207186e82463b243133; current revision 2472e4911c22. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +39/-0, of which 1 are camera paths: platform/frameworks/support/heifwriter/heifwriter/src/androidTest/java/androidx/heifwriter/AvifWriterTest.java.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"24_ouXHxSASSIonX2iPXZA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.71,
+      "android_hal_relevance": 0.71,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "25658c5edc4497db",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8778820",
+      "title": "camera: tools: mctk: include for errno/ENOSPC - chromiumos/platform2",
+      "published_at": "2026-11-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 8778820 on chromiumos/platform2 (branch main) is merged (submitted 2026-11-10). Change-Id I7d44dccd63d5cbc7ad1fb6e33fc0560946ef728d; current revision 11d979103695. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +2/-2, of which 1 are camera paths: chromiumos/platform2/camera/tools/mctk/control_from_kernel.cc.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"FPEpRqU6Gguz8MozQd4gFg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.5,
+      "android_hal_relevance": 0.5,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.767,
+      "warnings": []
+    },
+    {
+      "id": "3e13ee9c0d52dc1a",
+      "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+      "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+      "published_at": "2026-11-11T16:03:02Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The OV5693 front sensor of the Surface Pro 8 is mounted upside down, but the machine does not report that: neither the SSDB nor the _PLD carries a rotation, so the sensor is advertised with a rotation of 0 and every application receives an image rotated by 180 degrees. The ACPI HID of this sensor is INT33BE, not OVTI5693 as on the Surface Pro 9, so add an entry matching that one. On the machine the read-only camera_sensor_rotation control now reports 180, and libcamera turns the reported rotatio",
+          "evidence_text": "<html><head><title>[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down - Emfox Zhou</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6acd7480 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.761,
+      "warnings": []
+    },
+    {
+      "id": "49c9b97f1c3c8641",
+      "url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
+      "title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+      "published_at": "2026-11-14T19:55:33Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hello, The main part of this series aims to add NV12M output format support and there is a small drive-by fix to honor the image stride from input images in patch 1/4. Patch 2/4 address a confusion around how much data was needed to flush out all pixels to the output buffer. Later versions of the datasheet makes it use clear and how it relates to image strides. This is needed for NV12M support as we need to tightly control it to generate valid NV12M frames. Patch 3/4 is a quality of life fix whe",
+          "evidence_text": "<html><head><title>[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6acd7480 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "c3250079058fa7aa",
+      "url": "https://patchwork.libcamera.org/patch/28867/",
+      "title": "[RFC,v2,1/2] libcamera: software_isp: Use shared stats",
+      "published_at": "2026-11-11",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RFC,v2,1/2] libcamera: software_isp: Use shared stats - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/>",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "4ad0b9a679e7fc48",
+      "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+      "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+      "published_at": "2026-11-09T22:38:44Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds camera support for the Qualcomm SM8150 (Titan 175) and the three cameras of the LG G8x ThinQ: - CAMSS for SM8150: four CSIPHYs, two CSIDs/VFEs plus two lite pairs, reusing the gen2 CSID and VFE 17x code with SM8150 clock rates, the CSIPHY v1.1 lane table and camnoc_axi set to 400 MHz by the driver, - a driver for the Samsung S5K3M3 13MP sensor (wide camera), - a driver for the Samsung S5KGD1 32MP quad-Bayer sensor (front camera, 2x2 binned mode), - a lens driver for the autofocu",
+          "evidence_text": "<html><head><title>[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors - Gaurav Suman via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6acd7480 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "3554dd23c6f69a7a",
+      "url": "https://developer.android.com/blog/posts/build-it-your-way-a-next-era-of-android-development",
+      "title": "Agentic and Flexible: A next era of Android development",
+      "published_at": "2026-10-28",
+      "source_type": "blog_post_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Agentic and Flexible: A next era of Android development 4 min read 28 Oct 2026 Matthew McCullough Vice President, Product Management, Android Developer In a time when the way you work is changing, your craft, creativity, and expertise are needed more than ever. Today at the Android Dev Summit , we annouced the broad availability of many tools and APIs designed to remove everyday friction and give you more flexibility to build great Android apps.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.745,
+      "warnings": []
+    },
+    {
+      "id": "c155c4cc58b451be",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+      "published_at": "2026-11-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This release brings 211 commits, with significant developments around the IPA framework as well as both API and ABI updates. The largest development in this release is the integration of improved framework in libipa to unify and refactor much of the previous duplication between IPA modules. This work will allow consistency in image controls across multiple platforms and greatly eases development of an IPA for new platforms. As part of this, IPU3 and Mali-C55 now have additional algorithm support",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  data-css-features=\"site_disable_smooth_scrolling\"\n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.741,
+      "warnings": []
+    },
+    {
+      "id": "383d55b05104ca6e",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "published_at": "2026-10-16",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4370387 on platform/frameworks/support (branch snap-temp-L73500030206873228) is merged (submitted 2026-10-16). Change-Id I2b1bec2139688ffdb61f130284a758ae1b49db28; current revision 0ecba8e26f1d. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +18/-2, of which 1 are camera paths: platform/frameworks/support/heifwriter/heifwriter/src/main/java/androidx/heifwriter/EncoderBase.java.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"kjwwyPvFu4EVC731oNSTLA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.65,
+      "android_hal_relevance": 0.65,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.733,
+      "warnings": []
+    },
+    {
+      "id": "b66760627bb6b900",
+      "url": "https://patchwork.libcamera.org/patch/28837/",
+      "title": "[v2] libcamera: pipeline: simple: Set planesCount for the capture format",
+      "published_at": "2026-11-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Faizel K B); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2] libcamera: pipeline: simple: Set planesCount for the capture format - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.713,
+      "warnings": []
+    },
+    {
+      "id": "0d10058cb9901726",
+      "url": "https://developer.android.com/blog/posts/android-dev-summit-26-developer-tools-performance",
+      "title": "What's new in Android developer tools and performance at Android Dev Summit",
+      "published_at": "2026-10-28",
+      "source_type": "blog_post_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "What's new in Android developer tools and performance at Android Dev Summit 10 min read 28 Oct 2026 Adarsh Fernando Group Product Manager, Android Developer Tools This year at Android Dev Summit we shared how Android developer tools are evolving to help you be more productive alongside your agents.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"fr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.697,
+      "warnings": []
+    }
+  ]
+}
