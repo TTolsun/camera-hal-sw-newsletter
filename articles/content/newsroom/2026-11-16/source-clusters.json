@@ -140,51 +140,6 @@
       ]
     },
     {
-      "cluster_id": "49d58944bd3ca26f",
-      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
-      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-rc01",
-      "candidate_count": 5,
-      "duplicate_count": 4,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
-          "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
-          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "title": "1.6.2",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "title": "1.3.0-beta02",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "title": "1.4.0-alpha07",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "ca0244e3d958a933",
       "cluster_key": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
       "canonical_url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
@@ -202,154 +157,32 @@
       ]
     },
     {
-      "cluster_id": "7efb892ff84fa9c7",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
-      "canonical_title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+      "candidate_count": 3,
+      "duplicate_count": 2,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
-          "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
           "canonical": true,
-          "reliability": "project-official",
+          "reliability": "official",
           "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e0de6164415e31a7",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
-      "canonical_title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
+        },
         {
-          "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
-          "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
-          "canonical": true,
-          "reliability": "project-official",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
           "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "907f6cef86ac5666",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
+        },
         {
-          "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
-          "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "dd41a1fe9fef6f49",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
-          "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "bb7f05cba921f730",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
-      "canonical_title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
-          "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "be2b6255fc43ef14",
-      "cluster_key": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
-      "canonical_title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
-          "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "5c7917e5b52fcd37",
-      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
-      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
-      "canonical_title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
-          "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "1bff7254dcd7b771",
-      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-      "canonical_title": "v0.8.0",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-          "title": "v0.8.0",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "9cbb453ced6c0805",
-      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2brpt20261104",
-      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
-      "canonical_title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
-          "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
-          "canonical": true,
-          "reliability": "project-official",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "canonical": false,
+          "reliability": "official",
           "manual_seed": false
         }
       ]
@@ -542,6 +375,57 @@
       ]
     },
     {
+      "cluster_id": "7efb892ff84fa9c7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+      "canonical_title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+          "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e0de6164415e31a7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+      "canonical_title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+          "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "907f6cef86ac5666",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+          "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "2005c04eb81ac4ed",
       "cluster_key": "https://lore.kernel.org/linux-media/cagesz8hvy-jde6k7vl4b4m=hpzptyz2a1d_qza81uyhd=fr8sw@mail.gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
@@ -569,6 +453,57 @@
         {
           "url": "https://lore.kernel.org/linux-media/20261114-v4l2-add-nv12-v2-0-a3f5ecfd48d6@ragnatech.se/",
           "title": "[PATCH v2 0/4] media: rcar-isp: Add NV12M support and fix stride",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dd41a1fe9fef6f49",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+          "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb7f05cba921f730",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+      "canonical_title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+          "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "be2b6255fc43ef14",
+      "cluster_key": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+      "canonical_title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+          "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -712,6 +647,57 @@
       ]
     },
     {
+      "cluster_id": "5c7917e5b52fcd37",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "canonical_title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+          "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1bff7254dcd7b771",
+      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_title": "v0.8.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+          "title": "v0.8.0",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9cbb453ced6c0805",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2brpt20261104",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+          "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "5e2f07a9cd8a2ace",
       "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
       "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
@@ -814,16 +800,135 @@
       ]
     },
     {
-      "cluster_id": "3b165b9d2cb3a6f8",
-      "cluster_key": "https://android-review.googlesource.com/q/i3235c1d64aa76a9084bdac63d81faa408e2f132f",
-      "canonical_url": "https://android-review.googlesource.com/q/I3235c1d64aa76a9084bdac63d81faa408e2f132f",
-      "canonical_title": "I3235c",
+      "cluster_id": "02e9abf47eaf3fa0",
+      "cluster_key": "https://openai.com/index/coderabbit-codex-daybreak",
+      "canonical_url": "https://openai.com/index/coderabbit-codex-daybreak",
+      "canonical_title": "CodeRabbit scales agentic software development and ships 20x more",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/q/I3235c1d64aa76a9084bdac63d81faa408e2f132f",
-          "title": "I3235c",
+          "url": "https://openai.com/index/coderabbit-codex-daybreak",
+          "title": "CodeRabbit scales agentic software development and ships 20x more",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ace31f3b0bb1b6f0",
+      "cluster_key": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+      "canonical_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+      "canonical_title": "Claude Code v2.1.321",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+          "title": "Claude Code v2.1.321",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7d1e67602b79321d",
+      "cluster_key": "https://issuetracker.google.com/issues/563673593",
+      "canonical_url": "https://issuetracker.google.com/issues/563673593",
+      "canonical_title": "b/563673593",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/563673593",
+          "title": "b/563673593",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f49dbaa66e94a444",
+      "cluster_key": "https://issuetracker.google.com/issues/558819242",
+      "canonical_url": "https://issuetracker.google.com/issues/558819242",
+      "canonical_title": "b/558819242",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/558819242",
+          "title": "b/558819242",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "048720ba5ccda09d",
+      "cluster_key": "https://issuetracker.google.com/issues/556807521",
+      "canonical_url": "https://issuetracker.google.com/issues/556807521",
+      "canonical_title": "b/556807521",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/556807521",
+          "title": "b/556807521",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "df43d076e6a8541c",
+      "cluster_key": "https://issuetracker.google.com/issues/551348846",
+      "canonical_url": "https://issuetracker.google.com/issues/551348846",
+      "canonical_title": "b/551348846",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/551348846",
+          "title": "b/551348846",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "517f86acd1acb800",
+      "cluster_key": "https://issuetracker.google.com/issues/545866947",
+      "canonical_url": "https://issuetracker.google.com/issues/545866947",
+      "canonical_title": "b/545866947",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/545866947",
+          "title": "b/545866947",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bc8bbcb9fe0bad4e",
+      "cluster_key": "https://issuetracker.google.com/issues/543937345",
+      "canonical_url": "https://issuetracker.google.com/issues/543937345",
+      "canonical_title": "b/543937345",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/543937345",
+          "title": "b/543937345",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

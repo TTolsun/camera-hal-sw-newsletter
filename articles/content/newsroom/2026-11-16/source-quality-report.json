@@ -148,6 +148,24 @@
       }
     },
     {
+      "candidate_id": "9da274f60bc34317",
+      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "source_quality_score": 0.903,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "c863b2312a1dbe64",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
       "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
@@ -158,60 +176,6 @@
         "camera_relevance": 1,
         "android_hal_relevance": 1,
         "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "d075fc31feb456b4",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
-      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
-      "source_quality_score": 0.752,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.65,
-        "android_hal_relevance": 0.65,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "c7dc6fb35d697d90",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "1.6.2",
-      "source_quality_score": 0.552,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.6,
-        "android_hal_relevance": 0.6,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "f2f7a4ce6187ee89",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "title": "1.3.0-beta02",
-      "source_quality_score": 0.552,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.6,
-        "android_hal_relevance": 0.6,
-        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -231,186 +195,6 @@
         "android_hal_relevance": 0.6,
         "technical_depth": 0.25,
         "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "9da274f60bc34317",
-      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
-      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
-      "source_quality_score": 0.903,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.84,
-        "android_hal_relevance": 0.84,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "75644e0b5722e7df",
-      "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
-      "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
-      "source_quality_score": 0.93,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 1,
-        "android_hal_relevance": 1,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "4ad0b9a679e7fc48",
-      "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
-      "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
-      "source_quality_score": 0.758,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "d495c58baa68b43a",
-      "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
-      "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
-      "source_quality_score": 0.596,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "404784b6ac991a6e",
-      "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
-      "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
-      "source_quality_score": 0.668,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "5f96a07437f2a879",
-      "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
-      "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
-      "source_quality_score": 0.572,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.33,
-        "android_hal_relevance": 0.33,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "3e13ee9c0d52dc1a",
-      "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
-      "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
-      "source_quality_score": 0.761,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "c155c4cc58b451be",
-      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
-      "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
-      "source_quality_score": 0.741,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.55,
-        "recency_score": 0.8,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "144ef778a6fe2def",
-      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-      "title": "v0.8.0",
-      "source_quality_score": 0.693,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.55,
-        "recency_score": 0.8,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "1cf2c4ae177bc4bf",
-      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
-      "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
-      "source_quality_score": 0.648,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 0.8,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -526,6 +310,24 @@
       }
     },
     {
+      "candidate_id": "d075fc31feb456b4",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "source_quality_score": 0.752,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.65,
+        "android_hal_relevance": 0.65,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "383d55b05104ca6e",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
       "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
@@ -616,6 +418,60 @@
       }
     },
     {
+      "candidate_id": "75644e0b5722e7df",
+      "url": "https://lore.kernel.org/linux-media/20261112004636.739749-1-vincent.cloutier@icloud.com/",
+      "title": "[PATCH v2 0/3] media: i2c: Add Samsung S5K3L6 and Librem 5 rear camera",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4ad0b9a679e7fc48",
+      "url": "https://lore.kernel.org/linux-media/20261109-sm8150-camera-v1-0-3d2e7b407516@gmail.com/",
+      "title": "[PATCH 0/8] Add SM8150 CAMSS and LG G8x ThinQ camera sensors",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "d495c58baa68b43a",
+      "url": "https://lore.kernel.org/linux-media/20261112-kaanapali-camss-v25-0-1d709f57f370@oss.qualcomm.com/",
+      "title": "[PATCH v25 00/15] media: qcom: camss: Add Kaanapali support",
+      "source_quality_score": 0.596,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.39,
+        "android_hal_relevance": 0.39,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "b4d0d1ff5ebbf524",
       "url": "https://lore.kernel.org/linux-media/CAGEsz8Hvy-jde6K7vL4B4M=hpZpTYz2a1D_qza81uyhD=Fr8Sw@mail.gmail.com/",
       "title": "[PATCH v4 0/2] media: rcar-isp: fix core IRQ and probe error handling",
@@ -644,6 +500,60 @@
         "camera_relevance": 0.57,
         "android_hal_relevance": 0.57,
         "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "404784b6ac991a6e",
+      "url": "https://lore.kernel.org/linux-media/20261114-add-support-for-camss-on-sm8750-v7-0-8ff2a11835f6@oss.qualcomm.com/",
+      "title": "[PATCH v7 00/23] Add CAMSS support for SM8750 and Eliza",
+      "source_quality_score": 0.668,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5f96a07437f2a879",
+      "url": "https://lore.kernel.org/linux-media/20261114095815.74012-1-lsa.uz@pm.me/",
+      "title": "[PATCH v5 0/6] media: Add the ST VD55G0 global shutter sensor",
+      "source_quality_score": 0.572,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3e13ee9c0d52dc1a",
+      "url": "https://lore.kernel.org/linux-media/179441296841.24445.13457212017391431902@debian.org/",
+      "title": "[PATCH] media: ipu-bridge: Mark the Surface Pro 8 front sensor as upside down",
+      "source_quality_score": 0.761,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -796,6 +706,60 @@
       }
     },
     {
+      "candidate_id": "c155c4cc58b451be",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
+      "source_quality_score": 0.741,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "144ef778a6fe2def",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "title": "v0.8.0",
+      "source_quality_score": 0.693,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "1cf2c4ae177bc4bf",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
+      "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
+      "source_quality_score": 0.648,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "11309426a1de6de4",
       "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8774557",
       "title": "camera: Update capability rules - chromiumos/platform2",
@@ -904,9 +868,135 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-3b165b9d2cb3a6f8",
-      "url": "https://android-review.googlesource.com/q/I3235c1d64aa76a9084bdac63d81faa408e2f132f",
-      "title": "I3235c",
+      "candidate_id": "450ee33634de99ad",
+      "url": "https://openai.com/index/coderabbit-codex-daybreak",
+      "title": "CodeRabbit scales agentic software development and ships 20x more",
+      "source_quality_score": 0.488,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.44,
+        "android_hal_relevance": 0.44,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "220db452b5349841",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+      "title": "Claude Code v2.1.321",
+      "source_quality_score": 0.564,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.44,
+        "android_hal_relevance": 0.44,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-7d1e67602b79321d",
+      "url": "https://issuetracker.google.com/issues/563673593",
+      "title": "b/563673593",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-f49dbaa66e94a444",
+      "url": "https://issuetracker.google.com/issues/558819242",
+      "title": "b/558819242",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-048720ba5ccda09d",
+      "url": "https://issuetracker.google.com/issues/556807521",
+      "title": "b/556807521",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-df43d076e6a8541c",
+      "url": "https://issuetracker.google.com/issues/551348846",
+      "title": "b/551348846",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-517f86acd1acb800",
+      "url": "https://issuetracker.google.com/issues/545866947",
+      "title": "b/545866947",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-bc8bbcb9fe0bad4e",
+      "url": "https://issuetracker.google.com/issues/543937345",
+      "title": "b/543937345",
       "source_quality_score": 0.367,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
@@ -1322,6 +1412,6 @@
     "strong_candidate": 14,
     "blocked_candidate": 21,
     "review_candidate": 14,
-    "weak_candidate": 24
+    "weak_candidate": 29
   }
 }

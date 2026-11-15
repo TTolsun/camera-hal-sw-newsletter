@@ -33,7 +33,7 @@
 | 항목 | 값 | 판단 |
 | --- | --- | --- |
 | manual 후보 | 50 | 입력 |
-| linked evidence 파생 후보 | 23 | 있음 |
+| linked evidence 파생 후보 | 28 | 있음 |
 | linked 파생 publishable 후보 | 0 | 없음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
