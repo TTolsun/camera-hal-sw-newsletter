@@ -37,6 +37,7 @@ const {
   LINKED_EVIDENCE_HIGH_IMPACT_CLAIM,
   LINKED_EVIDENCE_LIMITATION_NOTE
 } = require('../../shared/common/quality-gate-policy');
+const { gerritTarget } = require('../reporter/gerrit-source-reader');
 const { text } = require('./quality-text');
 // claim 이슈 카테고리 매핑은 레지스트리 모듈로 분리했다(OCP). 여기서는 그대로 재노출한다.
 const { claimIssueCategory } = require('./claim-issue-category');
@@ -300,25 +301,50 @@ const GERRIT_STATE_SPAN_CHARS = /^[A-Za-z0-9/._=:\s가-힣(),-]+$/;
 // 구간 안의 한국어도 제한한다. 확정 주장 정규식은 영어만 보므로 '해결하고' 같은 한국어 낱말이 끼면 막을 수 없다.
 const GERRIT_STATE_KOREAN_WORD = /^(?:(?:브랜치|병합|상태|변경)(?:은|는|이|가|에|의|로|으로)?|은|는|이|가|에|의|로|으로)$/;
 
-function isGerritMergedSpan(span, changeId, metadata) {
-  const [date, time] = metadata.submitted.split(' ');
+// submitted는 'YYYY-MM-DD HH:MM:SS[.fff]' 문자열이어야 한다. 아니면 null(치환하지 않음 = 차단 유지).
+function gerritSubmittedParts(metadata) {
+  const match = typeof metadata?.submitted === 'string' &&
+    metadata.submitted.match(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}(?:\.\d+)?)$/);
+  return match ? { date: match[1], time: match[2] } : null;
+}
+
+function isGerritMergedSpan(span, changeId, metadata, { date, time }) {
   const clock = time.split('.')[0];
   const allowed = new Set([changeId, metadata.project, metadata.branch, date, clock, clock.slice(0, 5)]);
   if (!GERRIT_STATE_SPAN_CHARS.test(span)) return false;
   const koreanAllowed = (span.match(/[가-힣]+/g) || []).every(word => GERRIT_STATE_KOREAN_WORD.test(word));
   return koreanAllowed && (span.match(GERRIT_STATE_WORD) || [])
     .map(word => word.replace(/^[.:=-]+|[.:=-]+$/g, '')).filter(Boolean)
-    // 초 이하 소수는 무시한다.
-    .map(word => (/^\d{2}:\d{2}:\d{2}\.\d+$/.test(word) ? word.split('.')[0] : word))
-    .every(word => allowed.has(word) || GERRIT_STATE_FIXED_WORDS.has(word.toLowerCase()));
+    .every(word => allowed.has(word) || GERRIT_STATE_FIXED_WORDS.has(word.toLowerCase()) ||
+      // 소수 초는 metadata 시각의 앞부분과 정확히 같을 때만 허용한다('12:00:00.000'은 허용, '12:00:00.5'는 거부).
+      (/^\d{2}:\d{2}:\d{2}\.\d+$/.test(word) && time.startsWith(word)));
+}
+
+// 'Gerrit change N' 출현 위치마다 독립적으로 구간(첫 MERGED까지)을 잡아 판정한다. 앞 구간이 거부되면
+// 그 안에 있는 뒤쪽 'Gerrit change N … MERGED'도 다음 출현 위치로서 따로 판정한다. 치환된 구간은 건너뛴다.
+function neutralizeGerritMergedSentence(sentence, changeId, metadata, parts) {
+  const startPattern = new RegExp(`Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)`, 'gi');
+  const tailPattern = new RegExp(`[^]{0,${GERRIT_STATE_SPAN_LIMIT}}?(?:status=)?MERGED`, 'iy');
+  let result = '';
+  let copied = 0;
+  for (let found = startPattern.exec(sentence); found; found = startPattern.exec(sentence)) {
+    tailPattern.lastIndex = found.index + found[0].length;
+    if (!tailPattern.test(sentence)) continue;
+    const end = tailPattern.lastIndex;
+    if (!isGerritMergedSpan(sentence.slice(found.index, end), changeId, metadata, parts)) continue;
+    result += sentence.slice(copied, found.index) + 'Gerrit primary source state';
+    copied = end;
+    startPattern.lastIndex = end;
+  }
+  return result + sentence.slice(copied);
 }
 
 // 문장 단위로 구간을 찾는다. 같은 문장에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면, 앞이든
 // 뒤든 그 문장의 MERGED는 linked evidence에 대한 주장일 수 있어 지우지 않는다. lead는 앞 필드가 문장부호
 // 없이 끝난 경우(제목·'Linked evidence b/42 상태:' 같은 라벨)의 마지막 문장으로, 첫 문장과 같은 문장으로 본다.
 function neutralizeGerritMergedState(articleText, changeId, metadata, lead = '') {
-  const span = new RegExp(
-    `Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)[^]{0,${GERRIT_STATE_SPAN_LIMIT}}?(?:status=)?MERGED`, 'gi');
+  const parts = gerritSubmittedParts(metadata);
+  if (!parts) return articleText;
   let result = '';
   let start = 0;
   for (const boundary of [...articleText.matchAll(SENTENCE_END), { index: articleText.length }]) {
@@ -326,11 +352,16 @@ function neutralizeGerritMergedState(articleText, changeId, metadata, lead = '')
     const context = start === 0 ? `${lead} ${sentence}`: sentence;
     result += LINKED_EVIDENCE_SUBJECT.test(context)
       ? sentence
-      : sentence.replace(span, match => (isGerritMergedSpan(match, changeId, metadata) ? 'Gerrit primary source state' : match));
+      : neutralizeGerritMergedSentence(sentence, changeId, metadata, parts);
     result += articleText.slice(boundary.index, boundary.index + 1);
     start = boundary.index + 1;
   }
   return result;
+}
+
+// 소스 리더가 지원하는 Gerrit 호스트(android-review·chromium-review)의 변경 번호. 그 밖의 URL이면 ''.
+function primaryGerritChangeId(url) {
+  try { return gerritTarget(String(url || ''))?.number || ''; } catch { return ''; }
 }
 
 function hasUnresolvedConfirmationClaim(section, candidate) {
@@ -378,9 +409,9 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     if (!match) continue;
     let metadata;
     try { metadata = JSON.parse(match[1]); } catch { continue; }
-    const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
+    const changeId = primaryGerritChangeId(candidate.url);
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
-      !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
+      !metadata.project || !metadata.branch || !gerritSubmittedParts(metadata)) continue;
     pieces = pieces.map((piece, index) =>
       neutralizeGerritMergedState(piece, changeId, metadata, unterminatedLastSentence(leaves[index - 1])));
   }

@@ -887,6 +887,28 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     'Gerrit change 123 ｆｉｘｅｄ MERGED.', 'Gerrit change 123 ✅ MERGED.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
+  // 소수 초는 metadata 시각의 앞부분과 정확히 같을 때만 허용한다.
+  assert.equal(blocked({ ...article, confirmed_facts: [timed.replace('12:00:00', '12:00:00.000')] }), false);
+  // 불일치 소수('12:00:00.5')는 isGerritMergedSpan이 거부하지만, 차단 정규식이 마침표를 넘지 못해 게이트 결과로는 관찰되지 않는다.
+  // 앞 구간이 거부돼도 그 안에서 시작하는 뒤쪽 유효 구간은 따로 판정한다.
+  assert.equal(blocked({ ...article, confirmed_facts: [
+    'Gerrit change 123은 b/42와 연결되어 있고, Gerrit change 123은 2026-01-02에 MERGED 상태입니다.'] }), false);
+  assert.equal(blocked({ ...article, confirmed_facts: [
+    'Gerrit change 123은 b/42와 연결되어 있고, Gerrit change 123은 2026-01-03에 MERGED 상태입니다.'] }), true);
+  // metadata.submitted가 문자열이 아니거나 시각이 없으면 throw 없이 차단을 유지한다.
+  const withMetadata = (changed, documentUrl = url) => linkedEvidenceCandidate(documentUrl, 'direct_aosp_camera', {
+    article_source_reading: { status: 'read', documents: [{ ...document, url: documentUrl,
+      text: document.text.replace(/\{[\s\S]*?\n\}/, JSON.stringify({ ...metadata, ...changed }, null, 2)) }] },
+    linked_evidence_summary: candidate.linked_evidence_summary, impact_classification: candidate.impact_classification
+  });
+  for (const submitted of [['2026-01-02 12:00:00'], '2026-01-02', { date: '2026-01-02' }]) {
+    assert.equal(blocked({ ...article, confirmed_facts: [timed] }, withMetadata({ submitted })), true, JSON.stringify(submitted));
+  }
+  // chromium-review 변경도 소스 리더가 지원하므로 같은 사실 대조를 적용한다.
+  const chromiumUrl = 'https://chromium-review.googlesource.com/c/chromium/src/+/123';
+  const chromium = withMetadata({ project: 'chromium/src' }, chromiumUrl);
+  assert.equal(blocked({ ...section({ url: chromiumUrl, what_changed: 'x', evidence_summary: 'x' }), confirmed_facts: [timed] }, chromium), false);
+  assert.equal(blocked({ ...section({ url: chromiumUrl, what_changed: 'x', evidence_summary: 'x' }), confirmed_facts: [timed + ' Gerrit linked evidence verified.'] }, chromium), true);
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
     expandedClaim.replace('01-02', '01-03'), expandedClaim + ' Linked evidence verified.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
