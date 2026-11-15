@@ -94,7 +94,7 @@ for (const [name, body, status, error] of [
   ['HTML shell', shell, 200, 'invalid_gerrit_patch_encoding'],
   ['base64 shell', Buffer.from(shell).toString('base64'), 200, 'invalid_gerrit_patch_content'],
   ['wrong patch revision', Buffer.from(patch.replace(revision, otherRevision)).toString('base64'), 200, 'invalid_gerrit_patch_content'],
-  ['document budget', Buffer.from(patch + 'x'.repeat(64000)).toString('base64'), 200, 'gerrit_source_exceeds_document_budget'],
+  ['commit message beyond the document budget', Buffer.from(patch.replace('Keep the ownership condition.', 'x'.repeat(64000))).toString('base64'), 200, 'gerrit_source_exceeds_document_budget'],
   ['network byte budget', 'x'.repeat(800 * 1024), 200, 'gerrit_patch:truncated_at_byte_limit']
 ]) {
   test(`${name} stays unavailable without an HTML or summary fallback`, async () => {
@@ -106,6 +106,22 @@ for (const [name, body, status, error] of [
     assert.equal(c.source_gap_risk, true);
   });
 }
+
+test('a patch beyond the document budget keeps the commit message and file list but no diff lines', async () => {
+  const { input, fetchImpl } = setup();
+  const bigPatch = patch + '+added line\n'.repeat(8000);
+  await readArticleSources(input, { fetchImpl: (url, init) => url.endsWith('/patch')
+    ? response(Buffer.from(bigPatch).toString('base64')) : fetchImpl(url, init) });
+  const c = input.selected_articles[0];
+  assert.equal(c.article_source_reading.status, 'read');
+  const docs = c.article_source_reading.documents;
+  const text = docs.map(d => d.text).join('');
+  assert.match(text, /Keep the ownership condition\./);
+  assert.match(text, /"files": \[\s*"camera\/test.cc"\s*\]/);
+  assert.match(text, /Diff omitted: the complete patch \(\d+ chars\) exceeds the 64000-char document budget/);
+  assert.doesNotMatch(text, /^diff --git |^[+-]added line|handle<platform>/m);
+  assert.ok(docs.every(d => d.revision === revision && d.truncated === false && d.diff_omitted === true));
+});
 
 test('cache does not attach a successful revision read to a conflicting shortlist revision', async () => {
   const { input, fetchImpl } = setup();

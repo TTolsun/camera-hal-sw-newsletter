@@ -350,7 +350,10 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const value = text(note);
     const urls = value.match(/https?:\/\/[^\s<>"')]+/g) || [];
     const evidenceIds = value.match(/source-body:[a-zA-Z0-9_-]+/g) || [];
-      const primaryOnly = /primary source|원문|\bfrom\b|\bpatch details\b|\bcommit message\b/i.test(value) &&
+      // A document whose diff was omitted cannot back a note that says the diff was read.
+      const readsOmittedDiff = /\bdiff\b/i.test(value) &&
+        documents.some(doc => doc.diff_omitted && (doc === labeledDocument || doc.evidence_id === evidenceIds[0]));
+      const primaryOnly = !readsOmittedDiff && /primary source|원문|\bfrom\b|\bpatch details\b|\bcommit message\b/i.test(value) &&
       !/linked|모든|전체|\ball\b|\bevery\b|\bentire\b/i.test(value);
       if (primaryOnly && labeledDocument && evidenceIds.length === 0 && urls.length === 0) return false;
     return !(primaryOnly && evidenceIds.length === 1 && urls.length <= 1 && documents.some(doc =>
@@ -366,7 +369,7 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
   // assertions (including neighbouring confirmations) visible to the existing
   // blocker.
   for (const document of documents) {
-    const match = document.text.match(/^Official Gerrit metadata \(UTC timestamps\):\s*\n(\{[\s\S]*?\n\})\s*\n\nComplete revision patch/);
+    const match = document.text.match(/^Official Gerrit metadata \(UTC timestamps\):\s*\n(\{[\s\S]*?\n\})\s*\n\n(?:Complete revision patch|Revision commit message)/);
     if (!match) continue;
     let metadata;
     try { metadata = JSON.parse(match[1]); } catch { continue; }
