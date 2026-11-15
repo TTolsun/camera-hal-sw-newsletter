@@ -265,6 +265,12 @@ function withBacktickedBody(overlay) {
   return { ...overlay, sections };
 }
 
+// 백틱은 정규화가 걷어 내므로 재시도 경로는 정규화가 못 고치는 위반(인용 블록)으로 시험한다.
+function withBlockquoteBody(overlay) {
+  const sections = overlay.sections.map(section => ({ ...section, body_markdown: `> ${section.body_markdown}` }));
+  return { ...overlay, sections };
+}
+
 test('checks reject public article contract violations that the translation added', t => {
   // 2026-10-26 W44: 프롬프트가 금지해도 LLM이 식별자에 백틱을 붙였고, 워크플로 최종 검증에서야 실패했다.
   const { target, overlay } = storySample(t);
@@ -278,13 +284,48 @@ test('a contract violation is retried with its feedback before anything is writt
   let calls = 0;
   const result = await translateIssue(target, { call: async (run, system, prompt) => {
     calls++;
-    if (calls === 1) return withBacktickedBody(overlay);
+    if (calls === 1) return withBlockquoteBody(overlay);
     // 재시도는 한 번뿐이라 위반한 기사 전부가 피드백에 실려야 한다.
-    assert.match(prompt, /sections\[0\][^;]*inline_code[^;]*; sections\[1\][^;]*inline_code/);
+    assert.match(prompt, /sections\[0\][^;]*blockquote[^;]*; sections\[1\][^;]*blockquote/);
     return overlay;
   } });
   assert.equal(calls, 2);
   assert.deepEqual(result.overlay, overlay);
   // 검사가 원본 issue를 바꾸면 2차 시도가 원문 바이트와 어긋난다.
   assert.equal(JSON.stringify(target.issue), JSON.stringify(JSON.parse(target.sourceText)));
+});
+
+test('backticks the model added to a source without backticks are stripped before checks, so no retry is spent', async t => {
+  // 2026-W47: 모델이 식별자와 코드 펜스를 덧붙였다. 서식일 뿐이므로 안의 텍스트만 남긴다.
+  const { target, overlay } = storySample(t);
+  const response = withBacktickedBody(overlay);
+  response.sections[0].body_markdown = `\`\`\`c\n${response.sections[0].body_markdown}\n\`\`\``;
+  response.sections[1].headline = 'Why `HM1246` reached v10';
+  const input = translationInput(target.issue, target.sourceText);
+  const normalized = normalizeTranslationResponse(response, input);
+  assert.deepEqual(normalized.sections.map(section => section.body_markdown), overlay.sections.map(section => section.body_markdown));
+  assert.equal(normalized.sections[1].headline, 'Why HM1246 reached v10');
+  assert.equal(response.sections[1].body_markdown.includes('`'), true, 'input response is not mutated');
+  let calls = 0;
+  const result = await translateIssue(target, { call: async () => { calls++; return response; } });
+  assert.equal(calls, 1);
+  assert.equal(result.overlay.sections[1].headline, 'Why HM1246 reached v10');
+});
+
+test('backticks are preserved in fields whose Korean source already had them', t => {
+  const { target, overlay } = sample(t);
+  const input = translationInput(target.issue, target.sourceText);
+  assert.ok(input.sections[0].body_markdown.includes('`camera_open`'));
+  const response = { ...overlay, title: 'Weekly `camera` news' };
+  const normalized = normalizeTranslationResponse(response, input);
+  assert.equal(normalized.sections[0].body_markdown, overlay.sections[0].body_markdown);
+  assert.equal(normalized.title, 'Weekly camera news');
+  assert.deepEqual(translationChecks(target.issue, normalized, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
+});
+
+test('stripping backticks never hides a missing protected token', async t => {
+  const { target, overlay } = storySample(t);
+  const response = withBacktickedBody(overlay);
+  response.sections[0].body_markdown = response.sections[0].body_markdown.replace('v4l2_subdev_format', 'format');
+  await assert.rejects(translateIssue(target, { call: async () => response }), /Missing protected token v4l2_subdev_format: translation\.sections\[0\]\.body_markdown/);
 });
