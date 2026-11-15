@@ -236,24 +236,29 @@ function validateDateArtifacts(date) {
   if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
     return [`Public newsletter files are missing for ${date}.`];
   }
-  const errors = validatePublicNewsletterFiles(markdownPath, htmlPath, {
-    json: item,
-    jsonLabel: `data/${indexLabel}:${key}`
-  });
+  const errors = validateIndexedItemFiles(markdownPath, htmlPath, item, `data/${indexLabel}:${key}`);
   errors.push(...validatePublicJsonFilesForDate(date));
   return errors;
 }
 
 // 색인 항목의 한국어 값에서 영어 값(en)과 같은 자리의 값을 찾는다. 배열 원소는 id가 있으면 id로, 없으면 위치로 짝짓는다.
+// 영어나 한국어 쪽에 같은 id가 둘 이상이면 짝을 정할 수 없으므로 korean을 undefined로 돌려 면제하지 않게 한다.
 function pairedValue(root, englishRoot, pathParts) {
   let korean = root;
   let english = englishRoot;
   for (const part of pathParts) {
     if (korean == null || english == null) return { korean: undefined, english: undefined };
+    const englishParent = english;
     english = english[part];
     if (Array.isArray(korean)) {
       const id = english && typeof english === 'object' ? english.id : undefined;
-      korean = id === undefined ? korean[part] : korean.find(entry => entry?.id === id);
+      if (id === undefined) {
+        korean = korean[part];
+      } else {
+        const sameId = list => (Array.isArray(list) ? list : []).filter(entry => entry?.id === id);
+        const koreanMatches = sameId(korean);
+        korean = koreanMatches.length === 1 && sameId(englishParent).length === 1 ? koreanMatches[0] : undefined;
+      }
     } else {
       korean = korean[part];
     }
@@ -267,14 +272,18 @@ function stringLeafPaths(value, pathParts = []) {
   return Object.entries(value).flatMap(([key, child]) => stringLeafPaths(child, pathParts.concat(key)));
 }
 
+function leakageBody(message) {
+  return message.replace(/^\S+ contains /, 'contains ');
+}
+
 // 주간 색인 항목의 en 하위 객체는 같은 항목의 한국어 필드를 번역한 것이다. 한국어 필드는 '폴백'처럼 영어 누출 규칙을
 // 피하지만 번역문은 'fallback'으로 걸리므로, 걸린 용어를 한국어 짝 필드가 충실히 옮긴 경우에만(번역 검사와 같은
-// isFaithfulTechnicalTerm) 면제한다. 면제 후보가 아닌 이슈(금지 필드명, 순수 파이프라인 용어, placeholder 등)는 en 전체
-// 검사 결과 그대로 남긴다.
+// isFaithfulTechnicalTerm) 면제한다. en 전체 검사에서 나온 면제 후보 이슈는 필드별 재검사에서 같은 이슈가 재현되고
+// 그 필드마다 면제될 때만 뺀다. 필드를 넘어 만들어진 문맥 이슈처럼 재현되지 않는 이슈와 면제 후보가 아닌 이슈(금지
+// 필드명, 순수 파이프라인 용어, placeholder 등)는 그대로 오류로 남긴다.
 function indexedEnglishIssues(item, label) {
-  if (!item?.en || typeof item.en !== 'object') return [];
   const exemptionCandidate = message => Boolean(KOREAN_COUNTERPARTS[leakedTerm({ type: 'public_article_leakage', message })]);
-  const errors = validatePublicJsonText(item.en, label + '.en').filter(message => !exemptionCandidate(message));
+  const leafResults = [];
   for (const pathParts of stringLeafPaths(item.en)) {
     const key = pathParts.join('.');
     const { korean, english } = pairedValue(item, item.en, pathParts);
@@ -282,12 +291,33 @@ function indexedEnglishIssues(item, label) {
     for (const message of validatePublicJsonText(leaf, 'public_article.' + key)) {
       if (!exemptionCandidate(message)) continue;
       const issue = { type: 'public_article_leakage', key, message };
-      if (!isFaithfulTechnicalTerm(issue, { public_article: { [key]: korean } }, { public_article: { [key]: english } })) {
-        errors.push(label + '.en.' + message.replace(/^public_article\./, ''));
-      }
+      const faithful = isFaithfulTechnicalTerm(issue, { public_article: { [key]: korean } }, { public_article: { [key]: english } });
+      leafResults.push({ body: leakageBody(message), faithful, report: label + '.en.' + message.replace(/^public_article\./, '') });
     }
   }
+  const errors = [];
+  for (const message of validatePublicJsonText(item.en, label + '.en')) {
+    if (!exemptionCandidate(message)) {
+      errors.push(message);
+      continue;
+    }
+    const hits = leafResults.filter(result => result.body === leakageBody(message));
+    if (hits.length === 0) errors.push(message);
+  }
+  errors.push(...leafResults.filter(result => !result.faithful).map(result => result.report));
   return errors;
+}
+
+// 색인 항목 하나의 공개 계약 검사. en이 객체이면 한국어 부분은 기존 검사로, en은 짝이 되는 한국어 필드를 원문으로 삼는
+// 차등 검사로 나눠 돌린다. en이 객체가 아니면 항목 전체를 기존 검사에 맡긴다(그 값 안의 금지 용어도 검사된다).
+function validateIndexedItemFiles(markdownPath, htmlPath, item, jsonLabel) {
+  const englishIsObject = item?.en && typeof item.en === 'object' && !Array.isArray(item.en);
+  if (!englishIsObject) return validatePublicNewsletterFiles(markdownPath, htmlPath, { json: item, jsonLabel });
+  const { en, ...koreanItem } = item;
+  return [
+    ...validatePublicNewsletterFiles(markdownPath, htmlPath, { json: koreanItem, jsonLabel }),
+    ...indexedEnglishIssues(item, jsonLabel)
+  ];
 }
 
 function validateIndexedNewsletters() {
@@ -360,11 +390,7 @@ function validateIndexedWeeklyNewsletters({ rootDir = root, strictKeys = null } 
       continue;
     }
     const jsonLabel = 'data/newsletters-weekly.json:' + (weeklyKey || 'entry');
-    const { en, ...koreanItem } = item;
-    const result = [
-      ...validatePublicNewsletterFiles(markdownPath, htmlPath, { json: koreanItem, jsonLabel }),
-      ...indexedEnglishIssues(item, jsonLabel)
-    ].map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
+    const result = validateIndexedItemFiles(markdownPath, htmlPath, item, jsonLabel).map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
     if (result.length === 0) continue;
     if (requireAll || strict.has(weeklyKey)) {
       errors.push(...result);
