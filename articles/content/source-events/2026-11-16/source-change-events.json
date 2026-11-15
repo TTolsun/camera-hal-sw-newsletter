@@ -54,8 +54,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 128,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 129,
         "status": 200
       },
       "current_values": {
@@ -134,8 +134,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 27,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 28,
         "status": 200
       },
       "current_values": {
@@ -257,8 +257,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 27,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 28,
         "status": 200
       },
       "current_values": {
@@ -376,8 +376,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 25,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 26,
         "status": 200
       },
       "current_values": {
@@ -477,8 +477,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 25,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 26,
         "status": 200
       },
       "current_values": {
@@ -2214,8 +2214,8 @@
           }
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-11-09T00:00:00.000Z",
-        "seen_count": 128,
+        "last_seen_at": "2026-11-16T00:00:00.000Z",
+        "seen_count": 129,
         "status": 200
       },
       "current_values": {
