@@ -1,0 +1,240 @@
+# 2026 W46 (11.09 ~ 11.15)
+
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
+This week's newsletter covers various updates that enhance the stability and efficiency of the camera framework. Notably, the merge of a quirk to bypass abortCaptures to prevent SIGSEGV during session stops on the Galaxy A54 5G improves stability on specific devices. Additionally, the merge of CameraX SessionConfig's fast session switch Phase 1 and the Camera2-pipe FrameGraph's buffer frame filtering overhaul will significantly improve camera use case switching and buffer processing efficiency. Finally, the fix for PreviewView PERFORMANCE mode rotation distortion and the addition of extended functions to Camera2-pipe CameraMetadata for querying 3A mode and flash support are important changes that improve developer convenience and user experience.
+
+- [Quirk merged to bypass abortCaptures to prevent Camera HAL SIGSEGV during session stops on Galaxy A54 5G](#article-quirk-merged-to-bypass-abortcaptures-to-prevent-camera-hal-sigsegv-during-sessio)
+
+  If a synchronization defect occurs between abortCaptures and stream release timing during the buffer pipeline cleanup process within the vendor HAL, the upper framework can block the call itself. SoC driver and HAL development teams should re-verify the lower stack for null pointer references or use-after-free issues when discarding in-flight buffers in the WNC-LmeMcscRepr scaler and representer modules.
+
+- [Extended functions added to Camera2-pipe CameraMetadata to query 3A mode and flash support](#article-extended-functions-added-to-camera2-pipe-camerametadata-to-query-3a-mode-and-fla)
+
+  Camera2-pipe's upper layer has wrapped the static 3A and flash support arrays of CameraCharacteristics into an easy-to-query interface. Sensor driver and HAL development teams should verify during bring-up that the arrays of supported AE, AF, and AWB modes are fully populated in the static metadata.
+
+- [CameraX SessionConfig fast session switch Phase 1: Dynamic UseCase subset switching without session reconfiguration merged](#article-camerax-sessionconfig-fast-session-switch-phase-1-dynamic-usecase-subset-switchi)
+
+  CameraX is building a path for dynamic UseCase switching by updating repeating requests without session reconfiguration. At the HAL level, the frequency of configureStreams re-calls will decrease, but the stability of the pipeline in smoothly handling repeating requests where stream targets change within a single session becomes crucial.
+
+- [Camera2-pipe FrameGraph Buffer Frame Filtering Overhaul: TagBundle-Based Precise Routing Support](#article-camera2-pipe-framegraph-buffer-frame-filtering-overhaul-tagbundle-based-precise-)
+
+  This change prevents buffers produced by the HAL driver from being unnecessarily wasted or corrupted within the framework's higher-level FrameGraph when sharing the same stream. HAL engineers should verify that framework request metadata is returned without loss in scenarios where a single stream is shared by multiple buffer consumers.
+
+- [PreviewView PERFORMANCE mode rotation distortion fix: SurfaceControl and TextureView fallback when CameraEffect is applied](#article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev)
+
+  This is an example of fixing upper-view defects that occur when metadata transformations are lost as buffers output by the driver and HAL pass through intermediate framework processors. HAL developers need to verify that buffer flags and transformation metadata are consistently delivered to the framework consumer layer.
+
+
+
+
+<a id="article-quirk-merged-to-bypass-abortcaptures-to-prevent-camera-hal-sigsegv-during-sessio"></a>
+
+## 2. Quirk merged to bypass abortCaptures to prevent Camera HAL SIGSEGV during session stops on Galaxy A54 5G
+
+_AndroidX Gerrit Camera (change 4430441)_
+
+To prevent abnormal termination of the driver process during rapid camera switching or lifecycle termination, a quirk that omits the abortCaptures call during session stops on Galaxy A54 5G devices has been applied to the AndroidX main branch.
+
+### Camera HAL/Driver perspective: what it means
+
+If a synchronization defect occurs between abortCaptures and stream release timing during the buffer pipeline cleanup process within the vendor HAL, the upper framework can block the call itself. SoC driver and HAL development teams should re-verify the lower stack for null pointer references or use-after-free issues when discarding in-flight buffers in the WNC-LmeMcscRepr scaler and representer modules.
+
+
+![](../../../assets/images/fallback/android.svg)
+
+
+When a camera app closes the screen or quickly switches to another camera, the framework's session cleanup process has been reported to cause the entire process to suddenly terminate.
+
+According to the commit message and code, on Samsung Galaxy A54 5G devices (Exynos s5e8835 chipset, device identifier a54x, and model prefix SM-A546), calling the CameraCaptureSession.abortCaptures function when stopping a capture session intermittently caused a native SIGSEGV error in the WNC-LmeMcscRepr routine within the vendor camera library, camera.s5e8835.so. This issue caused the camera provider process to crash completely.
+
+### Upper-layer bypass behavior and conditions
+
+The AndroidX team added Samsung Galaxy A54 5G device identification conditions to the DisableAbortCapturesOnStopQuirk class. This quirk is activated if the manufacturer is Samsung and the device name is a54x or the model name starts with SM-A546. When the quirk is enabled, a flag is lowered in the CameraPipe graph settings to prevent calling abortCaptures when stopping a session.
+
+The confirmed scope of application, as seen in the original text, includes some Tecno devices, Galaxy Note 10+, Poco X3 Pro, and now detailed variants of the Galaxy A54 5G (such as SM-A546E, SM-A546U1, SC-53D, a54xnsxx). In contrast, the A53, A55, and S24 series from the same manufacturer are not included in the quirk activation target.
+
+### Limitations of field checks and verification
+
+On the affected device, you can observe whether camera provider process crash logs (SIGSEGV in camera.s5e8835.so) disappear when repeatedly starting and stopping the camera lifecycle or rapidly switching between front and rear cameras. However, this patch is an upper-framework level workaround and does not fix the root cause of the internal memory error in the vendor HAL library.
+
+The current confirmed status is that the commit was merged into the androidx-main source tree on November 12, 2026. Separate tracking is required to determine if it has been applied to an actual CameraX official release version or device firmware update.
+
+[Back to this week’s highlights](#issue-briefing)
+
+**Sources**
+
+- [Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441)
+
+---
+
+<a id="article-extended-functions-added-to-camera2-pipe-camerametadata-to-query-3a-mode-and-fla"></a>
+
+## 3. Extended functions added to Camera2-pipe CameraMetadata to query 3A mode and flash support
+
+_AndroidX Gerrit Camera (Change 4439489)_
+
+Extended functions that query static metadata arrays have been introduced in Camera2-pipe, allowing code to easily check if a camera device supports specific 3A settings or flash.
+
+### Camera HAL/Driver perspective: what it means
+
+Camera2-pipe's upper layer has wrapped the static 3A and flash support arrays of CameraCharacteristics into an easy-to-query interface. Sensor driver and HAL development teams should verify during bring-up that the arrays of supported AE, AF, and AWB modes are fully populated in the static metadata.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
+
+When configuring camera requests, specifying 3A modes that the device does not support can lead to unexpected behavior, making it necessary to query availability beforehand.
+
+AndroidX patch 4439489 added isSupported extended functions to the CameraMetadata class, which can query 3A mode availability. These functions read the CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES, CONTROL_AWB_AVAILABLE_MODES, and CONTROL_AVAILABLE_MODES static keys of CameraCharacteristics and return true or false depending on whether the mode value passed as an argument is included in the integer array.
+
+### Flash mode determination rules and helper role
+
+Separate rules apply to flash mode support checks. FlashMode.OFF is always determined to be supported, regardless of device specifications. In contrast, FlashMode.SINGLE and FlashMode.TORCH return true only when the hasFlashUnit property, configured based on FLASH_INFO_AVAILABLE in the static metadata, is true; non-standard modes return false.
+
+This change only adds simple helper functions for querying. It does not include logic to forcibly validate unsupported modes in the capture request pipeline or to prevent requests from being sent. It provides a convenient interface for callers to query hardware support before building requests.
+
+### Verification methods and limitations of reflection
+
+To check this utility, you can unit test whether passing AeMode.ON or FlashMode.SINGLE to a CameraMetadata instance containing specific modes returns the expected boolean result. This check verifies the return value of the query helper function and does not guarantee the success of actual driver capture requests. Furthermore, it is only merged into the androidx-main source branch as of November 13, 2026, and it has not been confirmed whether it is included in official AndroidX library distributions or commercial device builds.
+
+[Back to this week’s highlights](#issue-briefing)
+
+**Sources**
+
+- [Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489)
+
+---
+
+<a id="article-camerax-sessionconfig-fast-session-switch-phase-1-dynamic-usecase-subset-switchi"></a>
+
+## 4. CameraX SessionConfig fast session switch Phase 1: Dynamic UseCase subset switching without session reconfiguration merged
+
+_AndroidX Gerrit Camera (Change 4381870)_
+
+To reduce screen flickering and delays caused by reopening sessions every time camera use cases were changed, a fast session switching infrastructure that maintains the existing session and only modifies repeating requests has been merged.
+
+### Camera HAL/Driver perspective: what it means
+
+CameraX is building a path for dynamic UseCase switching by updating repeating requests without session reconfiguration. At the HAL level, the frequency of configureStreams re-calls will decrease, but the stability of the pipeline in smoothly handling repeating requests where stream targets change within a single session becomes crucial.
+
+
+![](../../../assets/images/fallback/android.svg)
+
+
+When combining or detaching additional use cases, such as video recording or image capture, during preview, completely reconfiguring the session causes significant time delays.
+
+AndroidX patch 4381870 introduced a Phase 1 structure that dynamically replaces the active subset of UseCases from the entire bound UseCases without regenerating the session. The initialEnabledUseCases method, added to SessionConfig.Builder, configures the list of UseCases to be initially enabled, maintaining order and without duplicates. The CameraControl.setEnabledUseCasesAsync function, introduced alongside it, updates only the target output subset of repeating requests without closing the running CameraCaptureSession.
+
+### Completion point of switching and framework-level verification logic
+
+This asynchronous switch call completes when the first capture result of the repeating request, reflecting the updated UseCase set, is received. Internally, the framework ensures safety by passing through validators that pre-verify compatibility with high-speed capture, extended features, concurrent cameras, zero shutter lag, and various hardware quirks. It also includes a safeguard that automatically pre-connects a metering repeating stream in case a repeating stream is missing for a disabled subset.
+
+This change is currently Phase 1 and is limited to internal library use. It optimizes the upper-level session operation of the framework, rather than modifying the configureStreams contract of the Camera HAL layer itself.
+
+### Practical verification suggestions and scope of reflection
+
+When this feature is active, you can check the framework's behavior by observing whether the upper session is not closed and only setRepeatingBurst or setRepeatingRequest is recalled. This is a proposed behavior verification based on the commit content, and actual device measurements have not been confirmed. The source was merged into the androidx-main branch on November 9, 2026, but its inclusion in official AndroidX releases or commercial device firmware builds needs separate verification.
+
+[Back to this week’s highlights](#issue-briefing)
+
+**Sources**
+
+- [Add SessionConfig fast session switch Phase 1 - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870)
+
+---
+
+<a id="article-camera2-pipe-framegraph-buffer-frame-filtering-overhaul-tagbundle-based-precise-"></a>
+
+## 5. Camera2-pipe FrameGraph Buffer Frame Filtering Overhaul: TagBundle-Based Precise Routing Support
+
+_AndroidX Gerrit Camera (Change 4371710)_
+
+To resolve issues where unintended frames entered buffers sharing the same stream, displacing existing buffer data, precise filtering based on request parameters and tags has been added.
+
+### Camera HAL/Driver perspective: what it means
+
+This change prevents buffers produced by the HAL driver from being unnecessarily wasted or corrupted within the framework's higher-level FrameGraph when sharing the same stream. HAL engineers should verify that framework request metadata is returned without loss in scenarios where a single stream is shared by multiple buffer consumers.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
+
+When multiple buffers reference the same camera stream, frames requested with different settings can enter unintended buffers. This can cause buffers to fill prematurely and frames to be lost.
+
+The previous structure of FrameGraph unconditionally delivered all started frames to all connected FrameBuffer instances. This had the side effect of specific one-shot captures or frames with individual settings entering other buffers, overwriting and evicting existing frames.
+
+### Introduction of TagBundle and Parameter Matching Rules
+
+AndroidX patch 4371710 revised the FrameGraph's inspection logic. Now, frames are added to a buffer only if the frame's Request matches the parameters and tags specified for that buffer. The newly added TagBundle represents an immutable set of tags. It is specified as a type of Metadata.Key to identify frame consumers. A frame is received only if the TagBundle in Request.extras contains all the tags of the buffer.
+
+Additionally, for general CaptureRequest.Key parameters, the value in the request must be the same as the value bound to the buffer for inflow to be allowed. In contrast, repeating requests created by FrameGraph include the union of parameters and TagBundle from all connected buffers. This ensures that repeating frames, during normal execution, reliably reach all buffers that meet the conditions.
+
+### Verification Conditions and Status
+
+This behavior can be verified through unit or integration tests. These tests should connect two buffers with different TagBundle instances to the same stream and request a one-shot capture with a specific tag. The expected result is that the frame enters only the buffer with the corresponding tag, and the queue size of the other buffer remains unchanged. This verification is a suggested check based on the operating principle stated in the commit diff. The change was merged into the androidx-main branch on November 13, 2026. Its inclusion in a final library release or product firmware build has not been confirmed.
+
+[Back to this week’s highlights](#issue-briefing)
+
+**Sources**
+
+- [Filter FrameGraph buffer frames by parameters - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710)
+
+---
+
+<a id="article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev"></a>
+
+## 6. PreviewView PERFORMANCE mode rotation distortion fix: SurfaceControl and TextureView fallback when CameraEffect is applied
+
+_AndroidX Gerrit Camera (Change 4418107)_
+
+To fix the issue of camera screens appearing stretched or rotated sideways when effects or stream sharing were enabled, a rendering layer that corrects rotation based on the system version has been added to PreviewView.
+
+### Camera HAL/Driver perspective: what it means
+
+This is an example of fixing upper-view defects that occur when metadata transformations are lost as buffers output by the driver and HAL pass through intermediate framework processors. HAL developers need to verify that buffer flags and transformation metadata are consistently delivered to the framework consumer layer.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
+
+When applying graphic effects or stream sharing in PERFORMANCE mode, which uses SurfaceView for high-performance previews, the screen orientation was sometimes misaligned.
+
+SurfaceView, by default, only reflects camera transformation metadata contained within the buffer itself on the screen. However, streams that pass through CameraEffect or stream sharing pipelines may have camera hardware transformation information removed or altered from the buffer. This resulted in defects where the remaining rotation angle was not applied correctly, causing the preview to rotate sideways or stretch its aspect ratio.
+
+### Rendering path branching and rotation correction by system version
+
+AndroidX patch 4418107 determines if camera transformations are missing from the stream and branches the rendering method according to the API level. On devices with API 29 or higher, an intermediate SurfaceControl layer is created below the SurfaceView to rotate the geometry by the remaining rotation angle. On API 31 or higher, it is synchronized with View transformations and reflected immediately when the next frame is drawn.
+
+Conversely, for older devices below API 29 where detailed SurfaceControl is difficult, it switches to using TextureView for such streams. This decision is made initially based on the presence or absence of camera transformations in the stream, so it does not unnecessarily destroy and recreate the surface even if a simple screen rotation occurs later.
+
+### Verification methods and reflection status
+
+This fix can be verified in a view test environment by applying CameraEffect, calling Preview.setTargetRotation, and rotating the device screen. You can then check if there is no distortion or rotation error in the preview screen without surface regeneration. This is a proposed verification based on the operating principle specified in the commit message. It was merged into the androidx-main branch on November 10, 2026, and its inclusion in library releases and actual product firmware needs separate verification.
+
+[Back to this week’s highlights](#issue-briefing)
+
+**Sources**
+
+- [Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107)
+
+
+## Further reading
+
+- [Sync PreviewView with display rotation - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4433911>) — AndroidX Gerrit Camera (2026-11-12) · AOSP Camera framework reference
+- [How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX](<https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification>) — Android Developers Blog (2026-11-11) · AOSP Camera framework reference
+- [Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978>) — AndroidX Gerrit Camera (2026-11-10) · AOSP Camera framework reference
+- [Force StreamSharing for HLG10 + stab on SM8550 - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4426038>) — AndroidX Gerrit Camera (2026-11-09) · AOSP Camera framework reference
+
+## References
+
+- [Disable abortCaptures on stop for Galaxy A54 5G - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441)
+- [Add 3A mode isSupported functions to CameraMetadata - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489)
+- [Add SessionConfig fast session switch Phase 1 - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4381870)
+- [Filter FrameGraph buffer frames by parameters - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4371710)
+- [Fix PreviewView PERFORMANCE rotation with effects - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4418107)
