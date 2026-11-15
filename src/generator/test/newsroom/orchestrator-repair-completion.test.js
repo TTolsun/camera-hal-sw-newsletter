@@ -28,9 +28,12 @@ function makeStubs(state) {
         return { patches: [] };
       }
     }),
-    '../../publish/orchestrator-quality-gate-runner': () => ({
+    '../../publish/orchestrator-quality-gate-runner': (s) => ({
       // repair/completion 재게이트는 항상 PASS인 정합 셋을 돌려준다.
-      runQualityGateAndPersist: (editor) => ({ editor, qualityReport: passReport() })
+      runQualityGateAndPersist: (editor) => {
+        s.regateCalls.push(editor);
+        return { editor, qualityReport: s.regateNotPass ? { ...passReport(), status: 'NEEDS_FIX' } : passReport() };
+      }
     }),
     '../../publish/orchestrator-editor-validation': (s) => ({
       validateEditor: (editor) => editor,
@@ -91,6 +94,7 @@ function makeStubs(state) {
       // repair try가 throw하면 catch에서 호출. s.salvageThrows면 oracle 불일치를 모사해 throw하고,
       // 아니면 s.salvage(후보 또는 null)를 돌려준다.
       salvagePublishableSubset: () => {
+        s.salvageCalls += 1;
         if (s.salvageThrows) { throw new Error('salvage oracle mismatch'); }
         return s.salvage;
       }
@@ -119,7 +123,10 @@ function withStubbed(setup, run) {
     throwOnStageIncludes: setup.throwOnStageIncludes || '',
     completionCandidates: setup.completionCandidates || [],
     tooFew: setup.tooFew || false,
-    repairFailureCalls: []
+    repairFailureCalls: [],
+    salvageCalls: 0,
+    regateCalls: [],
+    regateNotPass: setup.regateNotPass || false
   };
   const stubs = makeStubs(state);
   const stageKey = require.resolve(STAGE_MODULE);
@@ -367,4 +374,97 @@ test('#629 completion-failure reviewable 경로: completion이 throw하고 pre-c
     assert.equal(state.repairFailureCalls.length, 1);
     assert.equal(state.repairFailureCalls[0].stage, 'editor completion attempt 1/1');
   });
+});
+
+// repair 뒤 재검토가 일부 기사만 unpublishable로 막은 경우의 salvage(salvageUnpublishableAfterReview).
+// salvagePublishableSubset 자체(하한·subset 재게이트)는 quality 도메인 테스트가 검증하므로 여기서는
+// 스텁으로 두고, "원인이 unpublishable뿐일 때만 위임하고 결과를 어떻게 돌려주는가"를 고정한다.
+function reviewBlockedReport(overrides = {}) {
+  return {
+    status: 'NEEDS_FIX',
+    deductions: [],
+    unpublishable_articles: [{ section_index: 1, headline: 'HAL change B', reason: '원문이 뒷받침하지 않는 단정' }],
+    metrics: { source_gap_count: 0, must_fix_count: 0, blocking_deduction_count: 0 },
+    ...overrides
+  };
+}
+
+function runReviewSalvage(setup, overrides = {}) {
+  const sectionA = sectionWithUrl('CameraX release A', 'https://example.com/a');
+  const sectionB = sectionWithUrl('HAL change B', 'https://example.com/b');
+  let delegated = 0;
+  let regates = 0;
+  const result = withStubbed({ repairPlan: [], salvage: setup.salvage, regateNotPass: setup.regateNotPass }, (run, state) => {
+    const { salvageUnpublishableAfterReview } = require(STAGE_MODULE);
+    const out = salvageUnpublishableAfterReview({
+      date: '2026-05-08',
+      editor: { sections: [sectionA, sectionB] },
+      reporter: { candidates: [] },
+      factCheck: { status: 'PASS', items: [] },
+      qualityReport: reviewBlockedReport(),
+      shortlistReport: {},
+      seedEvidencePack: null,
+      attempt: 1,
+      qualityGateContext: {},
+      ...overrides
+    });
+    regates = state.regateCalls.length;
+    delegated = state.salvageCalls;
+    return out;
+  });
+  return { result, delegated, regates, sectionA, sectionB };
+}
+
+test('재검토 후 기사 1건만 unpublishable이면 그 기사만 강등하고 남은 PASS subset을 돌려준다', () => {
+  const sectionA = sectionWithUrl('CameraX release A', 'https://example.com/a');
+  const salvage = {
+    editor: { sections: [sectionA] },
+    factCheck: { status: 'PASS', items: [], salvaged: true },
+    qualityReport: passReport(),
+    kept_section_count: 1
+  };
+  const { result } = runReviewSalvage({ salvage });
+  assert.ok(result);
+  assert.deepEqual(result.editor.sections.map(s => s.headline), ['CameraX release A']);
+  assert.equal(result.qualityReport.status, 'PASS');
+  assert.deepEqual(result.droppedSections.map(s => s.headline), ['HAL change B']);
+  // 강등 사유(unpublishable reason)가 repair_actions용 문자열에 남는다.
+  assert.equal(result.droppedActions.length, 1);
+  assert.match(result.droppedActions[0], /^demote\(source-review-salvage\): .*HAL change B/);
+});
+
+test('재게이트가 PASS가 아니면 채택하지 않고 이전 상태로 산출물을 다시 기록한 뒤 null을 돌려준다', () => {
+  const sectionA = sectionWithUrl('CameraX release A', 'https://example.com/a');
+  const salvage = {
+    editor: { sections: [sectionA] }, factCheck: { status: 'PASS', items: [] },
+    qualityReport: passReport(), kept_section_count: 1
+  };
+  const { result, regates } = runReviewSalvage({ salvage, regateNotPass: true });
+  assert.equal(result, null);
+  // salvage subset 재게이트 1회 + 이전 상태 복원 기록 1회.
+  assert.equal(regates, 2);
+});
+
+test('빼고 나면 하한 미만이거나 subset 게이트가 PASS 아니면(salvage가 null) null이라 다음 attempt로 간다', () => {
+  const { result } = runReviewSalvage({ salvage: null });
+  assert.equal(result, null);
+});
+
+test('hard blocker / must_fix / source gap / fact-check NEEDS_FIX가 있으면 salvage를 시도하지 않는다', () => {
+  const salvage = {
+    editor: { sections: [] }, factCheck: {}, qualityReport: passReport(), kept_section_count: 1
+  };
+  const blocked = [
+    { qualityReport: reviewBlockedReport({ metrics: { source_gap_count: 0, must_fix_count: 0, blocking_deduction_count: 1 } }) },
+    { qualityReport: reviewBlockedReport({ metrics: { source_gap_count: 0, must_fix_count: 1, blocking_deduction_count: 0 } }) },
+    { qualityReport: reviewBlockedReport({ metrics: { source_gap_count: 1, must_fix_count: 0, blocking_deduction_count: 0 } }) },
+    { factCheck: { status: 'NEEDS_FIX', items: [] } },
+    { qualityReport: reviewBlockedReport({ unpublishable_articles: [] }) },
+    { qualityReport: passReport() }
+  ];
+  for (const overrides of blocked) {
+    const { result, delegated } = runReviewSalvage({ salvage }, overrides);
+    assert.equal(result, null);
+    assert.equal(delegated, 0);
+  }
 });

@@ -143,6 +143,65 @@ function attemptRepairFailureSalvage({
   }
 }
 
+// 재검토(source review) 뒤 게이트가 "일부 기사 unpublishable" 하나만으로 NEEDS_FIX가 된 경우의 salvage.
+// repair 뒤 reviewArticleSources가 이미 통과한 기사까지 다시 뽑게 만드는(다음 attempt가 전부 재생성)
+// 대신, 판정이 난 기사만 빼고 남은 기사로 같은 quality gate를 다시 돌려 PASS일 때만 채택한다.
+// 메커니즘은 #628 attemptRepairFailureSalvage 그대로이고(기사 수 하한도 salvagePublishableSubset이
+// 지킨다), 여기서는 "원인이 unpublishable뿐인지"만 가른다. source gap / must_fix / blocking
+// deduction(hard blocker, safety, source integrity)이 하나라도 있으면 null을 돌려 기존 경로(다음
+// attempt)로 보낸다. 반환: { editor, factCheck, qualityReport, droppedSections } 또는 null.
+function salvageUnpublishableAfterReview({
+  date,
+  editor,
+  reporter,
+  factCheck,
+  qualityReport,
+  shortlistReport,
+  seedEvidencePack,
+  attempt,
+  qualityGateContext
+}) {
+  if (!qualityReport || qualityReport.status === 'PASS') return null;
+  const metrics = qualityReport.metrics || {};
+  const onlyUnpublishable = ensureArray(qualityReport.unpublishable_articles).length > 0 &&
+    Number(metrics.source_gap_count) === 0 &&
+    Number(metrics.must_fix_count) === 0 &&
+    Number(metrics.blocking_deduction_count) === 0 &&
+    (factCheck && factCheck.status) !== 'NEEDS_FIX';
+  if (!onlyUnpublishable) return null;
+  const salvage = attemptRepairFailureSalvage({
+    date,
+    preRepairEditor: editor,
+    reporter,
+    preRepairFactCheck: factCheck,
+    preRepairQualityReport: qualityReport,
+    shortlistReport,
+    seedEvidencePack
+  });
+  if (!salvage) return null;
+  const keptKeys = new Set(ensureArray(salvage.editor.sections).map(stableSectionKey).filter(Boolean));
+  const droppedSections = [];
+  const droppedActions = [];
+  ensureArray(editor.sections).forEach((before, index) => {
+    const key = stableSectionKey(before);
+    if (key && keptKeys.has(key)) return;
+    droppedSections.push(before);
+    // PR 리뷰어가 강등 근거를 볼 수 있게, 막은 판정의 reason 앞부분을 repair_actions에 남긴다.
+    const verdict = ensureArray(qualityReport.unpublishable_articles)
+      .find(item => Number(item.section_index) === index);
+    const reason = verdict && verdict.reason ? ` (${String(verdict.reason).slice(0, 200)})` : '';
+    droppedActions.push(`demote(source-review-salvage): ${sectionLabel(before)}${reason}`);
+  });
+  // 같은 게이트를 산출물 기록과 함께 다시 돌려 PASS일 때만 채택한다. 아니면 이전 상태로 산출물을
+  // 다시 기록해 되돌리고 null을 돌려 기존 경로(다음 attempt)로 보낸다.
+  const regated = runQualityGateAndPersist(salvage.editor, salvage.factCheck, attempt, 'attempt', qualityGateContext);
+  if (!regated.qualityReport || regated.qualityReport.status !== 'PASS') {
+    runQualityGateAndPersist(editor, factCheck, attempt, 'attempt', qualityGateContext);
+    return null;
+  }
+  return { editor: regated.editor, factCheck: salvage.factCheck, qualityReport: regated.qualityReport, droppedSections, droppedActions };
+}
+
 // #629 completion-failure 복구: completion(target 채우기)은 best-effort다. completion 직전 draft가
 // 이미 quality gate를 PASS(min 충족)했다면, target 보충 실패가 그 발행을 막지 않게 pre-completion
 // 스냅샷으로 되돌릴 복구 번들을 돌려준다(재검증 없음 — 이미 PASS인 스냅샷). pre-completion이 PASS가
@@ -599,5 +658,6 @@ async function runRepairAndCompletionPasses({
 }
 
 module.exports = {
-  runRepairAndCompletionPasses
+  runRepairAndCompletionPasses,
+  salvageUnpublishableAfterReview
 };
