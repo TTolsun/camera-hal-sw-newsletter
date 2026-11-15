@@ -32,6 +32,7 @@ function makeStubs(state) {
       // repair/completion 재게이트는 항상 PASS인 정합 셋을 돌려준다.
       runQualityGateAndPersist: (editor) => {
         s.regateCalls.push(editor);
+        if (s.regateThrowsOnce && s.regateCalls.length === 1) throw new Error('regate oracle mismatch');
         return { editor, qualityReport: s.regateNotPass ? { ...passReport(), status: 'NEEDS_FIX' } : passReport() };
       }
     }),
@@ -126,7 +127,8 @@ function withStubbed(setup, run) {
     repairFailureCalls: [],
     salvageCalls: 0,
     regateCalls: [],
-    regateNotPass: setup.regateNotPass || false
+    regateNotPass: setup.regateNotPass || false,
+    regateThrowsOnce: setup.regateThrowsOnce || false
   };
   const stubs = makeStubs(state);
   const stageKey = require.resolve(STAGE_MODULE);
@@ -394,7 +396,8 @@ function runReviewSalvage(setup, overrides = {}) {
   const sectionB = sectionWithUrl('HAL change B', 'https://example.com/b');
   let delegated = 0;
   let regates = 0;
-  const result = withStubbed({ repairPlan: [], salvage: setup.salvage, regateNotPass: setup.regateNotPass }, (run, state) => {
+  let regateEditors = [];
+  const result = withStubbed({ repairPlan: [], salvage: setup.salvage, regateNotPass: setup.regateNotPass, regateThrowsOnce: setup.regateThrowsOnce }, (run, state) => {
     const { salvageUnpublishableAfterReview } = require(STAGE_MODULE);
     const out = salvageUnpublishableAfterReview({
       date: '2026-05-08',
@@ -409,10 +412,11 @@ function runReviewSalvage(setup, overrides = {}) {
       ...overrides
     });
     regates = state.regateCalls.length;
+    regateEditors = state.regateCalls;
     delegated = state.salvageCalls;
     return out;
   });
-  return { result, delegated, regates, sectionA, sectionB };
+  return { result, delegated, regates, regateEditors, sectionA, sectionB };
 }
 
 test('재검토 후 기사 1건만 unpublishable이면 그 기사만 강등하고 남은 PASS subset을 돌려준다', () => {
@@ -467,4 +471,33 @@ test('hard blocker / must_fix / source gap / fact-check NEEDS_FIX가 있으면 s
     assert.equal(result, null);
     assert.equal(delegated, 0);
   }
+});
+
+test('강등 사유의 줄바꿈과 Markdown 문자는 한 줄로 접고 escape하며 200자로 자른다', () => {
+  const salvage = {
+    editor: { sections: [sectionWithUrl('CameraX release A', 'https://example.com/a')] },
+    factCheck: { status: 'PASS', items: [] }, qualityReport: passReport(), kept_section_count: 1
+  };
+  const reason = 'first line\n\n  ![x](http://e)\t<b>`code`</b> [l](u)' + ' z'.repeat(300);
+  const { result } = runReviewSalvage({ salvage }, {
+    qualityReport: reviewBlockedReport({ unpublishable_articles: [{ section_index: 1, reason }] })
+  });
+  const action = result.droppedActions[0];
+  assert.ok(!/[\r\n\t]/.test(action));
+  assert.ok(action.includes('first line \\!\\[x\\]\\(http://e\\) \\<b\\>\\`code\\`\\</b\\> \\[l\\]\\(u\\)'));
+  const inner = action.slice(action.indexOf(' (') + 2, -1);
+  assert.equal(inner.length, 200);
+});
+
+test('subset 재게이트가 throw하면 원래 editor로 복원 호출을 하고 null을 돌려준다', () => {
+  const sectionA = sectionWithUrl('CameraX release A', 'https://example.com/a');
+  const salvage = {
+    editor: { sections: [sectionA] }, factCheck: { status: 'PASS', items: [] },
+    qualityReport: passReport(), kept_section_count: 1
+  };
+  const { result, regates, regateEditors, sectionB } = runReviewSalvage({ salvage, regateThrowsOnce: true });
+  assert.equal(result, null);
+  assert.equal(regates, 2);
+  assert.deepEqual(regateEditors[0].sections.map(s => s.headline), ['CameraX release A']);
+  assert.deepEqual(regateEditors[1].sections.map(s => s.headline), ['CameraX release A', sectionB.headline]);
 });

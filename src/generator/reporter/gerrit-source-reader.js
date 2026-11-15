@@ -56,9 +56,11 @@ async function readGerritSource(target, candidate, client) {
   let diffOmitted = false;
   if (body.length > MAX_GERRIT_CHARS) {
     // Never cut a diff: a partial diff hides rejection and exception paths. Keep only the commit
-    // message (everything before the first diff) and say plainly that the diff was not read.
+    // message and say plainly that the diff was not read. Take the message from the detail response,
+    // not by cutting the patch at the first "diff --git " line, which a message body may contain.
+    const message = detail.revisions[revision].commit?.message;
+    if (typeof message !== 'string' || !message.trim()) return unavailable('gerrit_source_exceeds_document_budget');
     diffOmitted = true;
-    const message = patch.slice(0, patch.search(/^diff --git /m));
     body = header + '\n\nRevision commit message (diff omitted):\n' + message +
       `\nDiff omitted: the complete patch (${patch.length} chars) exceeds the ${MAX_GERRIT_CHARS}-char document budget. ` +
       'Only the commit message and file list above are source evidence; do not infer code behavior from omitted diff lines.\n';

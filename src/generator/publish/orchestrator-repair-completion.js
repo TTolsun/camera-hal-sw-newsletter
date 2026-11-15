@@ -143,6 +143,16 @@ function attemptRepairFailureSalvage({
   }
 }
 
+// verdict reason은 LLM 출력이고 retry-history.md에 그대로 렌더된다. 줄바꿈 포함 연속 공백을 하나로
+// 접고, 링크·이미지·HTML·코드로 재해석될 수 있는 문자를 escape한 뒤 200자로 자른다.
+function sanitizeVerdictReason(reason) {
+  return String(reason)
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/[[\]()!<>`]/g, '\\$&')
+    .slice(0, 200);
+}
+
 // 재검토(source review) 뒤 게이트가 "일부 기사 unpublishable" 하나만으로 NEEDS_FIX가 된 경우의 salvage.
 // repair 뒤 reviewArticleSources가 이미 통과한 기사까지 다시 뽑게 만드는(다음 attempt가 전부 재생성)
 // 대신, 판정이 난 기사만 빼고 남은 기사로 같은 quality gate를 다시 돌려 PASS일 때만 채택한다.
@@ -189,13 +199,20 @@ function salvageUnpublishableAfterReview({
     // PR 리뷰어가 강등 근거를 볼 수 있게, 막은 판정의 reason 앞부분을 repair_actions에 남긴다.
     const verdict = ensureArray(qualityReport.unpublishable_articles)
       .find(item => Number(item.section_index) === index);
-    const reason = verdict && verdict.reason ? ` (${String(verdict.reason).slice(0, 200)})` : '';
+    const reason = verdict && verdict.reason ? ` (${sanitizeVerdictReason(verdict.reason)})` : '';
     droppedActions.push(`demote(source-review-salvage): ${sectionLabel(before)}${reason}`);
   });
   // 같은 게이트를 산출물 기록과 함께 다시 돌려 PASS일 때만 채택한다. 아니면 이전 상태로 산출물을
   // 다시 기록해 되돌리고 null을 돌려 기존 경로(다음 attempt)로 보낸다.
-  const regated = runQualityGateAndPersist(salvage.editor, salvage.factCheck, attempt, 'attempt', qualityGateContext);
-  if (!regated.qualityReport || regated.qualityReport.status !== 'PASS') {
+  // 재게이트가 throw해도 복원 호출이 건너뛰어지면 subset 산출물이 남아 섞이므로, throw도 비-PASS처럼
+  // 복원한다. 복원 호출 자체가 throw하면 최초 게이트와 같은 입력이라 원래 실패하는 경로이므로 전파한다.
+  let regated = null;
+  try {
+    regated = runQualityGateAndPersist(salvage.editor, salvage.factCheck, attempt, 'attempt', qualityGateContext);
+  } catch (regateError) {
+    console.warn(`Source-review salvage regate threw; restoring the previous artifacts: ${regateError.message}`);
+  }
+  if (!regated || !regated.qualityReport || regated.qualityReport.status !== 'PASS') {
     runQualityGateAndPersist(editor, factCheck, attempt, 'attempt', qualityGateContext);
     return null;
   }
