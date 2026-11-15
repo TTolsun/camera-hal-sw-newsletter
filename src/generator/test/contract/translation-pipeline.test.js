@@ -10,6 +10,7 @@ const { translationInput, translationSchema, normalizeTranslationResponse } = re
 const { translationChecks } = require('../../translate/translation-checks');
 const { parseArgs, readTarget, selectTarget, translateIssue, translateNewsletter } = require('../../translate/translate-newsletter');
 const { invalidateTranslation, translationArtifactPaths } = require('../../render/translation-state');
+const { weeklyRenderInputIssues } = require('../../validate/validate-public-newsletter');
 const { validateTranslationParity } = require('../../validate/validate-translation-parity');
 const { buildHtml, buildMarkdown } = require('../../render/newsletter-renderer');
 const { translationSourceHash } = require('../../render/apply-translation');
@@ -134,7 +135,8 @@ test('one failed response is retried once with check feedback and stage telemetr
     calls++;
     assert.equal(run.qualityAttempt, calls);
     if (calls === 1) return { ...overlay, title: '오류' };
-    assert.match(prompt, /Korean text remains/);
+    assert.match(prompt, /Translate all Korean text in title into English/);
+    assert.doesNotMatch(prompt, /Korean text remains|translation\./);
     return overlay;
   } });
   assert.equal(calls, 2);
@@ -220,7 +222,7 @@ test('Korean publication allowlist carries tracked translation deletions but dia
   for (const file of translationArtifactPaths(key)) assert.ok(!diagnostic.includes(file), file);
 });
 
-function storySample(t) {
+function storySample(t, tweak = () => {}) {
   const root = tempRoot('translation-story-');
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const key = '2026-W39';
@@ -245,6 +247,7 @@ function storySample(t) {
     references: urls.map(url => ({ title: 'linux-media', url })), reference_articles: [],
     sections: urls.map(storySection)
   };
+  tweak(issue);
   writeJson(path.join(root, 'articles/newsletters', key, 'issue.json'), issue);
   const target = readTarget(root, key);
   const overlay = translationInput(issue, target.sourceText);
@@ -265,12 +268,18 @@ function withBacktickedBody(overlay) {
   return { ...overlay, sections };
 }
 
+// 백틱은 정규화가 걷어 내므로 재시도 경로는 정규화가 못 고치는 위반(인용 블록)으로 시험한다.
+function withBlockquoteBody(overlay) {
+  const sections = overlay.sections.map(section => ({ ...section, body_markdown: `> ${section.body_markdown}` }));
+  return { ...overlay, sections };
+}
+
 test('checks reject public article contract violations that the translation added', t => {
   // 2026-10-26 W44: 프롬프트가 금지해도 LLM이 식별자에 백틱을 붙였고, 워크플로 최종 검증에서야 실패했다.
   const { target, overlay } = storySample(t);
   assert.deepEqual(translationChecks(target.issue, overlay, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
   assert.throws(() => translationChecks(target.issue, withBacktickedBody(overlay), target.sourceText),
-    /Public article contract violation in translation: sections\[0\] body_markdown_forbidden_construct body_markdown inline_code block \d+; sections\[1\] body_markdown_forbidden_construct body_markdown inline_code block \d+/);
+    /Public article contract violation in translation: sections\[0\] body_markdown_forbidden_construct body_markdown inline_code block \d+; Public article contract violation in translation: sections\[1\] body_markdown_forbidden_construct body_markdown inline_code block \d+/);
 });
 
 test('a contract violation is retried with its feedback before anything is written', async t => {
@@ -278,13 +287,214 @@ test('a contract violation is retried with its feedback before anything is writt
   let calls = 0;
   const result = await translateIssue(target, { call: async (run, system, prompt) => {
     calls++;
-    if (calls === 1) return withBacktickedBody(overlay);
-    // 재시도는 한 번뿐이라 위반한 기사 전부가 피드백에 실려야 한다.
-    assert.match(prompt, /sections\[0\][^;]*inline_code[^;]*; sections\[1\][^;]*inline_code/);
+    if (calls === 1) return withBlockquoteBody(overlay);
+    // 재시도는 한 번뿐이라 위반한 기사 전부가 코드명 없는 문장으로 피드백에 실려야 한다.
+    const { previous_check_error: feedback } = JSON.parse(prompt);
+    assert.equal(feedback.split('\n').length, 2);
+    assert.match(feedback, /Remove the blockquote formatting from body_markdown/);
+    assert.doesNotMatch(feedback, /body_markdown_forbidden_construct|public_article_leakage|Public article contract/);
     return overlay;
   } });
   assert.equal(calls, 2);
   assert.deepEqual(result.overlay, overlay);
   // 검사가 원본 issue를 바꾸면 2차 시도가 원문 바이트와 어긋난다.
   assert.equal(JSON.stringify(target.issue), JSON.stringify(JSON.parse(target.sourceText)));
+});
+
+test('backticks the model added to a source without backticks are stripped before checks, so no retry is spent', async t => {
+  // 2026-W47: 모델이 식별자와 코드 펜스를 덧붙였다. 서식일 뿐이므로 안의 텍스트만 남긴다.
+  const { target, overlay } = storySample(t);
+  const response = withBacktickedBody(overlay);
+  response.sections[0].body_markdown = `\`\`\`c\n${response.sections[0].body_markdown}\n\`\`\``;
+  response.sections[1].headline = 'Why `HM1246` reached v10';
+  const input = translationInput(target.issue, target.sourceText);
+  const normalized = normalizeTranslationResponse(response, input);
+  assert.deepEqual(normalized.sections.map(section => section.body_markdown), overlay.sections.map(section => section.body_markdown));
+  assert.equal(normalized.sections[1].headline, 'Why HM1246 reached v10');
+  assert.equal(response.sections[1].body_markdown.includes('`'), true, 'input response is not mutated');
+  let calls = 0;
+  const result = await translateIssue(target, { call: async () => { calls++; return response; } });
+  assert.equal(calls, 1);
+  assert.equal(result.overlay.sections[1].headline, 'Why HM1246 reached v10');
+});
+
+test('backticks are preserved in fields whose Korean source already had them', t => {
+  const { target, overlay } = sample(t);
+  const input = translationInput(target.issue, target.sourceText);
+  assert.ok(input.sections[0].body_markdown.includes('`camera_open`'));
+  const response = { ...overlay, title: 'Weekly `camera` news' };
+  const normalized = normalizeTranslationResponse(response, input);
+  assert.equal(normalized.sections[0].body_markdown, overlay.sections[0].body_markdown);
+  assert.equal(normalized.title, 'Weekly camera news');
+  assert.deepEqual(translationChecks(target.issue, normalized, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
+});
+
+test('stripping backticks never hides a missing protected token', async t => {
+  const { target, overlay } = storySample(t);
+  const response = withBacktickedBody(overlay);
+  response.sections[0].body_markdown = response.sections[0].body_markdown.replace('v4l2_subdev_format', 'format');
+  await assert.rejects(translateIssue(target, { call: async () => response }), /Missing protected token v4l2_subdev_format: translation\.sections\[0\]\.body_markdown/);
+});
+
+// 아래 시험은 한국어 원문을 일부 바꿔 쓴다. 번역문은 storySample의 영어 문장에 덧붙인다.
+function withKoreanSource(tweak) {
+  return issue => tweak(issue.sections.map(section => section.public_article));
+}
+
+test('translated technical terms are allowed when the Korean source uses their counterpart', t => {
+  // 2026-W47: 폴백 -> fallback, 검사기 -> validators를 파이프라인 내부 용어 누출로 오판해 번역이 두 번 실패했다.
+  const { target, overlay } = storySample(t, withKoreanSource(([first, second]) => {
+    first.headline = 'SurfaceControl 및 TextureView 폴백';
+    second.body_markdown += '\n\n프레임워크 내부에서는 검사기들을 거쳐 안전성을 확인합니다.';
+  }));
+  overlay.sections[0].headline = 'SurfaceControl and TextureView fallback';
+  overlay.sections[1].body_markdown += '\n\nInternally, the framework ensures safety by passing through validators that pre-verify.';
+  assert.deepEqual(translationChecks(target.issue, overlay, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
+});
+
+test('translated leak terms without a Korean counterpart in the source stay blocked', t => {
+  const { target, overlay } = storySample(t);
+  const fallback = structuredClone(overlay);
+  fallback.sections[0].headline = 'SurfaceControl fallback';
+  assert.throws(() => translationChecks(target.issue, fallback, target.sourceText), /sections\[0\][^;]*public_article_leakage headline[^;]*Fallback/);
+  const validator = structuredClone(overlay);
+  validator.sections[1].body_markdown += '\n\nInternally, validators pre-verify the request.';
+  assert.throws(() => translationChecks(target.issue, validator, target.sourceText), /sections\[1\][^;]*public_article_leakage body_markdown[^;]*validator/);
+});
+
+test('pipeline-only terms stay blocked even when the Korean source has a technical counterpart', t => {
+  const { target, overlay } = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n폴백 경로와 검사기를 확인합니다.'; }));
+  overlay.sections[0].body_markdown += '\n\nThe fallback path and validators are checked.';
+  assert.doesNotThrow(() => translationChecks(target.issue, overlay, target.sourceText));
+  for (const term of ['publish gate', 'Review-only']) {
+    const invalid = structuredClone(overlay);
+    invalid.sections[0].body_markdown += `\n\nThe ${term} decides it.`;
+    assert.throws(() => translationChecks(target.issue, invalid, target.sourceText), new RegExp(`sections\\[0\\][^;]*public_article_leakage body_markdown[^;]*${term}`, 'i'));
+  }
+});
+
+test('a failed article alone is retranslated and the passing article stays as translated', async t => {
+  const { target, overlay } = storySample(t);
+  const first = structuredClone(overlay);
+  first.sections[1].body_markdown = first.sections[1].body_markdown.replace('v4l2_subdev_format', 'format');
+  const prompts = [];
+  const result = await translateIssue(target, { call: async (run, system, prompt) => {
+    prompts.push(JSON.parse(prompt));
+    if (prompts.length === 1) return first;
+    // 모델이 통과한 기사까지 돌려줘도 1회차 번역이 고정되어야 한다.
+    const changed = structuredClone(overlay);
+    changed.sections[0].headline = 'Changed after acceptance';
+    return changed;
+  } });
+  assert.equal(prompts.length, 2);
+  assert.deepEqual(prompts[0].display_text.sections.map(section => section.id), overlay.sections.map(section => section.id));
+  const retry = prompts[1];
+  assert.deepEqual(retry.display_text.sections.map(section => section.id), [overlay.sections[1].id]);
+  assert.deepEqual(retry.immutable_metadata_and_glossary.map(item => item.id), [overlay.sections[1].id]);
+  assert.equal(retry.previous_check_error, `Article ${overlay.sections[1].id}: Keep the token v4l2_subdev_format exactly as in the source (in body_markdown).`);
+  assert.deepEqual(result.overlay.sections[0], first.sections[0]);
+  assert.deepEqual(result.overlay.sections[1], overlay.sections[1]);
+  assert.deepEqual(result.overlay.title, overlay.title);
+});
+
+test('articles that fail for different reasons are all retried with each error in the feedback', async t => {
+  const { target, overlay } = storySample(t);
+  const first = structuredClone(overlay);
+  first.sections[0].lead = '남은 한글입니다.';
+  first.sections[1].body_markdown = first.sections[1].body_markdown.replace('v4l2_subdev_format', 'format');
+  const prompts = [];
+  const result = await translateIssue(target, { call: async (run, system, prompt) => {
+    prompts.push(JSON.parse(prompt));
+    return prompts.length === 1 ? first : overlay;
+  } });
+  assert.equal(prompts.length, 2);
+  assert.equal(prompts[1].display_text.sections.length, 2);
+  const lines = prompts[1].previous_check_error.split('\n');
+  assert.equal(lines.length, 2);
+  assert.match(lines[0], /Translate all Korean text in lead into English/);
+  assert.match(lines[1], /Keep the token v4l2_subdev_format exactly as in the source/);
+  assert.doesNotMatch(prompts[1].previous_check_error, /translation\.|Missing protected token|Korean text remains/);
+  assert.deepEqual(result.overlay, overlay);
+});
+
+test('structural errors retranslate the whole issue, and a still-failing article throws after the retry', async t => {
+  const { target, overlay } = storySample(t);
+  const reversed = { ...structuredClone(overlay), sections: [...overlay.sections].reverse() };
+  const prompts = [];
+  await translateIssue(target, { call: async (run, system, prompt) => {
+    prompts.push(JSON.parse(prompt));
+    return prompts.length === 1 ? reversed : overlay;
+  } });
+  assert.equal(prompts[1].display_text.sections.length, 2);
+  assert.match(prompts[1].previous_check_error, /ID order mismatch/);
+
+  const broken = structuredClone(overlay);
+  broken.sections[1].body_markdown = broken.sections[1].body_markdown.replace('v4l2_subdev_format', 'format');
+  const retried = [];
+  await assert.rejects(translateIssue(target, { call: async (run, system, prompt) => {
+    retried.push(JSON.parse(prompt));
+    return broken;
+  } }), /two attempts: Missing protected token v4l2_subdev_format: translation\.sections\[1\]\.body_markdown/);
+  assert.equal(retried.length, 2);
+  assert.equal(retried[1].display_text.sections.length, 1);
+});
+
+test('validate:public gives translation.en.json the same Korean-counterpart allowance as the translation checks', t => {
+  // 번역 검사만 허용하고 validate:public이 같은 오버레이를 막으면 번역 PR이 최종 검증에서 실패한다.
+  const { target, overlay } = storySample(t, withKoreanSource(([first]) => { first.headline = 'SurfaceControl 및 TextureView 폴백'; }));
+  overlay.sections[0].headline = 'SurfaceControl and TextureView fallback';
+  const root = path.resolve(target.dir, '../../..');
+  writeJson(path.join(target.dir, 'translation.en.json'), overlay);
+  assert.deepEqual(weeklyRenderInputIssues(root, target.key), []);
+  overlay.sections[1].headline = 'SurfaceControl fallback';
+  writeJson(path.join(target.dir, 'translation.en.json'), overlay);
+  assert.match(weeklyRenderInputIssues(root, target.key).join('\n'), /sections\[1\]\.public_article failed: public_article_leakage headline[^\n]*Fallback/);
+});
+
+test('a Korean counterpart only counts in the paired source field, as a whole word, and with its context marker', t => {
+  // 리뷰 재현: 번역 대상이 아닌 필드의 폴백, '검증기간', 파이프라인 marker가 붙은 validator는 면제하지 않는다.
+  const editorOnly = storySample(t, withKoreanSource(([first]) => { first.editorial_story.not_to_overclaim += ' 폴백 경로입니다.'; }));
+  editorOnly.overlay.sections[0].body_markdown += '\n\nThis story was promoted by the Fallback lane of the newsroom.';
+  assert.throws(() => translationChecks(editorOnly.target.issue, editorOnly.overlay, editorOnly.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*Fallback/);
+
+  const debug = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검사기를 확인합니다.'; }));
+  debug.overlay.sections[0].body_markdown += '\n\nDebug output from the validator shows the schema failed for this story.';
+  assert.throws(() => translationChecks(debug.target.issue, debug.overlay, debug.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*validator/);
+
+  const period = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검증기간을 확인합니다.'; }));
+  period.overlay.sections[0].body_markdown += '\n\nInternally, the validator checks the request.';
+  assert.throws(() => translationChecks(period.target.issue, period.overlay, period.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*validator/);
+
+  const faithful = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n프레임워크 내부에서는 검사기들을 거쳐 안전성을 확인합니다.'; }));
+  faithful.overlay.sections[0].body_markdown += '\n\nInternally, the framework ensures safety by passing through validators that pre-verify.';
+  assert.doesNotThrow(() => translationChecks(faithful.target.issue, faithful.overlay, faithful.target.sourceText));
+});
+
+test('a Korean counterpart must be a whole word with only particles after it, and the English term may not outnumber it', t => {
+  // '검증기준'은 검증기가 아니다. '검사기들을'은 검사기 + 복수 접미사 + 조사다.
+  const compound = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검증기준을 확인합니다.'; }));
+  compound.overlay.sections[0].body_markdown += '\n\nInternally, the validator checks the request.';
+  assert.throws(() => translationChecks(compound.target.issue, compound.overlay, compound.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*validator/);
+
+  const particle = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n내부 검사기들을 거칩니다.'; }));
+  particle.overlay.sections[0].body_markdown += '\n\nInternally, validators are used.';
+  assert.doesNotThrow(() => translationChecks(particle.target.issue, particle.overlay, particle.target.sourceText));
+
+  // 한국어 대응어가 한 번뿐이면 영어 용어도 한 번까지만 옮긴 것으로 본다. 둘째는 원문에 없던 사용이다.
+  const extra = storySample(t, withKoreanSource(([first]) => { first.body_markdown += '\n\n폴백 경로를 확인합니다.'; }));
+  extra.overlay.sections[0].body_markdown += '\n\nThe fallback path is checked.\n\nThe release also has a fallback lane for the newsroom.';
+  assert.throws(() => translationChecks(extra.target.issue, extra.overlay, extra.target.sourceText), /sections\[0\][^;]*public_article_leakage body_markdown[^;]*Fallback/);
+});
+
+test('backtick stripping leaves ids alone and removes long fences with their info string', t => {
+  const { target, overlay } = storySample(t);
+  const input = translationInput(target.issue, target.sourceText);
+  const wrapped = structuredClone(overlay);
+  wrapped.sections[0].id = `\`${wrapped.sections[0].id}\``;
+  assert.throws(() => translationChecks(target.issue, normalizeTranslationResponse(wrapped, input), target.sourceText), /Unknown or duplicate translation ID/);
+
+  const fenced = structuredClone(overlay);
+  fenced.sections[0].body_markdown = `\`\`\`\`c\n${overlay.sections[0].body_markdown}\n\`\`\`\``;
+  const normalized = normalizeTranslationResponse(fenced, input);
+  assert.equal(normalized.sections[0].body_markdown, overlay.sections[0].body_markdown);
 });

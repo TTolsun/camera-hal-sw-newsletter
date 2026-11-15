@@ -57,8 +57,35 @@ function translationSchema(input) {
   });
 }
 
+// 원문 문자열에 백틱이 하나도 없으면 번역문의 백틱은 내용이 아니라 모델이 덧붙인 서식이다. 프롬프트가 금지해도
+// 모델이 식별자에 백틱을 붙였으므로(2026-W47), 코드 펜스 줄과 인라인 백틱 문자만 걷어 내고 안의 텍스트는 둔다.
+// 식별 필드(id)는 번역 대상 산문이 아니므로 건드리지 않는다. 백틱으로 감싼 id는 구조 오류로 실패해야 한다.
+// 원문에 백틱이 있던 문자열은 "기존 코드는 그대로 보존" 계약에 따라 건드리지 않는다.
+function stripAddedBackticks(source, target) {
+  if (typeof target === 'string') {
+    if (typeof source !== 'string' || source.includes('`')) return target;
+    const unfenced = target.replace(/^[ \t]*`{3,}[^\n`]*$\n?/gm, '');
+    return (unfenced === target ? target : unfenced.trim()).replace(/`/g, '');
+  }
+  if (Array.isArray(target)) {
+    return target.map((value, index) => stripAddedBackticks(Array.isArray(source) ? source[index] : undefined, value));
+  }
+  if (target && typeof target === 'object') {
+    return Object.fromEntries(Object.entries(target).map(([key, value]) => [key, key === 'id' ? value : stripAddedBackticks(source?.[key], value)]));
+  }
+  return target;
+}
+
 function normalizeTranslationResponse(response, input) {
   const result = structuredClone(response);
+  // sections와 reference_articles는 응답 순서가 아니라 id로 원문 항목과 짝을 짓는다.
+  for (const group of ['sections', 'reference_articles']) {
+    if (!Array.isArray(result?.[group])) continue;
+    result[group] = result[group].map(item => stripAddedBackticks(input[group].find(source => source.id === item?.id), item));
+  }
+  for (const field of ['title', 'summary', 'watch_points']) {
+    if (Object.hasOwn(result || {}, field)) result[field] = stripAddedBackticks(input[field], result[field]);
+  }
   for (const [group, fields] of [['sections', ['lead', 'source_subtitle', 'image_alt']], ['reference_articles', ['note']]]) {
     if (!Array.isArray(result?.[group])) continue;
     for (const item of result[group]) {

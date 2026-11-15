@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyTranslation } = require('../render/apply-translation');
+const { isFaithfulTechnicalTerm } = require('../reporter/translated-technical-terms');
 
 const {
   readJson,
@@ -141,11 +142,13 @@ function newsroomJsonIssues(date, changedFiles = null) {
   return errors;
 }
 
-function activeRenderedArticleIssues(issue, label) {
+// keep은 이슈 하나를 보고도 남길지 정한다. 번역 오버레이 검사가 한국어 원문 대응어를 옮긴 기술 용어를 거를 때 쓴다.
+function activeRenderedArticleIssues(issue, label, keep = () => true) {
   if (!Array.isArray(issue?.sections)) return [label + ': renderer sections must contain an array'];
   // Only active renderer sections inherit this issue's contract marker. Archived
   // metadata.legacySection/public_article values keep their original provenance.
   return issue.sections.flatMap((section, index) => validatePublicArticle(section, index, { issue })
+    .filter(error => keep(error, index, section))
     .map(error => label + ':sections[' + index + '].public_article failed: ' + error.type + (error.key ? ' ' + error.key : '') + (error.reason ? ' ' + error.reason : '') + (error.message ? ' ' + error.message : '')));
 }
 
@@ -170,7 +173,9 @@ function weeklyRenderInputIssues(rootDir, weeklyKey) {
       }
       if (name === 'translation.en.json') {
         const sourceText = fs.readFileSync(path.join(dir, 'issue.json'), 'utf8');
-        errors.push(...activeRenderedArticleIssues(applyTranslation(JSON.parse(sourceText), value, { sourceText }), rel));
+        const sourceIssue = JSON.parse(sourceText);
+        errors.push(...activeRenderedArticleIssues(applyTranslation(sourceIssue, value, { sourceText }), rel,
+          (error, index, section) => !isFaithfulTechnicalTerm(error, sourceIssue.sections[index], section)));
       } else {
         const issue = name === 'publication-source.json' ? value.issue : value;
         errors.push(...activeRenderedArticleIssues(issue, rel));
@@ -364,5 +369,6 @@ module.exports = {
   main,
   publicArticlePathIssues,
   validateIndexedNewsletters,
-  validateIndexedWeeklyNewsletters
+  validateIndexedWeeklyNewsletters,
+  weeklyRenderInputIssues
 };

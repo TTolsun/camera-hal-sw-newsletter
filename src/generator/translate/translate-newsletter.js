@@ -55,32 +55,75 @@ function selectTarget(root, { weeklyKey, force = false } = {}) {
   return target;
 }
 
+// 재시도 피드백은 모델이 읽는 문장이다. 오류가 난 기사(또는 호 단위 필드)마다 한 줄씩, 코드명 없이 무엇을
+// 고칠지만 적는다.
+function retryFeedback(problems, input) {
+  const hintsByUnit = new Map();
+  for (const { unit, hint } of problems) hintsByUnit.set(unit, [...(hintsByUnit.get(unit) || []), hint]);
+  return [...hintsByUnit].map(([unit, hints]) => {
+    const where = unit === 'issue' ? 'Issue-level text (title, summary, watch_points, reference_articles)' : `Article ${input.sections[unit].id}`;
+    return `${where}: ${[...new Set(hints)].join(' ')}`;
+  }).join('\n');
+}
+
+// 1회차에서 통과한 기사는 고정하고, 실패한 기사와(실패했다면) 호 단위 필드만 재번역 응답으로 바꾼다.
+// 호 단위 필드는 응답 스키마가 늘 요구하므로 재요청에도 실려 가지만, 실패하지 않았다면 1회차 값을 쓴다.
+function mergeRetry(first, retry, input, failedSections, issueFailed) {
+  const header = issueFailed && retry ? retry : first;
+  return {
+    schemaVersion: first.schemaVersion, weekly_key: first.weekly_key, source_hash: first.source_hash,
+    title: header.title, summary: header.summary, watch_points: header.watch_points, reference_articles: header.reference_articles,
+    sections: first.sections.map((section, index) => failedSections.has(index)
+      ? (retry?.sections || []).find(item => item?.id === input.sections[index].id) || section
+      : section)
+  };
+}
+
 async function translateIssue(target, { call, debugDir } = {}) {
   const input = translationInput(target.issue, target.sourceText);
-  const forbidden = target.issue.sections.map((section, index) => ({
+  const immutable = target.issue.sections.map((section, index) => ({
     id: input.sections[index].id,
     tags: section.tags, image: section.selectedImage,
     sources: (section.sources || []).map(source => ({ url: source.url, name: source.name || source.source || '', title: source.title }))
   }));
   const invoke = call || require('../../shared/llm/llm-client').callLlmJson;
   let failure = '';
+  let message = '';
+  // first는 1회차에서 구조는 맞지만 일부 기사나 호 단위 필드가 검사에 실패한 번역이다. 구조 오류(ID 순서·개수·
+  // 식별 정보)는 오류를 기사에 귀속할 수 없어 호 전체를 다시 번역한다.
+  let first = null;
+  let problems = [];
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const prompt = JSON.stringify({ display_text: input, immutable_metadata_and_glossary: forbidden, previous_check_error: failure });
+    const failedSections = new Set(problems.filter(problem => problem.unit !== 'issue').map(problem => problem.unit));
+    const issueFailed = problems.some(problem => problem.unit === 'issue');
+    const requested = first ? { ...input, sections: input.sections.filter((_, index) => failedSections.has(index)) } : input;
+    const requestedIds = new Set(requested.sections.map(section => section.id));
+    const prompt = JSON.stringify({
+      display_text: requested,
+      immutable_metadata_and_glossary: immutable.filter(item => requestedIds.has(item.id)),
+      previous_check_error: failure,
+      ...(first ? { retry_scope: 'Only the articles that failed the checks are included. The other articles are already accepted; do not return them.' } : {})
+    });
     if (debugDir) {
       fs.mkdirSync(debugDir, { recursive: true });
       fs.writeFileSync(path.join(debugDir, `prompt-${attempt}.txt`), `${SYSTEM}\n${prompt}`, 'utf8');
     }
-    const response = await invoke(stageRun(LLM_STAGES.TRANSLATE, { qualityAttempt: attempt, totalAttempts: 2 }), SYSTEM, prompt, translationSchema(input));
+    const response = await invoke(stageRun(LLM_STAGES.TRANSLATE, { qualityAttempt: attempt, totalAttempts: 2 }), SYSTEM, prompt, translationSchema(requested));
     if (debugDir) fs.writeFileSync(path.join(debugDir, `response-${attempt}.json`), `${JSON.stringify(response, null, 2)}\n`, 'utf8');
+    let overlay = normalizeTranslationResponse(response, requested);
+    if (first) overlay = mergeRetry(first, overlay, input, failedSections, issueFailed);
     try {
-      const overlay = normalizeTranslationResponse(response, input);
+      // 조립한 결과도 1회차와 같은 전체 검사를 다시 통과해야 채택한다.
       const { checks } = translationChecks(target.issue, overlay, target.sourceText);
       return { overlay, checks };
     } catch (error) {
-      failure = error.message;
+      message = error.message;
+      problems = error.problems || [];
+      first = problems.length > 0 ? overlay : null;
+      failure = problems.length > 0 ? retryFeedback(problems, input) : message;
     }
   }
-  throw new Error(`Translation checks failed after two attempts: ${failure}`);
+  throw new Error(`Translation checks failed after two attempts: ${message}`);
 }
 
 function tableCell(value) {
