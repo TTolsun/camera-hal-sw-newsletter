@@ -55,7 +55,7 @@ Galaxy A54 5G의 SoC 드라이버와 HAL을 맡은 팀이 확인할 소식입니
 
 ### 어떤 기기에서 우회하나요?
 
-AndroidX 팀은 DisableAbortCapturesOnStopQuirk 클래스에 Galaxy A54 5G 판별 조건을 추가했습니다. 제조사가 Samsung이고 디바이스명이 a54x이거나 모델명이 SM-A546으로 시작하면 이 쿼크가 켜집니다. 쿼크가 켜지면 CameraPipe 그래프 설정에서 세션을 멈출 때 abortCaptures를 호출하지 않도록 플래그를 내립니다.
+쿼크는 특정 기기의 오동작을 피하려고 그 기기에만 적용하는 우회 코드입니다. AndroidX 팀은 DisableAbortCapturesOnStopQuirk 클래스에 Galaxy A54 5G 판별 조건을 추가했습니다. 제조사가 Samsung이고 디바이스명이 a54x이거나 모델명이 SM-A546으로 시작하면 이 쿼크가 켜집니다. 쿼크가 켜지면 CameraPipe 그래프 설정에서 세션을 멈출 때 abortCaptures를 호출하지 않도록 플래그를 내립니다.
 
 원문에서 확인된 적용 범위는 Tecno 일부 기기, Galaxy Note 10+, Poco X3 Pro에 이어 Galaxy A54 5G의 세부 변종까지입니다. 세부 변종에는 SM-A546E, SM-A546U1, SC-53D, a54xnsxx 등이 있습니다. 같은 제조사의 A53, A55, S24 계열은 이 쿼크의 대상에 포함되지 않습니다.
 
