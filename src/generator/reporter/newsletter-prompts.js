@@ -10,6 +10,7 @@ const { PUBLIC_SOURCE_ROLES } = require('./public-article-contract');
 const { CLAIM_IMPACT_LEVELS } = require('./source-binding-policy');
 const { technicalBriefingContractPrompt } = require('./technical-briefing-contract');
 const { readableProsePrompt } = require('./readable-prose-prompt');
+const { koreanProseStylePrompt, koreanProseStyleExamplePrompt } = require('./korean-prose-style-prompt');
 
 // v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
 // lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
@@ -238,6 +239,8 @@ function publicArticleContractPrompt() {
     'public_article fields: story_contract_version, headline, source_subtitle, lead, body_markdown, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
     articleInterpretationCriteriaPrompt(),
     readableProsePrompt(),
+    koreanProseStylePrompt(),
+    koreanProseStyleExamplePrompt(),
     'public_article.headline은 source title을 그대로 복사하지 말고, source_extraction/behavior_change/source_fact_bundle과 기사 본문을 바탕으로 Gemini가 새로 작성하세요. 단, headline과 lead/body는 source-confirmed 핵심 변경점을 누락하거나 generic CameraX/Android framing으로 대체하면 안 됩니다.',
     'editorial_story fields: not_to_overclaim, editor_take. 두 필드는 독자에게 렌더링되지 않는 내부 안전 필드입니다.',
     'lead는 무엇이 바뀌었는지와 핵심 조건·변경 상태를 일찍 전달하는 한두 문장입니다. 독자가 마주칠 법한 장면이나 질문으로 열 수도 있지만 가정형으로 쓰고, source가 확인하지 않은 사건을 실제로 일어난 일처럼 단정하지 마세요. 훅 때문에 확인된 핵심 변화를 본문 뒤로 미루지 마세요.',
@@ -256,7 +259,7 @@ function publicArticleContractPrompt() {
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',
     'Gemini는 public article writer입니다. selected article capsule과 source facts를 바탕으로 public-facing impact wording과 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성하세요.',
     'Public-facing impact wording과 claim-level classification은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 뒷받침하는 범위 안에서만 HAL/driver/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요.',
-    'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
+    'public_article은 한국어 독자가 읽는 기술 뉴스레터 문장으로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
     `source_links[].source_role을 쓰면 기존 허용값 ${PUBLIC_SOURCE_ROLES.join(', ')} 중 해당 URL에 허용된 역할만 사용하세요. official_blog 같은 출처 종류를 source_role 값으로 새로 만들지 마세요. related_context는 selected capsule이 명시적으로 허용한 경우에만 사용합니다.`,

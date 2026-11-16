@@ -217,7 +217,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   ]) {
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  assert.match(prompt, /독자-facing/);
+  assert.match(prompt, /독자가 읽는 기술 뉴스레터 문장/);
   // v1의 reader_scenario 슬롯 지시는 사라졌지만 "가정형" 요구는 lead로 이식됐다.
   assert.match(prompt, /장면이나 질문으로 열 수도 있지만 가정형으로 쓰고/);
   assert.match(prompt, /source-confirmed fact/);

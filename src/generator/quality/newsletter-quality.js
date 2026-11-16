@@ -100,6 +100,7 @@ const {
 const {
   buildQualityReportMarkdown
 } = require('./quality-markdown');
+const { measureProseStyle } = require('./prose-style-metrics');
 
 function halSignalInput(section = {}, candidate = {}, scope = {}) {
   return {
@@ -943,7 +944,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       hal_signal_quality_summary: halSignalQualitySummary,
       main_article_signal_checks: mainArticleSignalChecks,
       top_deduction_categories: summarizeDeductionCategories(state.deductions).slice(0, 5),
-      candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5)
+      candidate_exclusion_summary: summarizeCandidateExclusions(reporter).slice(0, 5),
+      // #1380: 참고 지표입니다. status·score·deductions 계산에는 쓰지 않습니다.
+      prose_style: measureProseStyle(sections)
     }
   };
 }

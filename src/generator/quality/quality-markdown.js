@@ -11,6 +11,7 @@ const {
   articleSectionContractRowValues
 } = require('../reporter/article-structure-summary');
 const { text } = require('./quality-text');
+const { proseStyleMarkdown } = require('./prose-style-metrics');
 const {
   blockingDeductions,
   softDeductions
@@ -260,6 +261,10 @@ ${topDeductionCategories}
 ## Candidate Exclusion Summary
 
 ${candidateExclusionSummary}
+
+## Prose Style (reference only)
+
+${proseStyleMarkdown(metrics.prose_style)}
 
 ## Deductions
 
