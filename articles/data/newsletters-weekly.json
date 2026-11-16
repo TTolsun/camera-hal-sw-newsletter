@@ -24,7 +24,7 @@
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
           "href": "newsletters/2026-W47/index.html#article-galaxy-a54-5g-camera-hal-sigsegv-abortcaptures",
           "headline": "Galaxy A54 5G 세션 중지 시 Camera HAL SIGSEGV 방지를 위한 abortCaptures 우회 쿼크 병합",
-          "lead": "Galaxy A54 5G에서 세션을 멈출 때 abortCaptures를 호출하지 않도록 하는 쿼크가 AndroidX 메인 브랜치에 병합되었습니다. 이 기기에서 카메라를 빠르게 전환하거나 종료하면 드라이버 프로세스가 비정상 종료되는 문제를 피하기 위한 우회책입니다.",
+          "lead": "Galaxy A54 5G에서만 세션을 멈출 때 abortCaptures를 호출하지 않게 하는 기기별 우회 코드(쿼크)가 AndroidX 메인 브랜치에 병합되었습니다. 이 기기에서 카메라를 빠르게 전환하거나 종료하면 드라이버 프로세스가 비정상 종료되는 문제를 피하기 위한 변경입니다.",
           "takeaway": "Galaxy A54 5G의 SoC 드라이버와 HAL을 맡은 팀이 확인할 소식입니다. 이번 패치는 상위 프레임워크가 abortCaptures 호출을 피하게 할 뿐입니다. 크래시가 난 WNC-LmeMcscRepr 루틴에 널 포인터 참조나 메모리 해제 후 참조가 없는지는 하위 스택에서 따로 점검해야 합니다.",
           "tags": [
             "Camera HAL"
