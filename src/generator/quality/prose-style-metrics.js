@@ -68,9 +68,12 @@ function round(value, digits = 1) {
 
 function articleProseFields(section) {
   const article = section && typeof section === 'object' ? section.public_article || {} : {};
+  // 초기 호는 body_markdown 대신 body_paragraphs 배열에 본문을 저장했습니다.
+  const body = toText(article.body_markdown)
+    || (Array.isArray(article.body_paragraphs) ? article.body_paragraphs.map(toText).join('\n') : '');
   return {
     lead: toText(article.lead),
-    prose: [article.lead, article.body_markdown, article.camera_hal_takeaway].map(toText).join('\n')
+    prose: [article.lead, body, article.camera_hal_takeaway].map(toText).join('\n')
   };
 }
 

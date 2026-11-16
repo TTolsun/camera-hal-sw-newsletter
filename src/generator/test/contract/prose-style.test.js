@@ -25,7 +25,20 @@ test('평균 문장 길이와 120자 초과 비율을 센다', () => {
   assert.equal(metrics.sentence_count, 2);
   assert.equal(metrics.long_sentence_count, 1);
   assert.equal(metrics.long_sentence_ratio, 0.5);
+  assert.equal(metrics.avg_sentence_length, 67.5); // (9 + 126) / 2
   assert.equal(metrics.reference_only, true);
+});
+
+test('120자는 길지 않고 121자부터 길다고 센다', () => {
+  const at = measureProseStyle([section({ lead: '', body_markdown: `${'가'.repeat(119)}.`, camera_hal_takeaway: '' })]);
+  const over = measureProseStyle([section({ lead: '', body_markdown: `${'가'.repeat(120)}.`, camera_hal_takeaway: '' })]);
+  assert.equal(at.long_sentence_count, 0);
+  assert.equal(over.long_sentence_count, 1);
+});
+
+test('body_paragraphs로 저장된 초기 호 본문도 센다', () => {
+  const metrics = measureProseStyle([section({ lead: '', body_paragraphs: ['첫 문단입니다.', '둘째 문단입니다.'], camera_hal_takeaway: '' })]);
+  assert.equal(metrics.sentence_count, 2);
 });
 
 test('목적절로 시작한 lead만 센다', () => {
@@ -79,6 +92,7 @@ test('한국어 말투 지침과 예시는 쓰기 단계에만 들어가고 판�
     assert.ok(build().includes(koreanProseStyleExamplePrompt()));
   }
   assert.ok(!factCheckSystemPrompt().includes(koreanProseStylePrompt()));
+  assert.ok(!factCheckSystemPrompt().includes(koreanProseStyleExamplePrompt()));
   assert.match(koreanProseStyleExamplePrompt(), /다른 기사에 가져다 쓰면 안 됩니다/);
   assert.match(koreanProseStylePrompt(), /확정형으로 바꾸지 마세요/);
 });
