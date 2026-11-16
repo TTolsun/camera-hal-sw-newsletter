@@ -39,7 +39,7 @@
 
 _AndroidX Gerrit Camera (change 4430441)_
 
-Galaxy A54 5G에서 세션을 멈출 때 abortCaptures를 호출하지 않도록 하는 쿼크가 AndroidX 메인 브랜치에 병합되었습니다. 이 기기에서 카메라를 빠르게 전환하거나 종료하면 드라이버 프로세스가 비정상 종료되는 문제를 피하기 위한 우회책입니다.
+Galaxy A54 5G에서만 세션을 멈출 때 abortCaptures를 호출하지 않게 하는 기기별 우회 코드(쿼크)가 AndroidX 메인 브랜치에 병합되었습니다. 이 기기에서 카메라를 빠르게 전환하거나 종료하면 드라이버 프로세스가 비정상 종료되는 문제를 피하기 위한 변경입니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
