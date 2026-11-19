@@ -9,6 +9,7 @@
 | `source-monitor-registry.json` | source snapshot monitor 계약(`schemaVersion`, `source_id`, `url_patterns`, `date_extractors`, bounded fetch 값 등)입니다. |
 | `source-snapshots/**` | bounded fetch로 관찰한 source snapshot의 reviewable generated state입니다. public newsletter renderer 입력이 아닙니다. |
 | `article-exposure-history.json` | homepage headline 등 노출 이력을 추적하는 forward-only state입니다. 서빙되지 않습니다. |
+| `quirk-ledger.json` | 기기 우회 장부(AndroidX 쿼크 변경)의 최근 12주 누적 state입니다. shadow 산출물이며 서빙되지 않습니다. |
 | `AGENTS.md` | state 변경 시 지켜야 하는 JSON 계약과 검증 규칙입니다. |
 
 ## 편집 규칙

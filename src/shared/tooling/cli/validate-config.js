@@ -7,6 +7,9 @@ const {
 const {
   validateSourceMonitorRegistryText
 } = require('../../validate/source-monitor-registry-validator');
+const {
+  validateQuirkLedgerStateText
+} = require('../../validate/quirk-ledger-state-validator');
 
 const root = process.cwd();
 const configPath = path.resolve(root, process.argv[2] || path.join('src', 'shared', 'data', 'news-sources.json'));
@@ -49,4 +52,18 @@ if (fs.existsSync(monitorConfigPath)) {
     process.exit(1);
   }
   console.log(`Source monitor registry config validation passed for ${monitorDisplayPath}.`);
+}
+
+const quirkLedgerPath = path.resolve(root, 'state', 'quirk-ledger.json');
+const quirkLedgerDisplayPath = path.relative(root, quirkLedgerPath).replace(/\\/g, '/') || quirkLedgerPath;
+if (fs.existsSync(quirkLedgerPath)) {
+  const quirkLedgerResult = validateQuirkLedgerStateText(fs.readFileSync(quirkLedgerPath, 'utf8'), { filePath: quirkLedgerDisplayPath });
+  if (!quirkLedgerResult.ok) {
+    console.error(`Quirk ledger state validation failed for ${quirkLedgerDisplayPath}:`);
+    for (const error of quirkLedgerResult.errors) {
+      console.error(`- ${error}`);
+    }
+    process.exit(1);
+  }
+  console.log(`Quirk ledger state validation passed for ${quirkLedgerDisplayPath}.`);
 }
