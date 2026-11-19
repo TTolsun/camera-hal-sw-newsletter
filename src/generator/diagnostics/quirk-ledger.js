@@ -92,7 +92,7 @@ function diffIdentifiers(lines) {
       if (identifier && (!known || SOURCE_STRENGTH.indexOf(source) < SOURCE_STRENGTH.indexOf(known))) found.set(identifier, source);
     };
     for (const match of line.matchAll(SAMSUNG_MODEL_PATTERN)) add(match[0]);
-    if (comment || /^s*@/.test(line)) continue;
+    if (comment || /^\s*@/.test(line)) continue;
     for (const match of line.matchAll(QUOTED_TOKEN_PATTERN)) {
       if (isDeviceToken(match[1])) add(match[1]);
     }

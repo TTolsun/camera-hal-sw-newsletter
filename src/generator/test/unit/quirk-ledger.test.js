@@ -181,6 +181,17 @@ test('기존 기기 줄을 다시 쓰면서 기기 하나를 추가한 diff에�
   assert.deepEqual(devices, [{ identifier: 'SM-A546', source: 'diff_code' }]);
 });
 
+test('들여쓴 어노테이션 줄의 따옴표 문자열은 기기 식별자로 뽑지 않는다', () => {
+  const devices = extractDeviceIdentifiers({
+    addedLines: [
+      '    @SuppressLint("NewApi1")',
+      '\t@RequiresApi(api = 21, value = "Camera2Interop")',
+      '                "PHT110" to setOf("2", "3"),'
+    ]
+  });
+  assert.deepEqual(devices, [{ identifier: 'PHT110', source: 'diff_code' }]);
+});
+
 test('삭제 줄에 있던 기기는 커밋 메시지에 다시 나와도 살아나지 않는다', () => {
   const devices = extractDeviceIdentifiers({
     commitMessage: 'Add SM-A546.\nAlready handled: Build.DEVICE "d2q", tested on sm-n975 and SM-A546E',
