@@ -16,7 +16,7 @@ const {
   changeUrl,
   commitMessageOf,
   fetchMergedCameraChanges,
-  fetchQuirkAddedLines,
+  fetchQuirkDiffLines,
   quirkFilesOf
 } = require('../../shared/collect/androidx-quirk-gerrit-changes');
 const { gerritTimeMs } = require('../../shared/collect/gerrit-camera-changes');
@@ -80,32 +80,46 @@ function isDeviceToken(token) {
   return /[A-Za-z]/.test(token) && /\d/.test(token) && !QUALCOMM_SOC_PATTERN.test(token);
 }
 
+/** 쿼크 파일 diff 줄들에서 기기 식별자를 뽑아 Map(식별자 -> 근거)으로 돌려준다. */
+function diffIdentifiers(lines) {
+  const found = new Map();
+  for (const line of lines) {
+    const comment = isCommentLine(line);
+    const source = comment ? 'diff_comment' : 'diff_code';
+    const add = value => {
+      const identifier = normalizeIdentifier(value);
+      const known = found.get(identifier);
+      if (identifier && (!known || SOURCE_STRENGTH.indexOf(source) < SOURCE_STRENGTH.indexOf(known))) found.set(identifier, source);
+    };
+    for (const match of line.matchAll(SAMSUNG_MODEL_PATTERN)) add(match[0]);
+    if (comment || /^s*@/.test(line)) continue;
+    for (const match of line.matchAll(QUOTED_TOKEN_PATTERN)) {
+      if (isDeviceToken(match[1])) add(match[1]);
+    }
+  }
+  return found;
+}
+
 /**
- * 커밋 메시지와 쿼크 파일 추가 줄에서 기기 식별자를 뽑는다. 같은 문자열은 가장 강한 근거 하나만 남긴다.
+ * 커밋 메시지와 쿼크 파일 diff에서 "이번 변경이 새로 적은" 기기 식별자를 뽑는다.
+ * 삭제 줄(removedLines)에 이미 있던 식별자는 기존 기기라서 diff 근거에서도, 커밋 메시지 근거에서도 뺀다
+ * (기존 기기 줄을 다시 쓰는 변경과, 기존 기기를 언급하는 커밋 메시지를 새 기기로 오인하지 않으려는 것이다).
+ * 같은 문자열은 가장 강한 근거 하나만 남긴다.
  * source(강한 순): diff_code(쿼크 코드의 조건), diff_comment(쿼크 파일 주석), commit_message.
- * 추가 줄은 줄 단위라서, 기존 기기 줄을 다시 쓴 변경이면 새로 추가된 기기가 아닌 식별자도 섞인다.
  * 식별자는 "언급된 문자열"이지 "영향받는다는 판정"이 아니다(영향 없는 기기도 적힐 수 있다).
  */
-function extractDeviceIdentifiers({ commitMessage = '', addedLines = [] } = {}) {
+function extractDeviceIdentifiers({ commitMessage = '', addedLines = [], removedLines = [] } = {}) {
+  const existing = new Set(diffIdentifiers(removedLines).keys());
   const found = new Map();
-  const add = (value, source) => {
-    const identifier = normalizeIdentifier(value);
-    if (!identifier) return;
+  const add = (identifier, source) => {
+    if (!identifier || existing.has(identifier)) return;
     const known = found.get(identifier);
     if (!known || SOURCE_STRENGTH.indexOf(source) < SOURCE_STRENGTH.indexOf(known)) found.set(identifier, source);
   };
 
-  for (const line of addedLines) {
-    const comment = isCommentLine(line);
-    const source = comment ? 'diff_comment' : 'diff_code';
-    for (const match of line.matchAll(SAMSUNG_MODEL_PATTERN)) add(match[0], source);
-    if (comment || /^\s*@/.test(line)) continue;
-    for (const match of line.matchAll(QUOTED_TOKEN_PATTERN)) {
-      if (isDeviceToken(match[1])) add(match[1], source);
-    }
-  }
-  for (const match of String(commitMessage).matchAll(BUILD_FIELD_VALUE_PATTERN)) add(match[1], 'commit_message');
-  for (const match of String(commitMessage).matchAll(SAMSUNG_MODEL_PATTERN)) add(match[0], 'commit_message');
+  for (const [identifier, source] of diffIdentifiers(addedLines)) add(identifier, source);
+  for (const match of String(commitMessage).matchAll(BUILD_FIELD_VALUE_PATTERN)) add(normalizeIdentifier(match[1]), 'commit_message');
+  for (const match of String(commitMessage).matchAll(SAMSUNG_MODEL_PATTERN)) add(normalizeIdentifier(match[0]), 'commit_message');
 
   return [...found].map(([identifier, source]) => ({ identifier, source }));
 }
@@ -137,15 +151,18 @@ function classifyChange(change, window) {
   return { change, quirkFiles, submittedDate, reason };
 }
 
-function buildEntry({ change, quirkFiles, submittedDate }, addedLines) {
+function buildEntry({ change, quirkFiles, submittedDate }, { addedLines, removedLines }) {
   const commitMessage = commitMessageOf(change);
+  const devices = extractDeviceIdentifiers({ commitMessage, addedLines, removedLines });
   return {
     change_number: change._number,
     url: changeUrl(change._number),
     submitted_date: submittedDate,
     subject: String(change.subject || ''),
     quirk_classes: quirkFiles.map(file => ({ name: quirkClassName(file.path), change: quirkFileChange(file.status) })),
-    devices: extractDeviceIdentifiers({ commitMessage, addedLines }),
+    devices,
+    // 식별자를 못 뽑은 항목(예: 쿼크 파일을 새로 만든 기능 추가)은 제외하지 않고 표시만 한다.
+    no_device: devices.length === 0,
     ...detectExynos({ commitMessage, addedLines })
   };
 }
@@ -194,15 +211,17 @@ async function buildQuirkLedgerReport({ date, window, fetchTextImpl, now = new D
         report.excluded.push({ change_number: item.change._number, subject: String(item.change.subject || ''), reason: item.reason });
         continue;
       }
-      const addedLines = [];
+      const lines = { addedLines: [], removedLines: [] };
       for (const file of item.quirkFiles) {
         try {
-          addedLines.push(...await fetchQuirkAddedLines(item.change._number, file.path, fetchTextImpl));
+          const diff = await fetchQuirkDiffLines(item.change._number, file.path, fetchTextImpl);
+          lines.addedLines.push(...diff.addedLines);
+          lines.removedLines.push(...diff.removedLines);
         } catch (error) {
           report.diagnostics.push({ kind: 'diff_fetch_failed', change_number: item.change._number, message: error.message });
         }
       }
-      report.entries.push(buildEntry(item, addedLines));
+      report.entries.push(buildEntry(item, lines));
     }
     report.entries.sort((left, right) =>
       left.submitted_date.localeCompare(right.submitted_date) || left.change_number - right.change_number);
@@ -227,7 +246,7 @@ const DEVICE_SOURCE_LABELS = Object.freeze([
 ]);
 
 function renderDevices(devices) {
-  if (devices.length === 0) return '(식별자 없음)';
+  if (devices.length === 0) return '(식별자 없음, no_device)';
   return DEVICE_SOURCE_LABELS
     .map(([source, label]) => {
       const identifiers = devices.filter(device => device.source === source).map(device => device.identifier);

@@ -17,6 +17,7 @@ function entry(changeNumber, submittedDate, overrides = {}) {
     subject: `change ${changeNumber}`,
     quirk_classes: [{ name: 'ZslDisablerQuirk', change: 'modified' }],
     devices: [],
+    no_device: true,
     exynos: false,
     exynos_evidence: [],
     ...overrides
@@ -66,6 +67,8 @@ test('상태 검증기는 모양이 어긋난 항목과 근거 없는 Exynos 표
     'submitted_date must be': { ...valid, entries: [entry(1, 'yesterday')] },
     'quirk_classes must be a non-empty array': { ...valid, entries: [entry(1, '2026-11-12', { quirk_classes: [] })] },
     'devices items need': { ...valid, entries: [entry(1, '2026-11-12', { devices: [{ identifier: 'x', source: 'guess' }] })] },
+    'no_device must be a boolean': { ...valid, entries: [entry(1, '2026-11-12', { no_device: undefined })] },
+    'no_device must be true exactly when': { ...valid, entries: [entry(1, '2026-11-12', { no_device: false })] },
     'exynos is true but exynos_evidence is empty': { ...valid, entries: [entry(1, '2026-11-12', { exynos: true })] },
     'is duplicated': { ...valid, entries: [entry(1, '2026-11-12'), entry(1, '2026-11-13')] }
   };

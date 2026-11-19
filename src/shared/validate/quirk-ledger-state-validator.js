@@ -35,6 +35,11 @@ function validateEntry(entry, index, errors) {
       }
     }
   }
+  if (typeof entry.no_device !== 'boolean') {
+    errors.push(`${label}.no_device must be a boolean.`);
+  } else if (Array.isArray(entry.devices) && entry.no_device !== (entry.devices.length === 0)) {
+    errors.push(`${label}.no_device must be true exactly when devices is empty.`);
+  }
   if (typeof entry.exynos !== 'boolean') errors.push(`${label}.exynos must be a boolean.`);
   if (!Array.isArray(entry.exynos_evidence)) errors.push(`${label}.exynos_evidence must be an array.`);
   // 근거 없는 Exynos 표시를 막는다: 표시는 근거 문자열이 있을 때만 켜진다.

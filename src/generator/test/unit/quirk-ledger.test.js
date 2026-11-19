@@ -163,6 +163,45 @@ test('같은 식별자는 대소문자만 달라도 하나로 합치고 가장 �
   ]);
 });
 
+test('기존 기기 줄을 다시 쓰면서 기기 하나를 추가한 diff에서는 새 기기만 남는다', () => {
+  const devices = extractDeviceIdentifiers({
+    commitMessage: 'Add Galaxy A54 5G',
+    removedLines: [
+      '        private val isSamsungNote10PlusDevice: Boolean',
+      '            get() = Device.isSamsungDevice() && "d2q".equals(Build.DEVICE, ignoreCase = true)',
+      '  * - Device(s): Samsung Galaxy Note 10+ (SM-N975)'
+    ],
+    addedLines: [
+      '        private val isSamsungNote10PlusDevice: Boolean',
+      '            get() = Device.isSamsungDevice() && "d2q".equals(Build.DEVICE, ignoreCase = true)',
+      '                Build.MODEL.startsWith("SM-A546", ignoreCase = true)',
+      '  * - Device(s): Samsung Galaxy Note 10+ (SM-N975), Galaxy A54 5G (SM-A546)'
+    ]
+  });
+  assert.deepEqual(devices, [{ identifier: 'SM-A546', source: 'diff_code' }]);
+});
+
+test('삭제 줄에 있던 기기는 커밋 메시지에 다시 나와도 살아나지 않는다', () => {
+  const devices = extractDeviceIdentifiers({
+    commitMessage: 'Add SM-A546.\nAlready handled: Build.DEVICE "d2q", tested on sm-n975 and SM-A546E',
+    removedLines: ['    get() = "d2q".equals(Build.DEVICE)', '  * - Device(s): Note 10+ (SM-N975)'],
+    addedLines: ['    get() = "d2q".equals(Build.DEVICE) || "a54x".equals(Build.DEVICE)']
+  });
+  assert.deepEqual(devices.map(device => device.identifier), ['a54x', 'SM-A546', 'SM-A546E']);
+  assert.ok(!devices.some(device => ['d2q', 'SM-N975'].includes(device.identifier)));
+});
+
+test('식별자가 하나도 없는 항목은 제외하지 않고 no_device를 붙이며 Markdown에도 표시한다', async () => {
+  const report = await build([
+    quirkChange({ number: 1, subject: 'Add fast session switch', files: { [quirkPath('FastSessionSwitchDisablerQuirk')]: { status: 'A' } } }),
+    quirkChange({ number: 2 })
+  ], { 1: ['public class FastSessionSwitchDisablerQuirk implements Quirk {'], 2: ['                "SM-F971",'] });
+  const [withoutDevice, withDevice] = report.entries;
+  assert.equal(withoutDevice.no_device, true);
+  assert.equal(withDevice.no_device, false);
+  assert.match(renderQuirkLedgerMarkdown(report), /Add fast session switch | (식별자 없음, no_device)/);
+});
+
 test('근거가 없으면 기기 식별자는 빈 배열이고 추측하지 않는다', () => {
   assert.deepEqual(extractDeviceIdentifiers({ commitMessage: 'Extend quirk to API 35+\n\nBug: 582678736', addedLines: ['    get() = isSamsungDevice()'] }), []);
   assert.deepEqual(extractDeviceIdentifiers(), []);

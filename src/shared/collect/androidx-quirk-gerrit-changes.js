@@ -89,18 +89,20 @@ async function fetchMergedCameraChanges(windowStartDate, fetchTextImpl) {
   return { url, changes: parsed, truncated };
 }
 
-/** 쿼크 파일 하나의 diff에서 추가된 줄(새 쪽)만 모아 돌려준다. 못 읽으면 던진다. */
-async function fetchQuirkAddedLines(changeNumber, filePath, fetchTextImpl) {
+/** 쿼크 파일 하나의 diff에서 추가된 줄(새 쪽 b)과 삭제된 줄(옛 쪽 a)을 돌려준다. 못 읽으면 던진다. */
+async function fetchQuirkDiffLines(changeNumber, filePath, fetchTextImpl) {
   const url = `${ANDROIDX_GERRIT_ORIGIN}/changes/${changeNumber}/revisions/current/files/${encodeURIComponent(filePath)}/diff`;
   const parsed = parseGoogleJson(await fetchTextImpl(url, DIFF_FETCH_TIMEOUT_MS));
   if (!parsed || !Array.isArray(parsed.content)) {
     throw new Error(`Gerrit diff is not a JSON object with content: ${url}`);
   }
-  const lines = [];
+  const addedLines = [];
+  const removedLines = [];
   for (const block of parsed.content) {
-    if (Array.isArray(block.b)) lines.push(...block.b);
+    if (Array.isArray(block.b)) addedLines.push(...block.b);
+    if (Array.isArray(block.a)) removedLines.push(...block.a);
   }
-  return lines;
+  return { addedLines, removedLines };
 }
 
 module.exports = {
@@ -110,7 +112,7 @@ module.exports = {
   changeUrl,
   commitMessageOf,
   fetchMergedCameraChanges,
-  fetchQuirkAddedLines,
+  fetchQuirkDiffLines,
   listQueryUrl,
   quirkFilesOf,
   totalFileCountOf
