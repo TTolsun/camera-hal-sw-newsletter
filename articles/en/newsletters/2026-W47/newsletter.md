@@ -8,7 +8,7 @@
 
 ## 1. This week’s highlights
 
-This issue begins with a quirk to bypass abortCaptures, which avoids a SIGSEGV when stopping a session on the Galaxy A54 5G. Next, it covers CameraX's fast session switch Phase 1, which changes only repeating requests without reopening the session. For Camera2-pipe, we examine how FrameGraph was changed to distribute frames into buffers by comparing tags, and how extension functions were added to CameraMetadata to query 3A modes and flash support. Finally, we introduce a fix for rotation distortion that occurred when using CameraEffect in PreviewView PERFORMANCE mode. All changes have been merged into AndroidX source. The official release and product integration status are specified in each article.
+On the Galaxy A54 5G, calling abortCaptures when stopping a camera session can cause a SIGSEGV. This issue covers the device-specific workaround that skips the call and Phase 1 of CameraX fast session switching, which updates repeating requests without reopening the session. In Camera2-pipe, FrameGraph routes frames to buffers with matching tags, and CameraMetadata now offers queries for 3A modes and flash support. The last story looks at a rotation error when using CameraEffect in PreviewView PERFORMANCE mode. All five changes have merged into AndroidX source. Each article covers what is known about official releases and product integration.
 
 - [Quirk to Bypass abortCaptures Merged to Prevent Camera HAL SIGSEGV on Galaxy A54 5G Session Stop](#article-quirk-to-bypass-abortcaptures-merged-to-prevent-camera-hal-sigsegv-on-galaxy-a54)
 
@@ -26,7 +26,7 @@ This issue begins with a quirk to bypass abortCaptures, which avoids a SIGSEGV w
 
   Buffers output by the HAL from the same stream are now prevented from being wasted by entering unintended buffers in the upper FrameGraph. HAL engineers should verify that all framework request metadata is returned in the results in scenarios where multiple buffer consumers share a single stream.
 
-- [PreviewView PERFORMANCE Mode Rotation Distortion Fix: SurfaceControl and TextureView Fallback for CameraEffect Application](#article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev)
+- [PreviewView PERFORMANCE Mode Rotation Distortion Fix: SurfaceControl and TextureView Paths for CameraEffect](#article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev)
 
   This is an example of fixing a defect in the upper view when buffers output by the driver and HAL lose transformation metadata after intermediate processing by the framework. HAL developers should check that buffer flags and transformation metadata are consistently passed to the framework consumer layer.
 
@@ -203,7 +203,7 @@ This change was merged into the androidx-main branch on November 13, 2026. Wheth
 
 <a id="article-previewview-performance-mode-rotation-distortion-fix-surfacecontrol-and-texturev"></a>
 
-## 6. PreviewView PERFORMANCE Mode Rotation Distortion Fix: SurfaceControl and TextureView Fallback for CameraEffect Application
+## 6. PreviewView PERFORMANCE Mode Rotation Distortion Fix: SurfaceControl and TextureView Paths for CameraEffect
 
 _AndroidX Gerrit Camera (Change 4418107)_
 

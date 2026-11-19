@@ -3,8 +3,8 @@
   "updated_at": "2026-11-16T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
-    "title": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가",
-    "summary": "Camera2-pipe의 CameraMetadata에 3A 모드와 플래시 지원 여부를 조회하는 확장 함수가 추가되었습니다. 코드가 요청을 만들기 전에 정적 메타데이터 배열을 읽어 장치가 해당 설정을 지원하는지 간단히 확인할 수 있습니다.",
+    "title": "Camera2-pipe의 CameraMetadata로 3A 모드와 플래시 지원 여부 조회",
+    "summary": "이제 Camera2-pipe의 CameraMetadata에서 기기가 지원하는 3A 모드와 플래시 설정을 확인할 수 있습니다. 새 확장 함수는 캡처 요청을 만들기 전에 정적 메타데이터 배열을 읽습니다.",
     "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
     "newsletter_date": "2026-11-16",
     "newsletter_url": "newsletters/2026-W47/index.html",
@@ -42,7 +42,7 @@
     },
     "newsletter_article_url": "newsletters/2026-W47/index.html#article-camera2-pipe-camerametadata-3a",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "Camera2-pipe CameraMetadata에 3A 모드 및 플래시 지원 여부 조회 확장 함수 추가 image"
+    "image_alt": "Camera2-pipe의 CameraMetadata로 3A 모드와 플래시 지원 여부 조회 image"
   },
   "headline_history": [
     {
