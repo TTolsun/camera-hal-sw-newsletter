@@ -344,6 +344,14 @@ jobs:
         continue-on-error: true
         run: npm run report:evidence-pack -- --date "${{ steps.meta.outputs.date }}"
 
+      # 기기 우회 장부(quirk ledger) shadow 보고서. AndroidX Gerrit를 직접 조회해 보고서와 state/quirk-ledger.json만
+      # 쓰며 공개 렌더링에는 아무것도 넣지 않는다. 조회가 실패해도 이 스텝은 종료 코드 0으로 진단만 남기고,
+      # 스텝 자체도 continue-on-error라 어떤 실패도 발행을 막지 않는다.
+      - name: Generate quirk ledger report
+        if: always() && steps.meta.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:quirk-ledger -- --date "${{ steps.meta.outputs.date }}"
+
       - name: Audit newsletter image lineage
         id: audit-images
         if: always() && steps.meta.outputs.date != ''
@@ -416,6 +424,7 @@ jobs:
             copy_if_present "articles/data/newsletters.json"
             copy_if_present "articles/data/homepage-headline.json"
             copy_if_present "state/article-exposure-history.json"
+            copy_if_present "state/quirk-ledger.json"
             copy_tree_if_present "state/source-snapshots"
           else
             echo "No generated date marker found; skipping date-scoped artifact copy."

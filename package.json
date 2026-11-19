@@ -13,6 +13,7 @@
     "ci": "npm run test && npm run validate",
     "report:source-effectiveness": "node src/generator/publish/build-source-effectiveness-report.js",
     "report:source-quality-diagnosis": "node src/generator/publish/build-source-quality-diagnosis.js",
+    "report:quirk-ledger": "node src/generator/publish/build-quirk-ledger-report.js",
     "report:source-followup-issues": "node src/generator/publish/build-source-followup-issues.js",
     "report:evidence-pack": "node src/generator/publish/build-evidence-pack-summary.js",
     "report:prose-style": "node src/generator/publish/report-prose-style-baseline.js",

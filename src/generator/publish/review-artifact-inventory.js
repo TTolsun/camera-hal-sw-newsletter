@@ -467,6 +467,24 @@ function exactCatalog(date, publicOutputLane = 'daily') {
       humanReadable: true
     }),
     entry({
+      // 기기 우회 장부(quirk ledger) shadow 산출물. 공개 렌더링에 쓰이지 않고 게이트도 아니라서
+      // reviewBlocking을 켜지 않는다. 워크플로 03이 쓰며 조회에 실패해도 파일은 생긴다(status: failed).
+      relPath: newsroomRelPath(date, 'quirk-ledger-report.md'),
+      group: 'selection_diagnostics',
+      role: 'quirk_ledger_report',
+      reviewOrder: 54,
+      humanReadable: true
+    }),
+    entry({
+      // 최근 12주 누적 상태. 날짜별이 아니라 repo-root state/에 쌓이는 커밋된 진실 공급원이라
+      // present-only·non-blocking으로 두어 생성 PR이 함께 커밋하게 한다.
+      relPath: 'state/quirk-ledger.json',
+      group: 'selection_diagnostics',
+      role: 'quirk_ledger_state',
+      reviewOrder: 55,
+      humanReadable: false
+    }),
+    entry({
       relPath: seedFetchReportMarkdownRelPath(date),
       group: 'check_when_needed',
       role: 'check_when_needed',
@@ -566,6 +584,7 @@ const DEBUG_RRC_PATHS = new Set([
   'retry-history.json',
   'source-quality-diagnosis.json',
   'source-followup-issues.json',
+  'quirk-ledger-report.json',
   'source-effectiveness-report.json',
   'source-discovery-feedback-report.json',
   'cost-report.md',
@@ -644,6 +663,7 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'source-quality-report.json'),
     newsroomRelPath(date, 'source-quality-diagnosis.json'),
     newsroomRelPath(date, 'source-followup-issues.json'),
+    newsroomRelPath(date, 'quirk-ledger-report.json'),
     newsroomRelPath(date, 'source-effectiveness-report.json'),
     newsroomRelPath(date, 'source-discovery-feedback-report.json'),
     newsroomRelPath(date, 'source-clusters.json'),

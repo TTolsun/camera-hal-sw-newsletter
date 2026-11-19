@@ -23,6 +23,13 @@
 - catch-up 창을 넓혀 나이 창이 `coverage_starts_at` 이전으로 넘어가면, 그 구간에는 게이트가 볼 레코드가 없어 catch-up이 과거 main 기사를 다시 올립니다. 나이(`days_since_published`)의 기준은 실행일이 아니라 **이 호의 이슈 날짜가 정하는 직전 완결 UTC ISO 주**입니다(`freshnessWindowMetadata`, `src/generator/select/newsroom-selection.js`). 단 `COVERAGE_WEEK_KEY`(`coverageWeekKeyOverride`)를 주면 그 주가 앵커가 되고 이슈 날짜는 무시됩니다. 그래서 과거 호를 재실행하거나 백필하면 — override로 과거 주를 겨냥하는 경우까지 — 창도 그 호로 되돌아갑니다. 벽시계가 흘렀다는 사실은 이 위험을 줄여 주지 않습니다. 한편 `catchUpPolicy.maxAgeDays`는 `selectionWindowPolicy.referenceContextDays`를 넘을 수 없고, 위반하면 정책 로드가 throw합니다(`src/shared/common/newsletter-policy.js`). 두 값을 함께 올리는 변경만 이 계약을 건드릴 수 있고, 그때 함께 봐야 합니다.
 - `coverage`에 설명용 키를 새로 넣지 마세요. `normalizeExposureHistory`(`src/generator/reporter/article-exposure-history.js`)가 `mode`·`coverage_starts_at`·`backfill_included` 세 키로만 다시 만들기 때문에 다음 쓰기에서 조용히 사라집니다.
 
+## Quirk Ledger (기기 우회 장부)
+
+- `state/quirk-ledger.json`은 AndroidX Gerrit의 쿼크 변경(`/quirk/*Quirk.(kt|java)`)을 최근 12주 동안 누적한 shadow state입니다. 공개 renderer 입력이 아니고, 쓰는 곳은 `npm run report:quirk-ledger`(`src/generator/publish/build-quirk-ledger-report.js`) 하나뿐입니다. 사람이 손으로 고치지 마세요.
+- 병합 규칙: 이번 실행의 조회 창 안 항목은 그 실행 결과로 통째로 바뀌고(창이 정본), 창 밖 항목은 12주 안에서 유지됩니다. 목록을 못 읽은 실행(`status: failed`)은 이 파일을 건드리지 않습니다. 읽기 실패가 누적 상태를 지우면 안 되기 때문입니다.
+- 항목의 기기 식별자는 커밋 메시지와 쿼크 파일 diff 추가 줄에 적힌 문자열뿐입니다. 외부 기기 DB 매핑이나 제조사·SoC 추측을 넣지 마세요. `exynos` 표시는 근거 문자열(`exynos_evidence`)이 있을 때만 켜지며, 검증기(`validate:config`)가 이를 확인합니다.
+- 어떤 실패도 발행을 막지 않아야 합니다. 이 파일의 검증 실패는 `validate:config`에서 드러나지만, 생성 단계(워크플로 03의 해당 스텝)는 `continue-on-error`입니다.
+
 ## 필수 검증 (Required Validation)
 
 state JSON 계약이나 표시값을 바꾼 뒤에는 아래 명령을 실행합니다.

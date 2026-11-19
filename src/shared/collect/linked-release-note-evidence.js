@@ -183,6 +183,7 @@ async function resolveLinkedReleaseNoteEvidenceItems(items = [], parentSource = 
 }
 
 module.exports = {
+  fetchText,
   isTrustedLinkedReleaseNoteTarget,
   linkedReleaseNoteFetchCacheKey,
   markUnresolvedLinkedReleaseNote,

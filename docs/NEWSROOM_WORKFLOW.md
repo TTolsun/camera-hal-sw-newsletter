@@ -644,6 +644,15 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. `gemini-candidates.json`은 #1186이 제안 단계를 제거해 더는 만들지 않으므로 등급 목록과 `.gitignore`에서도 뺐습니다.
 
+## 기기 우회 장부 (shadow)
+
+워크플로 03은 `npm run report:quirk-ledger`로 AndroidX Gerrit(`platform/frameworks/support`, `status:merged dir:camera`)를 직접 조회해 `articles/content/newsroom/YYYY-MM-DD/quirk-ledger-report.json`·`.md`와 누적 상태 `state/quirk-ledger.json`(최근 12주)을 씁니다. 후보 풀이나 선정 규칙을 거치지 않고, 공개 렌더링에는 아무것도 넣지 않습니다.
+
+- 조회 창은 실행일 기준 직전 완결 ISO 주이며 `COVERAGE_WEEK_KEY`가 우선합니다. 수동 실행은 `--since YYYY-MM-DD --until YYYY-MM-DD`(UTC 제출일, 양끝 포함)로 창을 줍니다.
+- 쿼크 파일 경로 필터는 서버가 정규식 질의를 지원하지 않아 클라이언트에서 적용합니다. 제외 규칙은 제출일이 창 밖, 제목의 `Merge empty history`·`Snap for`·`ktfmt`·`Format all code`·`JSpecify`, 쿼크 파일 12개 이상 동시 변경(기계적 리팩터링)입니다.
+- 기기 식별자는 커밋 메시지와 쿼크 파일 diff 추가 줄에 적힌 문자열만 씁니다. 못 뽑으면 빈 값이고, Exynos 표시는 텍스트에 `exynos` 또는 `s5ed+`가 있을 때만 붙습니다(걸린 문자열을 `exynos_evidence`에 남깁니다).
+- 어떤 실패도 발행을 막지 않습니다. 조회·해석 실패는 보고서의 `status: failed`와 `diagnostics`로만 남고 종료 코드는 0이며, 그때 `state/quirk-ledger.json`은 바뀌지 않습니다. 워크플로 스텝도 `continue-on-error`입니다.
+
 ## 공개 사이트의 영문 로케일
 
 기본 언어는 한국어이며 헤더의 언어 선택 버튼에서 한국어와 English를 선택합니다. 영문 홈과 아카이브는 `articles/en/index.html`, `articles/en/archive.html`이며 배포 URL은 `/en/` 접두사를 사용합니다. 번역이 없는 호는 영문 아카이브에서 한국어 제목과 `Korean only` 배지를 표시하고 한국어 원문으로 연결합니다. 영문 홈은 한국어 홈과 같은 구조(헤드라인 블록, 전체 호 목록, 정렬·주제 필터)입니다. 헤드라인 블록은 헤드라인 기사가 실린 주간호의 `translation.en.json`에서 같은 기사(`id` = `article_identity_key`)의 번역 제목과 리드를 가져옵니다. 한국어 헤드라인 요약은 발행 전 후보 요약이라 번역 대상이 아니며, 영문판은 발행된 리드를 씁니다. 그 주간호에 영문판이 없으면 정적 브랜드 블록을 그대로 둡니다. "Read article →"는 영문 호 페이지로 연결하며, 영문 페이지의 기사 앵커는 영어 제목에서 만들어지므로 한국어 앵커를 붙이지 않습니다.

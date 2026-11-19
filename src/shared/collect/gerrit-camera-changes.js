@@ -630,6 +630,7 @@ module.exports = {
   MIN_LIST_PAGE_SIZE,
   cameraFileScope,
   effectiveDate,
+  gerritTimeMs,
   hasEligibleState,
   isGerritUrl,
   parseGerritChangeUrl,
