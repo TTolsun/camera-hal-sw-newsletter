@@ -1,0 +1,3557 @@
+<!doctype html>
+<html lang="__REPORT_LANGUAGE__" data-sidebar-collapsed="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>__REPORT_TITLE__</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --sidebar-width: 220px;
+      --radius: 6px;
+      --radius-control: 6px;
+      --radius-pill: 999px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Apple SD Gothic Neo", "Malgun Gothic", Helvetica, Arial, sans-serif;
+      --font-mono: "Berkeley Mono", "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", D2Coding, "Nanum Gothic Coding", "Courier New", monospace;
+      font-family: var(--font-sans);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      --background: light-dark(#fdfcfc, #201d1d);
+      --foreground: light-dark(#201d1d, #fdfcfc);
+      --card: light-dark(#fdfcfc, #201d1d);
+      --card-foreground: light-dark(#201d1d, #fdfcfc);
+      --popover: light-dark(#fdfcfc, #302c2c);
+      --popover-foreground: light-dark(#201d1d, #fdfcfc);
+      --muted: light-dark(#f8f7f7, #302c2c);
+      --muted-foreground: light-dark(#646262, #9a9898);
+      --primary: light-dark(#201d1d, #fdfcfc);
+      --primary-foreground: light-dark(#fdfcfc, #201d1d);
+      --secondary: light-dark(#f1eeee, #302c2c);
+      --secondary-foreground: light-dark(#302c2c, #fdfcfc);
+      --accent: light-dark(#f1eeee, #302c2c);
+      --accent-foreground: light-dark(#201d1d, #fdfcfc);
+      --destructive: light-dark(#d70015, #ff3b30);
+      --destructive-foreground: light-dark(#fdfcfc, #201d1d);
+      --border: light-dark(#e0dede, #3f3c3c);
+      --input: light-dark(#646262, #646262);
+      --ring: light-dark(#201d1d, #fdfcfc);
+      --status-success: light-dark(#008236, #7bf1a8);
+      --status-success-soft: light-dark(#f0fdf4, #032e15);
+      --status-warning: light-dark(#a65f00, #ffdf20);
+      --status-warning-soft: light-dark(#fefce8, #432004);
+      --status-danger: light-dark(#c10007, #ffa2a2);
+      --status-danger-soft: light-dark(#fef2f2, #460809);
+      --status-info: light-dark(#1447e6, #8ec5ff);
+      --status-info-soft: light-dark(#eff6ff, #162456);
+      --impact-high: var(--status-warning);
+      --impact-high-soft: var(--status-warning-soft);
+      --positive: var(--status-success);
+      --positive-soft: var(--status-success-soft);
+      --destructive-soft: var(--status-danger-soft);
+      --add-hue: var(--status-success);
+      --del-hue: var(--status-danger);
+      --hunk-hue: var(--status-info);
+      --shadow: none;
+      --code-bg: light-dark(#f1eeee, #302c2c);
+      --code-fg: light-dark(#201d1d, #c9d1d9);
+      --code-muted: light-dark(#646262, #9a9898);
+      --code-add-text: light-dark(var(--status-success), #8fe3a7);
+      --code-del-text: light-dark(var(--status-danger), #ffb3ba);
+      --code-hunk-text: light-dark(var(--status-info), #a9c2ff);
+      --tok-kw: light-dark(#cf222e, #ff7b72);
+      --tok-str: light-dark(#0a3069, #a5d6ff);
+      --tok-num: light-dark(#0550ae, #79c0ff);
+      --tok-com: light-dark(#646262, #9a9898);
+      --tok-fn: light-dark(#8250df, #d2a8ff);
+      --tok-type: light-dark(#953800, #ffa657);
+      min-width: 18rem;
+      min-height: 100vh;
+      margin: 0;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    body[data-default-theme="dark"]:not([data-theme]),
+    body[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    body[data-default-theme="light"]:not([data-theme]),
+    body[data-theme="light"] {
+      color-scheme: light;
+    }
+
+    body[data-default-theme="auto"]:not([data-theme]) {
+      color-scheme: light dark;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body[data-default-theme="auto"]:not([data-theme]) {
+        --shadow: none;
+      }
+    }
+
+    a {
+      color: var(--primary);
+      text-underline-offset: 0.18em;
+    }
+
+    button,
+    summary {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    :disabled,
+    [aria-disabled="true"] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    /* Bracket affordances are text, sized by the surrounding control. */
+    .icon {
+      flex: 0 0 auto;
+      display: block;
+      font-variant-ligatures: none;
+    }
+
+    /* Korean sets prose by 어절, so keep-all prevents the mid-word breaks Latin
+       rules allow; break-word remains the escape hatch for long Latin tokens.
+       Declared early so component rules can still choose overflow-wrap: anywhere. */
+    #report-title,
+    [id$="--report-title"],
+    #report-main > h2,
+    #report-main > h3,
+    #report-main > p,
+    #report-main > ul,
+    #report-main > ol,
+    #report-main > .language-part[data-report-body] > h2,
+    #report-main > .language-part[data-report-body] > h3,
+    #report-main > .language-part[data-report-body] > p,
+    #report-main > .language-part[data-report-body] > ul,
+    #report-main > .language-part[data-report-body] > ol,
+    .card-content > p,
+    .card-content > ul,
+    .card-content > ol,
+    .summary-title,
+    .comment-text,
+    .comment-empty,
+    .quiz-question-title,
+    .quiz-option-text,
+    .quiz-explanation p,
+    th,
+    td {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* word-break inherits, so code inside prose must opt back out or long paths
+       and identifiers stop breaking and overflow their container. */
+    pre,
+    code,
+    .repo {
+      word-break: normal;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.55rem 0.8rem;
+      transform: translateY(-200%);
+      border: 1px solid var(--foreground);
+      background: var(--card);
+      color: var(--foreground);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    html[data-sidebar-collapsed="true"] .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    html[data-sidebar-collapsed="true"] aside {
+      display: none;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: visible;
+      border-right: 1px solid var(--border);
+      background: var(--muted);
+    }
+
+    .sidebar-header {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .icon-btn,
+    .sidebar-action,
+    .control button {
+      min-height: 2rem;
+      padding: 4px 8px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-control);
+      background: var(--background);
+      color: var(--foreground);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 6px;
+      background: transparent;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .icon-btn:hover,
+    .sidebar-action:hover,
+    .control button:hover {
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .brand {
+      margin: 0;
+      color: var(--foreground);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .sidebar-body {
+      flex: 1 1 auto;
+      padding: 6px 8px 10px;
+      overflow: auto;
+    }
+
+    .repo {
+      margin-bottom: 6px;
+      padding: 4px 4px 6px;
+      overflow-wrap: anywhere;
+      border-bottom: 1px solid var(--border);
+      color: var(--foreground);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .sidebar-label,
+    .comment-panel-title,
+    .sidebar-footer-label {
+      margin: 0 0 4px;
+      color: var(--foreground);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav {
+      margin-bottom: 8px;
+    }
+
+    .section-index {
+      display: grid;
+      gap: 1px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .section-index-item a {
+      display: grid;
+      grid-template-columns: 1.2rem minmax(0, 1fr);
+      gap: 0.2rem;
+      align-items: baseline;
+      min-width: 0;
+      padding: 3px 6px;
+      border-radius: var(--radius-control);
+      color: var(--foreground);
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+      text-decoration: none;
+    }
+
+    .section-index-item a:hover {
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .section-index-item--h3 a {
+      padding-left: 16px;
+      color: var(--foreground);
+      font-size: 11px;
+    }
+
+    .index-mark {
+      color: var(--foreground);
+      font-family: var(--font-mono);
+      text-align: center;
+    }
+
+    .comment-panel {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    .comment-empty {
+      margin: 0;
+      padding: 4px 6px;
+      color: var(--foreground);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 13rem;
+      margin: 0;
+      padding: 0;
+      overflow: auto;
+      list-style: none;
+    }
+
+    .comment-list li {
+      margin: 0;
+    }
+
+    .comment-jump {
+      display: block;
+      width: 100%;
+      padding: 4px 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: transparent;
+      color: var(--foreground);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      line-height: 1.3;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .comment-jump:hover,
+    .comment-jump:focus-visible {
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .sidebar-footer {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: column;
+      gap: 6px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sidebar-action {
+      width: 100%;
+      font-size: 12px;
+    }
+
+    .sidebar-action--danger:hover:not(:disabled) {
+      border-color: var(--destructive);
+      background: var(--destructive);
+      color: var(--destructive-foreground);
+    }
+
+    .sidebar-resizer {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      right: -3px;
+      width: 6px;
+      height: 100%;
+      background: transparent;
+      cursor: col-resize;
+      touch-action: none;
+    }
+
+    .sidebar-resizer:hover,
+    .sidebar-resizer:focus-visible,
+    .is-resizing .sidebar-resizer {
+      background: var(--primary);
+      opacity: 0.45;
+    }
+
+    .sidebar-expand {
+      position: fixed;
+      z-index: 999;
+      top: 12px;
+      left: 12px;
+      display: none;
+      min-height: 2rem;
+      padding: 4px 8px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-control);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      color: var(--card-foreground);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    html[data-sidebar-collapsed="true"] .sidebar-expand {
+      display: inline-flex;
+    }
+
+    html[data-sidebar-collapsed="true"] .sidebar-expand {
+      align-items: center;
+    }
+
+    .sidebar-expand:hover {
+      border-color: var(--input);
+      color: var(--accent-foreground);
+    }
+
+    .main-column {
+      min-width: 0;
+      padding: 24px 32px 64px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      max-width: 980px;
+      margin: 0 auto 18px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .control {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 5px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .control button {
+      background: transparent;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .control-label {
+      padding: 0 4px;
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Segmented mode controls: exactly one button pressed, so the active theme or
+       language reads at a glance instead of hiding inside a menu. */
+    .control--theme,
+    .control--language {
+      gap: 2px;
+    }
+
+    .control button[aria-pressed="true"] {
+      border-color: var(--foreground);
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    .control--theme button {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .language-part[hidden] {
+      display: none !important;
+    }
+
+    .card-action {
+      min-height: 2rem;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--muted);
+      color: var(--foreground);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .card-action:hover {
+      border-color: var(--input);
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .report-header {
+      margin: 0 0 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .report-overline {
+      margin-bottom: 4px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    #report-title {
+      margin: 0 0 12px;
+      font-family: var(--font-sans);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+
+    [id$="--report-title"] {
+      margin: 0 0 12px;
+      font-family: var(--font-sans);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+
+    .report-metadata {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .metadata-cell {
+      flex: 0 1 auto;
+      min-width: 0;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .metadata-cell--wide {
+      flex: 1 1 20rem;
+    }
+
+    .metadata-cell dt {
+      margin-bottom: 1px;
+      color: var(--muted-foreground);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .metadata-cell dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .metadata-cell dd code {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-size: 11.5px;
+    }
+
+    #report-main {
+      width: 100%;
+      max-width: 980px;
+      margin-inline: auto;
+      overflow-wrap: anywhere;
+    }
+
+    #report-main > h2 {
+      margin: 36px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    #report-main > .language-part[data-report-body] > h2 {
+      margin: 36px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    #report-main > h3 {
+      margin: 24px 0 10px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.4;
+    }
+
+    #report-main > .language-part[data-report-body] > h3 {
+      margin: 24px 0 10px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.4;
+    }
+
+    #report-main > p,
+    .card-content > p {
+      max-width: 72ch;
+      margin: 0 0 12px;
+    }
+
+    #report-main > .language-part[data-report-body] > p {
+      max-width: 72ch;
+      margin: 0 0 12px;
+    }
+
+    #report-main > ul,
+    #report-main > ol,
+    .card-content > ul,
+    .card-content > ol {
+      max-width: 70ch;
+      margin: 6px 0 14px;
+      padding-left: 1.35rem;
+    }
+
+    #report-main > .language-part[data-report-body] > ul,
+    #report-main > .language-part[data-report-body] > ol {
+      max-width: 70ch;
+      margin: 6px 0 14px;
+      padding-left: 1.35rem;
+    }
+
+    li + li {
+      margin-top: 0.28rem;
+    }
+
+    p code,
+    li code,
+    dd code {
+      padding: 2px 6px;
+      border-radius: var(--radius-control);
+      background: var(--muted);
+      font-size: 12.5px;
+      overflow-wrap: anywhere;
+    }
+
+    .table-scroll {
+      max-width: 100%;
+      margin: 1.2rem 0 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 9px 13px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: var(--muted);
+      color: var(--foreground);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    tbody tr:hover {
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .align-center {
+      text-align: center;
+    }
+
+    .align-right {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-card {
+      margin: 0 0 14px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      background: var(--card);
+      color: var(--card-foreground);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card.impact-high {
+      border-left-color: var(--impact-high);
+    }
+
+    .card-summary {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+      min-height: 0;
+      padding: 8px 12px;
+      background: var(--muted);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .summary-card[open] .card-summary {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* Brackets are the icon set: the marker is text, so it inherits the
+       report's one monospaced face and needs no asset or glyph coverage. */
+    .card-summary::before {
+      grid-column: 1;
+      grid-row: 1;
+      content: "[+]";
+      margin-left: 2px;
+      color: var(--muted-foreground);
+    }
+
+    .summary-card[open] .card-summary::before {
+      content: "[-]";
+    }
+
+    .card-heading {
+      display: grid;
+      grid-column: 2;
+      grid-row: 1;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: baseline;
+      min-width: 0;
+    }
+
+    .summary-id {
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .summary-title {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .card-badges {
+      display: flex;
+      grid-column: 3;
+      grid-row: 1;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .badge,
+    .comment-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .badge--category {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted-foreground);
+    }
+
+    .badge--impact {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    .summary-card.impact-high .badge--impact {
+      background: var(--impact-high-soft);
+      color: var(--impact-high);
+    }
+
+    .comment-count {
+      min-width: 1.4rem;
+      justify-content: center;
+      border-radius: var(--radius-control);
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    .comment-count[data-count="0"] {
+      display: none;
+    }
+
+    .card-panel {
+      padding: 10px 16px 14px;
+      border-top: 0;
+      animation: none;
+    }
+
+    .card-content {
+      padding-top: 0;
+    }
+
+    .code-block-wrapper {
+      position: relative;
+      margin: 12px 0 16px;
+    }
+
+    .code-block {
+      margin: 12px 0 16px;
+      padding: 14px 16px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--code-bg);
+      color: var(--code-fg);
+      font-size: 12.5px;
+      line-height: 1.55;
+      tab-size: 2;
+    }
+
+    .code-block-wrapper > .code-block {
+      margin: 0;
+    }
+
+    .code-block code {
+      display: block;
+      min-width: max-content;
+      font-size: inherit;
+    }
+
+    .code-copy-btn {
+      position: absolute;
+      z-index: 1;
+      top: 7px;
+      right: 7px;
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: color-mix(in srgb, var(--code-bg) 88%, var(--code-fg));
+      color: var(--code-muted);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .code-copy-btn:hover {
+      color: var(--code-fg);
+    }
+
+    .code-copy-btn.copied {
+      border-color: var(--positive);
+      color: var(--positive);
+    }
+
+    .tok-kw { color: var(--tok-kw); }
+    .tok-str { color: var(--tok-str); }
+    .tok-num { color: var(--tok-num); }
+    .tok-com { color: var(--tok-com); font-style: italic; }
+    .tok-fn { color: var(--tok-fn); }
+    .tok-type { color: var(--tok-type); }
+
+    .code-block:has(.diff-line) {
+      padding-inline: 0;
+    }
+
+    .code-block:has(.diff-line) code {
+      white-space: normal;
+    }
+
+    .diff-line {
+      display: block;
+      min-height: 1.55em;
+      padding-inline: 16px;
+      white-space: pre;
+    }
+
+    .diff-line--add {
+      background: color-mix(in srgb, var(--code-bg) 82%, var(--add-hue));
+      color: var(--code-add-text);
+    }
+
+    .diff-line--delete {
+      background: color-mix(in srgb, var(--code-bg) 82%, var(--del-hue));
+      color: var(--code-del-text);
+    }
+
+    .diff-line--hunk {
+      background: color-mix(in srgb, var(--code-bg) 88%, var(--hunk-hue));
+      color: var(--code-hunk-text);
+      font-style: italic;
+    }
+
+    .diff-line--meta {
+      color: var(--code-muted);
+      font-weight: 600;
+    }
+
+    .card-files {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      align-items: baseline;
+      margin-top: 14px;
+    }
+
+    .card-files-title {
+      margin: 0;
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .comment-thread {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: var(--muted);
+    }
+
+    .comment-thread[hidden] {
+      display: none;
+    }
+
+    .comment-thread-title {
+      margin: 0 0 0.7rem;
+      color: var(--muted-foreground);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .comment-thread-list {
+      display: grid;
+      gap: 0.65rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .comment-thread-list li {
+      margin: 0;
+    }
+
+    .review-comment {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--card);
+    }
+
+    .review-comment.is-targeted {
+      border-color: var(--primary);
+    }
+
+    .comment-meta {
+      margin: 0 0 6px;
+      color: var(--foreground);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .comment-text {
+      margin: 0;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 0.35rem;
+      justify-content: flex-end;
+      margin-top: 0.65rem;
+    }
+
+    .comment-edit,
+    .comment-delete,
+    .comment-editor-action {
+      min-height: 2rem;
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-control);
+      background: var(--card);
+      color: var(--foreground);
+      cursor: pointer;
+      font-size: 0.68rem;
+      font-weight: 750;
+    }
+
+    .comment-delete:hover {
+      border-color: var(--destructive);
+      background: var(--destructive);
+      color: var(--destructive-foreground);
+    }
+
+    .comment-editor {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: var(--muted);
+    }
+
+    .comment-editor-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .comment-editor textarea {
+      display: block;
+      width: 100%;
+      min-height: 7rem;
+      resize: vertical;
+      padding: 0.7rem;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-control);
+      background: var(--card);
+      color: var(--foreground);
+      font: inherit;
+      line-height: 1.5;
+    }
+
+    .comment-editor-help {
+      margin: 0.45rem 0 0;
+      color: var(--muted-foreground);
+      font-size: 0.67rem;
+    }
+
+    .comment-editor-actions {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: flex-end;
+      margin-top: 0.7rem;
+    }
+
+    .comment-editor-action--save {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    .file-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 6px;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .file-list li {
+      min-width: 0;
+      margin: 0;
+    }
+
+    .file-list code {
+      display: inline-block;
+      max-width: 100%;
+      padding: 2px 6px;
+      overflow-wrap: anywhere;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--muted);
+      font-size: 11px;
+    }
+
+    .card-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .report-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      max-width: 980px;
+      margin: 40px auto 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-family: var(--font-sans);
+      font-size: 12px;
+    }
+
+    .status-region {
+      position: fixed;
+      z-index: 10;
+      right: 1rem;
+      bottom: 1rem;
+      max-width: min(28rem, calc(100vw - 2rem));
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--foreground);
+      pointer-events: none;
+    }
+
+    .status-region:not(:empty) {
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--card-foreground);
+    }
+
+    .manual-copy-backdrop {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(10, 15, 20, 0.72);
+    }
+
+    .manual-copy-dialog {
+      width: min(42rem, 100%);
+      max-height: calc(100vh - 2rem);
+      padding: 1.1rem;
+      overflow: auto;
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--card-foreground);
+    }
+
+    .manual-copy-title {
+      margin: 0 0 0.35rem;
+      font-family: var(--font-sans);
+      font-size: 1.45rem;
+      line-height: 1.15;
+    }
+
+    .manual-copy-instructions {
+      margin: 0 0 0.8rem;
+      color: var(--muted-foreground);
+      font-size: 0.78rem;
+    }
+
+    .manual-copy-text {
+      display: block;
+      width: 100%;
+      min-height: min(18rem, 48vh);
+      resize: vertical;
+      padding: 0.75rem;
+      border: 1px solid var(--input);
+      background: var(--background);
+      color: var(--foreground);
+      font: 0.76rem/1.5 var(--font-mono);
+      white-space: pre-wrap;
+    }
+
+    .manual-copy-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.8rem;
+    }
+
+    .quiz-question {
+      margin: 12px 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+
+    .quiz-question-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      min-width: 0;
+      margin: 0 0 0.6rem;
+      font-size: 1rem;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .quiz-question-title {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .quiz-id {
+      color: var(--muted-foreground);
+      font: 600 0.75rem/1.4 var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      min-width: 0;
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-control);
+      background: var(--background);
+      color: var(--foreground);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--input);
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .quiz-option:disabled {
+      cursor: default;
+    }
+
+    .quiz-option-marker {
+      flex-shrink: 0;
+      color: var(--muted-foreground);
+      font: 600 0.78rem/1.5 var(--font-mono);
+    }
+
+    .quiz-option-text {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .quiz-option.is-correct {
+      border-color: var(--positive);
+      background: var(--positive-soft);
+    }
+
+    .quiz-option.is-correct .quiz-option-marker {
+      color: var(--positive);
+    }
+
+    .quiz-option.is-incorrect {
+      border-color: var(--destructive);
+      background: var(--destructive-soft);
+    }
+
+    .quiz-status {
+      margin: 0.6rem 0 0;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .quiz-explanation {
+      min-width: 0;
+      margin-top: 0.65rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    /* Same disclosure marker as the summary cards, so the report has one
+       expand affordance instead of a custom chevron next to a native triangle. */
+    .quiz-explanation summary {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted-foreground);
+      font-size: 0.88rem;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .quiz-explanation summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .quiz-explanation summary::before {
+      content: "[+]";
+      color: var(--muted-foreground);
+    }
+
+    .quiz-explanation[open] summary::before {
+      content: "[-]";
+    }
+
+    .quiz-explanation p {
+      margin: 0.5rem 0 0;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        display: block;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+        max-height: 40vh;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar-resizer {
+        display: none;
+      }
+
+      .comment-list {
+        max-height: 10rem;
+      }
+
+      .section-index {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .main-column {
+        padding: 20px 16px 48px;
+      }
+
+      .topbar {
+        display: block;
+      }
+
+      .controls {
+        justify-content: flex-start;
+        margin-bottom: 16px;
+      }
+
+      .report-metadata {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .metadata-cell--wide {
+        grid-column: auto;
+      }
+
+      .card-summary {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .card-badges {
+        grid-column: 2;
+        grid-row: 2;
+        justify-content: flex-start;
+      }
+
+      .card-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .comment-actions,
+      .comment-editor-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .report-footer {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 16mm;
+      }
+
+      body,
+      body[data-default-theme="dark"]:not([data-theme]),
+      body[data-theme="dark"],
+      body[data-default-theme="auto"]:not([data-theme]) {
+        --background: #ffffff;
+        --foreground: #201d1d;
+        --card: #fdfcfc;
+        --card-foreground: #201d1d;
+        --popover: #fdfcfc;
+        --popover-foreground: #201d1d;
+        --muted: #f8f7f7;
+        --muted-foreground: #646262;
+        --primary: #201d1d;
+        --primary-foreground: #fdfcfc;
+        --secondary: #f1eeee;
+        --secondary-foreground: #302c2c;
+        --accent: #f1eeee;
+        --accent-foreground: #201d1d;
+        --destructive: #d70015;
+        --destructive-foreground: #fdfcfc;
+        --border: #e0dede;
+        --input: #646262;
+        --ring: #201d1d;
+        --status-success: #008236;
+        --status-success-soft: #f0fdf4;
+        --status-warning: #a65f00;
+        --status-warning-soft: #fefce8;
+        --status-danger: #c10007;
+        --status-danger-soft: #fef2f2;
+        --status-info: #1447e6;
+        --status-info-soft: #eff6ff;
+        --impact-high: var(--status-warning);
+        --impact-high-soft: var(--status-warning-soft);
+        --positive: var(--status-success);
+        --positive-soft: var(--status-success-soft);
+        --destructive-soft: var(--status-danger-soft);
+        --add-hue: var(--status-success);
+        --del-hue: var(--status-danger);
+        --hunk-hue: var(--status-info);
+        --shadow: none;
+        --code-bg: #ffffff;
+        --code-fg: #201d1d;
+        --code-muted: #646262;
+        --code-add-text: var(--status-success);
+        --code-del-text: var(--status-danger);
+        --code-hunk-text: var(--status-info);
+        --tok-kw: #cf222e;
+        --tok-str: #0a3069;
+        --tok-num: #0550ae;
+        --tok-com: #646262;
+        --tok-fn: #8250df;
+        --tok-type: #953800;
+        color-scheme: light;
+        background: var(--background);
+        color: var(--foreground);
+        font-size: 10pt;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      aside,
+      .sidebar-expand,
+      .topbar .controls,
+      .sidebar-resizer,
+      .skip-link,
+      .card-toolbar,
+      .comment-thread,
+      .comment-editor,
+      .comment-panel,
+      .comment-count,
+      .code-copy-btn,
+      .manual-copy-backdrop,
+      .status-region {
+        display: none !important;
+      }
+
+      .main-column {
+        padding: 0;
+        overflow: visible;
+      }
+
+      #report-main > h2 {
+        margin-top: 12mm;
+        break-after: avoid;
+      }
+
+      #report-main > .language-part[data-report-body] > h2 {
+        margin-top: 12mm;
+        break-after: avoid;
+      }
+
+      .summary-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+
+      .summary-card:not([open]) > :not(summary) {
+        display: block;
+      }
+
+      .code-block {
+        overflow: visible;
+        white-space: pre-wrap;
+      }
+
+      .code-block code,
+      .diff-line {
+        min-width: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .quiz-option[data-quiz-correct]::after {
+        content: " ✓";
+        font-weight: 700;
+      }
+
+      .quiz-status {
+        display: none !important;
+      }
+
+      .quiz-question,
+      .quiz-explanation {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body data-default-theme="__DEFAULT_THEME__">
+  <a class="skip-link" href="#report-main">Skip to report</a>
+  <button class="sidebar-expand" type="button" data-sidebar-expand aria-controls="report-sections" aria-expanded="true" title="Expand report sidebar" aria-label="Expand report sidebar"><span class="icon" aria-hidden="true">[&gt;]</span></button>
+  <div class="layout">
+    <aside data-sidebar aria-label="Report sidebar">
+      <div class="sidebar-header">
+        <button class="icon-btn" type="button" data-sidebar-toggle aria-controls="report-sections" aria-expanded="true" title="Collapse report sidebar" aria-label="Collapse report sidebar"><span class="icon" aria-hidden="true">[&lt;]</span></button>
+        <span class="brand">Diff Summary</span>
+      </div>
+      <div class="sidebar-body">
+        <div class="repo">__SIDEBAR_REPOSITORY__</div>
+        <div class="sidebar-label" data-sidebar-navigation-title>Sections</div>
+        <nav id="report-sections" class="sidebar-nav" aria-label="Report sections">
+          __SIDEBAR_NAV__
+        </nav>
+        <section class="comment-panel" aria-label="Review comments">
+          <h2 class="comment-panel-title" data-comment-panel-title>Review comments</h2>
+          <p class="comment-empty" data-comment-empty>No comments yet.</p>
+          <ol class="comment-list" data-comment-list></ol>
+        </section>
+      </div>
+      <div class="sidebar-footer" aria-label="Review actions">
+        <h2 class="sidebar-footer-label" data-sidebar-footer-title>Review actions</h2>
+        <button type="button" class="sidebar-action sidebar-action--danger" data-clear-comments aria-label="Clear all reviewer comments">Clear comments</button>
+      </div>
+      <div class="sidebar-resizer" data-sidebar-resizer role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize report sidebar" aria-valuemin="96" aria-valuemax="480" aria-valuenow="220"></div>
+    </aside>
+
+    <div class="main-column">
+      <div class="topbar">
+        <div class="controls" aria-label="Display controls">
+          __LANGUAGE_CONTROL__
+          <div class="control control--theme" role="group" data-i18n-label="theme" aria-label="Theme">
+            <button type="button" data-set-theme="auto" data-i18n-label="themeAuto" aria-label="Auto"><span class="control-text" data-i18n="themeAuto">Auto</span></button>
+            <button type="button" data-set-theme="light" data-i18n-label="themeLight" aria-label="Light"><span class="control-text" data-i18n="themeLight">Light</span></button>
+            <button type="button" data-set-theme="dark" data-i18n-label="themeDark" aria-label="Dark"><span class="control-text" data-i18n="themeDark">Dark</span></button>
+          </div>
+          <div class="control">
+            <button type="button" data-copy-feedback aria-label="Copy reviewer feedback">Copy feedback</button>
+          </div>
+          <div class="control">
+            <button type="button" data-copy-report aria-label="Copy complete report Markdown">Copy report</button>
+          </div>
+          <div class="control">
+            <button type="button" data-print-report aria-label="Print report">Print</button>
+          </div>
+        </div>
+      </div>
+      <main id="report-main" tabindex="-1">
+        __REPORT_METADATA__
+        __REPORT_BODY__
+        <footer class="report-footer">
+          <span>Generated report</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div id="report-status" class="status-region" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script id="summary-data" type="application/json">__SUMMARY_DATA__</script>
+  <script id="raw-markdown" type="application/json">__RAW_MARKDOWN__</script>
+  <script id="comment-scope" type="application/json">__COMMENT_SCOPE__</script>
+  <script data-diff-summary-runtime>
+    (() => {
+      "use strict";
+
+      const root = document.documentElement;
+      const body = document.body;
+      const rail = document.querySelector("aside[data-sidebar]");
+      const statusRegion = document.getElementById("report-status");
+      const sidebarToggle = document.querySelector("[data-sidebar-toggle]");
+      const sidebarExpand = document.querySelector("[data-sidebar-expand]");
+      const sidebarResizer = document.querySelector("[data-sidebar-resizer]");
+      let language = (root.lang || "").toLowerCase().startsWith("ko")
+        ? "ko"
+        : "en";
+      const messages = {
+        en: {
+          dataError: "Some embedded report data could not be read. The report remains available.",
+          language: "Language",
+          skipToReport: "Skip to report",
+          storageUnavailable: "Browser storage is unavailable. Changes will remain in this tab only.",
+          commentsReset: "Invalid saved comments were reset.",
+          collapseSidebar: "Collapse report sidebar",
+          expandSidebar: "Expand report sidebar",
+          sidebarNavigation: "Sections",
+          displayControls: "Display controls",
+          commentsHeading: "Review comments",
+          noComments: "No comments yet.",
+          reviewActions: "Review actions",
+          copyFeedback: "Copy feedback",
+          copyFeedbackLabel: "Copy reviewer feedback",
+          copyReport: "Copy report",
+          copyReportLabel: "Copy complete report Markdown",
+          printReport: "Print",
+          printReportLabel: "Print report",
+          clearComments: "Clear comments",
+          clearCommentsLabel: "Clear all reviewer comments",
+          resizeSidebar: "Resize report sidebar",
+          addComment: "Add comment",
+          addCommentLabel: (summaryId) => `Add comment to ${summaryId}`,
+          copyMarkdown: "Copy Markdown",
+          copyMarkdownLabel: (summaryId) => `Copy ${summaryId} Markdown`,
+          copyCode: "Copy",
+          copiedCode: "Copied!",
+          copyCodeLabel: "Copy code block",
+          files: "Files",
+          comments: "Comments",
+          commentCount: (count) => `${count} ${count === 1 ? "comment" : "comments"}`,
+          commentEditor: (summaryId, editing) =>
+            `${editing ? "Edit" : "Add"} comment for ${summaryId}`,
+          editorHelp: "Escape cancels. Command or Control + Enter saves.",
+          save: "Save comment",
+          cancel: "Cancel",
+          edit: "Edit",
+          editLabel: (summaryId) => `Edit comment on ${summaryId}`,
+          delete: "Delete",
+          deleteLabel: (summaryId) => `Delete comment on ${summaryId}`,
+          commentSaved: "Comment saved.",
+          commentEmpty: "Enter a comment before saving.",
+          commentDeleted: "Comment deleted.",
+          deleteConfirm: "Delete this reviewer comment?",
+          clearConfirm: "Clear all reviewer comments for this report?",
+          commentsCleared: "All reviewer comments were cleared.",
+          nothingToClear: "There are no reviewer comments to clear.",
+          copiedSummary: "Card Markdown copied.",
+          copiedReport: "Report Markdown copied.",
+          copiedFeedback: "Reviewer feedback copied.",
+          copiedNoComments: "Regeneration request copied with a no-comments note.",
+          copyFailed: "Copy failed. Select and copy the text manually.",
+          manualCopyTitle: "Copy manually",
+          manualCopyInstructions:
+            "Automatic copy was blocked. The complete text is selected below; copy it with your keyboard, then dismiss this dialog.",
+          manualCopyTextLabel: "Text to copy manually",
+          manualCopyDismiss: "Dismiss",
+          feedbackIntro: "Regenerate this diff summary using the reviewer feedback below.",
+          feedbackInstruction:
+            "Preserve the requested Git scope and update only what the feedback requires.",
+          reportContext: "Report context",
+          noCommentsPayload:
+            "No reviewer comments were recorded. Regenerate the diff summary without comment-driven changes.",
+          originalCard: "Exact original card Markdown",
+          reviewerComments: "Reviewer comments",
+          reviewerComment: "Reviewer comment",
+          jumpLabel: (summaryId, text) => `Jump to ${summaryId} comment: ${text}`,
+          quizCorrect: "Correct.",
+          quizIncorrect: (correctLabel) => `Not quite. The correct answer is ${correctLabel}.`,
+          quizExplanation: "Explanation",
+          quizOptionLabel: (quizId, letter, text) =>
+            `Answer option ${letter} for ${quizId}: ${text}`,
+          quizCorrectAnswerLabel: (optionLabel) => `${optionLabel}. Correct answer.`,
+          themeGroup: "Theme",
+          theme: {
+            auto: "Auto",
+            light: "Light",
+            dark: "Dark",
+          },
+          themeLabel: {
+            auto: "Follow the system color theme",
+            light: "Use the light color theme",
+            dark: "Use the dark color theme",
+          },
+        },
+        ko: {
+          dataError: "보고서 내장 데이터 일부를 읽지 못했습니다. 보고서 내용은 계속 볼 수 있습니다.",
+          language: "언어",
+          skipToReport: "보고서로 건너뛰기",
+          storageUnavailable: "브라우저 저장소를 사용할 수 없어 변경 사항이 현재 탭에만 유지됩니다.",
+          commentsReset: "잘못 저장된 댓글을 초기화했습니다.",
+          collapseSidebar: "보고서 사이드바 접기",
+          expandSidebar: "보고서 사이드바 펼치기",
+          sidebarNavigation: "보고서 목차",
+          displayControls: "화면 설정",
+          commentsHeading: "검토 댓글",
+          noComments: "아직 댓글이 없습니다.",
+          reviewActions: "검토 작업",
+          copyFeedback: "피드백 복사",
+          copyFeedbackLabel: "검토자 피드백 복사",
+          copyReport: "보고서 복사",
+          copyReportLabel: "전체 보고서 Markdown 복사",
+          printReport: "인쇄",
+          printReportLabel: "보고서 인쇄",
+          clearComments: "댓글 모두 삭제",
+          clearCommentsLabel: "검토 댓글 모두 삭제",
+          resizeSidebar: "보고서 사이드바 너비 조절",
+          addComment: "댓글 추가",
+          addCommentLabel: (summaryId) => `${summaryId}에 댓글 추가`,
+          copyMarkdown: "Markdown 복사",
+          copyMarkdownLabel: (summaryId) => `${summaryId} Markdown 복사`,
+          copyCode: "복사",
+          copiedCode: "복사됨!",
+          copyCodeLabel: "코드 블록 복사",
+          files: "파일",
+          comments: "댓글",
+          commentCount: (count) => `댓글 ${count}개`,
+          commentEditor: (summaryId, editing) =>
+            `${summaryId} 댓글 ${editing ? "수정" : "추가"}`,
+          editorHelp: "Escape로 취소하고 Command 또는 Control + Enter로 저장합니다.",
+          save: "댓글 저장",
+          cancel: "취소",
+          edit: "수정",
+          editLabel: (summaryId) => `${summaryId} 댓글 수정`,
+          delete: "삭제",
+          deleteLabel: (summaryId) => `${summaryId} 댓글 삭제`,
+          commentSaved: "댓글을 저장했습니다.",
+          commentEmpty: "저장할 댓글을 입력하세요.",
+          commentDeleted: "댓글을 삭제했습니다.",
+          deleteConfirm: "이 검토 댓글을 삭제할까요?",
+          clearConfirm: "이 보고서의 검토 댓글을 모두 삭제할까요?",
+          commentsCleared: "검토 댓글을 모두 삭제했습니다.",
+          nothingToClear: "삭제할 검토 댓글이 없습니다.",
+          copiedSummary: "카드 Markdown을 복사했습니다.",
+          copiedReport: "보고서 Markdown을 복사했습니다.",
+          copiedFeedback: "검토자 피드백을 복사했습니다.",
+          copiedNoComments: "댓글 없음 안내를 포함한 재생성 요청을 복사했습니다.",
+          copyFailed: "복사하지 못했습니다. 텍스트를 직접 선택해 복사하세요.",
+          manualCopyTitle: "직접 복사",
+          manualCopyInstructions:
+            "자동 복사가 차단되었습니다. 아래 전체 텍스트가 선택되어 있으니 키보드로 복사한 뒤 이 대화상자를 닫으세요.",
+          manualCopyTextLabel: "직접 복사할 텍스트",
+          manualCopyDismiss: "닫기",
+          feedbackIntro: "아래 검토자 피드백을 반영하여 diff summary를 다시 생성해주세요.",
+          feedbackInstruction: "요청된 Git 범위를 유지하고 피드백에 필요한 내용만 변경해주세요.",
+          reportContext: "보고서 범위 정보",
+          noCommentsPayload:
+            "기록된 검토자 댓글이 없습니다. 댓글로 인한 변경 없이 diff summary를 다시 생성해주세요.",
+          originalCard: "원본 카드 Markdown 원문",
+          reviewerComments: "검토자 댓글",
+          reviewerComment: "검토자 댓글",
+          jumpLabel: (summaryId, text) => `${summaryId} 댓글로 이동: ${text}`,
+          quizCorrect: "정답입니다.",
+          quizIncorrect: (correctLabel) => `오답입니다. 정답은 ${correctLabel}입니다.`,
+          quizExplanation: "해설",
+          quizOptionLabel: (quizId, letter, text) =>
+            `${quizId} 선택지 ${letter}: ${text}`,
+          quizCorrectAnswerLabel: (optionLabel) => `${optionLabel}. 정답입니다.`,
+          themeGroup: "테마",
+          theme: {
+            auto: "자동",
+            light: "밝게",
+            dark: "어둡게",
+          },
+          themeLabel: {
+            auto: "시스템 색상 테마를 따릅니다",
+            light: "밝은 색상 테마를 사용합니다",
+            dark: "어두운 색상 테마를 사용합니다",
+          },
+        },
+      };
+      let strings = messages[language] || messages.en;
+
+      let storageFailureAnnounced = false;
+      let comments = [];
+      let activeEditor = null;
+      let manualCopyDialog = null;
+      let manualCopyTextarea = null;
+      let manualCopyPreviousFocus = null;
+      let currentTheme = body.dataset.defaultTheme || "auto";
+      let currentSidebarCollapsed = false;
+      let currentSidebarWidth = 220;
+
+      function announce(message, tone = "info") {
+        if (!statusRegion) {
+          return;
+        }
+        statusRegion.textContent = message;
+        statusRegion.dataset.tone = tone;
+      }
+
+      function readJsonPayload(elementId) {
+        try {
+          const element = document.getElementById(elementId);
+          if (!element) {
+            throw new Error(`Missing embedded payload: ${elementId}`);
+          }
+          return { ok: true, value: JSON.parse(element.textContent || "") };
+        } catch (error) {
+          announce(strings.dataError, "error");
+          return { ok: false, value: null };
+        }
+      }
+
+      function safeStorageGet(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (error) {
+          if (!storageFailureAnnounced) {
+            announce(strings.storageUnavailable, "warning");
+            storageFailureAnnounced = true;
+          }
+          return null;
+        }
+      }
+
+      function safeStorageSet(key, value) {
+        try {
+          localStorage.setItem(key, value);
+          return true;
+        } catch (error) {
+          if (!storageFailureAnnounced) {
+            announce(strings.storageUnavailable, "warning");
+            storageFailureAnnounced = true;
+          }
+          return false;
+        }
+      }
+
+      function safeStorageRemove(key) {
+        try {
+          localStorage.removeItem(key);
+          return true;
+        } catch (error) {
+          if (!storageFailureAnnounced) {
+            announce(strings.storageUnavailable, "warning");
+            storageFailureAnnounced = true;
+          }
+          return false;
+        }
+      }
+
+      const summaryPayload = readJsonPayload("summary-data");
+      const rawMarkdownPayload = readJsonPayload("raw-markdown");
+      const commentScopePayload = readJsonPayload("comment-scope");
+      const embeddedSummaryData = summaryPayload.value;
+      const embeddedRawMarkdown = rawMarkdownPayload.value;
+      const embeddedCommentScope = commentScopePayload.value;
+      const isSummaryList = (value) =>
+        Array.isArray(value) &&
+        value.every(
+          (card) =>
+            card &&
+            typeof card === "object" &&
+            typeof card.id === "string" &&
+            typeof card.title === "string" &&
+            typeof card.markdown === "string",
+        );
+      const summaryDataByLanguage =
+        Array.isArray(embeddedSummaryData)
+          ? { [language]: embeddedSummaryData }
+          : embeddedSummaryData &&
+              typeof embeddedSummaryData === "object" &&
+              !Array.isArray(embeddedSummaryData)
+            ? embeddedSummaryData
+            : {};
+      const rawMarkdownByLanguage =
+        typeof embeddedRawMarkdown === "string"
+          ? { [language]: embeddedRawMarkdown }
+          : embeddedRawMarkdown &&
+              typeof embeddedRawMarkdown === "object" &&
+              !Array.isArray(embeddedRawMarkdown)
+            ? embeddedRawMarkdown
+            : {};
+      const supportedLanguages = Object.keys(summaryDataByLanguage).filter(
+        (code) =>
+          (code === "ko" || code === "en") &&
+          isSummaryList(summaryDataByLanguage[code]) &&
+          typeof rawMarkdownByLanguage[code] === "string",
+      );
+      const summaryPayloadValid =
+        summaryPayload.ok &&
+        rawMarkdownPayload.ok &&
+        supportedLanguages.length > 0 &&
+        supportedLanguages.length === Object.keys(summaryDataByLanguage).length &&
+        supportedLanguages.length === Object.keys(rawMarkdownByLanguage).length;
+      const commentScope =
+        commentScopePayload.ok &&
+        typeof embeddedCommentScope === "string" &&
+        embeddedCommentScope.trim()
+          ? embeddedCommentScope
+          : null;
+      if (!supportedLanguages.includes(language) && supportedLanguages.length > 0) {
+        language = supportedLanguages[0];
+        strings = messages[language] || messages.en;
+      }
+      let summaryData = [];
+      let rawMarkdown = null;
+      let cardsById = new Map();
+      let cardElements = [];
+      let cardElementsById = new Map();
+      let interactionsReady = false;
+      let reportContext = {
+        repository: "",
+        scope: "",
+        command: "",
+        head: "",
+      };
+      let quizQuestionElements = [];
+      let quizQuestionsById = new Map();
+
+      function activeReportRoot() {
+        const bodies = Array.from(document.querySelectorAll("[data-report-body]"));
+        return (
+          bodies.find(
+            (candidate) =>
+              candidate.dataset.languagePart === language && !candidate.hidden,
+          ) || document
+        );
+      }
+
+      function activeMetadataRoot() {
+        const metadataParts = Array.from(
+          document.querySelectorAll("[data-report-title]"),
+        );
+        return (
+          metadataParts.find(
+            (candidate) =>
+              candidate.dataset.languagePart === language && !candidate.hidden,
+          ) || document
+        );
+      }
+
+      function refreshActiveReportState() {
+        const reportRoot = activeReportRoot();
+        const metadataRoot = activeMetadataRoot();
+        summaryData =
+          summaryPayloadValid && isSummaryList(summaryDataByLanguage[language])
+            ? summaryDataByLanguage[language]
+            : [];
+        rawMarkdown =
+          summaryPayloadValid && typeof rawMarkdownByLanguage[language] === "string"
+            ? rawMarkdownByLanguage[language]
+            : null;
+        cardsById = new Map(summaryData.map((card) => [card.id, card]));
+        cardElements = Array.from(
+          reportRoot.querySelectorAll(".summary-card[data-summary-id]"),
+        );
+        cardElementsById = new Map(
+          cardElements.map((card) => [card.dataset.summaryId, card]),
+        );
+        const payloadCardIds = summaryData.map((card) => card.id);
+        const domCardIds = cardElements.map((card) => card.dataset.summaryId);
+        const payloadCardIdSet = new Set(payloadCardIds);
+        const domCardIdSet = new Set(domCardIds);
+        interactionsReady =
+          summaryPayloadValid &&
+          commentScope !== null &&
+          payloadCardIds.length === domCardIds.length &&
+          payloadCardIdSet.size === payloadCardIds.length &&
+          domCardIdSet.size === domCardIds.length &&
+          payloadCardIds.every((summaryId) => domCardIdSet.has(summaryId));
+        body.dataset.interactionsReady = String(interactionsReady);
+
+        const metadataValues = new Map(
+          Array.from(metadataRoot.querySelectorAll(".metadata-cell"), (cell) => [
+            (cell.querySelector("dt") || {}).textContent || "",
+            (cell.querySelector("dd") || {}).textContent || "",
+          ]),
+        );
+        const reportHeader = metadataRoot.querySelector(".report-header");
+        reportContext = {
+          repository: reportHeader ? reportHeader.dataset.repository || "" : "",
+          scope: reportHeader ? reportHeader.dataset.scope || "" : "",
+          command: metadataValues.get("Command") || "",
+          head: metadataValues.get("HEAD") || "",
+        };
+        quizQuestionElements = Array.from(
+          reportRoot.querySelectorAll(".quiz-question[data-quiz-id]"),
+        );
+        quizQuestionsById = new Map(
+          quizQuestionElements.map((question) => [question.dataset.quizId, question]),
+        );
+      }
+
+      refreshActiveReportState();
+      if (!interactionsReady || rawMarkdown === null) {
+        announce(strings.dataError, "error");
+      }
+      const commentStorageKey =
+        interactionsReady ? "diff-summary:comments:" + commentScope : null;
+      const THEME_KEY = "diff-summary:theme";
+      const LANGUAGE_KEY = "diff-summary:language";
+      const SIDEBAR_COLLAPSED_KEY = "diff-summary:sidebar:collapsed";
+      const SIDEBAR_WIDTH_KEY = "diff-summary:sidebar:width";
+      const SIDEBAR_MIN = 96;
+      const SIDEBAR_MAX = 480;
+      const THEME_ORDER = ["auto", "light", "dark"];
+
+      function normalizeComment(record) {
+        if (!record || typeof record !== "object") {
+          return null;
+        }
+        if (
+          typeof record.id !== "string" ||
+          !record.id.trim() ||
+          typeof record.summaryId !== "string" ||
+          !cardsById.has(record.summaryId) ||
+          typeof record.text !== "string" ||
+          !record.text.trim() ||
+          !Number.isFinite(record.createdAt) ||
+          !Number.isFinite(record.updatedAt) ||
+          !Number.isFinite(new Date(record.createdAt).getTime()) ||
+          !Number.isFinite(new Date(record.updatedAt).getTime())
+        ) {
+          return null;
+        }
+        return {
+          id: record.id.trim(),
+          summaryId: record.summaryId,
+          text: record.text.trim(),
+          createdAt: record.createdAt,
+          updatedAt: record.updatedAt,
+        };
+      }
+
+      function loadComments() {
+        if (!commentStorageKey) {
+          return [];
+        }
+        const serialized = safeStorageGet(commentStorageKey);
+        if (serialized === null) {
+          return [];
+        }
+        try {
+          const parsed = JSON.parse(serialized);
+          if (!Array.isArray(parsed)) {
+            throw new Error("Saved comments must be an array");
+          }
+          const seenIds = new Set();
+          const validComments = [];
+          parsed.forEach((record) => {
+            const comment = normalizeComment(record);
+            if (comment && !seenIds.has(comment.id)) {
+              seenIds.add(comment.id);
+              validComments.push(comment);
+            }
+          });
+          return validComments;
+        } catch (error) {
+          if (safeStorageRemove(commentStorageKey)) {
+            announce(strings.commentsReset, "warning");
+          }
+          return [];
+        }
+      }
+
+      function saveComments() {
+        renderComments();
+        if (!commentStorageKey) {
+          return false;
+        }
+        return safeStorageSet(commentStorageKey, JSON.stringify(comments));
+      }
+
+      function createButton(className, text, label) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = className;
+        button.textContent = text;
+        button.setAttribute("aria-label", label);
+        return button;
+      }
+
+      function setInteractionControlsEnabled(enabled) {
+        ("[data-add-comment],[data-copy-feedback],[data-clear-comments]")
+          .split(",")
+          .forEach((selector) => {
+            document.querySelectorAll(selector).forEach((control) => {
+              control.disabled = !enabled;
+              control.setAttribute("aria-disabled", String(!enabled));
+            });
+          });
+      }
+
+      function formatCommentDate(timestamp) {
+        try {
+          return new Intl.DateTimeFormat(language === "ko" ? "ko-KR" : "en", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }).format(new Date(timestamp));
+        } catch (error) {
+          return String(timestamp);
+        }
+      }
+
+      function renderComments() {
+        if (!interactionsReady) {
+          return;
+        }
+        document.querySelectorAll(".comment-thread").forEach((thread) => thread.remove());
+        summaryData.forEach((card) => {
+          const cardElement = cardElementsById.get(card.id);
+          if (!cardElement) {
+            return;
+          }
+          const previousThread = cardElement.querySelector(".comment-thread");
+          if (previousThread) {
+            previousThread.remove();
+          }
+
+          const cardComments = comments.filter((comment) => comment.summaryId === card.id);
+          const toolbar = cardElement.querySelector(".card-toolbar");
+          const panel = toolbar ? toolbar.parentNode : null;
+          if (toolbar && panel) {
+            const thread = document.createElement("section");
+            const heading = document.createElement("h4");
+            const list = document.createElement("ol");
+            const headingId = `${language}--comment-thread-title-${card.id}`;
+            thread.className = "comment-thread";
+            thread.hidden = cardComments.length === 0;
+            thread.setAttribute("aria-labelledby", headingId);
+            heading.id = headingId;
+            heading.className = "comment-thread-title";
+            heading.textContent = `${strings.comments} · ${cardComments.length}`;
+            list.className = "comment-thread-list";
+
+            cardComments.forEach((comment) => {
+              const item = document.createElement("li");
+              const article = document.createElement("article");
+              const meta = document.createElement("p");
+              const text = document.createElement("p");
+              const actions = document.createElement("div");
+              const editButton = createButton(
+                "comment-edit",
+                strings.edit,
+                strings.editLabel(card.id),
+              );
+              const deleteButton = createButton(
+                "comment-delete",
+                strings.delete,
+                strings.deleteLabel(card.id),
+              );
+              article.className = "review-comment";
+              article.dataset.commentId = comment.id;
+              article.tabIndex = -1;
+              meta.className = "comment-meta";
+              meta.textContent = formatCommentDate(comment.updatedAt);
+              text.className = "comment-text";
+              text.textContent = comment.text;
+              actions.className = "comment-actions";
+              editButton.addEventListener("click", () => editComment(comment.id, editButton));
+              deleteButton.addEventListener("click", () => deleteComment(comment.id));
+              actions.append(editButton, deleteButton);
+              article.append(meta, text, actions);
+              item.append(article);
+              list.append(item);
+            });
+            thread.append(heading, list);
+            panel.insertBefore(thread, toolbar);
+          }
+
+          const count = cardElement.querySelector("[data-comment-count]");
+          if (count) {
+            count.textContent = String(cardComments.length);
+            count.setAttribute("data-count", String(cardComments.length));
+            count.setAttribute("aria-label", strings.commentCount(cardComments.length));
+          }
+        });
+
+        const sidebarList = document.querySelector("[data-comment-list]");
+        const emptyState = document.querySelector("[data-comment-empty]");
+        if (sidebarList) {
+          sidebarList.replaceChildren();
+          comments.forEach((comment) => {
+            const card = cardsById.get(comment.summaryId);
+            if (!card) {
+              return;
+            }
+            const item = document.createElement("li");
+            const preview = comment.text.replace(/\s+/g, " ").slice(0, 80);
+            const jumpButton = createButton(
+              "comment-jump",
+              `${card.id} · ${preview}`,
+              strings.jumpLabel(card.id, preview),
+            );
+            jumpButton.addEventListener("click", () => jumpToComment(comment.id));
+            item.append(jumpButton);
+            sidebarList.append(item);
+          });
+        }
+        if (emptyState) {
+          emptyState.hidden = comments.length !== 0;
+          emptyState.textContent = strings.noComments;
+        }
+      }
+
+      function closeCommentEditor(restoreFocus = true) {
+        const trigger = activeEditor ? activeEditor.trigger : null;
+        if (activeEditor && activeEditor.element.isConnected) {
+          activeEditor.element.remove();
+        }
+        activeEditor = null;
+        if (
+          restoreFocus &&
+          trigger &&
+          trigger.isConnected &&
+          typeof trigger.focus === "function"
+        ) {
+          trigger.focus({ preventScroll: true });
+        }
+      }
+
+      function createCommentId() {
+        let candidate = "";
+        if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
+          candidate = crypto.randomUUID();
+        } else {
+          candidate = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+        }
+        while (comments.some((comment) => comment.id === candidate)) {
+          candidate = `${candidate}-${Math.random().toString(36).slice(2, 8)}`;
+        }
+        return candidate;
+      }
+
+      function openCommentEditor(summaryId, commentId = null, trigger = document.activeElement) {
+        if (!interactionsReady) {
+          return;
+        }
+        const cardElement = cardElementsById.get(summaryId);
+        const existing = commentId
+          ? comments.find((comment) => comment.id === commentId) || null
+          : null;
+        if (!cardElement || (commentId && !existing)) {
+          return;
+        }
+        closeCommentEditor(false);
+        cardElement.open = true;
+        const toolbar = cardElement.querySelector(".card-toolbar");
+        if (!toolbar || !toolbar.parentNode) {
+          return;
+        }
+
+        const editor = document.createElement("div");
+        const label = document.createElement("label");
+        const textarea = document.createElement("textarea");
+        const help = document.createElement("p");
+        const actions = document.createElement("div");
+        const saveButton = createButton(
+          "comment-editor-action comment-editor-action--save",
+          strings.save,
+          strings.save,
+        );
+        const cancelButton = createButton(
+          "comment-editor-action",
+          strings.cancel,
+          strings.cancel,
+        );
+        const editorId = `${language}--comment-editor-${summaryId}`;
+        editor.className = "comment-editor";
+        label.className = "comment-editor-label";
+        label.htmlFor = editorId;
+        label.textContent = strings.commentEditor(summaryId, Boolean(existing));
+        textarea.id = editorId;
+        textarea.value = existing ? existing.text : "";
+        textarea.rows = 5;
+        help.className = "comment-editor-help";
+        help.textContent = strings.editorHelp;
+        actions.className = "comment-editor-actions";
+        actions.append(cancelButton, saveButton);
+        editor.append(label, textarea, help, actions);
+        toolbar.parentNode.insertBefore(editor, toolbar);
+        activeEditor = { element: editor, summaryId, commentId, trigger };
+
+        const commit = () => {
+          const text = textarea.value.trim();
+          if (!text) {
+            announce(strings.commentEmpty, "warning");
+            return;
+          }
+          const now = Date.now();
+          if (existing) {
+            const index = comments.findIndex((comment) => comment.id === existing.id);
+            if (index === -1) {
+              return;
+            }
+            comments[index] = {
+              id: existing.id,
+              summaryId: existing.summaryId,
+              text,
+              createdAt: existing.createdAt,
+              updatedAt: Math.max(now, existing.updatedAt + 1),
+            };
+          } else {
+            comments.push({
+              id: createCommentId(),
+              summaryId,
+              text,
+              createdAt: now,
+              updatedAt: now,
+            });
+          }
+          const addCommentTrigger = cardElement.querySelector("[data-add-comment]");
+          closeCommentEditor(false);
+          const saved = saveComments();
+          const focusTarget =
+            addCommentTrigger && addCommentTrigger.isConnected
+              ? addCommentTrigger
+              : trigger;
+          if (
+            focusTarget &&
+            focusTarget.isConnected &&
+            typeof focusTarget.focus === "function"
+          ) {
+            focusTarget.focus({ preventScroll: true });
+          }
+          if (saved) {
+            announce(strings.commentSaved, "success");
+          }
+        };
+        activeEditor.textarea = textarea;
+        activeEditor.commit = commit;
+
+        cancelButton.addEventListener("click", () => closeCommentEditor());
+        saveButton.addEventListener("click", commit);
+        textarea.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            closeCommentEditor();
+          } else if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+            event.preventDefault();
+            commit();
+          }
+        });
+        textarea.focus();
+      }
+
+      function editComment(commentId, trigger = document.activeElement) {
+        const comment = comments.find((candidate) => candidate.id === commentId);
+        if (comment) {
+          openCommentEditor(comment.summaryId, comment.id, trigger);
+        }
+      }
+
+      function deleteComment(commentId) {
+        if (!interactionsReady) {
+          return;
+        }
+        const comment = comments.find((candidate) => candidate.id === commentId);
+        if (!comment || !window.confirm(strings.deleteConfirm)) {
+          return;
+        }
+        if (activeEditor && activeEditor.commentId === commentId) {
+          closeCommentEditor(false);
+        }
+        comments = comments.filter((candidate) => candidate.id !== commentId);
+        if (saveComments()) {
+          announce(strings.commentDeleted, "success");
+        }
+      }
+
+      function clearComments() {
+        if (!interactionsReady) {
+          return;
+        }
+        if (comments.length === 0) {
+          renderComments();
+          if (!commentStorageKey) {
+            return;
+          }
+          if (safeStorageRemove(commentStorageKey)) {
+            announce(strings.nothingToClear, "info");
+          }
+          return;
+        }
+        if (!window.confirm(strings.clearConfirm)) {
+          return;
+        }
+        closeCommentEditor(false);
+        comments = [];
+        renderComments();
+        if (commentStorageKey && safeStorageRemove(commentStorageKey)) {
+          announce(strings.commentsCleared, "success");
+        }
+      }
+
+      function jumpToComment(commentId) {
+        if (!interactionsReady) {
+          return;
+        }
+        const comment = comments.find((candidate) => candidate.id === commentId);
+        if (!comment) {
+          return;
+        }
+        const cardElement = cardElementsById.get(comment.summaryId);
+        if (!cardElement) {
+          return;
+        }
+        cardElement.open = true;
+        cardElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        const cardSummary = cardElement.querySelector(".card-summary");
+        const targetComment = Array.from(
+          cardElement.querySelectorAll(".review-comment[data-comment-id]"),
+        ).find((element) => element.dataset.commentId === commentId);
+        if (targetComment) {
+          targetComment.classList.add("is-targeted");
+          targetComment.scrollIntoView({ behavior: "smooth", block: "center" });
+          targetComment.focus({ preventScroll: true });
+          setTimeout(() => targetComment.classList.remove("is-targeted"), 1400);
+        } else if (cardSummary) {
+          cardSummary.focus({ preventScroll: true });
+        }
+      }
+
+      function buildFeedbackMarkdown() {
+        if (!interactionsReady) {
+          return "";
+        }
+        const context = [
+          `## ${strings.reportContext}`,
+          `- Repository: ${reportContext.repository}`,
+          `- Scope: ${reportContext.scope}`,
+          `- Command: ${reportContext.command}`,
+          `- HEAD: ${reportContext.head}`,
+        ].join("\n");
+        const commentedCards = summaryData.filter((card) =>
+          comments.some((comment) => comment.summaryId === card.id),
+        );
+        if (commentedCards.length === 0) {
+          return [strings.feedbackIntro, strings.noCommentsPayload, context].join("\n\n");
+        }
+        const sections = [strings.feedbackIntro, strings.feedbackInstruction, context];
+        commentedCards.forEach((card) => {
+          const cardComments = comments.filter((comment) => comment.summaryId === card.id);
+          sections.push(`## ${card.id} — ${card.title}`);
+          sections.push(`### ${strings.originalCard}`);
+          sections.push(card.markdown);
+          sections.push(`### ${strings.reviewerComments}`);
+          cardComments.forEach((comment, index) => {
+            sections.push(`#### ${strings.reviewerComment} ${index + 1}\n\n${comment.text}`);
+          });
+        });
+        return sections.join("\n\n");
+      }
+
+      let quizPrintOpenStates = null;
+
+      function prepareQuizForPrint() {
+        if (quizPrintOpenStates !== null) {
+          return;
+        }
+        const explanations = Array.from(
+          activeReportRoot().querySelectorAll(".quiz-explanation"),
+        );
+        quizPrintOpenStates = explanations.map((explanation) => explanation.open);
+        explanations.forEach((explanation) => {
+          explanation.open = true;
+        });
+      }
+
+      function restoreQuizAfterPrint() {
+        if (quizPrintOpenStates === null) {
+          return;
+        }
+        const explanations = Array.from(
+          activeReportRoot().querySelectorAll(".quiz-explanation"),
+        );
+        explanations.forEach((explanation, index) => {
+          explanation.open = Boolean(quizPrintOpenStates[index]);
+        });
+        quizPrintOpenStates = null;
+      }
+
+      window.addEventListener("beforeprint", prepareQuizForPrint);
+      window.addEventListener("afterprint", restoreQuizAfterPrint);
+
+      function answerQuiz(quizId, optionIndex) {
+        const question = quizQuestionsById.get(quizId);
+        if (!question || question.dataset.quizAnswered === "true") {
+          return false;
+        }
+        const options = Array.from(question.querySelectorAll("[data-quiz-option]"));
+        const chosen = options.find(
+          (option) => Number(option.dataset.quizOption) === optionIndex,
+        );
+        if (!chosen) {
+          return false;
+        }
+        question.dataset.quizAnswered = "true";
+        const isCorrect = chosen.dataset.quizCorrect !== undefined;
+        const correctOption = options.find(
+          (option) => option.dataset.quizCorrect !== undefined,
+        );
+        options.forEach((option) => {
+          option.disabled = true;
+          option.setAttribute("aria-disabled", "true");
+          option.setAttribute("aria-pressed", option === chosen ? "true" : "false");
+          if (option.dataset.quizCorrect !== undefined) {
+            option.classList.add("is-correct");
+          }
+        });
+        let correctLabel = "";
+        if (correctOption) {
+          const correctNumber = Number(correctOption.dataset.quizOption);
+          const correctLetter = Number.isFinite(correctNumber)
+            ? String.fromCharCode(65 + correctNumber)
+            : "";
+          correctLabel = correctOption.dataset.quizLabel || correctLetter;
+          const accessibleLabel = strings.quizOptionLabel(
+            quizId,
+            correctLetter,
+            correctLabel,
+          );
+          correctOption.setAttribute(
+            "aria-label",
+            strings.quizCorrectAnswerLabel(accessibleLabel),
+          );
+        }
+        chosen.classList.add("is-selected");
+        if (!isCorrect) {
+          chosen.classList.add("is-incorrect");
+        }
+        const quizStatus = question.querySelector("[data-quiz-status]");
+        if (quizStatus) {
+          quizStatus.hidden = false;
+          quizStatus.textContent = isCorrect
+            ? strings.quizCorrect
+            : strings.quizIncorrect(correctLabel);
+          quizStatus.dataset.tone = isCorrect ? "success" : "error";
+        }
+        const explanation = question.querySelector(".quiz-explanation");
+        if (explanation) {
+          explanation.open = true;
+        }
+        return isCorrect;
+      }
+
+      function dismissManualCopy(restoreFocus = true) {
+        const previousFocus = manualCopyPreviousFocus;
+        if (manualCopyDialog) {
+          manualCopyDialog.remove();
+        }
+        manualCopyDialog = null;
+        manualCopyTextarea = null;
+        manualCopyPreviousFocus = null;
+        if (
+          restoreFocus &&
+          previousFocus &&
+          previousFocus.isConnected &&
+          typeof previousFocus.focus === "function"
+        ) {
+          previousFocus.focus({ preventScroll: true });
+        }
+      }
+
+      function showManualCopy(text, previousFocus) {
+        dismissManualCopy(false);
+        const backdrop = document.createElement("div");
+        const dialog = document.createElement("section");
+        const title = document.createElement("h2");
+        const instructions = document.createElement("p");
+        const textarea = document.createElement("textarea");
+        const actions = document.createElement("div");
+        const dismissButton = createButton(
+          "card-action",
+          strings.manualCopyDismiss,
+          strings.manualCopyDismiss,
+        );
+        backdrop.className = "manual-copy-backdrop";
+        backdrop.dataset.manualCopyDialog = "";
+        dialog.className = "manual-copy-dialog";
+        dialog.setAttribute("role", "dialog");
+        dialog.setAttribute("aria-modal", "true");
+        dialog.setAttribute("aria-label", strings.manualCopyTitle);
+        title.className = "manual-copy-title";
+        title.textContent = strings.manualCopyTitle;
+        instructions.className = "manual-copy-instructions";
+        instructions.textContent = strings.manualCopyInstructions;
+        textarea.className = "manual-copy-text";
+        textarea.dataset.manualCopyText = "";
+        textarea.value = text;
+        textarea.readOnly = true;
+        textarea.setAttribute("readonly", "");
+        textarea.setAttribute("aria-label", strings.manualCopyTextLabel);
+        actions.className = "manual-copy-actions";
+        dismissButton.dataset.manualCopyDismiss = "";
+        dismissButton.addEventListener("click", () => dismissManualCopy());
+        dialog.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            dismissManualCopy();
+          }
+        });
+        actions.append(dismissButton);
+        dialog.append(title, instructions, textarea, actions);
+        backdrop.append(dialog);
+        body.append(backdrop);
+        manualCopyDialog = backdrop;
+        manualCopyTextarea = textarea;
+        manualCopyPreviousFocus = previousFocus;
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+      }
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.setAttribute("aria-hidden", "true");
+        textarea.style.position = "fixed";
+        textarea.style.inset = "0 auto auto -9999px";
+        body.append(textarea);
+        let copied = false;
+        try {
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, textarea.value.length);
+          copied = document.execCommand("copy") === true;
+        } catch (error) {
+          copied = false;
+        } finally {
+          textarea.remove();
+        }
+        return copied;
+      }
+
+      async function copyText(text, successMessage, failureMessage) {
+        const copyOrigin = document.activeElement;
+        let copied = false;
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          try {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          } catch (error) {
+            copied = false;
+          }
+        }
+        if (!copied) {
+          copied = fallbackCopy(text);
+        }
+        if (copied) {
+          if (
+            copyOrigin &&
+            copyOrigin.isConnected &&
+            typeof copyOrigin.focus === "function"
+          ) {
+            copyOrigin.focus({ preventScroll: true });
+          }
+          announce(successMessage, "success");
+        } else {
+          showManualCopy(text, copyOrigin);
+          announce(failureMessage, "error");
+        }
+        return copied;
+      }
+
+      function applyTheme(theme) {
+        if (!THEME_ORDER.includes(theme)) {
+          theme = "auto";
+        }
+        currentTheme = theme;
+        if (theme === "auto") {
+          body.dataset.defaultTheme = "auto";
+          body.removeAttribute("data-theme");
+        } else {
+          body.dataset.theme = theme;
+        }
+        document.querySelectorAll("[data-set-theme]").forEach((button) => {
+          const mode = button.dataset.setTheme;
+          const text = button.querySelector(".control-text");
+          button.setAttribute("aria-pressed", String(mode === theme));
+          if (text && strings.theme[mode]) {
+            text.textContent = strings.theme[mode];
+          }
+          if (strings.themeLabel[mode]) {
+            button.setAttribute("aria-label", strings.themeLabel[mode]);
+          }
+        });
+      }
+
+      function setLanguage(nextLanguage, persist = true) {
+        if (!supportedLanguages.includes(nextLanguage)) {
+          return false;
+        }
+        closeCommentEditor(false);
+        language = nextLanguage;
+        strings = messages[language] || messages.en;
+        root.lang = language;
+        document.querySelectorAll("[data-language-part]").forEach((part) => {
+          const active = part.dataset.languagePart === language;
+          part.hidden = !active;
+          part.classList.toggle("is-active", active);
+          if (active && part.dataset.reportTitle) {
+            document.title = part.dataset.reportTitle;
+          }
+        });
+        document.querySelectorAll("[data-set-lang]").forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.setLang === language),
+          );
+        });
+        refreshActiveReportState();
+        applyTheme(currentTheme);
+        setSidebarCollapsed(currentSidebarCollapsed, false);
+        applyLocalizedInterface();
+        setInteractionControlsEnabled(interactionsReady);
+        renderComments();
+        if (persist) {
+          safeStorageSet(LANGUAGE_KEY, language);
+        }
+        return true;
+      }
+
+      function setSidebarCollapsed(collapsed, persist = true) {
+        collapsed = Boolean(collapsed);
+        currentSidebarCollapsed = collapsed;
+        root.dataset.sidebarCollapsed = String(collapsed);
+        if (rail) {
+          rail.setAttribute("aria-hidden", String(collapsed));
+        }
+        if (sidebarToggle) {
+          sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+          sidebarToggle.setAttribute("aria-label", strings.collapseSidebar);
+          sidebarToggle.setAttribute("title", strings.collapseSidebar);
+        }
+        if (sidebarExpand) {
+          sidebarExpand.setAttribute("aria-expanded", String(!collapsed));
+          sidebarExpand.setAttribute("aria-label", strings.expandSidebar);
+          sidebarExpand.setAttribute("title", strings.expandSidebar);
+        }
+        if (sidebarResizer) {
+          sidebarResizer.hidden = collapsed;
+        }
+        if (persist) {
+          safeStorageSet(SIDEBAR_COLLAPSED_KEY, String(collapsed));
+        }
+      }
+
+      function setSidebarWidth(value, persist = true) {
+        const numericValue = Number(value);
+        const finiteValue = Number.isFinite(numericValue) ? numericValue : 220;
+        const width = Math.min(SIDEBAR_MAX, Math.max(SIDEBAR_MIN, Math.round(finiteValue)));
+        currentSidebarWidth = width;
+        root.style.setProperty("--sidebar-width", `${width}px`);
+        if (sidebarResizer) {
+          sidebarResizer.setAttribute("aria-valuenow", String(width));
+        }
+        if (persist) {
+          safeStorageSet(SIDEBAR_WIDTH_KEY, String(width));
+        }
+      }
+
+      function applyLocalizedInterface() {
+        const controls = document.querySelector(".controls");
+        const skipLink = document.querySelector(".skip-link");
+        const languageControl = document.querySelector(".control--language");
+        const themeControl = document.querySelector(".control--theme");
+        const languageLabel = document.querySelector("[data-language-label]");
+        const navigation = document.getElementById("report-sections");
+        const navigationLabel = document.querySelector("[data-sidebar-navigation-title]");
+        const commentPanel = document.querySelector(".comment-panel");
+        const commentPanelTitle = document.querySelector("[data-comment-panel-title]");
+        const actionsPanel = document.querySelector(".sidebar-footer");
+        const actionsTitle = document.querySelector("[data-sidebar-footer-title]");
+        const feedbackButton = document.querySelector("[data-copy-feedback]");
+        const reportButton = document.querySelector("[data-copy-report]");
+        const printButton = document.querySelector("[data-print-report]");
+        const clearButton = document.querySelector("[data-clear-comments]");
+        if (controls) {
+          controls.setAttribute("aria-label", strings.displayControls);
+        }
+        if (skipLink) {
+          skipLink.textContent = strings.skipToReport;
+        }
+        if (languageControl) {
+          languageControl.setAttribute("aria-label", strings.language);
+        }
+        if (themeControl) {
+          themeControl.setAttribute("aria-label", strings.themeGroup);
+        }
+        if (languageLabel) {
+          languageLabel.textContent = strings.language;
+        }
+        if (navigationLabel) {
+          navigationLabel.textContent = strings.sidebarNavigation;
+        }
+        if (navigation) {
+          navigation.setAttribute("aria-label", strings.sidebarNavigation);
+        }
+        if (commentPanel) {
+          commentPanel.setAttribute("aria-label", strings.commentsHeading);
+        }
+        if (commentPanelTitle) {
+          commentPanelTitle.textContent = strings.commentsHeading;
+        }
+        if (actionsPanel) {
+          actionsPanel.setAttribute("aria-label", strings.reviewActions);
+        }
+        if (actionsTitle) {
+          actionsTitle.textContent = strings.reviewActions;
+        }
+        if (feedbackButton) {
+          feedbackButton.textContent = strings.copyFeedback;
+          feedbackButton.setAttribute("aria-label", strings.copyFeedbackLabel);
+        }
+        if (reportButton) {
+          reportButton.textContent = strings.copyReport;
+          reportButton.setAttribute("aria-label", strings.copyReportLabel);
+        }
+        if (printButton) {
+          printButton.textContent = strings.printReport;
+          printButton.setAttribute("aria-label", strings.printReportLabel);
+        }
+        if (clearButton) {
+          clearButton.textContent = strings.clearComments;
+          clearButton.setAttribute("aria-label", strings.clearCommentsLabel);
+        }
+        if (sidebarResizer) {
+          sidebarResizer.setAttribute("aria-label", strings.resizeSidebar);
+        }
+        document.querySelectorAll("[data-add-comment]").forEach((button) => {
+          const summaryId = button.dataset.addComment;
+          button.textContent = strings.addComment;
+          button.setAttribute("aria-label", strings.addCommentLabel(summaryId));
+        });
+        document.querySelectorAll("[data-copy-summary]").forEach((button) => {
+          const summaryId = button.dataset.copySummary;
+          button.textContent = strings.copyMarkdown;
+          button.setAttribute("aria-label", strings.copyMarkdownLabel(summaryId));
+        });
+        document.querySelectorAll(".code-copy-btn").forEach((button) => {
+          if (!button.classList.contains("copied")) {
+            button.textContent = strings.copyCode;
+          }
+          button.setAttribute("aria-label", strings.copyCodeLabel);
+        });
+        document.querySelectorAll(".card-files-title").forEach((heading) => {
+          heading.textContent = strings.files;
+        });
+        document.querySelectorAll("[data-quiz-option]").forEach((button) => {
+          const optionNumber = Number(button.dataset.quizOption);
+          if (!Number.isFinite(optionNumber) || optionNumber < 0) {
+            return;
+          }
+          const letter = String.fromCharCode(65 + optionNumber);
+          button.setAttribute(
+            "aria-label",
+            strings.quizOptionLabel(
+              button.dataset.quizId,
+              letter,
+              button.dataset.quizLabel || "",
+            ),
+          );
+          button.setAttribute("aria-pressed", "false");
+        });
+        document.querySelectorAll(".quiz-explanation-title").forEach((summary) => {
+          summary.textContent = strings.quizExplanation;
+        });
+      }
+
+      document.addEventListener("click", (event) => {
+        const target = event.target instanceof Element ? event.target.closest("button") : null;
+        if (!target) {
+          return;
+        }
+        if (target.matches("[data-add-comment]")) {
+          if (!interactionsReady) {
+            announce(strings.dataError, "error");
+            return;
+          }
+          openCommentEditor(target.dataset.addComment);
+        } else if (target.matches("[data-copy-summary]")) {
+          const card = cardsById.get(target.dataset.copySummary);
+          if (card) {
+            void copyText(card.markdown, strings.copiedSummary, strings.copyFailed);
+          } else {
+            announce(strings.copyFailed, "error");
+          }
+        } else if (target.matches("[data-copy-report]")) {
+          if (rawMarkdown !== null) {
+            void copyText(rawMarkdown, strings.copiedReport, strings.copyFailed);
+          } else {
+            announce(strings.dataError, "error");
+          }
+        } else if (target.matches("[data-print-report]")) {
+          window.print();
+          return;
+        } else if (target.matches("[data-copy-feedback]")) {
+          if (!interactionsReady) {
+            announce(strings.dataError, "error");
+            return;
+          }
+          const successMessage =
+            comments.length === 0 ? strings.copiedNoComments : strings.copiedFeedback;
+          void copyText(buildFeedbackMarkdown(), successMessage, strings.copyFailed);
+        } else if (target.matches("[data-quiz-option]")) {
+          answerQuiz(target.dataset.quizId, Number(target.dataset.quizOption));
+        } else if (target.matches("[data-clear-comments]")) {
+          clearComments();
+        } else if (target.matches("[data-set-theme]")) {
+          applyTheme(target.dataset.setTheme);
+          safeStorageSet(THEME_KEY, currentTheme);
+        } else if (target.matches("[data-set-lang]")) {
+          setLanguage(target.dataset.setLang);
+        } else if (target.matches("[data-sidebar-toggle]")) {
+          setSidebarCollapsed(true);
+          if (sidebarExpand) {
+            sidebarExpand.focus({ preventScroll: true });
+          }
+        } else if (target.matches("[data-sidebar-expand]")) {
+          setSidebarCollapsed(false);
+          if (sidebarToggle) {
+            sidebarToggle.focus({ preventScroll: true });
+          }
+        }
+      });
+
+      if (sidebarResizer) {
+        let resizing = false;
+        sidebarResizer.addEventListener("pointerdown", (event) => {
+          if (currentSidebarCollapsed) {
+            return;
+          }
+          resizing = true;
+          root.classList.add("is-resizing");
+          sidebarResizer.setPointerCapture(event.pointerId);
+          event.preventDefault();
+        });
+        sidebarResizer.addEventListener("pointermove", (event) => {
+          if (resizing) {
+            setSidebarWidth(event.clientX, false);
+          }
+        });
+        const finishResize = (event) => {
+          if (!resizing) {
+            return;
+          }
+          resizing = false;
+          root.classList.remove("is-resizing");
+          if (sidebarResizer.hasPointerCapture(event.pointerId)) {
+            sidebarResizer.releasePointerCapture(event.pointerId);
+          }
+          setSidebarWidth(currentSidebarWidth);
+        };
+        sidebarResizer.addEventListener("pointerup", finishResize);
+        sidebarResizer.addEventListener("pointercancel", finishResize);
+        sidebarResizer.addEventListener("keydown", (event) => {
+          let nextWidth = currentSidebarWidth;
+          if (event.key === "ArrowLeft") {
+            nextWidth -= 16;
+          } else if (event.key === "ArrowRight") {
+            nextWidth += 16;
+          } else if (event.key === "Home") {
+            nextWidth = SIDEBAR_MIN;
+          } else if (event.key === "End") {
+            nextWidth = SIDEBAR_MAX;
+          } else {
+            return;
+          }
+          event.preventDefault();
+          setSidebarWidth(nextWidth);
+        });
+      }
+
+      const storedLanguage = safeStorageGet(LANGUAGE_KEY);
+      setLanguage(
+        supportedLanguages.includes(storedLanguage) ? storedLanguage : language,
+        false,
+      );
+      const storedTheme = safeStorageGet(THEME_KEY);
+      const defaultTheme = body.dataset.defaultTheme;
+      applyTheme(THEME_ORDER.includes(storedTheme) ? storedTheme : defaultTheme);
+      const storedWidth = safeStorageGet(SIDEBAR_WIDTH_KEY);
+      setSidebarWidth(storedWidth === null ? 220 : storedWidth, false);
+      const storedCollapsed = safeStorageGet(SIDEBAR_COLLAPSED_KEY);
+      setSidebarCollapsed(storedCollapsed === "true", false);
+      comments = loadComments();
+      renderComments();
+      const runtimeTestBridge = globalThis.__DIFF_SUMMARY_RUNTIME_TEST__;
+      if (runtimeTestBridge && typeof runtimeTestBridge === "object") {
+        Object.assign(runtimeTestBridge, {
+          copyText,
+          dismissManualCopy,
+          applyTheme,
+          setLanguage,
+          setSidebarCollapsed,
+          openCommentEditor,
+          answerQuiz,
+          commitActiveComment: (text) => {
+            if (
+              !activeEditor ||
+              !activeEditor.textarea ||
+              typeof activeEditor.commit !== "function"
+            ) {
+              return false;
+            }
+            activeEditor.textarea.value = String(text);
+            activeEditor.commit();
+            return true;
+          },
+          getState: () => ({
+            interactionsReady,
+            commentStorageKey,
+            editorOpen: Boolean(activeEditor),
+            currentTheme,
+            language,
+            bodyTheme: body.dataset.theme || null,
+            defaultTheme: body.dataset.defaultTheme || null,
+            bodyInteractionsReady: body.dataset.interactionsReady,
+            manualCopyOpen: Boolean(manualCopyDialog),
+            manualCopyText: manualCopyTextarea ? manualCopyTextarea.value : null,
+            manualCopySelection: manualCopyTextarea
+              ? [manualCopyTextarea.selectionStart, manualCopyTextarea.selectionEnd]
+              : null,
+            activeFocus:
+              document.activeElement === manualCopyTextarea
+                ? "manual-copy-text"
+                : document.activeElement && document.activeElement.dataset
+                  ? document.activeElement.dataset.testFocus || null
+                  : null,
+          }),
+        });
+      }
+    })();
+  </script>
+  <script data-diff-summary-highlight>
+    (() => {
+      "use strict";
+
+      if (typeof document === "undefined" || !document.querySelectorAll) {
+        return;
+      }
+
+      const MAX_SOURCE_LENGTH = 200000;
+      function copyStrings() {
+        return (document.documentElement.lang || "").toLowerCase().startsWith("ko")
+          ? { copy: "복사", copied: "복사됨!", copyLabel: "코드 블록 복사" }
+          : { copy: "Copy", copied: "Copied!", copyLabel: "Copy code block" };
+      }
+
+      function words(list) {
+        return new Set(list.split(" "));
+      }
+
+      const LITERALS = words("true false null undefined None True False nil NULL");
+      const KEYWORDS = {
+        python: words(
+          "False None True and as assert async await break class continue def del " +
+          "elif else except finally for from global if import in is lambda nonlocal " +
+          "not or pass raise return try while with yield match case",
+        ),
+        javascript: words(
+          "abstract as async await break case catch class const continue debugger " +
+          "declare default delete do else enum export extends finally for from " +
+          "function get if implements import in infer instanceof interface is keyof " +
+          "let namespace new of package private protected public readonly return " +
+          "satisfies set static super switch this throw try type typeof var void " +
+          "while with yield",
+        ),
+        go: words(
+          "break case chan const continue default defer else fallthrough for func " +
+          "go goto if import interface map package range return select struct " +
+          "switch type var",
+        ),
+        java: words(
+          "abstract assert break case catch class const continue default do else " +
+          "enum extends final finally for goto if implements import instanceof " +
+          "interface native new package permits private protected public record " +
+          "return sealed static strictfp super switch synchronized this throw " +
+          "throws transient try var void volatile while yield",
+        ),
+        kotlin: words(
+          "abstract actual annotation as break by catch class companion const " +
+          "constructor continue crossinline data do dynamic else enum expect " +
+          "external final finally for fun get if import in infix init inline inner " +
+          "interface internal is lateinit noinline object open operator out " +
+          "override package private protected public reified return sealed set " +
+          "super suspend tailrec this throw try typealias val var vararg when " +
+          "where while",
+        ),
+        swift: words(
+          "actor as associatedtype async await break case catch class continue " +
+          "convenience default defer deinit do dynamic else enum extension " +
+          "fallthrough fileprivate final for func get guard if import in indirect " +
+          "infix init inout internal is lazy let mutating nonmutating open " +
+          "operator optional override postfix prefix private protocol public " +
+          "repeat required rethrows return set some static struct subscript super " +
+          "switch throw throws try typealias unowned var weak where while",
+        ),
+        rust: words(
+          "as async await break const continue crate dyn else enum extern fn for " +
+          "if impl in let loop match mod move mut pub ref return static struct " +
+          "super trait type unsafe use where while",
+        ),
+        c: words(
+          "auto break case char const continue default do double else enum extern " +
+          "float for goto if inline int long register restrict return short " +
+          "signed sizeof static struct switch typedef union unsigned void " +
+          "volatile while",
+        ),
+        cpp: words(
+          "alignas alignof auto bool break case catch char class concept const " +
+          "consteval constexpr constinit const_cast continue decltype default " +
+          "delete do double dynamic_cast else enum explicit export extern float " +
+          "for friend goto if inline int long mutable namespace new noexcept " +
+          "operator private protected public register reinterpret_cast requires " +
+          "return short signed sizeof static static_assert static_cast struct " +
+          "switch template this thread_local throw try typedef typeid typename " +
+          "union unsigned using virtual void volatile wchar_t while",
+        ),
+        csharp: words(
+          "abstract as async await base bool break byte case catch char checked " +
+          "class const continue decimal default delegate do double else enum " +
+          "event explicit extern finally fixed float for foreach get goto if " +
+          "implicit in init int interface internal is lock long namespace new " +
+          "object operator out override params partial private protected public " +
+          "readonly record ref required return sbyte sealed set short sizeof " +
+          "static string struct switch this throw try typeof uint ulong unsafe " +
+          "ushort using var virtual void volatile when where while yield",
+        ),
+        ruby: words(
+          "BEGIN END alias and attr_accessor attr_reader attr_writer begin break " +
+          "case class def do else elsif end ensure for if in module next not or " +
+          "redo require require_relative rescue retry return self super then " +
+          "undef unless until when while yield",
+        ),
+        php: words(
+          "abstract and array as break callable case catch class clone const " +
+          "continue declare default do echo else elseif empty enum extends final " +
+          "finally fn for foreach function global goto if implements include " +
+          "instanceof insteadof interface isset list match namespace new or print " +
+          "private protected public readonly require return static switch throw " +
+          "trait try unset use var while xor yield",
+        ),
+        shell: words(
+          "alias break case cd continue coproc declare do done echo elif else " +
+          "esac eval exec exit export fi for function if in local printf read " +
+          "readonly return select set shift source test then time trap typeset " +
+          "unset until while",
+        ),
+        sql: words(
+          "ADD ALL ALTER AND AS ASC BEGIN BETWEEN BY CASCADE CASE CHECK COLUMN " +
+          "COMMIT CONSTRAINT CREATE CROSS DEFAULT DELETE DESC DISTINCT DROP ELSE " +
+          "END EXISTS FOREIGN FROM FULL GROUP HAVING IN INDEX INNER INSERT INTO " +
+          "IS JOIN KEY LEFT LIKE LIMIT NOT NULL OFFSET ON OR ORDER OUTER PRIMARY " +
+          "REFERENCES RETURNING RIGHT ROLLBACK SELECT SET TABLE THEN TRANSACTION " +
+          "UNION UNIQUE UPDATE VALUES VIEW WHEN WHERE WITH",
+        ),
+        yaml: words("true false null yes no on off"),
+      };
+
+      const RX = {
+        blockComment: /\/\*[^]*?(?:\*\/|$)/,
+        lineSlash: /\/\/[^\n]*/,
+        lineHash: /#[^\n]*/,
+        lineDashes: /--[^\n]*/,
+        lineSemicolon: /;[^\n]*/,
+        markupComment: /<!--[^]*?(?:-->|$)/,
+        markupTag: /<\/?[A-Za-z][\w.:-]*|\/?>/,
+        entity: /&[A-Za-z#\d]+;/,
+        triple: /[RrBbUuFf]{0,2}(?:"""[^]*?(?:"""|$)|'''[^]*?(?:'''|$))/,
+        backtick: /`(?:\\[^]|[^`\\])*(?:`|$)/,
+        doubleQuote: /"(?:\\.|[^"\\\n])*"/,
+        singleQuote: /'(?:\\.|[^'\\\n])*'/,
+        jsonKey: /"(?:\\.|[^"\\\n])*"(?=[ \t]*:)/,
+        yamlKey: /(?<=^|\n)[ \t]*(?:-[ \t]+)?["']?[\w.$-]+["']?(?=[ \t]*:(?:[ \t]|\n|$))/,
+        tomlSection: /(?<=^|\n)[ \t]*\[[^\]\n]*\]/,
+        tomlKey: /(?<=^|\n)[ \t]*[\w.-]+(?=[ \t]*=)/,
+        preprocessor: /(?<=^|\n)[ \t]*#[ \t]*[A-Za-z]+/,
+        decorator: /@[A-Za-z_][\w.]*/,
+        cssAtRule: /@[\w-]+/,
+        cssProperty: /(?<=^|[;{\n])[ \t]*-{0,2}[A-Za-z][\w-]*(?=[ \t]*:)/,
+        hexColor: /#[0-9A-Fa-f]{3,8}\b/,
+        variable: /\$\{[^}\n]*\}|\$[A-Za-z_]\w*|\$\d+/,
+        rubySymbol: /:[A-Za-z_]\w*/,
+        number: /\b0[xXoObB][\dA-Fa-f_]+n?\b|(?:\b\d[\d_]*(?:\.[\d_]+)?|\B\.\d[\d_]*)(?:[eE][+-]?\d+)?[a-zA-Z%]*/,
+        word: /[A-Za-z_$][\w$]*/,
+      };
+
+      const LANGUAGES = {
+        python: { comments: [RX.lineHash], strings: [RX.triple], extras: [[RX.decorator, "tok-fn"]] },
+        javascript: {
+          comments: [RX.blockComment, RX.lineSlash],
+          strings: [RX.backtick],
+          extras: [[RX.decorator, "tok-fn"]],
+        },
+        go: { comments: [RX.blockComment, RX.lineSlash], strings: [RX.backtick] },
+        java: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.decorator, "tok-fn"]] },
+        kotlin: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.decorator, "tok-fn"]] },
+        swift: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.decorator, "tok-fn"]] },
+        rust: { comments: [RX.blockComment, RX.lineSlash] },
+        c: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.preprocessor, "tok-kw"]] },
+        cpp: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.preprocessor, "tok-kw"]] },
+        csharp: { comments: [RX.blockComment, RX.lineSlash], extras: [[RX.preprocessor, "tok-kw"]] },
+        ruby: { comments: [RX.lineHash], extras: [[RX.rubySymbol, "tok-num"]] },
+        php: {
+          comments: [RX.blockComment, RX.lineSlash, RX.lineHash],
+          extras: [[RX.variable, "tok-num"]],
+        },
+        shell: { comments: [RX.lineHash], extras: [[RX.variable, "tok-num"]] },
+        sql: { comments: [RX.blockComment, RX.lineDashes], caseInsensitive: true },
+        yaml: {
+          comments: [RX.lineHash],
+          extras: [[RX.yamlKey, "tok-kw"]],
+        },
+        json: { extras: [[RX.jsonKey, "tok-kw"]] },
+        toml: {
+          comments: [RX.lineHash],
+          extras: [[RX.tomlSection, "tok-type"], [RX.tomlKey, "tok-kw"]],
+        },
+        ini: {
+          comments: [RX.lineSemicolon, RX.lineHash],
+          extras: [[RX.tomlSection, "tok-type"], [RX.tomlKey, "tok-kw"]],
+        },
+        markup: { markup: true },
+        css: {
+          comments: [RX.blockComment],
+          extras: [
+            [RX.cssAtRule, "tok-kw"],
+            [RX.cssProperty, "tok-type"],
+            [RX.hexColor, "tok-num"],
+          ],
+        },
+      };
+
+      const ALIASES = {
+        py: "python",
+        python3: "python",
+        js: "javascript",
+        jsx: "javascript",
+        mjs: "javascript",
+        cjs: "javascript",
+        ts: "javascript",
+        tsx: "javascript",
+        typescript: "javascript",
+        golang: "go",
+        kt: "kotlin",
+        kts: "kotlin",
+        rs: "rust",
+        "c++": "cpp",
+        cc: "cpp",
+        cxx: "cpp",
+        hpp: "cpp",
+        h: "c",
+        cs: "csharp",
+        "c#": "csharp",
+        rb: "ruby",
+        sh: "shell",
+        bash: "shell",
+        zsh: "shell",
+        console: "shell",
+        shellsession: "shell",
+        yml: "yaml",
+        jsonc: "json",
+        json5: "json",
+        html: "markup",
+        xml: "markup",
+        svg: "markup",
+        vue: "markup",
+        scss: "css",
+        less: "css",
+      };
+
+      function buildPatterns(name, spec) {
+        if (spec.markup) {
+          return [
+            [RX.markupComment, "tok-com"],
+            [RX.doubleQuote, "tok-str"],
+            [RX.singleQuote, "tok-str"],
+            [RX.markupTag, "tok-kw"],
+            [RX.entity, "tok-num"],
+            [RX.number, "tok-num"],
+          ];
+        }
+        const patterns = [];
+        (spec.comments || []).forEach((comment) => patterns.push([comment, "tok-com"]));
+        (spec.strings || []).forEach((string) => patterns.push([string, "tok-str"]));
+        (spec.extras || []).forEach(([extra, className]) => {
+          if (extra === RX.jsonKey || extra === RX.yamlKey) {
+            patterns.push([extra, className]);
+          }
+        });
+        patterns.push([RX.doubleQuote, "tok-str"], [RX.singleQuote, "tok-str"]);
+        (spec.extras || []).forEach(([extra, className]) => {
+          if (extra !== RX.jsonKey && extra !== RX.yamlKey) {
+            patterns.push([extra, className]);
+          }
+        });
+        patterns.push([RX.number, "tok-num"], [RX.word, "word"]);
+        return patterns;
+      }
+
+      function classifyWord(text, spec, nextCharacter) {
+        if (LITERALS.has(text)) {
+          return "tok-num";
+        }
+        const keywords = KEYWORDS[spec.keywordSet] || null;
+        if (keywords) {
+          if (spec.caseInsensitive ? keywords.has(text.toUpperCase()) : keywords.has(text)) {
+            return "tok-kw";
+          }
+        }
+        if (/^[A-Z][A-Z0-9_]+$/.test(text)) {
+          return "tok-num";
+        }
+        if (/^[A-Z]/.test(text)) {
+          return "tok-type";
+        }
+        if (nextCharacter === "(") {
+          return "tok-fn";
+        }
+        return null;
+      }
+
+      function tokenize(source, patterns, spec) {
+        const master = new RegExp(
+          patterns.map(([pattern]) => "(" + pattern.source + ")").join("|"),
+          "g",
+        );
+        const tokens = [];
+        let last = 0;
+        let match;
+        while ((match = master.exec(source)) !== null) {
+          if (match.index > last) {
+            tokens.push([source.slice(last, match.index), null]);
+          }
+          let className = null;
+          for (let index = 0; index < patterns.length; index += 1) {
+            if (match[index + 1] !== undefined) {
+              className = patterns[index][1];
+              break;
+            }
+          }
+          if (className === "word") {
+            let cursor = master.lastIndex;
+            while (cursor < source.length && (source[cursor] === " " || source[cursor] === "\t")) {
+              cursor += 1;
+            }
+            className = classifyWord(match[0], spec, source[cursor] || "");
+          }
+          tokens.push([match[0], className]);
+          if (master.lastIndex === match.index) {
+            master.lastIndex += 1;
+          }
+          last = master.lastIndex;
+        }
+        if (last < source.length) {
+          tokens.push([source.slice(last), null]);
+        }
+        return tokens;
+      }
+
+      function highlightElement(code, name) {
+        const spec = LANGUAGES[name];
+        if (!spec) {
+          return;
+        }
+        const source = code.textContent || "";
+        if (!source || source.length > MAX_SOURCE_LENGTH) {
+          return;
+        }
+        let tokens;
+        try {
+          tokens = tokenize(source, buildPatterns(name, spec), {
+            keywordSet: name,
+            caseInsensitive: Boolean(spec.caseInsensitive),
+          });
+        } catch (error) {
+          return;
+        }
+        const fragment = document.createDocumentFragment();
+        tokens.forEach(([text, className]) => {
+          if (className) {
+            const span = document.createElement("span");
+            span.className = className;
+            span.textContent = text;
+            fragment.appendChild(span);
+          } else {
+            fragment.appendChild(document.createTextNode(text));
+          }
+        });
+        code.replaceChildren(fragment);
+      }
+
+      function languageOf(code) {
+        const match = /(?:^|\s)language-([\w#+.-]+)/.exec(code.className || "");
+        if (!match) {
+          return null;
+        }
+        const name = match[1].toLowerCase();
+        return ALIASES[name] || name;
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (error) {
+            // Fall through to the textarea fallback.
+          }
+        }
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.setAttribute("aria-hidden", "true");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        let copied = false;
+        try {
+          textarea.select();
+          copied = document.execCommand("copy") === true;
+        } catch (error) {
+          copied = false;
+        } finally {
+          textarea.remove();
+        }
+        return copied;
+      }
+
+      function attachCopyButton(pre) {
+        const parent = pre.parentNode;
+        if (!parent) {
+          return;
+        }
+        const wrapper = document.createElement("div");
+        wrapper.className = "code-block-wrapper";
+        parent.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "code-copy-btn";
+        const initialStrings = copyStrings();
+        button.textContent = initialStrings.copy;
+        button.setAttribute("aria-label", initialStrings.copyLabel);
+        let restoreTimer = null;
+        button.addEventListener("click", async () => {
+          const copied = await copyText(pre.textContent || "");
+          if (!copied) {
+            return;
+          }
+          const activeStrings = copyStrings();
+          button.classList.add("copied");
+          button.textContent = activeStrings.copied;
+          button.setAttribute("aria-label", activeStrings.copyLabel);
+          if (restoreTimer !== null) {
+            clearTimeout(restoreTimer);
+          }
+          restoreTimer = setTimeout(() => {
+            const restoredStrings = copyStrings();
+            button.classList.remove("copied");
+            button.textContent = restoredStrings.copy;
+            button.setAttribute("aria-label", restoredStrings.copyLabel);
+            restoreTimer = null;
+          }, 1500);
+        });
+        wrapper.appendChild(button);
+      }
+
+      document.querySelectorAll("pre.code-block > code").forEach((code) => {
+        const name = languageOf(code);
+        if (name && name !== "diff") {
+          highlightElement(code, name);
+        }
+      });
+      document.querySelectorAll("pre.code-block").forEach(attachCopyButton);
+    })();
+  </script>
+</body>
+</html>
