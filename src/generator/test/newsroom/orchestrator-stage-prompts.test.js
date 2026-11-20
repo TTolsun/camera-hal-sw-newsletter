@@ -89,6 +89,21 @@ test('writing and verification use original evidence without imposing one articl
   }
 });
 
+test('weekly editor uses mined Gerrit test evidence for up to two articles', () => {
+  const editor = editorSystemPrompt({ publishMode: 'NORMAL', hasLockedSections: true });
+  assert.match(reporterSystemPrompt(), /status가 MERGED이고 리비전의 전체 diff가 제공된 경우/);
+  assert.match(reporterSystemPrompt(), /테스트 입력·상태.*테스트 이름과 evidence_id/);
+  assert.match(editor, /Gerrit 메인 기사 최대 2건/);
+  assert.match(editor, /후보가 한 건이면 한 건만 보강하고, 없으면 생략/);
+  assert.match(editor, /그대로 유지하는 기사에 이미 들어간 심층 설명도 이 범위에 포함/);
+  assert.match(editor, /테스트의 기대값을 실행 결과나 단말 검증으로 쓰지 마세요/);
+  assert.match(editor, /API·테스트 식별자는 원문대로/);
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /같은 리비전의 diff에서 해당 조건과 기대값을 대조/);
+    assert.match(prompt, /기사 수나 형식 자체는 발행 판정에 쓰지 마세요/);
+  }
+});
+
 test('editorSystemPrompt는 구성 상한을 editor의 보류 사유로 주지 않는다', () => {
   // 2026-10-26 실측: 보조 main 최대 1건을 editor 기준으로 주자 보조 기사 1건뿐인 구성에서 그 기사를 보류했다.
   const prompt = editorSystemPrompt({ publishMode: 'NORMAL' });
