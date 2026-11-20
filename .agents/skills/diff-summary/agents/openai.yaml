@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diff Summary"
+  short_description: "Summarize code changes as bilingual Markdown and HTML"
+  default_prompt: "Use $diff-summary to summarize the current code changes as an interactive HTML report."
