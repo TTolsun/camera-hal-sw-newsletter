@@ -103,9 +103,11 @@ Separate rules apply to flash modes. FlashMode.OFF is always determined to be su
 
 This change adds helper functions for querying. It does not include logic to forcibly validate unsupported modes in the capture request pipeline or prevent request submission. It is a convenience interface that allows callers to inquire about hardware support before creating a request.
 
-### How to verify and what is the reflection status?
+### What should you check when an expected mode returns false?
 
-This utility can be checked at the unit test level. Pass AeMode.ON or FlashMode.SINGLE to a CameraMetadata instance containing a specific mode and check if the expected boolean result is returned. This verification only shows the return value of the query function and does not guarantee that actual driver capture requests will succeed.
+The new isSupported_aeMode_returnsTrueOnlyForAvailableModes test in CameraMetadataTest expects false for AeMode.ON when the metadata key is missing or the array is empty. With ON and ON_AUTO_FLASH in the array, it expects true for both and false for OFF and ON_EXTERNAL_FLASH, which are absent from the list. The implementation uses an empty array in availableAeModes when the key is missing, so the return value alone cannot tell you whether the key is missing or the list omits the mode.
+
+During bring-up, if an AE mode you expect to be supported returns false, start by checking CONTROL_AE_AVAILABLE_MODES from the HAL. Check whether the key is missing, the array is empty, or only the requested mode is absent. The unit test checks the query rule. Verify actual capture requests separately on a device.
 
 This change was merged into the androidx-main source branch on November 13, 2026. Whether it has been included in official AndroidX library distributions or commercial device builds has not been confirmed.
 
