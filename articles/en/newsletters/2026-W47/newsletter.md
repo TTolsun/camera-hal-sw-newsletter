@@ -189,9 +189,11 @@ Similar logic applies to general CaptureRequest.Key parameters. A frame is recei
 
 The repeating requests created by FrameGraph include the union of parameters and TagBundle from all connected buffers. Therefore, repeating frames during normal operation reliably reach all buffers that meet the conditions.
 
-### How to verify and what is the reflection status?
+### Is one matching tag enough for a buffer to accept a frame?
 
-Connect two buffers with different TagBundle instances to the same stream and request a one-shot capture with a specific tag. You can verify through unit or integration tests that frames enter only the buffer with that tag, and the queue size of other buffers remains unchanged. This is a suggested check based on the operational principles described in the commit diff.
+Suppose a buffer requires both tags a and b, but the request carries b and c. In onFrameStarted_requestMissingOneTagOfBuffer_ignoresFrame, the expected buffer size is zero. The request carries b but is missing a.
+
+A buffer with no tag requirement can also receive a tagged frame. In captureWith_tagSets_sessionCaptureOnlyReachesMatchingBuffers, three buffers share one stream. For a single capture tagged a, the test expects the frame in both the buffer that requires a and the buffer with no tag requirement. The buffer that requires b should not receive it. If a frame reaches an unexpected buffer, check both the tags on the request and the tags that buffer requires.
 
 This change was merged into the androidx-main branch on November 13, 2026. Whether it has been reflected in a final library release or product firmware build has not been confirmed.
 
