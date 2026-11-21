@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  editorialPlanSystemPrompt,
   reporterSystemPrompt,
   editorSystemPrompt,
   factCheckSystemPrompt,
@@ -101,6 +102,23 @@ test('weekly editor uses mined Gerrit test evidence for up to two articles', () 
   for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
     assert.match(prompt, /같은 리비전의 diff에서 해당 조건과 기대값을 대조/);
     assert.match(prompt, /기사 수나 형식 자체는 발행 판정에 쓰지 마세요/);
+  }
+});
+
+test('omitted Gerrit diffs cannot turn merge status or test filenames into run results', () => {
+  const writing = [editorialPlanSystemPrompt(), reporterSystemPrompt(), editorSystemPrompt(),
+    editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()];
+  const checking = [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()];
+  for (const prompt of [...writing, ...checking]) {
+    assert.match(prompt, /diff_omitted=true.*truncated=false.*MERGED는 병합 상태만/);
+  }
+  for (const prompt of writing) {
+    assert.match(prompt, /파일명이나 병합 상태로 테스트 이름·입력·기대값·실행 여부·통과\/실패를 추정하지/);
+    assert.match(prompt, /같은 리비전.*결과를 명시한 실행 기록이나 출처의 보고를 evidence_id/);
+  }
+  for (const prompt of checking) {
+    assert.match(prompt, /테스트도 통과했을 것.*must_fix\[\].*article_quality.publishable=false/);
+    assert.match(prompt, /점검을 제안한 기사는 diff 생략만으로 차단하지/);
   }
 });
 
