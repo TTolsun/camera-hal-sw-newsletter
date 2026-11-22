@@ -97,6 +97,7 @@ async function runEditorStage({
       // (coverage_decision/impact_level)는 editorFacingEditorialPlan이 빼므로 editor가 선택된 기사를
       // demote/병합하도록 유도하지 않는다(어떤 기사를 main으로 낼지는 selection이 결정).
       `Internal editorial plan JSON (작성 안내용 내부 자료입니다. 어떤 기사를 main article로 낼지는 selection이 이미 정했으니 선택된 기사를 모두 작성하고, 각 기사의 target_description/editorial_angle/why_it_matters/reader_takeaway/misunderstanding_risks/source_limitations를 자연스러운 한국어 prose로 반영하세요. narrative_arc는 그 기사 본문의 흐름 제안이고 subheading_candidates는 소제목 후보이니 참고하되, 그대로 따라야 하는 것은 아닙니다):\n${JSON.stringify(editorFacingEditorialPlan(editorialPlanReport), null, 2)}`,
+      '독자가 보는 본문을 마지막으로 읽으세요. 제목에 내건 기능은 원문에서 확인한 동작을 한 문장이라도 설명하세요. 테스트 코드가 무엇을 검사하는지와 단말에서 누군가 무엇을 측정했는지는 주어와 동사를 달리 쓰세요. 원문으로 설명할 수 있는 현장 진단은 새 문단에 두고, 어느 조건에서 어떤 값을 살펴보면 두 원인을 가를 수 있는지 쓰세요. 우회책의 효과는 공개된 지원 목록이나 기존 장애 로그로 확인할 수 있습니다. 우회책을 해제해 장애를 일으키는 절차를 권하지 마세요.',
       '최종 작성 확인: 각 버그 수정 기사의 public_article.body_markdown만 읽어도 변경 전후, 적용 조건, 확인할 입력과 관찰 결과, 릴리스·제품 반영의 확인 범위를 알 수 있어야 합니다. reader_checkpoints, action_items, source_verification_notes는 공개 본문에 표시되지 않습니다. 이 내부 필드에만 적은 확인 절차나 반영 한계는 공개 본문에도 근거 범위 안에서 자연스럽게 설명하세요. 제안하는 점검을 실행 완료 사실로 쓰지 말고, 원문에 없는 성공 보장이나 합격 수치를 추가하지 마세요.'
     ].filter(Boolean).join('\n\n'),
     editorSchema

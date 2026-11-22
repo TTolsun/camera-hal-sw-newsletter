@@ -167,21 +167,21 @@ function evidenceItems(candidate) {
     .map(([label, value]) => compactText(`${label}: ${value}`, 160));
 }
 
-function compactExtractionItems(items) {
+function compactExtractionItems(items, releaseSource = false) {
   return ensureArray(items).slice(0, 5).map(item => ({
     text: compactText(item?.text || item?.source_text, 180),
-    source_text: compactText(item?.source_text || item?.text, 180),
+    source_text: releaseSource ? compactText(item?.source_text, 1200) : compactText(item?.source_text || item?.text, 180),
     links: ensureArray(item?.links).slice(0, 3),
     issue_ids: ensureArray(item?.issue_ids).slice(0, 5),
     artifact_names: ensureArray(item?.artifact_names).slice(0, 5)
   }));
 }
 
-function compactExtractionSections(sections) {
+function compactExtractionSections(sections, releaseSource = false) {
   return ensureArray(sections).slice(0, 5).map(section => ({
     category: text(section?.category),
     heading: compactText(section?.heading, 80),
-    items: compactExtractionItems(section?.items)
+    items: compactExtractionItems(section?.items, releaseSource)
   })).filter(section => section.items.length > 0);
 }
 
@@ -196,7 +196,7 @@ function compactSourceExtraction(extraction) {
       version: text(extraction.release?.version),
       date: text(extraction.release?.date),
       component: text(extraction.release?.component),
-      sections: compactExtractionSections(extraction.release?.sections)
+      sections: compactExtractionSections(extraction.release?.sections, extraction.source_type === 'release_note')
     },
     minor_line_context: minor ? {
       version: text(minor.version),

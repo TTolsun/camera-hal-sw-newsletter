@@ -2,6 +2,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { sourceReviewInput, reviewArticleSources, BRIEFING_CHECKS } = require('../../../quality/article-source-review');
 
+const { buildArticleCapsule } = require('../../../select/article-capsules');
+
 const editor = { sections: [{ sources: [{ url: 'https://example.com/a' }],
   public_article: { headline: 'Change', body_markdown: 'Generic advice' }, claims: ['internal claims'] }] };
 const capsules = { selected_capsules: [{ url: 'https://example.com/a', what_changed: 'Repeated summary',
@@ -195,12 +197,17 @@ test('a test assertion presented as a field measurement blocks the public articl
 test('release-note review requires matching source identity and actual quoted source text', () => {
   const section = editor.sections[0];
   const url = section.source_candidate_url || section.sources[0].url;
-  const extraction = { source_type: 'release_note', source: { url }, release: { sections: [
-    { items: [{ source_text: 'An official release excerpt.' }, { text: 'Unverified summary.' }] }
-  ] } };
-  const input = source => sourceReviewInput(editor, { shortlisted_capsules: [{ url, source_extraction: source }] });
+  const sourceText = 'An official release excerpt. '.repeat(8) + 'Only with an attached surface.';
+  const extraction = { source_type: 'release_note', source: { url }, release: {
+    version: '1.0.0', date: '2026-11-18', sections: [
+      { heading: 'Input surfaces', items: [{ source_text: sourceText }, { text: 'Unverified summary.' }] }
+    ]
+  } };
+  const input = source => sourceReviewInput(editor, {
+    shortlisted_capsules: [buildArticleCapsule({ url, source_extraction: source })]
+  });
   const [row] = input(extraction);
-  assert.match(row.source_documents[0].text, /official release excerpt/);
+  assert.equal(row.source_documents[0].text, ['1.0.0', '2026-11-18', 'Input surfaces', sourceText].join('\n'));
   assert.doesNotMatch(row.source_documents[0].text, /Unverified summary/);
   assert.deepEqual(input({ ...extraction, source: { url: url + '/other' } }), []);
   assert.deepEqual(input({ ...extraction, release: { sections: [] } }), []);

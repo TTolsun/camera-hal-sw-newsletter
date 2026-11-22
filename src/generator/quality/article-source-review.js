@@ -49,9 +49,14 @@ function sourceReviewInput(editor, capsuleReport = {}) {
       // A version-scoped release-note extraction can be the only available primary source.
       const extraction = c.source_extraction;
       if (extraction?.source_type !== 'release_note' || extraction.source?.url !== c.url) return [];
-      const lines = (extraction.release?.sections || []).flatMap(section =>
-        (section.items || []).map(item => item.source_text).filter(Boolean));
-      return lines.length ? [{ url: c.url, evidence_id: 'release-note:' + c.url, text: lines.join('\n'), excerpt: true }] : [];
+      const release = extraction.release || {};
+      const lines = (release.sections || []).flatMap(section => {
+        const excerpts = (section.items || []).map(item => item.source_text).filter(Boolean);
+        return excerpts.length ? [section.heading, ...excerpts].filter(Boolean) : [];
+      });
+      if (!lines.length) return [];
+      const text = [release.version, release.date, ...lines].filter(Boolean).join('\n');
+      return [{ url: c.url, evidence_id: 'release-note:' + c.url, text, excerpt: true }];
     });
     const unique = [...new Map(documents.map(d => [d.evidence_id, d])).values()];
     const publicArticle = publicProseForReview(section.public_article);
