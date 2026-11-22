@@ -454,6 +454,15 @@ test('빼고 나면 하한 미만이거나 subset 게이트가 PASS 아니면(sa
   assert.equal(result, null);
 });
 
+test('source-backed omissions get the remaining editorial attempt before subset salvage', () => {
+  const factCheck = { status: 'PASS', article_quality: [{ section_index: 1, publishable: false,
+    source_review: { material_omissions: ['Explain the input condition for the proposed diagnostic.'] } }] };
+  const pending = runReviewSalvage({ salvage: null }, { factCheck, attempt: 1, totalAttempts: 2 });
+  assert.equal(pending.delegated, 0);
+  const exhausted = runReviewSalvage({ salvage: null }, { factCheck, attempt: 2, totalAttempts: 2 });
+  assert.equal(exhausted.delegated, 1);
+});
+
 test('hard blocker / must_fix / source gap / fact-check NEEDS_FIX가 있으면 salvage를 시도하지 않는다', () => {
   const salvage = {
     editor: { sections: [] }, factCheck: {}, qualityReport: passReport(), kept_section_count: 1

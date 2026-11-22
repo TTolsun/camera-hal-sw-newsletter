@@ -384,6 +384,7 @@ test('a failed article alone is retranslated and the passing article stays as tr
     // 모델이 통과한 기사까지 돌려줘도 1회차 번역이 고정되어야 한다.
     const changed = structuredClone(overlay);
     changed.sections[0].headline = 'Changed after acceptance';
+    changed.sections[1].headline = 'Retry regressed an already valid field';
     return changed;
   } });
   assert.equal(prompts.length, 2);
@@ -391,7 +392,7 @@ test('a failed article alone is retranslated and the passing article stays as tr
   const retry = prompts[1];
   assert.deepEqual(retry.display_text.sections.map(section => section.id), [overlay.sections[1].id]);
   assert.deepEqual(retry.immutable_metadata_and_glossary.map(item => item.id), [overlay.sections[1].id]);
-  assert.equal(retry.previous_check_error, `Article ${overlay.sections[1].id}: Keep the token v4l2_subdev_format exactly as in the source (in body_markdown).`);
+  assert.equal(retry.previous_check_error, `Article ${overlay.sections[1].id}: In body_markdown, copy v4l2_subdev_format verbatim as a standalone token. Separate units from numbers and pluralize the surrounding noun, not an identifier.`);
   assert.deepEqual(result.overlay.sections[0], first.sections[0]);
   assert.deepEqual(result.overlay.sections[1], overlay.sections[1]);
   assert.deepEqual(result.overlay.title, overlay.title);
@@ -412,7 +413,7 @@ test('articles that fail for different reasons are all retried with each error i
   const lines = prompts[1].previous_check_error.split('\n');
   assert.equal(lines.length, 2);
   assert.match(lines[0], /Translate all Korean text in lead into English/);
-  assert.match(lines[1], /Keep the token v4l2_subdev_format exactly as in the source/);
+  assert.match(lines[1], /copy v4l2_subdev_format verbatim as a standalone token/);
   assert.doesNotMatch(prompts[1].previous_check_error, /translation\.|Missing protected token|Korean text remains/);
   assert.deepEqual(result.overlay, overlay);
 });

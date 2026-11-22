@@ -103,28 +103,29 @@ function translationProblems(issue, overlay, sourceText) {
   }
   const problems = [];
   const seen = new Set();
-  function add(unit, message, hint) {
+  function add(unit, message, hint, fieldPath = '') {
     if (seen.has(`${unit}|${message}`)) return;
     seen.add(`${unit}|${message}`);
-    problems.push({ unit, message, hint });
+    const sectionField = /^translation\.sections\[\d+\]\.([a-z_]+)/.exec(fieldPath)?.[1];
+    problems.push({ unit, message, hint, ...(sectionField ? { sectionField } : {}) });
   }
   function compare(source, target, field) {
     if (typeof source === 'string') {
       if (typeof target !== 'string' || !target.trim()) {
-        add(unitOf(field), `Missing translation: ${field}`, `Provide a translation for ${shortField(field)}.`);
+        add(unitOf(field), `Missing translation: ${field}`, `Provide a translation for ${shortField(field)}.`, field);
         return;
       }
       // URLs and source-title map keys are immutable identities, not translatable prose.
       if (hasKoreanText(withoutUrls(target))) {
-        add(unitOf(field), `Korean text remains: ${field}`, `Translate all Korean text in ${shortField(field)} into English.`);
+        add(unitOf(field), `Korean text remains: ${field}`, `Translate all Korean text in ${shortField(field)} into English.`, field);
       }
       if (JSON.stringify(urls(source)) !== JSON.stringify(urls(target))) {
-        add(unitOf(field), `Translation URL mismatch: ${field}`, `Keep the URLs in ${shortField(field)} exactly as in the source.`);
+        add(unitOf(field), `Translation URL mismatch: ${field}`, `Keep the URLs in ${shortField(field)} exactly as in the source.`, field);
       }
       for (const token of protectedTokens(source)) {
         const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         if (!new RegExp(`(?<![A-Za-z0-9_])${escaped}(?![A-Za-z0-9_])`).test(target)) {
-          add(unitOf(field), `Missing protected token ${token}: ${field}`, `Keep the token ${token} exactly as in the source (in ${shortField(field)}).`);
+          add(unitOf(field), `Missing protected token ${token}: ${field}`, `In ${shortField(field)}, copy ${token} verbatim as a standalone token. Separate units from numbers and pluralize the surrounding noun, not an identifier.`, field);
         }
       }
     } else if (Array.isArray(source)) {

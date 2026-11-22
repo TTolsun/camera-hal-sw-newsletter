@@ -347,6 +347,7 @@ function editorialPlanPrompt() {
 function publicArticleJudgePrompt() {
   return [
     technicalBriefingContractPrompt(),
+    '한국어 공개 문장을 읽고 누가 무엇을 바꿨는지, 누가 어떤 신호를 확인해 볼 수 있는지 구별하세요. 번역투가 행위자나 확인 상태를 흐리면 해당 문장을 지목하고 원래 뜻을 살리는 최소 수정을 제안하세요. 단순한 문체 취향은 P3로 남기고 확인된 사실과 제안이 뒤섞여 의미가 달라질 때만 차단하세요.',
     '버그 수정의 공개 body_markdown에 확인 조건·관찰 결과 또는 릴리스·제품 반영의 미확인 한계가 빠졌으면 public_article_pass=false와 issues[].field=public_article.body_markdown, severity=P2로 기록하세요. 내부 reader_checkpoints나 not_to_overclaim이 충실해도 공개 본문 누락을 대신하지 못합니다. suggested_fix에는 제공된 근거 안에서 넣을 내용을 명명하세요. 이 검사는 P3 desk advisory가 아니라 기존 semantic repair 대상입니다.',
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 public article semantic judge입니다.',
     '역할은 article을 다시 쓰는 것이 아니라, 제공된 JSON이 독자에게 발행 가능한 의미 품질을 갖췄는지 판정하는 것입니다.',

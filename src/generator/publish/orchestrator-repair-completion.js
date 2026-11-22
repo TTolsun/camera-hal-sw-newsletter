@@ -169,6 +169,7 @@ function salvageUnpublishableAfterReview({
   shortlistReport,
   seedEvidencePack,
   attempt,
+  totalAttempts = attempt,
   qualityGateContext
 }) {
   if (!qualityReport || qualityReport.status === 'PASS') return null;
@@ -179,6 +180,10 @@ function salvageUnpublishableAfterReview({
     Number(metrics.blocking_deduction_count) === 0 &&
     (factCheck && factCheck.status) !== 'NEEDS_FIX';
   if (!onlyUnpublishable) return null;
+  // The next editor receives these source-bound findings and preserves the approved sections.
+  // Keep the existing subset fallback once the configured writing attempts are exhausted.
+  if (attempt < totalAttempts && ensureArray(factCheck.article_quality).some(article =>
+    article.publishable === false && ensureArray(article.source_review?.material_omissions).length > 0)) return null;
   const salvage = attemptRepairFailureSalvage({
     date,
     preRepairEditor: editor,

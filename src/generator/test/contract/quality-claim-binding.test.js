@@ -777,6 +777,21 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
   const splitNotes = [`Source URL: ${url}`, 'Evidence ID: source-body:primary',
     'Verified patch details and commit message in Gerrit.'];
   const splitArticle = { ...article, source_verification_notes: splitNotes };
+  const parts = [1, 2].map(part => ({ ...document, revision: 'same-primary-revision', part, parts: 2,
+    evidence_id: 'source-body:part' + part }));
+  const multipartNotes = splitNotes.flatMap(line => line.startsWith('Evidence ID:')
+    ? parts.map(doc => 'Evidence ID: ' + doc.evidence_id) : [line]);
+  const multipartBlockers = (docs, notes) => linkedDeductions(reportWithTargetSection(
+    { ...article, source_verification_notes: notes },
+    { ...candidate, article_source_reading: { status: 'read', documents: docs } }
+  ), 'linked-evidence-overclaim');
+  assert.equal(multipartBlockers(parts, multipartNotes).length, 0);
+  for (const docs of [
+    parts.slice(0, 1), [parts[0], { ...parts[1], part: 1 }],
+    [parts[0], { ...parts[1], revision: 'other-revision' }],
+    [parts[0], { ...parts[1], truncated: true }], [parts[0], { ...parts[1], url: url + '/other' }]
+  ]) assert.ok(multipartBlockers(docs, multipartNotes).some(finding => finding.blocking));
+  assert.ok(multipartBlockers(parts, [...multipartNotes, 'Gerrit linked evidence verified']).some(finding => finding.blocking));
   assert.equal(linkedDeductions(reportWithTargetSection(splitArticle, candidate), 'linked-evidence-overclaim').length, 0);
   for (const badNotes of [
     splitNotes.slice(1), splitNotes.filter(note => !note.startsWith('Evidence ID:')),
@@ -847,7 +862,7 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
   assert.equal(blocked({ ...article, headline: 'GitHub 정리 노트.', what_changed: 'Gerrit change 123 main 브랜치에 MERGED.' }), false);
   // 같은 사실을 대소문자·조사·어순만 바꿔 적어도 1차 변경의 상태로 인정한다(2026-10-26 실측 문구).
   const reworded = 'Gerrit Change 123은 2026-01-02 main 브랜치에 병합(MERGED)되었습니다.';
-  for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)',
+  for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)', 'Gerrit 커밋 123(status: MERGED)',
     'Gerrit 변경 123이 platform/example의 main 브랜치에 MERGED 상태입니다.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [variant] }), false, variant);
   }
@@ -857,6 +872,7 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     `${reworded} Linked evidence verified.`,
     // 앞에 linked evidence 주어가 오면 MERGED는 그 주어에 대한 주장일 수 있어 지우지 않는다.
     'GitHub issue #7 is closed by Gerrit change 123 main 브랜치에 MERGED.',
+    'Gerrit 커밋 124(status: MERGED)', 'Linked evidence b/42 — Gerrit 커밋 123(status: MERGED).',
     'Linked evidence b/42 — Gerrit change 123 MERGED.', 'CVE-2026-0001 patch: Gerrit change 123 MERGED.',
     // 주어와 구절 사이의 버전 번호·URL 마침표는 문장 경계가 아니다.
     'GitHub issue #7 (v1.2 regression) is closed by Gerrit change 123 MERGED.',

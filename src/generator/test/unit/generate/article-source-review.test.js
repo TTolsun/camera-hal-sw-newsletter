@@ -2,6 +2,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { sourceReviewInput, reviewArticleSources, BRIEFING_CHECKS } = require('../../../quality/article-source-review');
 
+const { buildArticleCapsule } = require('../../../select/article-capsules');
+
 const editor = { sections: [{ sources: [{ url: 'https://example.com/a' }],
   public_article: { headline: 'Change', body_markdown: 'Generic advice' }, claims: ['internal claims'] }] };
 const capsules = { selected_capsules: [{ url: 'https://example.com/a', what_changed: 'Repeated summary',
@@ -180,4 +182,33 @@ test('malformed passage references and missing behavioral comparisons fail close
     assert.equal(result.article_quality[0].publishable, false);
     assert.match(result.article_quality[0].reason, /Incomplete article briefing review/);
   }
+});
+
+test('a test assertion presented as a field measurement blocks the public article for repair', async () => {
+  const review = verdict();
+  review.briefing_checks.diagnostic_attribution = { applicable: true, satisfied: false,
+    evidence_passage_ids: ['0:lead:0'], reason: 'The test asserts output ordering. No device latency was measured.' };
+  const result = await reviewArticleSources(editor, capsules, { article_quality: [verdict()] },
+    async () => ({ article_quality: [review] }));
+  assert.equal(result.article_quality[0].publishable, false);
+  assert.match(result.article_quality[0].reason, /diagnostic_attribution/);
+});
+
+test('release-note review requires matching source identity and actual quoted source text', () => {
+  const section = editor.sections[0];
+  const url = section.source_candidate_url || section.sources[0].url;
+  const sourceText = 'An official release excerpt. '.repeat(8) + 'Only with an attached surface.';
+  const extraction = { source_type: 'release_note', source: { url }, release: {
+    version: '1.0.0', date: '2026-11-18', sections: [
+      { heading: 'Input surfaces', items: [{ source_text: sourceText }, { text: 'Unverified summary.' }] }
+    ]
+  } };
+  const input = source => sourceReviewInput(editor, {
+    shortlisted_capsules: [buildArticleCapsule({ url, source_extraction: source })]
+  });
+  const [row] = input(extraction);
+  assert.equal(row.source_documents[0].text, ['1.0.0', '2026-11-18', 'Input surfaces', sourceText].join('\n'));
+  assert.doesNotMatch(row.source_documents[0].text, /Unverified summary/);
+  assert.deepEqual(input({ ...extraction, source: { url: url + '/other' } }), []);
+  assert.deepEqual(input({ ...extraction, release: { sections: [] } }), []);
 });
