@@ -1,4 +1,4 @@
-name: Newsletters 01 - Source Collection PR
+name: 1-01 Newsletter - Collect Sources
 
 on:
   workflow_dispatch:

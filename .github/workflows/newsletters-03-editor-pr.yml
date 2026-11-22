@@ -1,4 +1,4 @@
-name: Newsletters 03 - Editor PR
+name: 1-03 Newsletter - Prepare Editorial PR
 
 on:
   workflow_dispatch:

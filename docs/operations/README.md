@@ -10,7 +10,7 @@
 
 수동으로 고품질 호를 생성할 때의 절차입니다.
 
-- GitHub Actions에서 `Newsletters 03 - Editor PR` (`.github/workflows/newsletters-03-editor-pr.yml`)을 고르고 `Run workflow`를 실행합니다.
+- GitHub Actions에서 `1-03 Newsletter - Prepare Editorial PR` (`.github/workflows/newsletters-03-editor-pr.yml`)을 고르고 `Run workflow`를 실행합니다.
 - Stage 2/3 manual run의 `newsletter_date`는 선택 입력(optional)입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 정해지고, 정해진 날짜는 workflow log에 출력됩니다.
 - 특정 날짜를 다시 생성하려면 `newsletter_date`만 입력합니다. candidate artifact는 이제 path input으로 받지 않습니다. 대신 `merged-candidates.json` → `manual-candidates.json` → legacy `candidates.json` 순서로 자동 선택합니다.
 - Stage 3 manual final generation의 기본 입력은 `llm_model=""`입니다. 이 기본 실행은 code default stage model을 primary로 씁니다.
@@ -28,7 +28,7 @@ PR을 검토할 때는 상단 요약부터 본 뒤 필요하면 artifact로 내�
 - `final_publish_ready=false`는 AI 자동 발행 기준을 충족하지 못했다는 뜻입니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장이 merge해서 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없습니다. 그래서 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason(공개 파일이 없는 이유)을 먼저 확인합니다.
 
-> 📌 `Site 01 - Validate Site and Images` (`.github/workflows/site-01-validate.yml`)는 quality/fact-check 문제는 차단하지 않는 알림(non-blocking annotation)으로 보고하고, structural validation(구조 검증)만 차단(blocking)으로 처리합니다.
+> 📌 `2-01 Site - Validate Site and Images` (`.github/workflows/site-01-validate.yml`)는 quality/fact-check 문제는 차단하지 않는 알림(non-blocking annotation)으로 보고하고, structural validation(구조 검증)만 차단(blocking)으로 처리합니다.
 
 <details>
 <summary>PR body에서 확인할 항목 자세히 보기</summary>
@@ -71,7 +71,7 @@ PR을 검토할 때는 상단 요약부터 본 뒤 필요하면 artifact로 내�
 
 ## 배포 후 모바일 화면 검사
 
-`Site 02 - Build & Deploy`는 Pages 배포 성공 후 `verify-deployed-layout` job에서 실제 배포 URL을 Chromium의 320×900 화면으로 검사합니다. 배포한 revision의 모든 한글·영문 뉴스레터를 수집하므로 최신 주간호, 이전 주간호, 날짜 형식의 과거 호가 자동으로 포함됩니다.
+`2-02 Site - Build & Deploy`는 Pages 배포 성공 후 `verify-deployed-layout` job에서 실제 배포 URL을 Chromium의 320×900 화면으로 검사합니다. 배포한 revision의 모든 한글·영문 뉴스레터를 수집하므로 최신 주간호, 이전 주간호, 날짜 형식의 과거 호가 자동으로 포함됩니다.
 
 각 페이지에서 언어 메뉴를 열고 닫으며 메뉴와 두 언어 선택지가 화면 안에 있고 클릭 가능한지 확인합니다. 기사 이미지와 fallback 이미지의 로딩, 이미지 개수, 본문 너비 일치와 16:9 비율도 확인합니다. 실제 사이트 검사에서는 외부 이미지를 모의 응답으로 바꾸지 않습니다.
 

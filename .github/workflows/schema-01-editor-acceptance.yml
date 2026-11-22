@@ -1,4 +1,4 @@
-name: Schema 01 - Editor Schema Acceptance
+name: 3-01 Manual - Check Editor Schema Acceptance
 
 # editor 단계의 세 모델이 현재 editorSchema를 실제로 받아주는지 라이브로 잽니다.
 # Gemini의 constrained decoding 한계(too many states)는 문서화된 수치가 없고 모델

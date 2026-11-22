@@ -1,4 +1,4 @@
-name: Newsletters 02 - Source Discovery PR
+name: 1-02 Newsletter - Discover Sources
 
 on:
   workflow_dispatch:

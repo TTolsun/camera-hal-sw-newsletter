@@ -169,14 +169,9 @@ Stage 3은 RAW artifact를 수정하지 않으며 `collect`도 다시 실행하�
 
 v1에서는 candidate를 사람이 손으로 편집하는 것을 허용하지 않습니다. RAW PR은 candidate를 검토(review)하고 출처 내력(provenance)을 확인하기 위한 PR입니다. candidate payload를 사람이 직접 고쳐서 Final Generation input으로 쓰는 절차는, 별도의 schema·review·approval 계약을 먼저 정의한 뒤에야 도입합니다.
 
-## Schedule Cutover
+## 주간 예약과 수동 실행
 
-현재 예약(schedule)된 RAW collection 진입점은 `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow입니다.
-
-- Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
-- 레거시 all-in-one 주간 workflow는 제거해야 합니다.
-- Stage 2와 Stage 3은 계속 `workflow_dispatch`로만 실행합니다.
-- 전환 이후에도 all-in-one schedule과 Stage 1 schedule을 동시에 켜 두지 않습니다.
+`1-00 Newsletter - Weekly Orchestrator`가 매주 월요일 09:17 KST에 후보 수집(`1-01`), 출처 탐색(`1-02`), 편집 PR 작성(`1-03`)을 `workflow_call`로 호출합니다. 한 단계만 다시 실행하려면 해당 워크플로의 `Run workflow`를 사용합니다.
 
 workflow branch는 날짜 기반 이름을 써서 같은 날짜에 PR이 중복 생성되는 것을 막습니다.
 

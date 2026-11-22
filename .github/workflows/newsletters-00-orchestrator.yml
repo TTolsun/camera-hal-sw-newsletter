@@ -1,4 +1,4 @@
-name: Newsletters 00 - Weekly Orchestrator
+name: 1-00 Newsletter - Weekly Orchestrator
 
 on:
   schedule:
