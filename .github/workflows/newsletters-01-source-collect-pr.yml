@@ -1,4 +1,4 @@
-name: 1-01 Newsletter - Collect Sources
+name: 1-01 기사 후보 자동 수집
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: 1-02 Newsletter - Discover Sources
+name: 1-02 추가 출처 자동 탐색
 
 on:
   workflow_dispatch:

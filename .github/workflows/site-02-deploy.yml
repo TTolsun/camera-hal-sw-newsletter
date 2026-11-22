@@ -1,4 +1,4 @@
-name: 2-02 Site - Build & Deploy (GitHub Pages)
+name: 2-02 사이트 자동 배포 (main 배포 파일 변경)
 
 # #262 phase 6: 공개 출력물은 root index.html + articles/ 아래에 위치한다.
 # 이 워크플로는 _site/ = (root index.html) + (articles/* 를 _site 루트로 복사)로 조립해

@@ -1,4 +1,4 @@
-name: 1-03 Newsletter - Prepare Editorial PR
+name: 1-03 한글판 편집 PR 자동 작성 → 사람 검토
 
 on:
   workflow_dispatch:
