@@ -828,7 +828,7 @@ async function main() {
     // 그대로 repair로 간다.
     const reviewSalvage = salvageUnpublishableAfterReview({
       date, editor, reporter, factCheck, qualityReport, shortlistReport, seedEvidencePack,
-      attempt, qualityGateContext
+      attempt, totalAttempts, qualityGateContext
     });
     if (reviewSalvage) {
       console.warn(`Quality attempt ${attempt}/${totalAttempts}: source review blocked ${reviewSalvage.droppedSections.length} article(s) only; demoting them and keeping ${ensureArray(reviewSalvage.editor.sections).length}.`);
