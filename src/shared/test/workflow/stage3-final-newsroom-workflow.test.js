@@ -299,9 +299,9 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
     'utf8'
   );
 
-  assert.match(stage1, /^name: Newsletters 01 - Source Collection PR/m);
-  assert.match(stage2, /^name: Newsletters 02 - Source Discovery PR/m);
-  assert.match(stage3, /^name: Newsletters 03 - Editor PR/m);
+  assert.match(stage1, /^name: 1-01 기사 후보 자동 수집/m);
+  assert.match(stage2, /^name: 1-02 추가 출처 자동 탐색/m);
+  assert.match(stage3, /^name: 1-03 한글판 편집 PR 자동 작성 → 사람 검토/m);
 
   assert.match(stage1, /workflow_dispatch:/);
   assert.match(stage1, /manual_source_urls:/);
@@ -498,7 +498,7 @@ test('site validation workflow keeps structural checks blocking and quality anno
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
-  assert.match(workflow, /^name: Site 01 - Validate Site and Images$/m);
+  assert.match(workflow, /^name: 2-01 사이트·이미지 자동 검증 \(PR·main\)$/m);
   assert.match(workflow, /^  push:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  pull_request:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  workflow_dispatch:$/m);

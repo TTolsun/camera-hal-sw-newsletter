@@ -1,4 +1,4 @@
-name: Newsletter English translation PR
+name: 1-04 한글판 머지 → 영문 번역 PR 자동 작성 → 사람 검토
 
 on:
   push:

@@ -16,7 +16,7 @@ API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 
 
 ## Workflow 요약
 
-### Newsletters 01 - Source Collection PR
+### 1-01 기사 후보 자동 수집
 
 이름: Gemini prompt 없음
 
@@ -32,7 +32,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 주요 guardrail: LLM credential이 필요 없고 Gemini prompt도 실행하지 않습니다. Stage 1 결과는 Stage 2/Stage 3의 입력일 뿐, 최종 발행물이 아닙니다.
 
-### Newsletters 02 - Source Discovery PR
+### 1-02 추가 출처 자동 탐색
 
 이름: Linked evidence selection prompt
 
@@ -40,7 +40,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 위치: `src/discovery/linked-evidence-candidate-expansion.js`의 `buildSelectionPrompt()`와 `selectNewsworthyLinks()`
 
-Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
+Workflow/Stage: `1-02 추가 출처 자동 탐색`, `sourceDiscovery`
 
 주요 입력: newsletter date, manual 후보의 `outgoing_links`에서 추린 링크 목록(url, link_context, evidence_role, 부모 후보 제목·URL). 기본 상한은 후보당 8개, 실행당 40개입니다.
 
@@ -48,7 +48,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 주요 guardrail: newsletter article을 직접 쓰지 않습니다. 이 선택 호출 자체는 추가 네트워크 fetch를 하지 않고(extract-only, 파생 후보의 근거 원문은 이후 근거 추출 단계가 가져옵니다), 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 고른 링크도 deterministic selection 게이트(source binding, dated evidence)를 통과해야 main 기사가 됩니다.
 
-## Newsletters 03 - Editor PR
+## 1-03 한글판 편집 PR 자동 작성 → 사람 검토
 
 ### 공통 prompt context
 
@@ -58,7 +58,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 위치: `src/generator/reporter/newsletter-prompts.js`의 `buildPromptContexts()` (호출·결합은 `src/generator/publish/gemini-newsroom-newsletter.js`)
 
-Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
+Workflow/Stage: `1-03 한글판 편집 PR 자동 작성 → 사람 검토`, Stage 3 전체
 
 주요 입력: newsletter date, audience 설명, `docs/EDITORIAL_POLICY.md`, `docs/NEWSLETTER_TEMPLATE.md`, `docs/golden-examples/MANUAL_QUALITY_NEWSLETTER.md`
 

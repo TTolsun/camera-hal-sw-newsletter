@@ -1,4 +1,4 @@
-name: Newsletters 00 - Weekly Orchestrator
+name: 1-00 주간호 시작 (월요일 자동 / 수동 가능)
 
 on:
   schedule:

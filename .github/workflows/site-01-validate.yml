@@ -1,4 +1,4 @@
-name: Site 01 - Validate Site and Images
+name: 2-01 사이트·이미지 자동 검증 (PR·main)
 
 on:
   push:
