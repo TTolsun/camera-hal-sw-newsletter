@@ -1,0 +1,433 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=unknown, editor=unknown, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 85,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 5,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점"
+    ],
+    "locked_article_headlines": [
+      "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.7.0"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+        ],
+        "source_titles": [
+          "Check if 3A modes are supported in Controller3A - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "category": "Camera Driver & HAL",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+        ],
+        "source_titles": [
+          "Disable ZSL on Samsung SM-F971 - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "category": "Camera Driver & HAL",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+        ],
+        "source_titles": [
+          "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 5,
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "category": "Android Platform",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+        ],
+        "source_titles": [
+          "Suspend video encoder input surface until start - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.7.0"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+        ],
+        "source_titles": [
+          "Check if 3A modes are supported in Controller3A - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "category": "Camera Driver & HAL",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+        ],
+        "source_titles": [
+          "Disable ZSL on Samsung SM-F971 - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "category": "Camera Driver & HAL",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+        ],
+        "source_titles": [
+          "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 5,
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "category": "Android Platform",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+        ],
+        "source_titles": [
+          "Suspend video encoder input surface until start - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 1
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

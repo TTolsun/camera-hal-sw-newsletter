@@ -2,9 +2,9 @@
 
 ## 최종 판단
 
-- 상태: 검토 필요
-- 편집장 액션: parser/source feedback을 확인하고 후보 보강 여부를 판단하세요.
-- 가장 먼저 볼 항목: parser/source feedback warning이 있습니다. parser_gap_count=1
+- 상태: 검토 가능
+- 편집장 액션: manual 후보로 03 final newsletter generation을 진행할 수 있습니다.
+- 가장 먼저 볼 항목: seed 또는 linked 파생 신규 후보 없이 manual 후보만 병합했습니다.
 
 ## 이번 PR 요약
 
@@ -17,9 +17,9 @@
 | merged candidate artifact | articles/content/collected-news/2026-11-23/merged-candidates.json |
 | source discovery feedback | articles/content/newsroom/2026-11-23/source-discovery-feedback-report.json |
 
-- 다음 단계 안내: 03 진행 가능하나 후보 보강 권장
-- 다음 단계 사유: merged artifact는 생성되었지만 parser/source gap이 남아 있습니다.
-- next_step: strengthen_candidates
+- 다음 단계 안내: 03 진행 가능
+- 다음 단계 사유: merged candidate artifact가 생성되었습니다.
+- next_step: run_03
 
 ## 반드시 확인할 항목
 
@@ -38,7 +38,7 @@
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
-| parser gap | 1 | 보강 필요 |
+| parser gap | 0 | 없음 |
 
 ## 상세 report
 

@@ -8,20 +8,13 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.7.0",
-      "candidate_count": 5,
-      "duplicate_count": 4,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
           "title": "CameraX Release Notes - CameraX 1.7.0",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "title": "CameraX | Jetpack | Android Developers",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         },
@@ -33,15 +26,15 @@
           "manual_seed": false
         },
         {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
-          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
         },
         {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "title": "1.4.0-alpha07",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -59,6 +52,40 @@
         {
           "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
           "title": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bd0afdb40015a4b5",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "canonical_title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+          "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "10516fa73a45ba80",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "canonical_title": "Honor abort cancellation in still capture control - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+          "title": "Honor abort cancellation in still capture control - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -100,16 +127,16 @@
       ]
     },
     {
-      "cluster_id": "4bd256ff5a057dd7",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
-      "canonical_title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+      "cluster_id": "5314ee226c5b3430",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "canonical_title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
-          "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+          "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -134,16 +161,16 @@
       ]
     },
     {
-      "cluster_id": "5314ee226c5b3430",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-      "canonical_title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
+      "cluster_id": "ea61dc10a15de657",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "canonical_title": "Suspend video encoder input surface until start - platform/frameworks/support",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-          "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+          "title": "Suspend video encoder input surface until start - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -151,16 +178,16 @@
       ]
     },
     {
-      "cluster_id": "f4fcd93c70ec2236",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "canonical_title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
+      "cluster_id": "ca0244e3d958a933",
+      "cluster_key": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "canonical_url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "canonical_title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-          "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
+          "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+          "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -168,16 +195,16 @@
       ]
     },
     {
-      "cluster_id": "ae5e659145c1d69b",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-      "canonical_title": "Skip HLG10 feature group tests on emulators - platform/frameworks/support",
+      "cluster_id": "764a52e4256164fb",
+      "cluster_key": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "canonical_url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "canonical_title": "media: exynos4-is: Fix a race between s_stream(0) and the interrupt handler (android17-6.18-lts)",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-          "title": "Skip HLG10 feature group tests on emulators - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+          "title": "media: exynos4-is: Fix a race between s_stream(0) and the interrupt handler (android17-6.18-lts)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -287,6 +314,125 @@
       ]
     },
     {
+      "cluster_id": "2b33b6ea1b853dc7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
+      "canonical_title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
+          "title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "db7a65e072b8cf2b",
+      "cluster_key": "https://patchwork.libcamera.org/patch/29049",
+      "canonical_url": "https://patchwork.libcamera.org/patch/29049/",
+      "canonical_title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/29049/",
+          "title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "db9b711dbde14d6c",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28964",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28964/",
+      "canonical_title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28964/",
+          "title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8e31c7494fb9032c",
+      "cluster_key": "https://patchwork.libcamera.org/patch/29062",
+      "canonical_url": "https://patchwork.libcamera.org/patch/29062/",
+      "canonical_title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/29062/",
+          "title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8bc218b98bd55af2",
+      "cluster_key": "https://patchwork.libcamera.org/patch/29018",
+      "canonical_url": "https://patchwork.libcamera.org/patch/29018/",
+      "canonical_title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/29018/",
+          "title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c76fc6b17aea364d",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28990",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28990/",
+      "canonical_title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28990/",
+          "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "25fe28ccd9e61bd3",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28958",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28958/",
+      "canonical_title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28958/",
+          "title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "5c7917e5b52fcd37",
       "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
       "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
@@ -338,86 +484,52 @@
       ]
     },
     {
-      "cluster_id": "8e31c7494fb9032c",
-      "cluster_key": "https://patchwork.libcamera.org/patch/29062",
-      "canonical_url": "https://patchwork.libcamera.org/patch/29062/",
-      "canonical_title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
+      "cluster_id": "abf0e040081e7718",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+      "canonical_title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://patchwork.libcamera.org/patch/29062/",
-          "title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+          "title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
           "canonical": true,
-          "reliability": "project-official",
+          "reliability": "official",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "db7a65e072b8cf2b",
-      "cluster_key": "https://patchwork.libcamera.org/patch/29049",
-      "canonical_url": "https://patchwork.libcamera.org/patch/29049/",
-      "canonical_title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+      "cluster_id": "b286e126e0262b89",
+      "cluster_key": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+      "canonical_url": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+      "canonical_title": "simdjson 5.0 with full C++26 reflection support -- Daniel Lemire",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://patchwork.libcamera.org/patch/29049/",
-          "title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+          "url": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+          "title": "simdjson 5.0 with full C++26 reflection support -- Daniel Lemire",
           "canonical": true,
-          "reliability": "project-official",
+          "reliability": "official-community",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "db9b711dbde14d6c",
-      "cluster_key": "https://patchwork.libcamera.org/patch/28964",
-      "canonical_url": "https://patchwork.libcamera.org/patch/28964/",
-      "canonical_title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
+      "cluster_id": "456e95040e569ad7",
+      "cluster_key": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+      "canonical_url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+      "canonical_title": "On forcing all derived classes to implement a specific non-virtual method, part 2 -- Raymond Chen",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://patchwork.libcamera.org/patch/28964/",
-          "title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
+          "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+          "title": "On forcing all derived classes to implement a specific non-virtual method, part 2 -- Raymond Chen",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "8bc218b98bd55af2",
-      "cluster_key": "https://patchwork.libcamera.org/patch/29018",
-      "canonical_url": "https://patchwork.libcamera.org/patch/29018/",
-      "canonical_title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://patchwork.libcamera.org/patch/29018/",
-          "title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "c76fc6b17aea364d",
-      "cluster_key": "https://patchwork.libcamera.org/patch/28990",
-      "canonical_url": "https://patchwork.libcamera.org/patch/28990/",
-      "canonical_title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://patchwork.libcamera.org/patch/28990/",
-          "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
-          "canonical": true,
-          "reliability": "project-official",
+          "reliability": "official-community",
           "manual_seed": false
         }
       ]
@@ -525,23 +637,6 @@
       ]
     },
     {
-      "cluster_id": "ca0244e3d958a933",
-      "cluster_key": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
-      "canonical_url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
-      "canonical_title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
-          "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "b9ae0e67c209d9be",
       "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
       "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
@@ -627,23 +722,6 @@
       ]
     },
     {
-      "cluster_id": "2b33b6ea1b853dc7",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
-      "canonical_title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
-          "title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "aa8d3d935b21f7dc",
       "cluster_key": "https://patchwork.libcamera.org/patch/29029",
       "canonical_url": "https://patchwork.libcamera.org/patch/29029/",
@@ -678,35 +756,52 @@
       ]
     },
     {
-      "cluster_id": "25fe28ccd9e61bd3",
-      "cluster_key": "https://patchwork.libcamera.org/patch/28958",
-      "canonical_url": "https://patchwork.libcamera.org/patch/28958/",
-      "canonical_title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+      "cluster_id": "a63efd201a48c919",
+      "cluster_key": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-method-p",
+      "canonical_url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-method-p",
+      "canonical_title": "On forcing all derived classes to implement a specific non-virtual method, part 1 -- Raymond Chen",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://patchwork.libcamera.org/patch/28958/",
-          "title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+          "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-method-p",
+          "title": "On forcing all derived classes to implement a specific non-virtual method, part 1 -- Raymond Chen",
           "canonical": true,
-          "reliability": "project-official",
+          "reliability": "official-community",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "1590e3f6387642d1",
-      "cluster_key": "https://github.com/anthropics/claude-code/releases/tag/v2.1.328",
-      "canonical_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.328",
-      "canonical_title": "Claude Code v2.1.328",
+      "cluster_id": "f67b5a44dc20fa3c",
+      "cluster_key": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+      "canonical_url": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+      "canonical_title": "Samsung Begins One UI 9.5 Beta Program",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.328",
-          "title": "Claude Code v2.1.328",
+          "url": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+          "title": "Samsung Begins One UI 9.5 Beta Program",
           "canonical": true,
-          "reliability": "official",
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4ad1aac0d8796fa9",
+      "cluster_key": "https://isocpp.org//blog/2026/11/cpp26-stdinplace-vector-sandor-dargo",
+      "canonical_url": "https://isocpp.org//blog/2026/11/cpp26-stdinplace-vector-sandor-dargo",
+      "canonical_title": "C++26: std::inplace_vector -- Sandor Dargo",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/11/cpp26-stdinplace-vector-sandor-dargo",
+          "title": "C++26: std::inplace_vector -- Sandor Dargo",
+          "canonical": true,
+          "reliability": "official-community",
           "manual_seed": false
         }
       ]
@@ -722,91 +817,6 @@
         {
           "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
           "title": "Claude Code v2.1.327",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4e2b4f1543d14800",
-      "cluster_key": "https://github.com/anthropics/claude-code/releases/tag/v2.1.326",
-      "canonical_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.326",
-      "canonical_title": "Claude Code v2.1.326",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.326",
-          "title": "Claude Code v2.1.326",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "1aca7ba8dd3fc8ca",
-      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8814042",
-      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8814042",
-      "canonical_title": "camera: Migrate SharedMemoryMapping::memory() to data() - chromiumos/platform2",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8814042",
-          "title": "camera: Migrate SharedMemoryMapping::memory() to data() - chromiumos/platform2",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "1e02ab9c34ce90d4",
-      "cluster_key": "https://github.com/openai/codex/releases/tag/rust-v0.171.0",
-      "canonical_url": "https://github.com/openai/codex/releases/tag/rust-v0.171.0",
-      "canonical_title": "Codex rust-v0.171.0",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://github.com/openai/codex/releases/tag/rust-v0.171.0",
-          "title": "Codex rust-v0.171.0",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "58da586369f33999",
-      "cluster_key": "https://openai.com/index/research-acceleration-jagged-frontier",
-      "canonical_url": "https://openai.com/index/research-acceleration-jagged-frontier",
-      "canonical_title": "Research acceleration: The jagged frontier",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://openai.com/index/research-acceleration-jagged-frontier",
-          "title": "Research acceleration: The jagged frontier",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "b82b64ef90f76e66",
-      "cluster_key": "https://openai.com/business/customer-stories/revolut",
-      "canonical_url": "https://openai.com/business/customer-stories/revolut",
-      "canonical_title": "How Revolut raises ambition without lowering the bar",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://openai.com/business/customer-stories/revolut",
-          "title": "How Revolut raises ambition without lowering the bar",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

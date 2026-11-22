@@ -1,0 +1,1037 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-23",
+  "generated_at": "2026-11-22T18:06:30.551Z",
+  "status": "OK",
+  "failure_stage": "",
+  "failure_reason": "",
+  "selection_errors": [],
+  "selection_warnings": [],
+  "selection_shortage_hints": [
+    "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "review_gate_passed": true,
+  "publish_gate_passed": true,
+  "gate_summary": {
+    "review_gate_passed": true,
+    "publish_gate_passed": true,
+    "non_fallback_reviewable_article_count": 5,
+    "primary_camera_stack_topic_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "eligible_non_fallback_reviewable_article_count": 12,
+    "min_final_articles": 1,
+    "max_final_articles": 5,
+    "absolute_min_reviewable_articles": 0,
+    "min_non_fallback_publish_ready_articles": 0,
+    "selected_article_count": 5
+  },
+  "coverage_week_key": "2026-W47",
+  "coverage_start_date": "2026-11-16",
+  "coverage_end_date": "2026-11-22",
+  "generation_anchor_date": "2026-11-23",
+  "composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_summary": {
+    "selected_article_count": 5,
+    "bucket_counts": {
+      "direct_aosp_camera": 4,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 4,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 5,
+    "fallback_topic_count": 0
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 12,
+    "bucket_counts": {
+      "direct_aosp_camera": 7,
+      "camera_driver_image_pipeline": 3,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 7,
+    "camera_driver_image_pipeline_count": 3,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 10,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 12,
+    "fallback_topic_count": 0
+  },
+  "headline_decision": {
+    "decision": "latest_camera_hal_article",
+    "reason": "latest_camera_hal_article",
+    "current_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+    "replacement_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-11-23",
+    "retained": false,
+    "replaced": true,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-07-27",
+    "backfill_included": true
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 12,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 7,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 10,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 10,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 10,
+    "camera_adjacent_candidate_count": 0,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 5,
+    "selected_primary_camera_stack_count": 5
+  },
+  "shortage_reason_codes": [],
+  "source_parser_hints": [
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "counts": {
+    "input_candidate_count": 55,
+    "eligible_candidate_count": 12,
+    "selected_article_count": 5,
+    "deterministic_selected_count": 5,
+    "reserve_candidate_count": 7,
+    "direct_aosp_camera_count": 4,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 5
+  },
+  "release_class_catch_up": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate",
+    "evidence_unchecked_skips": 0
+  },
+  "release_class_catch_up_after_reconciliation": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate"
+  },
+  "republication_cooldown_blocked": {
+    "history_loaded": true,
+    "history_main_article_count": 68,
+    "count": 1,
+    "urls": [
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+    ]
+  },
+  "evidence_unchecked_main_blocked": {
+    "count": 2,
+    "candidate_urls": [
+      "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477"
+    ]
+  },
+  "eligible_candidate_urls": [
+    "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+    "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+    "https://lore.kernel.org/linux-media/20261116175151.20150-1-volodymyrchapman@gmail.com/",
+    "https://lore.kernel.org/linux-media/20261122034656.1093369-1-huynhtuankiet33@gmail.com/",
+    "https://lore.kernel.org/linux-media/20261120-upstream-s5k3t2-v6-0-dd345fa4201c@proton.me/"
+  ],
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 20
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 20
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 20
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 15
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 15
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 15
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 8
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 5
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 20
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 20
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 20
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 15
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 15
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 15
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 8
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 5
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    }
+  ],
+  "candidate_diagnostics": [
+    {
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+      "stage": "selected",
+      "base_total": 119,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "stage": "selected",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "stage": "selected",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "stage": "selected",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "stage": "selected",
+      "base_total": 137,
+      "total": 139,
+      "camera_hal_directness": 5,
+      "scope_relevance": 5,
+      "freshness_window": "primary",
+      "relevance_bucket": "android",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261116175151.20150-1-volodymyrchapman@gmail.com",
+      "stage": "reserve",
+      "base_total": 128,
+      "camera_hal_directness": 5,
+      "scope_relevance": 4,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "stage": "reserve",
+      "base_total": 115,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "stage": "reserve",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+      "stage": "reserve",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+      "stage": "reserve",
+      "base_total": 99.5,
+      "camera_hal_directness": 2.5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261122034656.1093369-1-huynhtuankiet33@gmail.com",
+      "stage": "reserve",
+      "base_total": 128,
+      "camera_hal_directness": 5,
+      "scope_relevance": 4,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "stage": "shortlisted",
+      "base_total": 121,
+      "total": 123,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "stage": "excluded",
+      "base_total": 54,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "reference",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "watch page without dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "stage": "excluded",
+      "base_total": 64,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "watch page without dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "source_extraction.used_fallback=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "stage": "excluded",
+      "base_total": 114,
+      "total": 116,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "duplicate URL or near-duplicate title"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261121120731.2028810-1-huynhtuankiet33@gmail.com",
+      "stage": "excluded",
+      "base_total": 136,
+      "camera_hal_directness": 5,
+      "scope_relevance": 5,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "main",
+      "exclusion_reasons": [
+        "duplicate URL or near-duplicate title"
+      ]
+    },
+    {
+      "url": "https://patchwork.libcamera.org/patch/28990",
+      "stage": "excluded",
+      "base_total": 89,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://patchwork.libcamera.org/patch/28958",
+      "stage": "excluded",
+      "base_total": 91,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2brpt20261104",
+      "stage": "excluded",
+      "base_total": 54,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "watch page without dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+      "stage": "excluded",
+      "base_total": 86,
+      "camera_hal_directness": 3,
+      "scope_relevance": 4,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+      "stage": "excluded",
+      "base_total": 44.85,
+      "camera_hal_directness": 1.65,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/jetpack-compose-november-2026-release",
+      "stage": "excluded",
+      "base_total": 24,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/elevating-game-quality-foldables-large-screens-google-play",
+      "stage": "excluded",
+      "base_total": 4,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/google-play-adaptive-quality-standards",
+      "stage": "excluded",
+      "base_total": 24,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/ship-smarter-keep-rules-unblock-dex-optimization",
+      "stage": "excluded",
+      "base_total": 17.6,
+      "camera_hal_directness": 2.4,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/android-developer-verification-2027",
+      "stage": "excluded",
+      "base_total": -12.1,
+      "camera_hal_directness": 2.1,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/beyond-the-app-google-play-buyer-reach",
+      "stage": "excluded",
+      "base_total": 4,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408216",
+      "stage": "excluded",
+      "base_total": 132,
+      "total": 134,
+      "camera_hal_directness": 5,
+      "scope_relevance": 5,
+      "freshness_window": "fallback",
+      "relevance_bucket": "android",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "duplicate URL or near-duplicate title"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/blog/posts/open-source-google-sign-in-unity",
+      "stage": "excluded",
+      "base_total": 17,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261118132819.213473-13-sakari.ailus@linux.intel.com",
+      "stage": "excluded",
+      "base_total": 19,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://patchwork.libcamera.org/patch/29029",
+      "stage": "excluded",
+      "base_total": 19,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://patchwork.libcamera.org/patch/29014",
+      "stage": "excluded",
+      "base_total": 21,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-method-p",
+      "stage": "excluded",
+      "base_total": -31.85,
+      "camera_hal_directness": 1.35,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+      "stage": "excluded",
+      "base_total": -39,
+      "camera_hal_directness": 1,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://isocpp.org//blog/2026/11/cpp26-stdinplace-vector-sandor-dargo",
+      "stage": "excluded",
+      "base_total": 60.15,
+      "camera_hal_directness": 1.35,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261116173307.14169-1-volodymyrchapman@gmail.com",
+      "stage": "excluded",
+      "base_total": -63,
+      "camera_hal_directness": 1,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261116173143.13584-1-volodymyrchapman@gmail.com",
+      "stage": "excluded",
+      "base_total": -63,
+      "camera_hal_directness": 1,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/t",
+      "stage": "excluded",
+      "base_total": -63,
+      "camera_hal_directness": 1,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/r/20260917-v4l2-release-fix-v1-1-acbac7f9b78e@ixit.cz",
+      "stage": "excluded",
+      "base_total": 68,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/all/20261016105553.346322-1-a.karelin@ideco.ru",
+      "stage": "excluded",
+      "base_total": -59,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+      "stage": "excluded",
+      "base_total": 125,
+      "total": 127,
+      "camera_hal_directness": 5,
+      "scope_relevance": 5,
+      "freshness_window": "reference",
+      "relevance_bucket": "android",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
+      "stage": "excluded",
+      "base_total": 124,
+      "camera_hal_directness": 5,
+      "scope_relevance": 5,
+      "freshness_window": "reference",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short",
+      "source_policy_blockers": [
+        "trend_reference_project"
+      ],
+      "exclusion_reasons": [
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "stage": "excluded",
+      "base_total": 116,
+      "camera_hal_directness": 5,
+      "scope_relevance": 4,
+      "freshness_window": "reference",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short",
+      "source_policy_blockers": [
+        "trend_reference_project"
+      ],
+      "exclusion_reasons": [
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441",
+      "stage": "excluded",
+      "base_total": 116,
+      "total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main",
+      "exclusion_reasons": [
+        "published as a main article within the republication cooldown"
+      ]
+    }
+  ],
+  "candidate_diagnostics_count": 44,
+  "candidate_diagnostics_not_evaluated": 11,
+  "candidate_diagnostics_truncated": false,
+  "candidate_score_threshold": 42,
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+}

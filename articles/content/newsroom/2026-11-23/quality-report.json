@@ -1,0 +1,2099 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-23",
+  "score": 85,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "category": "Camera Framework",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "source_candidate_hash": "0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "category": "Camera Framework",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+        "source_candidate_hash": "bd0afdb40015a4b5328ea80100428f6c793ef8bb3f16b27b3c11da55f7330289",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "category": "Camera Driver & HAL",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "source_candidate_hash": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "category": "Camera Driver & HAL",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "source_candidate_hash": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "high",
+      "effective_actionability_level": "high",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "category": "Android Platform",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Suspend video encoder input surface until start - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+        "source_candidate_hash": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "high",
+      "effective_actionability_level": "high",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 27,
+    "total_claims": 27,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_release_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.7.0 버전이 2026년 11월 18일 공식 릴리스되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_interop_v2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Camera2Interop V2가 재설계되어 안정화되었으며 옵트인 없이 사용 가능합니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_night_mode",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED) 인터페이스가 추가되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_3a_locking",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "FocusMeteringAction에 3A 잠금 모드(FLAG_AE, FLAG_AWB, FLAG_AF) 설정 API가 도입되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_physical_binding",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "물리 카메라용 CameraSelector 획득 및 UseCase 직접 바인딩이 지원됩니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_auto_rotation",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "SessionConfig 등에 디바이스 센서 기반 회전 처리를 위한 setAutoRotationEnabled가 추가되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_low_light_boost",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Low Light Boost와 Torch가 last setting wins 방식으로 동작하도록 개선되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "claim_id": "c1_extensions_deprecate",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "ExtensionSessionConfig 도입으로 ExtensionsManager.getExtensionEnabledCameraSelector()가 폐기 예정으로 지정되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "claim_id": "c2_merge_status",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4439488이 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 19일 병합되었습니다.",
+      "evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "resolved_evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "claim_id": "c2_are_modes_supported",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Controller3A의 lock3A, submit3A, update3A 메서드에 areModesSupported 사전 검사가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "resolved_evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "claim_id": "c2_submit_failed",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CameraMetadata에 없는 미지원 AE, AF, AWB, Flash, Control 모드 요청 시 즉시 Result3A.Status.SUBMIT_FAILED를 반환합니다.",
+      "evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "resolved_evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "claim_id": "c2_state_retained",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "미지원 모드로 인해 반환된 실패 상황에서는 기존의 3A 상태가 변경되지 않고 유지됩니다.",
+      "evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "resolved_evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "claim_id": "c2_unit_tests",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest 단위 테스트가 함께 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2",
+        "source-body:b265e56cb8c86249fbb5"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:24b43cd05ef4e7a8f7f2",
+        "source-body:b265e56cb8c86249fbb5"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "resolved_evidence_id": "source-body:24b43cd05ef4e7a8f7f2",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:b265e56cb8c86249fbb5",
+          "resolved_evidence_id": "source-body:b265e56cb8c86249fbb5",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "claim_id": "c3_merge_status",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4441195가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "claim_id": "c3_camx_stall",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Samsung SM-F971U1에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환 시 CamX SAT 파이프라인이 멈추는 문제가 발생했습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "claim_id": "c3_result_timeout",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "파이프라인 멈춤으로 인해 TotalCaptureResult가 전달되지 않아 CameraControl.setZoomRatio()가 타임아웃되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "claim_id": "c3_non_zsl_ok",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "비ZSL 세션에서는 줌 전환과 스틸 이미지 캡처가 정상 작동했습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "claim_id": "c3_quirk_applied",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ZslDisablerQuirk에 SM-F971이 추가되어 해당 기기에서 ZSL을 끄고 표준 스틸 캡처로 폴백하도록 처리되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "claim_id": "c4_merge_status",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4440995가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "claim_id": "c4_hal_hang",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "OPPO Find N3 Flip(PHT110)에서 물리 카메라 ID 2 또는 3을 지정할 때 벤더 HAL이 P2StreamingNode 및 BasicSession::flush 중에 멈췄습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "claim_id": "c4_watchdog_abort",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이로 인해 camerahalserver 및 cameraserver watchdog abort(ERROR_CAMERA_DEVICE, CAMERA_DISCONNECTED)가 발생했습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "claim_id": "c4_quirk_applied",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ExcludePhysicalCameraIdQuirk에 PHT110 모델 및 물리 ID 2, 3이 등록되어 API 노출에서 제외되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "claim_id": "c4_test_updated",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ExcludePhysicalCameraIdQuirkTest 단위 테스트가 갱신되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "claim_id": "enc0",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다.",
+      "evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "resolved_evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "claim_id": "enc1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다.",
+      "evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "resolved_evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "claim_id": "enc2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "MediaCodec.start() 반환 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다.",
+      "evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "resolved_evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "claim_id": "enc3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "추가된 테스트는 첫 출력의 presentationTimeUs와 키프레임 여부를 확인합니다.",
+      "evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:8929aa5fd76f7373bf07"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "resolved_evidence_id": "source-body:8929aa5fd76f7373bf07",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 5,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 2,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 4,
+      "stream_buffer_metadata": 5,
+      "camerax_app_compatibility": 4
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 2,
+      "measurable_test": 3
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 2,
+      "measurable_test": 3
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 5
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "CameraX 신규 기능 추가를 HAL 인터페이스 구조체의 직접 변경으로 해석하지 마십시오.",
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraX 프레임워크 추상화 계층",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "HAL3 3A 알고리즘 처리 변경이나 카메라 서버 내부의 동작 변경으로 확대 해석하지 마십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraPipe Controller3A 및 CameraMetadata",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_driver_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "벤더 CamX HAL 자체의 수정이 아니며 CameraX 프레임워크 수준의 쿼크 등록임을 인지해야 합니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraX ZSL 재처리 및 CamX SAT 파이프라인",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "미디어텍 또는 오포의 벤더 HAL 소프트웨어가 직접 패치된 것으로 오해하지 않도록 주의하십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Camera2 OutputConfiguration 및 벤더 P2StreamingNode",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "relevance_bucket": "android",
+      "hal_impact_axes": [
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_framework_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 72): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 6 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "Recorder → EncoderImpl → MediaCodec",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 4,
+    "legacy_regex_camera_article_count": 4,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 4,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 5,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "source_candidate_hash": "0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+        "source_candidate_hash": "bd0afdb40015a4b5328ea80100428f6c793ef8bb3f16b27b3c11da55f7330289",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "source_candidate_hash": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "source_candidate_hash": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 5,
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+        "source_candidate_hash": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 4,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 4,
+      "supporting": 1,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 11,
+    "article_gate_counts": {
+      "PASS": 5,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 27,
+      "total_claims": 27,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 5,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 2,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 4,
+        "stream_buffer_metadata": 5,
+        "camerax_app_compatibility": 4
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 2,
+        "measurable_test": 3
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 2,
+        "measurable_test": 3
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 5
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "CameraX 신규 기능 추가를 HAL 인터페이스 구조체의 직접 변경으로 해석하지 마십시오.",
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "CameraX 프레임워크 추상화 계층",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "HAL3 3A 알고리즘 처리 변경이나 카메라 서버 내부의 동작 변경으로 확대 해석하지 마십시오."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "CameraPipe Controller3A 및 CameraMetadata",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "벤더 CamX HAL 자체의 수정이 아니며 CameraX 프레임워크 수준의 쿼크 등록임을 인지해야 합니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "CameraX ZSL 재처리 및 CamX SAT 파이프라인",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "미디어텍 또는 오포의 벤더 HAL 소프트웨어가 직접 패치된 것으로 오해하지 않도록 주의하십시오."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Camera2 OutputConfiguration 및 벤더 P2StreamingNode",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+        "relevance_bucket": "android",
+        "hal_impact_axes": [
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_framework_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 72): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 6 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "Recorder → EncoderImpl → MediaCodec",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 4
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 4
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      }
+    ],
+    "candidate_exclusion_summary": [],
+    "prose_style": {
+      "reference_only": true,
+      "long_sentence_threshold": 120,
+      "article_count": 5,
+      "sentence_count": 61,
+      "avg_sentence_length": 54.3,
+      "long_sentence_count": 0,
+      "long_sentence_ratio": 0,
+      "lead_count": 5,
+      "purpose_clause_lead_count": 0,
+      "purpose_clause_lead_ratio": 0,
+      "translationese_counts": {
+        "about": 0,
+        "through": 0,
+        "in_terms_of": 0,
+        "double_passive": 0,
+        "for_purpose": 0,
+        "comma_after_connective": 2
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "retention_weeks": 12,
+  "last_window_end_date": "2026-11-22",
+  "entries": [
+    {
+      "change_number": 4440995,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "submitted_date": "2026-11-17",
+      "subject": "Exclude OPPO PHT110 physical camera IDs 2 and 3",
+      "quirk_classes": [
+        {
+          "name": "ExcludePhysicalCameraIdQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "PHT110",
+          "source": "diff_code"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4441195,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "submitted_date": "2026-11-17",
+      "subject": "Disable ZSL on Samsung SM-F971",
+      "quirk_classes": [
+        {
+          "name": "ZslDisablerQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "SM-F971",
+          "source": "diff_code"
+        },
+        {
+          "identifier": "SM-F971U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F936",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F731",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F721",
+          "source": "commit_message"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4445746,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+      "submitted_date": "2026-11-17",
+      "subject": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max",
+      "quirk_classes": [
+        {
+          "name": "DolbyVisionStreamIncorrectColorQuirk",
+          "change": "added"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "2509FPN0BC",
+          "source": "diff_code"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4441276,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "submitted_date": "2026-11-18",
+      "subject": "Extend Samsung Extensions close quirk to API 35+",
+      "quirk_classes": [
+        {
+          "name": "CloseCameraDeviceOnCameraGraphCloseQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "SM-F966U",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F968U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-S942U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-S947U1",
+          "source": "commit_message"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    }
+  ]
+}

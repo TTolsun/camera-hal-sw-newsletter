@@ -1,0 +1,791 @@
+{
+  "status": "PASS",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "failure_kind": "",
+  "failure_class": "",
+  "quality_status": "PASS",
+  "quality_score": 85,
+  "quality_threshold": 60,
+  "publish_ready": true,
+  "selection_publish_ready": true,
+  "final_publish_ready": true,
+  "editor_review_required": true,
+  "date": "2026-11-23",
+  "failure_stage": "",
+  "failure_reason": "",
+  "quality_attempt_count": 1,
+  "quality_deduction_count": 11,
+  "stage_status_log": [
+    {
+      "stage_id": "editor.public_article_judge",
+      "role": "judge",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 public article judge"
+    },
+    {
+      "stage_id": "fact_checker",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "fact-checker attempt 1/2"
+    },
+    {
+      "stage_id": "article_source_review",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "article-source-review attempt 1/2"
+    },
+    {
+      "stage_id": "quality_gate",
+      "role": "quality_gate",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "quality_gate"
+    },
+    {
+      "stage_id": "render",
+      "role": "render",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "render"
+    },
+    {
+      "stage_id": "intro_letter",
+      "role": "intro-letter",
+      "attempt": 0,
+      "status": "passed",
+      "stage": "intro-letter"
+    },
+    {
+      "stage_id": "intro_letter_review",
+      "role": "intro-letter",
+      "attempt": 0,
+      "status": "passed",
+      "stage": "intro-letter-review"
+    }
+  ],
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "stage_key_format": "canonical-v1",
+  "model_usage": {
+    "editor.public_article_judge#1": {
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "fact_checker#1": {
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "article_source_review#1": {
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 8,
+          "successes": 8,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "intro_letter#0": {
+      "stage_key": "intro_letter#0",
+      "stage_id": "intro_letter",
+      "quality_attempt": 0,
+      "label": "intro-letter",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "intro_letter_review#0": {
+      "stage_key": "intro_letter_review#0",
+      "stage_id": "intro_letter_review",
+      "quality_attempt": 0,
+      "label": "intro-letter-review",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.8-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    }
+  },
+  "model_routing": {
+    "editor.public_article_judge#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1"
+    },
+    "fact_checker#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null
+    },
+    "article_source_review#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null
+    },
+    "intro_letter#0": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "intro_letter#0",
+      "stage_id": "intro_letter",
+      "quality_attempt": 0,
+      "label": "intro-letter",
+      "parent_run_key": null
+    },
+    "intro_letter_review#0": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.8-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "intro_letter_review#0",
+      "stage_id": "intro_letter_review",
+      "quality_attempt": 0,
+      "label": "intro-letter-review",
+      "parent_run_key": null
+    }
+  },
+  "candidate_input": {
+    "mode": "default",
+    "candidate_artifact": "articles/content/collected-news/2026-11-23/candidates.json",
+    "candidate_artifact_hash": "98210917ae20d90b28880dd2c4f9e070ce286d14d4716354d828a3c4f8c71497",
+    "manifest": "",
+    "manifest_type": "",
+    "manifest_status": "transition_fallback_no_manifest",
+    "llm_used": false,
+    "merge_mode": "",
+    "candidate_count": null
+  },
+  "run_context": {
+    "github_run_id": "",
+    "github_sha": "",
+    "github_ref": ""
+  },
+  "locked_article_count": 5,
+  "repaired_section_count": 0,
+  "failed_section_count": 0,
+  "skipped_repair_section_count": 3,
+  "rejected_duplicate_article_count": 0,
+  "validate_ok": true,
+  "public_output_expected": true,
+  "weekly_output_status": "written",
+  "weekly_output_failure_reason": "",
+  "intro_letter_status": "generated",
+  "intro_letter_reason": "",
+  "todo_found": false,
+  "empty_source_sections": [],
+  "source_gap_count": 0,
+  "stale_claim_status": "PASS",
+  "stale_claim_removed_count": 0,
+  "stale_claim_hard_failure_count": 0,
+  "completion_fallback_to_prepass": false,
+  "editor_semantic_validation": null,
+  "editor_public_article_judge": {
+    "date": "2026-11-23",
+    "overall_pass": true,
+    "section_count_expected": 5,
+    "section_count_actual": 5,
+    "sections": [
+      {
+        "section_index": 1,
+        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 3,
+        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 4,
+        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 5,
+        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      }
+    ]
+  },
+  "editor_desk_advisory": [],
+  "repairAttempted": false,
+  "repairSucceeded": false,
+  "input_candidate_count": 55,
+  "eligible_candidate_count": 12,
+  "eligible_candidate_urls": [
+    "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+    "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+    "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+    "https://lore.kernel.org/linux-media/20261116175151.20150-1-volodymyrchapman@gmail.com/",
+    "https://lore.kernel.org/linux-media/20261122034656.1093369-1-huynhtuankiet33@gmail.com/",
+    "https://lore.kernel.org/linux-media/20261120-upstream-s5k3t2-v6-0-dd345fa4201c@proton.me/"
+  ],
+  "selected_article_count": 5,
+  "deterministic_selected_count": 5,
+  "rendered_main_article_count": 5,
+  "selected_group_count": 5,
+  "rendered_group_count": 5,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "rendered_outside_selection_count": 0,
+  "explicitly_demoted_outside_selection_count": 0,
+  "hard_blocked_outside_selection_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "rendered_outside_selection_group_keys": [],
+  "explicitly_demoted_outside_selection_group_keys": [],
+  "hard_blocked_outside_selection_group_keys": [],
+  "group_coverage_ok": true,
+  "deterministic_selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+  ],
+  "reconciliation_demoted_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+  ],
+  "reconciliation_demoted_groups": [
+    {
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "demoted_candidates": [
+        {
+          "candidate_key": "5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c",
+          "coverage_decision": "main_article",
+          "reason_code": "diagnostic_comparison"
+        }
+      ]
+    }
+  ],
+  "editorial_plan_scored_candidates": [
+    {
+      "candidate_key": "0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "bd0afdb40015a4b5328ea80100428f6c793ef8bb3f16b27b3c11da55f7330289",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "coverage_decision": "main_article",
+      "reason_code": "diagnostic_comparison"
+    },
+    {
+      "candidate_key": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
+      "lineup_role": "reserve",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "coverage_decision": "main_article",
+      "reason_code": "promoted"
+    },
+    {
+      "candidate_key": "8bc23770060fdb15a34b9eb456159005cbb6fbcc65671b643824e392e43fd69e",
+      "lineup_role": "reserve",
+      "article_group_key": "lore-series:20261116175151.20150-volodymyrchapman@gmail.com",
+      "coverage_decision": "main_article",
+      "reason_code": "cap_clamp"
+    },
+    {
+      "candidate_key": "764a52e4256164fbdd54f5c88b3c4e4722acda6ea945dc8de84677d121fecf8e",
+      "lineup_role": "reserve",
+      "article_group_key": "article:https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "coverage_decision": "main_article",
+      "reason_code": "cap_clamp"
+    },
+    {
+      "candidate_key": "147e905fcf888ed080353cf08a87f6aa25f76548c3fdff262e20ab477967c556",
+      "lineup_role": "reserve",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+      "coverage_decision": "main_article",
+      "reason_code": "cap_clamp"
+    },
+    {
+      "candidate_key": "8f7a055a1b360233ad87f8f6e9ed14545bc77431e59e77c825c7cd5ff6f24435",
+      "lineup_role": "reserve",
+      "article_group_key": "article:https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+      "coverage_decision": "main_article",
+      "reason_code": "promotion_blocked_ineligible"
+    },
+    {
+      "candidate_key": "6a8e794d45cf5f2de48e0977f46e3a4d2b429f841ece3797be15d06845abe79f",
+      "lineup_role": "reserve",
+      "article_group_key": "lore-series:20261122034656.1093369-huynhtuankiet33@gmail.com",
+      "coverage_decision": "main_article",
+      "reason_code": "cap_clamp"
+    }
+  ],
+  "reconciliation_promoted_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+  ],
+  "reserve_candidate_count": 7,
+  "demoted_article_count": 0,
+  "fallback_topic_count": 0,
+  "reporter_candidate_count": 12,
+  "reporter_selected_count": 12,
+  "final_input_candidate_count": 55,
+  "final_eligible_candidate_count": 12,
+  "final_selected_article_count": 5,
+  "reporter_selected_but_final_excluded_count": 7,
+  "ai_selected_article_count": 4,
+  "underfilled": false,
+  "review_gate_passed": true,
+  "publish_gate_passed": true,
+  "min_final_articles": 1,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 0,
+  "min_non_fallback_publish_ready_articles": 0,
+  "composition_mode": "NORMAL",
+  "publish_mode": "DEEP",
+  "publish_mode_detail": {
+    "mode": "DEEP",
+    "core_count": 5,
+    "adjacent_count": 0,
+    "context_count": 0,
+    "context_min_signals": 1
+  },
+  "selection_composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_summary": {
+    "selected_article_count": 5,
+    "bucket_counts": {
+      "direct_aosp_camera": 4,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 4,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 5,
+    "fallback_topic_count": 0
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 12,
+    "bucket_counts": {
+      "direct_aosp_camera": 7,
+      "camera_driver_image_pipeline": 3,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 7,
+    "camera_driver_image_pipeline_count": 3,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 10,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 12,
+    "fallback_topic_count": 0
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 12,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 7,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 10,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 10,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 10,
+    "camera_adjacent_candidate_count": 0,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 5,
+    "selected_primary_camera_stack_count": 5
+  },
+  "shortage_reason_codes": [],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 0,
+    "directAospCameraOrDriverMinRequired": 0,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "non_fallback_reviewable_article_count": 5,
+  "eligible_non_fallback_reviewable_article_count": 12,
+  "primary_camera_stack_topic_count": 4,
+  "supporting_main_article_count": 1,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 4,
+  "camera_driver_image_pipeline_count": 0,
+  "android_count": 0,
+  "android_multimedia_camera_output_count": 1,
+  "soc_platform_signal_count": 0,
+  "cpp_ai_tooling_fallback_count": 0,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "headline_decision": {
+    "decision": "latest_camera_hal_article",
+    "reason": "latest_camera_hal_article",
+    "current_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489",
+    "replacement_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-11-23",
+    "retained": false,
+    "replaced": true,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-07-27",
+    "backfill_included": true
+  },
+  "release_class_catch_up": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate",
+    "evidence_unchecked_skips": 0
+  },
+  "release_class_catch_up_after_reconciliation": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate"
+  },
+  "republication_cooldown_blocked": {
+    "history_loaded": true,
+    "history_main_article_count": 68,
+    "count": 1,
+    "urls": [
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4430441"
+    ]
+  },
+  "evidence_unchecked_main_blocked": {
+    "count": 2,
+    "candidate_urls": [
+      "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477"
+    ]
+  },
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 20
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 20
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 20
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 15
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 15
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 15
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 8
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 5
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 20
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 20
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 20
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 15
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 15
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 15
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 8
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 5
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "coverage_week_key": "2026-W47",
+  "coverage_start_date": "2026-11-16",
+  "coverage_end_date": "2026-11-22",
+  "generation_anchor_date": "2026-11-23",
+  "carry_forward_status": "missing_expected",
+  "carry_source": null,
+  "not_yet_eligible_count": 0,
+  "not_yet_eligible_overflow": false,
+  "public_output_lane": "weekly",
+  "legacy_dated_output_enabled": false,
+  "weekly_page_structure_status": "ok",
+  "weekly_page_structure_key": "2026-W48",
+  "weekly_page_structure_errors": [],
+  "public_newsletter_ready": true,
+  "review_publication_ready": false,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "PUBLISH_READY",
+  "run_mode": "publish_ready",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "latest_public_ready",
+  "public_artifact_source": "latest_run",
+  "reconciliation_required": false,
+  "reconciliation_action": "none_latest_public_ready",
+  "reconciliation_reason": "latest run is final publish-ready and public structure is valid"
+}
