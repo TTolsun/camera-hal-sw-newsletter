@@ -8,17 +8,17 @@
 
 ## 🚀 주간호 시작
 
-매주 월요일 09:17 KST에 `1-00 주간호 시작 (월요일 자동 / 수동 가능)` 워크플로가 기사 후보 수집, 추가 출처 탐색, 한글판 편집 PR 작성을 차례로 실행합니다. 전체 흐름을 수동으로 시작하려면 GitHub Actions에서 같은 워크플로를 선택하고 `Run workflow`를 누릅니다.
+매주 월요일 09:17 KST에 `1-00 Start the weekly issue (Mondays or on demand)` 워크플로가 기사 후보 수집, 추가 출처 탐색, 한글판 편집 PR 작성을 차례로 실행합니다. 전체 흐름을 수동으로 시작하려면 GitHub Actions에서 같은 워크플로를 선택하고 `Run workflow`를 누릅니다.
 
-한글판 편집 PR은 사람이 검토해 발행을 승인하면 머지합니다. 한글판이 `main`에 반영되면 `1-04 한글판 머지 → 영문 번역 PR 자동 작성 → 사람 검토` 워크플로가 영문 번역 PR을 만듭니다. 이 PR도 사람이 별도로 검토합니다. GitHub Pages는 배포 대상 파일이 `main`에서 바뀔 때 자동으로 배포되므로 영문 PR을 검토하는 동안에도 한글판이 공개될 수 있습니다.
+한글판 편집 PR은 사람이 검토해 발행을 승인하면 머지합니다. 한글판이 `main`에 반영되면 `1-04 Auto after Korean merge - Open English PR for review` 워크플로가 영문 번역 PR을 만듭니다. 이 PR도 사람이 별도로 검토합니다. GitHub Pages는 배포 대상 파일이 `main`에서 바뀔 때 자동으로 배포되므로 영문 PR을 검토하는 동안에도 한글판이 공개될 수 있습니다.
 
 ### 한 단계만 수동으로 실행
 
 개별 단계를 다시 실행하려면 GitHub Actions에서 해당 워크플로를 고르고 `Run workflow`를 누릅니다.
 
-- 기사 후보 수집은 `1-01 기사 후보 자동 수집`을 실행합니다.
-- 추가 출처 탐색은 `1-02 추가 출처 자동 탐색`을 실행합니다.
-- 기존 후보로 한글판 편집 PR을 다시 만들려면 `1-03 한글판 편집 PR 자동 작성 → 사람 검토`를 실행합니다.
+- 기사 후보 수집은 `1-01 Auto - Collect news` 워크플로를 실행합니다.
+- 추가 출처 탐색은 `1-02 Auto - Find more sources` 워크플로를 실행합니다.
+- 기존 후보로 한글판 편집 PR을 다시 만들려면 `1-03 Auto - Open Korean PR for review` 워크플로를 실행합니다.
 
 출처 탐색과 편집 PR을 수동으로 실행할 때는 다음 입력과 산출물을 확인합니다.
 
@@ -39,7 +39,7 @@ PR을 검토할 때는 상단 요약부터 본 뒤 필요하면 artifact로 내�
 - `final_publish_ready=false`는 AI 자동 발행 기준을 충족하지 못했다는 뜻입니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장이 merge해서 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없습니다. 그래서 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason(공개 파일이 없는 이유)을 먼저 확인합니다.
 
-> 📌 `2-01 사이트·이미지 자동 검증 (PR·main)` (`.github/workflows/site-01-validate.yml`) 워크플로는 quality/fact-check 문제는 차단하지 않는 알림(non-blocking annotation)으로 보고하고, structural validation(구조 검증)만 차단(blocking)으로 처리합니다.
+> 📌 `2-01 Auto - Check site and images (PRs and main)` (`.github/workflows/site-01-validate.yml`) 워크플로는 quality/fact-check 문제는 차단하지 않는 알림(non-blocking annotation)으로 보고하고, structural validation(구조 검증)만 차단(blocking)으로 처리합니다.
 
 <details>
 <summary>PR body에서 확인할 항목 자세히 보기</summary>
@@ -82,7 +82,7 @@ PR을 검토할 때는 상단 요약부터 본 뒤 필요하면 artifact로 내�
 
 ## 배포 후 모바일 화면 검사
 
-`2-02 사이트 자동 배포 (main 배포 파일 변경)` 워크플로는 Pages 배포 성공 후 `verify-deployed-layout` job에서 실제 배포 URL을 Chromium의 320×900 화면으로 검사합니다. 배포한 revision의 모든 한글·영문 뉴스레터를 수집하므로 최신 주간호, 이전 주간호, 날짜 형식의 과거 호가 자동으로 포함됩니다.
+`2-02 Auto - Deploy site when site files change on main` 워크플로는 Pages 배포 성공 후 `verify-deployed-layout` job에서 실제 배포 URL을 Chromium의 320×900 화면으로 검사합니다. 배포한 revision의 모든 한글·영문 뉴스레터를 수집하므로 최신 주간호, 이전 주간호, 날짜 형식의 과거 호가 자동으로 포함됩니다.
 
 각 페이지에서 언어 메뉴를 열고 닫으며 메뉴와 두 언어 선택지가 화면 안에 있고 클릭 가능한지 확인합니다. 기사 이미지와 fallback 이미지의 로딩, 이미지 개수, 본문 너비 일치와 16:9 비율도 확인합니다. 실제 사이트 검사에서는 외부 이미지를 모의 응답으로 바꾸지 않습니다.
 

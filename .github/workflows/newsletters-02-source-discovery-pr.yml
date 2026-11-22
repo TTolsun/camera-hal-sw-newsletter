@@ -1,4 +1,4 @@
-name: 1-02 추가 출처 자동 탐색
+name: 1-02 Auto - Find more sources
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: 1-03 한글판 편집 PR 자동 작성 → 사람 검토
+name: 1-03 Auto - Open Korean PR for review
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: 1-01 기사 후보 자동 수집
+name: 1-01 Auto - Collect news
 
 on:
   workflow_dispatch:
