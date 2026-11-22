@@ -30,7 +30,7 @@
 
 - decision: latest_camera_hal_article
 - current_headline_key: url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439489
-- replacement_headline_key: url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0
+- replacement_headline_key: url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
@@ -41,7 +41,7 @@
 - latest_inclusion_mode: none
 - injected_from_snapshot: false
 - removed_due_to_headline_inclusion_count: 0
-- exposure_history_coverage: unknown since unknown
+- exposure_history_coverage: forward_only since 2026-07-27
 
 ## Source Parser Hints
 
@@ -51,8 +51,8 @@
 ## Gate Summary
 
 - non_fallback_reviewable_article_count: 5
-- primary_camera_stack_topic_count: 5
-- supporting_main_article_count: 0
+- primary_camera_stack_topic_count: 4
+- supporting_main_article_count: 1
 - forbidden_main_article_count: 0
 - Minimum publishable article count: 1
 - Primary camera stack requirement: disabled by one-article policy

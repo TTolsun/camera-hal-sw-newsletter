@@ -3,7 +3,7 @@
   "report_type": "source_quality_diagnosis",
   "date": "2026-11-23",
   "input_refs": {
-    "candidate_input": "articles/content/collected-news/2026-11-23/merged-candidates.json",
+    "candidate_input": "articles/content/collected-news/2026-11-23/candidates.json",
     "shortlisted_candidates": "articles/content/newsroom/2026-11-23/shortlisted-candidates.json",
     "selection_report": "articles/content/newsroom/2026-11-23/selection-report.json",
     "generation_status": "articles/content/newsroom/2026-11-23/generation-status.json",
@@ -11,7 +11,7 @@
     "source_quality_report": "articles/content/newsroom/2026-11-23/source-quality-report.json",
     "source_discovery_feedback_report": "articles/content/newsroom/2026-11-23/source-discovery-feedback-report.json",
     "merged_candidate_manifest": "articles/content/collected-news/2026-11-23/merged-candidate-manifest.json",
-    "evidence_pack_summary": null
+    "evidence_pack_summary": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json"
   },
   "evidence_completeness": {
     "candidate_input": true,
@@ -22,28 +22,22 @@
     "source_quality_report": true,
     "source_discovery_feedback_report": true,
     "merged_candidate_manifest": true,
-    "evidence_pack_summary": false
+    "evidence_pack_summary": true
   },
   "raw_candidate_count": 50,
   "eligible_candidate_count": 12,
-  "primary_camera_stack_count": 11,
-  "android_multimedia_camera_output_count": 0,
+  "primary_camera_stack_count": 10,
+  "android_multimedia_camera_output_count": 1,
   "diagnosis": {
     "actual_news_shortage": false,
-    "parser_extraction_failure": true,
+    "parser_extraction_failure": false,
     "source_gap_risk": true,
     "taxonomy_missing": false,
     "fallback_only_composition": false
   },
   "diagnosis_reasons": {
     "actual_news_shortage": [],
-    "parser_extraction_failure": [
-      {
-        "reason": "source-discovery feedback reports parser_gap_count=1.",
-        "source_artifact": "articles/content/newsroom/2026-11-23/source-discovery-feedback-report.json",
-        "severity": "high"
-      }
-    ],
+    "parser_extraction_failure": [],
     "source_gap_risk": [
       {
         "reason": "android-developers-blog has source coverage risk: source_gap_count=7.",
@@ -152,7 +146,7 @@
       "source_discovery_new_publishable_count": null,
       "recommended_action": "KEEP_AND_MONITOR",
       "recommended_action_label": "유지하고 추적",
-      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
     },
     {
       "source_id": "android-developers-latest-updates",
@@ -321,7 +315,7 @@
       "raw_count": 8,
       "eligible_count": 8,
       "blocked_count": 0,
-      "main_eligible_count": 6,
+      "main_eligible_count": 5,
       "top_blockers": [],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
@@ -488,10 +482,10 @@
       "source_name": "CameraX Release Notes",
       "reliability": "official",
       "priority": "high",
-      "raw_count": 3,
-      "eligible_count": 2,
+      "raw_count": 2,
+      "eligible_count": 1,
       "blocked_count": 1,
-      "main_eligible_count": 1,
+      "main_eligible_count": 0,
       "top_blockers": [
         "No RSS item, no published date, no concrete release/API/behavior change detected.",
         "briefing_only=true",
@@ -502,9 +496,9 @@
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "KEEP_AND_MONITOR",
-      "recommended_action_label": "유지하고 추적",
-      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
     },
     {
       "source_id": "chromeos-gerrit-camera-changes",
@@ -514,7 +508,7 @@
       "raw_count": 1,
       "eligible_count": 1,
       "blocked_count": 0,
-      "main_eligible_count": 0,
+      "main_eligible_count": 1,
       "top_blockers": [],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
@@ -545,39 +539,28 @@
       "source_name": "Claude Code Changelog",
       "reliability": "official",
       "priority": "medium",
-      "raw_count": 3,
+      "raw_count": 1,
       "eligible_count": 1,
-      "blocked_count": 2,
+      "blocked_count": 0,
       "main_eligible_count": 0,
-      "top_blockers": [
-        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true",
-        "finalSelectionEligibility=watchlist",
-        "main_eligible=false",
-        "reference_only=true"
-      ],
+      "top_blockers": [],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "REVIEW_SOURCE_GAP",
-      "recommended_action_label": "소스 풀 보강 검토",
-      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
     },
     {
       "source_id": "codex-releases",
       "source_name": "Codex Releases",
       "reliability": "official",
       "priority": "medium",
-      "raw_count": 1,
+      "raw_count": 0,
       "eligible_count": 0,
-      "blocked_count": 1,
+      "blocked_count": 0,
       "main_eligible_count": 0,
-      "top_blockers": [
-        "Excluded or low-confidence item below the main/short candidate tier.",
-        "finalSelectionEligibility=exclude",
-        "main_eligible=false",
-        "source_gap_risk=true"
-      ],
+      "top_blockers": [],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
@@ -862,11 +845,17 @@
       "source_name": "ISO C++ Blog",
       "reliability": "official-community",
       "priority": "high",
-      "raw_count": 0,
+      "raw_count": 4,
       "eligible_count": 0,
-      "blocked_count": 0,
+      "blocked_count": 4,
       "main_eligible_count": 0,
-      "top_blockers": [],
+      "top_blockers": [
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "finalSelectionEligibility=exclude",
+        "Excluded or low-confidence item below the main/short candidate tier.",
+        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present."
+      ],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
@@ -1157,23 +1146,17 @@
       "source_name": "OpenAI News",
       "reliability": "official",
       "priority": "medium",
-      "raw_count": 2,
+      "raw_count": 0,
       "eligible_count": 0,
-      "blocked_count": 2,
+      "blocked_count": 0,
       "main_eligible_count": 0,
-      "top_blockers": [
-        "main_eligible=false",
-        "source_gap_risk=true",
-        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true"
-      ],
+      "top_blockers": [],
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "REVIEW_SOURCE_GAP",
-      "recommended_action_label": "소스 풀 보강 검토",
-      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
     },
     {
       "source_id": "patchwork-libcamera-patches",
@@ -1443,6 +1426,46 @@
       "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
     },
     {
+      "source_id": "synthetic-android-kernel-exynos-camera",
+      "source_name": "Unregistered source: android-kernel-exynos-camera",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 1,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "synthetic-samsung-global-camera",
+      "source_name": "Unregistered source: samsung-global-camera",
+      "reliability": "vendor-blog",
+      "priority": "low",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "recommended_action_label": "소스 풀 보강 검토",
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+    },
+    {
       "source_id": "the-new-stack",
       "source_name": "The New Stack",
       "reliability": "tech-media",
@@ -1540,9 +1563,9 @@
       "parser_failure_signals": [],
       "duplicate_url_count": 0,
       "source_discovery_new_publishable_count": null,
-      "recommended_action": "REVIEW_SOURCE_GAP",
-      "recommended_action_label": "소스 풀 보강 검토",
-      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER"
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
     },
     {
       "source_id": "zdnet-korea",
@@ -1574,46 +1597,30 @@
       "reason_codes": []
     },
     {
-      "source_id": "androidx-camerax-release-notes",
-      "title": "CameraX | Jetpack | Android Developers",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "published_date": "",
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+      "published_date": "2026-11-17",
       "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": []
-    },
-    {
-      "source_id": "camerax-release-notes",
-      "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
-      "published_date": "October 21, 2026",
-      "freshness_window": "reference",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "reason_codes": [
-        "outside_main_window",
-        "reference_only"
-      ]
-    },
-    {
-      "source_id": "camerax-release-notes",
-      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
-      "published_date": "November 04, 2026",
-      "freshness_window": "fallback",
-      "gerrit_change_status": "",
+      "gerrit_change_status": "MERGED",
       "source_policy_blockers": [],
       "reason_codes": []
     },
     {
       "source_id": "androidx-gerrit-camera-changes",
-      "title": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
-      "published_date": "2026-11-17",
+      "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "published_date": "2026-11-19",
+      "freshness_window": "primary",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "androidx-gerrit-camera-changes",
+      "title": "Honor abort cancellation in still capture control - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "published_date": "2026-11-19",
       "freshness_window": "primary",
       "gerrit_change_status": "MERGED",
       "source_policy_blockers": [],
@@ -1641,10 +1648,10 @@
     },
     {
       "source_id": "androidx-gerrit-camera-changes",
-      "title": "Report HLG10 + stab + UHD unsupported on S26 - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4425978",
-      "published_date": "2026-11-10",
-      "freshness_window": "fallback",
+      "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "published_date": "2026-11-18",
+      "freshness_window": "primary",
       "gerrit_change_status": "MERGED",
       "source_policy_blockers": [],
       "reason_codes": []
@@ -1661,29 +1668,70 @@
     },
     {
       "source_id": "androidx-gerrit-camera-changes",
-      "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-      "published_date": "2026-11-18",
+      "title": "Suspend video encoder input surface until start - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "published_date": "2026-11-20",
       "freshness_window": "primary",
       "gerrit_change_status": "MERGED",
       "source_policy_blockers": [],
       "reason_codes": []
     },
     {
-      "source_id": "androidx-gerrit-camera-changes",
-      "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "published_date": "2026-11-17",
+      "source_id": "camerax-release-notes",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "published_date": "October 21, 2026",
+      "freshness_window": "reference",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "outside_main_window",
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "android-developers-latest-updates",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "published_date": "November 18, 2026",
       "freshness_window": "primary",
-      "gerrit_change_status": "MERGED",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "reason_codes": [
+        "reference_only"
+      ]
+    },
+    {
+      "source_id": "camerax-release-notes",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "published_date": "November 04, 2026",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
       "source_policy_blockers": [],
       "reason_codes": []
     },
     {
-      "source_id": "androidx-gerrit-camera-changes",
-      "title": "Skip HLG10 feature group tests on emulators - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-      "published_date": "2026-11-19",
+      "source_id": "android-developers-blog",
+      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
+      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
+      "published_date": "2026-11-11",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "android-kernel-exynos-camera",
+      "title": "media: exynos4-is: Fix a race between s_stream(0) and the interrupt handler (android17-6.18-lts)",
+      "url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "published_date": "2026-11-16T11:11:03.000Z",
       "freshness_window": "primary",
       "gerrit_change_status": "MERGED",
       "source_policy_blockers": [],
@@ -1774,6 +1822,112 @@
       ]
     },
     {
+      "source_id": "lore-linux-media-list",
+      "title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
+      "published_date": "2026-11-18T11:44:46Z",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+      "url": "https://patchwork.libcamera.org/patch/29049/",
+      "published_date": "2026-11-19",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
+      "url": "https://patchwork.libcamera.org/patch/28964/",
+      "published_date": "2026-11-18",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
+      "url": "https://patchwork.libcamera.org/patch/29062/",
+      "published_date": "2026-11-20",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
+      "url": "https://patchwork.libcamera.org/patch/29018/",
+      "published_date": "2026-11-18",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+      "url": "https://patchwork.libcamera.org/patch/28990/",
+      "published_date": "2026-11-18",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
+      "source_id": "patchwork-libcamera-patches",
+      "title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+      "url": "https://patchwork.libcamera.org/patch/28958/",
+      "published_date": "2026-11-18",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "trend_reference_project",
+        "cross_check_required_but_missing"
+      ],
+      "reason_codes": [
+        "primary_confirmation_missing"
+      ]
+    },
+    {
       "source_id": "raspberrypi-libcamera-releases",
       "title": "Raspberry Pi libcamera Releases - libcamera v0.8.0",
       "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0",
@@ -1818,101 +1972,44 @@
       ]
     },
     {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "pipeline: rkisp1: Forward controls passed to start() to the IPA",
-      "url": "https://patchwork.libcamera.org/patch/29062/",
-      "published_date": "2026-11-20",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "trend_reference_project",
-        "cross_check_required_but_missing"
-      ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
+      "source_id": "chromeos-gerrit-camera-changes",
+      "title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+      "published_date": "2026-11-04",
+      "freshness_window": "fallback",
+      "gerrit_change_status": "MERGED",
+      "source_policy_blockers": [],
+      "reason_codes": []
     },
     {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "[v3,1/8] libcamera: software_isp: Let a single point decide about computing stats",
-      "url": "https://patchwork.libcamera.org/patch/29049/",
-      "published_date": "2026-11-19",
+      "source_id": "iso-cpp-blog",
+      "title": "simdjson 5.0 with full C++26 reflection support -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+      "published_date": "Mon, 16 Nov 2026 21:49:47 +0000",
       "freshness_window": "primary",
       "gerrit_change_status": "",
       "source_policy_blockers": [
-        "trend_reference_project",
-        "cross_check_required_but_missing"
+        "source_gap_risk"
       ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
+      "reason_codes": []
     },
     {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "[RFC,v2,01/26] libcamera: software_isp: Rename Bayer classes to SoftwareIspInstance",
-      "url": "https://patchwork.libcamera.org/patch/28964/",
-      "published_date": "2026-11-18",
+      "source_id": "iso-cpp-blog",
+      "title": "On forcing all derived classes to implement a specific non-virtual method, part 2 -- Raymond Chen",
+      "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+      "published_date": "Fri, 20 Nov 2026 21:45:56 +0000",
       "freshness_window": "primary",
       "gerrit_change_status": "",
       "source_policy_blockers": [
-        "trend_reference_project",
-        "cross_check_required_but_missing"
+        "source_gap_risk"
       ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
-    },
-    {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "[RFC,1/3] libcamera: v4l2_subdevice: Add whence parameter to set/getSelection()",
-      "url": "https://patchwork.libcamera.org/patch/29018/",
-      "published_date": "2026-11-18",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "trend_reference_project",
-        "cross_check_required_but_missing"
-      ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
-    },
-    {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
-      "url": "https://patchwork.libcamera.org/patch/28990/",
-      "published_date": "2026-11-18",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk",
-        "trend_reference_project",
-        "cross_check_required_but_missing"
-      ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
+      "reason_codes": []
     },
     {
       "source_id": "android-developers-blog",
       "title": "What's new in the Jetpack Compose November '26 release",
       "url": "https://developer.android.com/blog/posts/jetpack-compose-november-2026-release",
       "published_date": "2026-11-18",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "reason_codes": [
-        "reference_only"
-      ]
-    },
-    {
-      "source_id": "android-developers-latest-updates",
-      "title": "1.4.0-alpha07",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "published_date": "November 18, 2026",
       "freshness_window": "primary",
       "gerrit_change_status": "",
       "source_policy_blockers": [
@@ -1999,16 +2096,6 @@
       ]
     },
     {
-      "source_id": "android-developers-blog",
-      "title": "How SmileID Scaled Identity Verification to 18,000+ Android Device Types with CameraX",
-      "url": "https://developer.android.com/blog/posts/smileid-camerax-android-identity-verification",
-      "published_date": "2026-11-11",
-      "freshness_window": "fallback",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": []
-    },
-    {
       "source_id": "androidx-gerrit-heifwriter-changes",
       "title": "Add testHeicFallbackAvailable to HeifWriterTest - platform/frameworks/support",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4408215",
@@ -2073,20 +2160,6 @@
       ]
     },
     {
-      "source_id": "lore-linux-media-list",
-      "title": "[PATCH RESEND] media: atomisp: remove dead error check in ia_css_stream_create()",
-      "url": "https://lore.kernel.org/linux-media/20261118114425.203120-1-a.karelin@ideco.ru/",
-      "published_date": "2026-11-18T11:44:46Z",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "cross_check_required_but_missing"
-      ],
-      "reason_codes": [
-        "primary_confirmation_missing"
-      ]
-    },
-    {
       "source_id": "patchwork-libcamera-patches",
       "title": "[v4,1/8] ipa: rpi: Drop unused params argument from platformPrepareIsp()",
       "url": "https://patchwork.libcamera.org/patch/29029/",
@@ -2123,35 +2196,49 @@
       ]
     },
     {
-      "source_id": "patchwork-libcamera-patches",
-      "title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
-      "url": "https://patchwork.libcamera.org/patch/28958/",
-      "published_date": "2026-11-18",
+      "source_id": "iso-cpp-blog",
+      "title": "On forcing all derived classes to implement a specific non-virtual method, part 1 -- Raymond Chen",
+      "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-method-p",
+      "published_date": "Thu, 19 Nov 2026 21:45:38 +0000",
       "freshness_window": "primary",
       "gerrit_change_status": "",
       "source_policy_blockers": [
         "source_gap_risk",
-        "trend_reference_project",
-        "cross_check_required_but_missing"
+        "reference_only"
       ],
       "reason_codes": [
-        "primary_confirmation_missing"
+        "reference_only"
       ]
     },
     {
-      "source_id": "claude-code-changelog",
-      "title": "Claude Code v2.1.328",
-      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.328",
-      "published_date": "2026-11-19T01:14:04Z",
+      "source_id": "samsung-global-camera",
+      "title": "Samsung Begins One UI 9.5 Beta Program",
+      "url": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+      "published_date": "Wed, 18 Nov 2026 18:00:00 +0000",
       "freshness_window": "primary",
       "gerrit_change_status": "",
       "source_policy_blockers": [
         "source_gap_risk",
-        "reference_only"
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
       ],
       "reason_codes": [
+        "primary_confirmation_missing",
         "reference_only"
       ]
+    },
+    {
+      "source_id": "iso-cpp-blog",
+      "title": "C++26: std::inplace_vector -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/11/cpp26-stdinplace-vector-sandor-dargo",
+      "published_date": "Wed, 18 Nov 2026 21:45:20 +0000",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "reason_codes": []
     },
     {
       "source_id": "claude-code-changelog",
@@ -2162,138 +2249,9 @@
       "gerrit_change_status": "",
       "source_policy_blockers": [],
       "reason_codes": []
-    },
-    {
-      "source_id": "claude-code-changelog",
-      "title": "Claude Code v2.1.326",
-      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.326",
-      "published_date": "2026-11-16T22:11:05Z",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "reason_codes": [
-        "reference_only"
-      ]
-    },
-    {
-      "source_id": "chromeos-gerrit-camera-changes",
-      "title": "camera: Migrate SharedMemoryMapping::memory() to data() - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8814042",
-      "published_date": "2026-11-17",
-      "freshness_window": "primary",
-      "gerrit_change_status": "MERGED",
-      "source_policy_blockers": [],
-      "reason_codes": []
-    },
-    {
-      "source_id": "codex-releases",
-      "title": "Codex rust-v0.171.0",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.171.0",
-      "published_date": "2026-11-20T00:44:47Z",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk"
-      ],
-      "reason_codes": []
-    },
-    {
-      "source_id": "openai-news",
-      "title": "Research acceleration: The jagged frontier",
-      "url": "https://openai.com/index/research-acceleration-jagged-frontier",
-      "published_date": "Wed, 18 Nov 2026 08:00:00 GMT",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "reason_codes": [
-        "reference_only"
-      ]
-    },
-    {
-      "source_id": "openai-news",
-      "title": "How Revolut raises ambition without lowering the bar",
-      "url": "https://openai.com/business/customer-stories/revolut",
-      "published_date": "Mon, 16 Nov 2026 09:30:00 GMT",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [
-        "source_gap_risk"
-      ],
-      "reason_codes": []
-    },
-    {
-      "source_id": "lore-linux-media-ipu",
-      "title": "https://lore.kernel.org/linux-media/20261116173307.14169-1-volodymyrchapman@gmail.com/",
-      "url": "https://lore.kernel.org/linux-media/20261116173307.14169-1-volodymyrchapman@gmail.com",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
-    },
-    {
-      "source_id": "lore-linux-media-ipu",
-      "title": "https://lore.kernel.org/linux-media/20261116173143.13584-1-volodymyrchapman@gmail.com/",
-      "url": "https://lore.kernel.org/linux-media/20261116173143.13584-1-volodymyrchapman@gmail.com",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
-    },
-    {
-      "source_id": "lore-linux-media-ipu",
-      "title": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/T/",
-      "url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/T",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
-    },
-    {
-      "source_id": "kernel-org-releases",
-      "title": "https://lore.kernel.org/r/20260917-v4l2-release-fix-v1-1-acbac7f9b78e@ixit.cz/",
-      "url": "https://lore.kernel.org/r/20260917-v4l2-release-fix-v1-1-acbac7f9b78e@ixit.cz",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
-    },
-    {
-      "source_id": "kernel-org-releases",
-      "title": "https://lore.kernel.org/all/20261016105553.346322-1-a.karelin@ideco.ru/",
-      "url": "https://lore.kernel.org/all/20261016105553.346322-1-a.karelin@ideco.ru",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
     }
   ],
   "collection_failures": [
-    {
-      "source_id": "iso-cpp-blog",
-      "source": "ISO C++ Blog",
-      "message": "403 Forbidden"
-    },
     {
       "source_id": "libcamera-documentation",
       "source": "libcamera Documentation",
@@ -2305,9 +2263,9 @@
       "message": "404 Not Found"
     },
     {
-      "source_id": "yozm-it",
-      "source": "요즘IT",
-      "message": "405 Not Allowed"
+      "source_id": "codex-releases",
+      "source": "Codex Releases",
+      "message": "http_403"
     },
     {
       "source_id": "reddit-androiddev-camera",
@@ -2342,8 +2300,8 @@
   ],
   "candidate_counts": {
     "raw": 50,
-    "merged_records": 55,
-    "merged_unique_urls": 55,
+    "merged_records": 50,
+    "merged_unique_urls": 50,
     "derived_new_unique_urls": 5,
     "derived_publishable": 0
   },
@@ -2383,34 +2341,34 @@
     {
       "action": "REVIEW_SOURCE_GAP",
       "action_label": "소스 풀 보강 검토",
-      "source_id": "claude-code-changelog",
-      "source_name": "Claude Code Changelog",
-      "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "blocked_count": 2,
-      "raw_count": 3
-    },
-    {
-      "action": "REVIEW_SOURCE_GAP",
-      "action_label": "소스 풀 보강 검토",
-      "source_id": "openai-news",
-      "source_name": "OpenAI News",
+      "source_id": "iso-cpp-blog",
+      "source_name": "ISO C++ Blog",
       "reason": "main_eligible=false",
       "severity": "medium",
       "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "blocked_count": 2,
-      "raw_count": 2
+      "source_priority": "high",
+      "source_reliability": "official-community",
+      "blocked_count": 4,
+      "raw_count": 4
     },
     {
       "action": "REVIEW_SOURCE_GAP",
       "action_label": "소스 풀 보강 검토",
       "source_id": "android-developers-latest-updates",
       "source_name": "Android Developers Latest Updates",
+      "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 2
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "camerax-release-notes",
+      "source_name": "CameraX Release Notes",
       "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
       "severity": "medium",
       "source_artifact": "source-effectiveness-report.json",
@@ -2431,19 +2389,6 @@
       "source_reliability": "project-official",
       "blocked_count": 1,
       "raw_count": 2
-    },
-    {
-      "action": "REVIEW_SOURCE_GAP",
-      "action_label": "소스 풀 보강 검토",
-      "source_id": "codex-releases",
-      "source_name": "Codex Releases",
-      "reason": "Excluded or low-confidence item below the main/short candidate tier.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "blocked_count": 1,
-      "raw_count": 1
     },
     {
       "action": "REVIEW_SOURCE_GAP",
@@ -2483,13 +2428,20 @@
       "source_reliability": "official",
       "blocked_count": 0,
       "raw_count": 0
+    },
+    {
+      "action": "REVIEW_SOURCE_GAP",
+      "action_label": "소스 풀 보강 검토",
+      "source_id": "claude-blog",
+      "source_name": "Claude Blog",
+      "reason": "REVIEW_SOURCE_OR_PARSER",
+      "severity": "medium",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 0,
+      "raw_count": 0
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json not found; partial diagnosis will continue.",
-      "source_artifact": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json"
-    }
-  ]
+  "warnings": []
 }

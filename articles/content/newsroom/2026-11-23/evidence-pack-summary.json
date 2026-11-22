@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-11-23",
-  "generated_at": "2026-11-22T15:59:47.598Z",
+  "generated_at": "2026-11-22T18:14:07.934Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -21,7 +21,7 @@
       "articles/content/newsroom/2026-11-23/stale-claim-report.json"
     ],
     "missing": [
-      "articles/content/newsroom/2026-11-23/stale-claim-report.json"
+      "articles/content/newsroom/2026-11-23/repair-failure.json"
     ],
     "used": [
       "articles/content/newsroom/2026-11-23/generation-status.json",
@@ -34,17 +34,17 @@
       "articles/content/newsroom/2026-11-23/fact-check-report.json",
       "articles/content/newsroom/2026-11-23/source-effectiveness-report.json",
       "articles/content/source-events/2026-11-23/source-change-events.json",
-      "articles/content/newsroom/2026-11-23/repair-failure.json"
+      "articles/content/newsroom/2026-11-23/stale-claim-report.json"
     ]
   },
   "publish_status": {
-    "status": "needs-fix",
-    "run_mode": "diagnostics_only",
-    "quality_score": 48,
+    "status": "publish-ready",
+    "run_mode": "publish_ready",
+    "quality_score": 85,
     "quality_threshold": 60,
-    "fact_check_status": "NEEDS_FIX",
-    "final_publish_ready": false,
-    "public_newsletter_ready": false,
+    "fact_check_status": "PASS",
+    "final_publish_ready": true,
+    "public_newsletter_ready": true,
     "review_pr_ready": true
   },
   "selection_summary": {
@@ -53,9 +53,9 @@
     "selected_main_article_count": 5,
     "reserve_candidate_count": 7,
     "excluded_candidate_count": 32,
-    "primary_camera_stack_count": 5,
-    "android_multimedia_camera_output_count": 0,
-    "supporting_bucket_count": 0,
+    "primary_camera_stack_count": 4,
+    "android_multimedia_camera_output_count": 1,
+    "supporting_bucket_count": 1,
     "fallback_window_used": false,
     "fallback_window_consulted": false,
     "fallback_window_reason": "",
@@ -68,8 +68,8 @@
   },
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 32,
-    "total_claims": 32,
+    "bound_claims": 27,
+    "total_claims": 27,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
     "available_article_count": 5,
@@ -163,6 +163,45 @@
     },
     {
       "index": 2,
+      "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract"
+      ],
+      "reader_owners": [
+        "camera_hal_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 0,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "hal_signal_capsule_missing"
+      ]
+    },
+    {
+      "index": 3,
       "title": "Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
       "relevance_bucket": "direct_aosp_camera",
@@ -201,7 +240,7 @@
       ]
     },
     {
-      "index": 3,
+      "index": 4,
       "title": "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
       "relevance_bucket": "direct_aosp_camera",
@@ -240,7 +279,7 @@
       ]
     },
     {
-      "index": 4,
+      "index": 5,
       "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
       "relevance_bucket": "direct_aosp_camera",
@@ -257,45 +296,6 @@
       "concrete_action_signal_count": 1,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [],
-      "soc_signal_type": "platform_signal",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": false,
-      "hal_signal_capsule_complete": false,
-      "hal_signal_capsule_missing_keys": [
-        "why_now",
-        "reader_owners",
-        "check_within_2_weeks",
-        "impact_axes",
-        "do_not_overstate"
-      ],
-      "hard_blockers": [
-        "actionability_none"
-      ],
-      "hard_blocker_reason_codes": [
-        "hal_actionability_none",
-        "hal_signal_capsule_missing"
-      ]
-    },
-    {
-      "index": 5,
-      "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "relevance_bucket": "direct_aosp_camera",
-      "hal_impact_axes": [
-        "framework_hal_contract"
-      ],
-      "reader_owners": [
-        "camera_hal_owner"
-      ],
-      "actionability_level": "none",
-      "effective_actionability_level": "none",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "weak_signal",
-      "concrete_action_signal_count": 0,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 84): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [],
       "soc_signal_type": "platform_signal",
       "soc_signal_source_allowed": true,
@@ -371,12 +371,81 @@
       "hal_impact_axes": [
         "\\bCameraX\\b"
       ],
-      "key_evidence": [],
+      "key_evidence": [
+        "behavior_change: Camera2Interop V2 (Stable, No Opt-In Required) : Redesigned in and , providing common wrappers ( ImageWrapper , ImagePlane with non-nullable B...",
+        "version_or_release: CameraX 1.7.0",
+        "evidence_note: CameraX 1.7.0 릴리스 노트에 따르면 Camera2Interop V2가 안정화되었으며, ImageWrapper, ImagePlane, CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResu..."
+      ],
       "selection_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
         "bound_claims": 8,
         "total_claims": 8,
+        "overclaim_risk": "low"
+      }
+    },
+    {
+      "candidate_id": "bd0afdb40015a4b5328ea80100428f6c793ef8bb3f16b27b3c11da55f7330289",
+      "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "source": "AndroidX Gerrit Camera",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "official",
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [
+        {
+          "title": "AndroidX Gerrit Camera",
+          "url": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+          "normalized_url": "https://android-review.googlesource.com/changes",
+          "canonical_url": "https://android-review.googlesource.com/changes",
+          "source": "AndroidX Gerrit Camera",
+          "published_date": "",
+          "relevance_bucket": "direct_aosp_camera",
+          "finalSelectionEligibility": "exclude",
+          "context_role": "parent_roundup_context_only",
+          "context_usage_label": "parent_roundup_context_only",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "parent_roundup_context_only",
+          "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
+        }
+      ],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bCamera2\\b"
+      ],
+      "key_evidence": [
+        "behavior_change: Merged change updates 6 camera source file(s) in platform/frameworks/support +416/-0: Check if 3A modes are supported in Controller3A. Commit...",
+        "api_or_component: platform/frameworks/support/camera/camera-camera2-pipe/src/main/java/androidx/camera/camera2/pipe",
+        "summary: Check if requested AE, AF, AWB, Control, and Flash modes are supported in CameraMetadata before updating, submitting, or locking 3A in Controller3A, r..."
+      ],
+      "selection_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 5,
+        "total_claims": 5,
         "overclaim_risk": "low"
       }
     },
@@ -433,15 +502,15 @@
         "\\bCamera2\\b"
       ],
       "key_evidence": [
-        "behavior_change: Samsung SM-F971U1 기기에서 재처리 가능한 PRIVATE ZSL 세션이 구성된 상태에서 물리적 렌즈 간 줌 비율을 전환할 때 CamX SAT 파이프라인이 멈추는 문제를 해결하기 위해 ZSL(Zero-Shutter Lag) 기능이 비활성화되었습...",
-        "version_or_release: androidx-main (Gerrit change 4441195)",
-        "summary: Gerrit change 4441195 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-17). Change-Id I031411d6045007818254fd1eb7caa..."
+        "behavior_change: Merged change updates 2 camera source file(s) in platform/frameworks/support +22/-4: Disable ZSL on Samsung SM-F971. Commit message: On Samsun...",
+        "api_or_component: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/compat/quirk",
+        "summary: On Samsung SM-F971U1, switching zoom ratio across physical lenses (Round 2 0.6x -> 2.0x after Round 0 2.0x and Round 1 0.6x complete) while configured..."
       ],
       "selection_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 6,
-        "total_claims": 6,
+        "bound_claims": 5,
+        "total_claims": 5,
         "overclaim_risk": "low"
       }
     },
@@ -498,15 +567,15 @@
         "\\bCamera2\\b"
       ],
       "key_evidence": [
-        "behavior_change: OPPO Find N3 Flip (PHT110, MediaTek mt6985) 기기에서 후면 논리 카메라 \"0\"의 물리적 카메라 ID \"2\" 또는 \"3\"을 대상으로 Camera2 OutputConfigurations를 구성할 때 벤더 HAL이 P2Stre...",
-        "version_or_release: androidx-main (Gerrit change 4440995)",
-        "summary: Gerrit change 4440995 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-17). Change-Id I270e8820139121d80c3f1e0ae77e0..."
+        "behavior_change: Merged change updates 2 camera source file(s) in platform/frameworks/support +11/-9: Exclude OPPO PHT110 physical camera IDs 2 and 3. Commit m...",
+        "api_or_component: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/compat/quirk",
+        "summary: On OPPO Find N3 Flip (PHT110, MediaTek mt6985), configuring Camera2 OutputConfigurations targeting physical camera IDs \"2\" or \"3\" of rear logical came..."
       ],
       "selection_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 6,
-        "total_claims": 6,
+        "bound_claims": 5,
+        "total_claims": 5,
         "overclaim_risk": "low"
       }
     },
@@ -562,141 +631,29 @@
       "hal_impact_axes": [
         "\\bCamera2\\b"
       ],
-      "key_evidence": [
-        "behavior_change: Samsung Extensions 카메라 장치 닫기 쿼크(CloseCameraDeviceOnCameraGraphCloseQuirk)가 API 35 이상 버전으로 확장되었습니다. 이전에는 API 34(UPSIDE_DOWN_CAKE)로 제한되어 있었으나, A...",
-        "version_or_release: androidx-main (Gerrit change 4441276)",
-        "summary: Gerrit change 4441276 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-18). Change-Id I72af048ffc33859fa8b5b6c8165e6..."
-      ],
+      "key_evidence": [],
       "selection_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 6,
-        "total_claims": 6,
-        "overclaim_risk": "low"
-      }
-    },
-    {
-      "candidate_id": "f4fcd93c70ec223697647342247a749e7dc2d4d74e33db241ddaa5958591e5ac",
-      "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "source": "AndroidX Gerrit Camera",
-      "source_tier": "high",
-      "source_role": "project_mailing_list_source",
-      "source_url_quality": "project_mailing_list_release",
-      "source_reliability": "official",
-      "freshness_window": "primary",
-      "relevance_bucket": "direct_aosp_camera",
-      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "tooling_workflow_type": "",
-      "source_event_id": "",
-      "evidence_id": "",
-      "event_type": "",
-      "effective_date": "",
-      "date_quality": {
-        "effective_date": "",
-        "published_date_present": true,
-        "date_source": "visible_date",
-        "date_confidence": 100,
-        "needs_editor_date_review": false,
-        "main_article_date_eligible": true,
-        "date_field": "published_date"
-      },
-      "related_context_candidates": [
-        {
-          "title": "AndroidX Gerrit Camera",
-          "url": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
-          "normalized_url": "https://android-review.googlesource.com/changes",
-          "canonical_url": "https://android-review.googlesource.com/changes",
-          "source": "AndroidX Gerrit Camera",
-          "published_date": "",
-          "relevance_bucket": "direct_aosp_camera",
-          "finalSelectionEligibility": "exclude",
-          "context_role": "parent_roundup_context_only",
-          "context_usage_label": "parent_roundup_context_only",
-          "source_quality_status": "unknown",
-          "context_usage_allowed": false,
-          "can_create_independent_article": false,
-          "blocked_from_independent_main_reason": "parent_roundup_context_only",
-          "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
-        }
-      ],
-      "finalSelectionEligibility": "main",
-      "source_gap_risk": false,
-      "has_dated_evidence": true,
-      "evidence_score": 6,
-      "hal_impact_axes": [
-        "\\bCamera2\\b"
-      ],
-      "key_evidence": [
-        "behavior_change: HLG10 크기 확인 로직이 `SupportedSurfaceCombination.checkSupported()`에서 지연 로딩되도록 변경되어, `aosp/4425978`에서 발생한 `NullPointerException`을 수정했습니다. 이 문제는 `Ca...",
-        "version_or_release: androidx-main (Gerrit change 4447086)",
-        "summary: Gerrit change 4447086 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-17). Change-Id Ib9b5823feca53e8b5e7687ebecedd..."
-      ],
-      "selection_reason": "AndroidX Gerrit Camera (official, high, score 84): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "claim_validation": {
-        "status": "available",
-        "bound_claims": 6,
-        "total_claims": 6,
+        "bound_claims": 4,
+        "total_claims": 4,
         "overclaim_risk": "low"
       }
     }
   ],
   "reserve_candidates": [
     {
-      "candidate_id": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
-      "title": "CameraX | Jetpack | Android Developers",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "source": "androidx-camerax-release-notes",
-      "source_tier": "high",
-      "source_role": "official_documentation_reference",
-      "source_url_quality": "official_site_update_row",
-      "source_reliability": "official",
-      "freshness_window": "primary",
-      "relevance_bucket": "direct_aosp_camera",
-      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera",
-      "tooling_workflow_type": "",
-      "source_event_id": "source-event-09e95d3471c083d3f67006b1759eb36e",
-      "evidence_id": "evidence-0a09f0ca106d5a97697ea1f71a6d9145",
-      "event_type": "release_row_added",
-      "effective_date": "2026-11-18",
-      "date_quality": {
-        "effective_date": "2026-11-18",
-        "published_date_present": false,
-        "date_source": "release_row_date",
-        "date_confidence": 95,
-        "needs_editor_date_review": false,
-        "main_article_date_eligible": true,
-        "date_field": "effective_date"
-      },
-      "related_context_candidates": [],
-      "finalSelectionEligibility": "main",
-      "source_gap_risk": false,
-      "has_dated_evidence": true,
-      "evidence_score": 8,
-      "hal_impact_axes": [
-        "\\bCameraX\\b"
-      ],
-      "key_evidence": [],
-      "selection_reason": "unknown",
-      "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
-      }
-    },
-    {
-      "candidate_id": "ae5e659145c1d69bc2964a0786afd593c66e0311a418b8e1acf6dde604afb771",
-      "title": "Skip HLG10 feature group tests on emulators - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-      "source": "AndroidX Gerrit Camera",
+      "candidate_id": "8bc23770060fdb15a34b9eb456159005cbb6fbcc65671b643824e392e43fd69e",
+      "title": "[PATCH 0/3] media: Add Sony IMX175 sensor driver (Lenovo ThinkPad 10 rear camera)",
+      "url": "https://lore.kernel.org/linux-media/20261116175151.20150-1-volodymyrchapman@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
       "source_tier": "high",
       "source_role": "project_mailing_list_source",
       "source_url_quality": "project_mailing_list_release",
-      "source_reliability": "official",
+      "source_reliability": "project-official",
       "freshness_window": "primary",
-      "relevance_bucket": "direct_aosp_camera",
-      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "article_group_key": "lore-series:20261116175151.20150-volodymyrchapman@gmail.com",
       "tooling_workflow_type": "",
       "source_event_id": "",
       "evidence_id": "",
@@ -717,10 +674,99 @@
       "has_dated_evidence": true,
       "evidence_score": 6,
       "hal_impact_axes": [
-        "\\bCamera\\s*HAL\\b"
+        "\\batomisp\\b",
+        "\\bipu-bridge\\b",
+        "\\bV4L2\\b"
       ],
       "key_evidence": [],
-      "selection_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "764a52e4256164fbdd54f5c88b3c4e4722acda6ea945dc8de84677d121fecf8e",
+      "title": "media: exynos4-is: Fix a race between s_stream(0) and the interrupt handler (android17-6.18-lts)",
+      "url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "source": "Android common kernel Exynos camera integrations",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "official",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "article_group_key": "article:https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bcamera driver\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "Android common kernel Exynos camera integrations (official, high, score 70): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "10516fa73a45ba80dd2c59186f2737c6a6f9414b1a728e5bb176d4be51c849fb",
+      "title": "Honor abort cancellation in still capture control - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "source": "AndroidX Gerrit Camera",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "official",
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bCamera2\\b",
+        "\\bcapture request\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "AndroidX Gerrit Camera (official, high, score 96): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 2 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "not_available",
         "bound_claims": null,
@@ -816,51 +862,6 @@
       }
     },
     {
-      "candidate_id": "8bc23770060fdb15a34b9eb456159005cbb6fbcc65671b643824e392e43fd69e",
-      "title": "[PATCH 0/3] media: Add Sony IMX175 sensor driver (Lenovo ThinkPad 10 rear camera)",
-      "url": "https://lore.kernel.org/linux-media/20261116175151.20150-1-volodymyrchapman@gmail.com/",
-      "source": "lore.kernel.org linux-media list",
-      "source_tier": "high",
-      "source_role": "project_mailing_list_source",
-      "source_url_quality": "project_mailing_list_release",
-      "source_reliability": "project-official",
-      "freshness_window": "primary",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "article_group_key": "lore-series:20261116175151.20150-volodymyrchapman@gmail.com",
-      "tooling_workflow_type": "",
-      "source_event_id": "",
-      "evidence_id": "",
-      "event_type": "",
-      "effective_date": "",
-      "date_quality": {
-        "effective_date": "",
-        "published_date_present": true,
-        "date_source": "visible_date",
-        "date_confidence": 100,
-        "needs_editor_date_review": false,
-        "main_article_date_eligible": true,
-        "date_field": "published_date"
-      },
-      "related_context_candidates": [],
-      "finalSelectionEligibility": "short",
-      "source_gap_risk": false,
-      "has_dated_evidence": true,
-      "evidence_score": 6,
-      "hal_impact_axes": [
-        "\\batomisp\\b",
-        "\\bipu-bridge\\b",
-        "\\bV4L2\\b"
-      ],
-      "key_evidence": [],
-      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
-      "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
-      }
-    },
-    {
       "candidate_id": "6a8e794d45cf5f2de48e0977f46e3a4d2b429f841ece3797be15d06845abe79f",
       "title": "[PATCH v3 0/2] media: i2c: Add Samsung S5K5E8 camera sensor driver",
       "url": "https://lore.kernel.org/linux-media/20261122034656.1093369-1-huynhtuankiet33@gmail.com/",
@@ -904,50 +905,6 @@
         "total_claims": null,
         "overclaim_risk": "unknown"
       }
-    },
-    {
-      "candidate_id": "1cc7ca26f6e1991efc2142af48c1c1491f3879086bb828bee520165cfe898555",
-      "title": "[PATCH v6 0/2] media: i2c: Samsung S5K3T2 image sensor",
-      "url": "https://lore.kernel.org/linux-media/20261120-upstream-s5k3t2-v6-0-dd345fa4201c@proton.me/",
-      "source": "lore.kernel.org linux-media list",
-      "source_tier": "high",
-      "source_role": "project_mailing_list_source",
-      "source_url_quality": "project_mailing_list_release",
-      "source_reliability": "project-official",
-      "freshness_window": "primary",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "article_group_key": "lore-series:20261120-upstream-s5k3t2-v6-dd345fa4201c@proton.me",
-      "tooling_workflow_type": "",
-      "source_event_id": "",
-      "evidence_id": "",
-      "event_type": "",
-      "effective_date": "",
-      "date_quality": {
-        "effective_date": "",
-        "published_date_present": true,
-        "date_source": "visible_date",
-        "date_confidence": 100,
-        "needs_editor_date_review": false,
-        "main_article_date_eligible": true,
-        "date_field": "published_date"
-      },
-      "related_context_candidates": [],
-      "finalSelectionEligibility": "main",
-      "source_gap_risk": false,
-      "has_dated_evidence": true,
-      "evidence_score": 6,
-      "hal_impact_axes": [
-        "\\bimage sensor\\b",
-        "\\bcamss\\b"
-      ],
-      "key_evidence": [],
-      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
-      "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
-      }
     }
   ],
   "excluded_candidates_top": [
@@ -959,6 +916,17 @@
       "source_role": "official_release_source",
       "source_url_quality": "official_release_note_anchor",
       "freshness_window": "reference",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "primary",
       "relevance_bucket": "direct_aosp_camera",
       "exclusion_reason": "missing dated evidence"
     },
@@ -985,6 +953,28 @@
       "exclusion_reason": "duplicate URL or near-duplicate title"
     },
     {
+      "candidate_id": "c76fc6b17aea364dd387a764d47b46db26047b0d9d4048308c79f83ede69f2ba",
+      "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
+      "url": "https://patchwork.libcamera.org/patch/28990/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "finalSelectionEligibility=exclude"
+    },
+    {
+      "candidate_id": "25fe28ccd9e61bd38c2b4940415ec345344d8171ac8cefa8f13b540169621a3f",
+      "title": "[v4,1/4] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
+      "url": "https://patchwork.libcamera.org/patch/28958/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "finalSelectionEligibility=exclude"
+    },
+    {
       "candidate_id": "9cbb453ced6c0805742e875580fca1784b947cc0df360e41dc2be2e96b25b804",
       "title": "Raspberry Pi libcamera Releases - v0.8.0+rpt20261104",
       "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.8.0%2Brpt20261104",
@@ -996,14 +986,25 @@
       "exclusion_reason": "missing dated evidence"
     },
     {
-      "candidate_id": "c76fc6b17aea364dd387a764d47b46db26047b0d9d4048308c79f83ede69f2ba",
-      "title": "[v6,01/23] ipa: libipa: fixedpoint: Shift unsigned type for scaling",
-      "url": "https://patchwork.libcamera.org/patch/28990/",
-      "source": "libcamera Patchwork (patch review)",
-      "source_role": "project_mailing_list_source",
-      "source_url_quality": "project_mailing_list_release",
+      "candidate_id": "b286e126e0262b890a9c29fddca461289ea00f710621bde8b7d8fd212b5c5374",
+      "title": "simdjson 5.0 with full C++26 reflection support -- Daniel Lemire",
+      "url": "https://isocpp.org//blog/2026/11/simdjson-5.0-with-full-cpp26-reflection-support-daniel-lemire",
+      "source": "ISO C++ Blog",
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
       "freshness_window": "primary",
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "exclusion_reason": "finalSelectionEligibility=exclude"
+    },
+    {
+      "candidate_id": "456e95040e569ad76d39e6f47cd862a4102ab1901c619dcfe3efe4dcfedccb18",
+      "title": "On forcing all derived classes to implement a specific non-virtual method, part 2 -- Raymond Chen",
+      "url": "https://isocpp.org//blog/2026/11/on-forcing-all-derived-classes-to-implement-a-specific-non-virtual-met",
+      "source": "ISO C++ Blog",
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
       "exclusion_reason": "finalSelectionEligibility=exclude"
     },
     {
@@ -1016,81 +1017,29 @@
       "freshness_window": "primary",
       "relevance_bucket": "generic_tech_watchlist",
       "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
-      "title": "1.4.0-alpha07",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "source": "Android Developers Latest Updates",
-      "source_role": "official_release_source",
-      "source_url_quality": "official_site_update_row",
-      "freshness_window": "primary",
-      "relevance_bucket": "direct_aosp_camera",
-      "exclusion_reason": "missing dated evidence"
-    },
-    {
-      "candidate_id": "e5a72834e729e4046eed9fbe745642b6fe00e8dafca88f88df56ccd0f26cf9fb",
-      "title": "Elevating games: New large screens and foldables quality standards on Google Play",
-      "url": "https://developer.android.com/blog/posts/elevating-game-quality-foldables-large-screens-google-play",
-      "source": "Android Developers Blog",
-      "source_role": "official_release_source",
-      "source_url_quality": "official_dated_release",
-      "freshness_window": "primary",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "3d4f13dcba77f0636507e0d638282ed0d65f8d6dc797dfca71cfb8f723ef8123",
-      "title": "Elevating apps: New adaptive quality standards on Google Play",
-      "url": "https://developer.android.com/blog/posts/google-play-adaptive-quality-standards",
-      "source": "Android Developers Blog",
-      "source_role": "official_release_source",
-      "source_url_quality": "official_dated_release",
-      "freshness_window": "primary",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
-    },
-    {
-      "candidate_id": "3ef0a46f6ebaf64c3495f2dccfb4563e27d3c7f05cacaf93933f6d2d69dec725",
-      "title": "Ship smarter keep rules: How library providers can unblock app-level DEX code optimization",
-      "url": "https://developer.android.com/blog/posts/ship-smarter-keep-rules-unblock-dex-optimization",
-      "source": "Android Developers Blog",
-      "source_role": "official_release_source",
-      "source_url_quality": "official_dated_release",
-      "freshness_window": "primary",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reason": "finalSelectionEligibility=watchlist"
     }
   ],
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
-    "quality_hard_failures": [
-      "Article describes unresolved linked evidence as confirmed detail.",
-      "Fact-check must_fix item mentions this section.",
-      "Fact checker returned 1 must_fix item(s)."
-    ],
-    "fact_check_must_fix": [
-      "claims[1]의 claim text는 OPPO PHT110 기기에서 물리 카메라 ID 2 또는 3을 타깃팅할 때 벤더 HAL 내부의 P2StreamingNode 및 BasicSession::flush 단계에서 멈추는 현상을 기술하고 있습니다. 이는 HAL 인터페이스 계약 자체의 변경이 아니라 벤더 HAL 내부 구..."
-    ],
-    "repair_failures": [
-      "Editor output failed selected group coverage validation."
-    ],
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
     "candidate_shortage_hints": [
       "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     ],
     "source_gap_warnings": [],
     "missing_artifacts": [
-      "articles/content/newsroom/2026-11-23/stale-claim-report.json"
+      "articles/content/newsroom/2026-11-23/repair-failure.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: articles/content/newsroom/2026-11-23/stale-claim-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-11-23/repair-failure.json",
     "Fallback claim_validation.status=not_available for selected article: CameraX Release Notes - CameraX 1.7.0",
+    "Fallback claim_validation.status=not_available for selected article: Check if 3A modes are supported in Controller3A - platform/frameworks/support",
     "Fallback claim_validation.status=not_available for selected article: Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
     "Fallback claim_validation.status=not_available for selected article: Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
-    "Fallback claim_validation.status=not_available for selected article: Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
-    "Fallback claim_validation.status=not_available for selected article: Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support"
+    "Fallback claim_validation.status=not_available for selected article: Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support"
   ]
 }

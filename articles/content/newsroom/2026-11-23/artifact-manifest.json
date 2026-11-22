@@ -1,18 +1,18 @@
 {
   "schema_version": 5,
   "date": "2026-11-23",
-  "generated_at": "2026-11-22T15:59:46.575Z",
+  "generated_at": "2026-11-22T18:06:33.754Z",
   "review_summary": {
-    "total": 109,
-    "present": 72,
-    "missing": 37,
-    "missingRequired": 1,
-    "reviewBlocking": 9,
-    "attentionRequired": 7,
+    "total": 98,
+    "present": 78,
+    "missing": 20,
+    "missingRequired": 0,
+    "reviewBlocking": 15,
+    "attentionRequired": 5,
     "seedUsed": false,
-    "publicOutputExpected": false,
+    "publicOutputExpected": true,
     "publicOutputLane": "weekly",
-    "status": "FAILED_REPAIR_REVIEWABLE"
+    "status": "PASS"
   },
   "files": [
     {
@@ -64,46 +64,31 @@
       "path": "articles/content/newsroom/2026-11-23/editor-draft.md"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/editor-invalid-attempt-2.json"
+      "path": "articles/content/newsroom/2026-11-23/editor-in-chief-brief.md"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-1.json"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-2.json"
+      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-error-targeted-repair-attempt-1.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-targeted-repair-attempt-1.json"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.md"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/editor-repair-patches-attempt-1.json"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-sections-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-validation-error-attempt-2.json"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/editorial-plan.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/evidence-validation-report.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/extracted-source-facts.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.md"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/fact-check-report-attempt-1.json"
@@ -133,16 +118,16 @@
       "path": "articles/content/newsroom/2026-11-23/hal-signal-quality-report.md"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/image-audit-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/image-audit-report.md"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/quality-report-attempt-1.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/quality-report-attempt-1.md"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.md"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/quality-report.json"
@@ -151,19 +136,16 @@
       "path": "articles/content/newsroom/2026-11-23/quality-report.md"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/recovery-prompt.md"
+      "path": "articles/content/newsroom/2026-11-23/quirk-ledger-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/quirk-ledger-report.md"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/release-qa-report.md"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/repair-failure.json"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-2.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/reporter-candidates.json"
@@ -196,10 +178,34 @@
       "path": "articles/content/newsroom/2026-11-23/source-discovery-feedback-report.md"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/source-effectiveness-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-effectiveness-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-followup-issues.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-followup-issues.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-quality-diagnosis.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-quality-diagnosis.md"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/source-quality-report.json"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/source-quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/stale-claim-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/stale-claim-report.md"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/summary-cache-report.json"
@@ -223,10 +229,22 @@
       "path": "articles/data/newsletters.json"
     },
     {
+      "path": "articles/newsletters/2026-W48/index.html"
+    },
+    {
+      "path": "articles/newsletters/2026-W48/issue.json"
+    },
+    {
+      "path": "articles/newsletters/2026-W48/newsletter.md"
+    },
+    {
       "path": "articles/sitemap.xml"
     },
     {
       "path": "state/article-exposure-history.json"
+    },
+    {
+      "path": "state/quirk-ledger.json"
     }
   ],
   "review_artifacts": [
@@ -253,18 +271,14 @@
       "role": "must_read",
       "required": "always",
       "requiredActive": true,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": true,
-      "review_attention_required": true,
+      "review_attention_required": false,
       "review_order": 11,
-      "changed": false,
+      "changed": true,
       "derived": false,
-      "retention_grade": "review_required_compact",
-      "warning": {
-        "code": "required_artifact_missing",
-        "message": "Required review artifact is missing for this run context."
-      }
+      "retention_grade": "review_required_compact"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/seed-evidence-pack.md",
@@ -358,7 +372,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 33,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -368,13 +382,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "weekly_public_html",
       "required": "when_public_output",
-      "requiredActive": false,
-      "present": false,
+      "requiredActive": true,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 33,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -384,13 +398,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "weekly_public_markdown",
       "required": "when_public_output",
-      "requiredActive": false,
-      "present": false,
+      "requiredActive": true,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 34,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -406,7 +420,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 34,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -432,13 +446,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "weekly_public_issue",
       "required": "when_public_output",
-      "requiredActive": false,
-      "present": false,
+      "requiredActive": true,
+      "present": true,
       "human_readable": false,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 35,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -464,13 +478,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "weekly_public_index",
       "required": "when_public_output",
-      "requiredActive": false,
+      "requiredActive": true,
       "present": true,
       "human_readable": false,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 36,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -561,12 +575,12 @@
       "role": "stale_claim_gate",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 43,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -577,9 +591,9 @@
       "role": "image_audit",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 44,
       "changed": false,
@@ -641,7 +655,7 @@
       "role": "source_quality_diagnosis",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -657,7 +671,7 @@
       "role": "source_followup_issues",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -673,7 +687,7 @@
       "role": "quirk_ledger_report",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -689,7 +703,7 @@
       "role": "quirk_ledger_state",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -721,10 +735,10 @@
       "role": "recovery_prompt",
       "required": "optional",
       "requiredActive": false,
-      "present": true,
+      "present": false,
       "human_readable": true,
       "review_blocking": false,
-      "review_attention_required": true,
+      "review_attention_required": false,
       "review_order": 61,
       "changed": true,
       "derived": false,
@@ -801,7 +815,7 @@
       "role": "source_effectiveness",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -902,7 +916,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.002,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1030,7 +1044,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.011,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1137,12 +1151,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.018,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1174,7 +1188,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.02,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy"
     },
@@ -1238,7 +1252,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.024,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy"
     },
@@ -1254,7 +1268,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.025,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy"
     },
@@ -1265,7 +1279,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1281,7 +1295,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1313,7 +1327,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1329,7 +1343,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1345,7 +1359,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1361,7 +1375,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1494,7 +1508,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.04,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1611,22 +1625,6 @@
       "retention_grade": "transient_attempt"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/editor-invalid-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-1.json",
       "group": "debug_evidence",
       "label": "디버그 근거",
@@ -1638,119 +1636,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-sections-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-validation-error-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "transient_attempt"
     },
@@ -1819,55 +1705,7 @@
       "retention_grade": "transient_attempt"
     },
     {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-2.json",
       "group": "debug_evidence",
       "label": "디버그 근거",
       "role": "debug_attempt",
@@ -1915,6 +1753,22 @@
       "retention_grade": "debug_heavy"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-error-targeted-repair-attempt-1.json",
+      "group": "unknown_artifacts",
+      "label": "미분류 산출물",
+      "role": "unclassified",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": true,
+      "review_order": 95,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-targeted-repair-attempt-1.json",
       "group": "unknown_artifacts",
       "label": "미분류 산출물",
@@ -1959,253 +1813,151 @@
       "review_attention_required": true,
       "review_order": 95,
       "changed": false,
-      "derived": false,
-      "retention_grade": "debug_heavy"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/repair-failure.json",
-      "group": "unknown_artifacts",
-      "label": "미분류 산출물",
-      "role": "unclassified",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": true,
-      "review_order": 95,
-      "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy"
     }
   ],
-  "missing_required_review_artifacts": [
-    "articles/content/newsroom/2026-11-23/editor-in-chief-brief.md"
-  ],
-  "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950",
+  "missing_required_review_artifacts": [],
+  "retention_location": "local-snapshot",
   "retention_summary": {
-    "review_required_compact": 34,
-    "public_source_of_truth": 7,
-    "debug_heavy": 12,
-    "transient_attempt": 19
+    "review_required_compact": 49,
+    "public_source_of_truth": 10,
+    "debug_heavy": 11,
+    "transient_attempt": 8
   },
   "retained_heavy_artifacts": [
     {
-      "path": "articles/content/newsroom/2026-11-23/recovery-prompt.md",
-      "size": 2161625,
-      "sha256": "8bcc17aeda5e94371b16335d2df4d421bcfb239fd2d1204106e2cd7dea630621",
-      "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
       "path": "articles/content/newsroom/2026-11-23/reporter-candidates.json",
-      "size": 511896,
-      "sha256": "f70826f440636ebfd8034768e117c31807c075b588ed7f578fcbbce3ac1e544e",
+      "size": 578759,
+      "sha256": "8e49aa6e63c8756927df50f3d50cec399805691334d6feb3c0d4be6676c1ec33",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-draft.json",
-      "size": 256432,
-      "sha256": "b6031e84684b7938e1f5f0d8cb6c769e4a622eee7c26101ed11092a36ab751a0",
+      "size": 208338,
+      "sha256": "5f73c3d9951adbe12f49085e406cb40352efe610d4b89f538e07e49b5c04fe7b",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-draft.md",
-      "size": 18022,
-      "sha256": "dcc956da0289909cac7e38ce2aaee3653ffb501c491b9a229d99cbe847ba765f",
+      "size": 11554,
+      "sha256": "1f198a8fe87eb5bc1ee88ff3f1a5fb9bb1d90e4ea30ef5ffce158224aa00d82a",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/shortlisted-candidates.json",
-      "size": 1915883,
-      "sha256": "43e6922c088a24178a474c8a5d2e3df7b500636cf43bc3eef04de60cde9b87e5",
+      "size": 1982757,
+      "sha256": "9c23e96737a86bafdba4ce9a828ad1274b14d3ac68f471c760509a5c773abc68",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/article-capsules.json",
-      "size": 530081,
-      "sha256": "d3bbe65b38868e32cbb3edff9d2d93402815bf3dc9c2a5a4cd3bb575d383c650",
+      "size": 572966,
+      "sha256": "523afbb508a3a97c25ba7257ef3f0c92cc3903b38648077fbf0f76408e26080c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/background-context.json",
-      "size": 17937,
-      "sha256": "4128fc30b0ec75eaa22a9622f101b87e6dbcd4352f067e0d5f78bd9318d68ee8",
+      "size": 7883,
+      "sha256": "c7ab0bd751961111d41a9c172987f51025fceeb9473d4613d91b141ba94abb2c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-draft-attempt-1.json",
-      "size": 112260,
-      "sha256": "49c99c96e7594992abdaec11ba3ed33fd3251216d0a0d64ad4d2f788ddda7e3e",
+      "size": 89932,
+      "sha256": "6367ee49c511d5898f14d581f649e47da931706cf364ee745bd141d14171f3b5",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-draft-attempt-1.md",
-      "size": 17754,
-      "sha256": "aeb85bd183aebe652c14e5c42f0b5ec2de0b51347d84633be43b777c77a2a765",
+      "size": 11554,
+      "sha256": "1f198a8fe87eb5bc1ee88ff3f1a5fb9bb1d90e4ea30ef5ffce158224aa00d82a",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-invalid-attempt-2.json",
-      "size": 74386,
-      "sha256": "52bf585807f24f8ce1e56024c1370f350e62104b8de6e3d5b2b68d278f7b5ae2",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-1.json",
-      "size": 1770,
-      "sha256": "7aa1799858296e86786bb30d02715a02742106694d7ec6a786e9f72863f10a57",
+      "size": 1597,
+      "sha256": "767408ffe2aa452ca99add50dd16721f37cce9e019e94046837461a3096994cb",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-attempt-2.json",
-      "size": 1768,
-      "sha256": "e173fa4d830b0547228c7d167b52a9219787d148664151896fb62716978367dc",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.json",
-      "size": 112870,
-      "sha256": "b702700ee942353324cb95b16e939d843399cb4901048dcdf0cd2f94642700db",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-attempt-1.md",
-      "size": 18022,
-      "sha256": "dcc956da0289909cac7e38ce2aaee3653ffb501c491b9a229d99cbe847ba765f",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-repair-sections-attempt-1.json",
-      "size": 49310,
-      "sha256": "4018e67093044ae8209675a9971ad27f014a910d98805894b3ae730c45a32c44",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/editor-validation-error-attempt-2.json",
-      "size": 2330,
-      "sha256": "934192868def975d605631f06889fc5d3e54973d880fa68a8deea331cb806cf6",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.json",
-      "size": 8321,
-      "sha256": "5c7a55839f2ce7ba93bcf957b3952f50fbd6f7c1c6e11fd80a152d9084ca1858",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/fact-check-repair-attempt-1.md",
-      "size": 1628,
-      "sha256": "8a14c686ed661515051a693793a168de01a530cf1f3b3c7da1587cf72311c35c",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/fact-check-report-attempt-1.json",
-      "size": 42243,
-      "sha256": "21a27146e8fad420b0554dc19accaea4245022a6b9128c3d6eceece6a90cf295",
+      "size": 30958,
+      "sha256": "4ebdfcf10bc98924937199857be9b701ff40342ee1d7cb595444e8aa70fc61fc",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/fact-check-report-attempt-1.md",
-      "size": 1549,
-      "sha256": "40ea7bc523e54895bd1a05db7ee2b302c2d9e73d07fbda34f6c3fbf4c28a861a",
+      "size": 742,
+      "sha256": "7ca905de64f006da0e3212239716e98123dcd37390e26189ca71d9a7408121e5",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/quality-report-attempt-1.json",
-      "size": 99424,
-      "sha256": "cde6a13e4c11b1015a0680d612144482b08d1889bc16c696f9fe4268ed103158",
+      "size": 82255,
+      "sha256": "75069e5be61d60efcaf7270cb3a0a37a9a9a09b275920df16aa67a4502aa64a0",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/quality-report-attempt-1.md",
-      "size": 33578,
-      "sha256": "4c522629bcabbf3698bf646724d26b29cf53a3cce07e342b7c6ee4d4d6b9ba00",
+      "size": 22687,
+      "sha256": "bc20b36764927063b0ff8f5cc8a5e9e433b5fdecfebc02feeeaed919d306630d",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.json",
-      "size": 96123,
-      "sha256": "9a07f400a1513271fc0ba44c6488fb3e41c1994e9cfe0e532ed35d6cc56722cf",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/quality-report-repair-attempt-1.md",
-      "size": 30448,
-      "sha256": "d561783b4558eb2bd8185d51172400a8bd364def5643a04e7cc4f18df66a4f7f",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-1.json",
-      "size": 511896,
-      "sha256": "f70826f440636ebfd8034768e117c31807c075b588ed7f578fcbbce3ac1e544e",
+      "size": 578759,
+      "sha256": "8e49aa6e63c8756927df50f3d50cec399805691334d6feb3c0d4be6676c1ec33",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/reporter-candidates-attempt-2.json",
-      "size": 508641,
-      "sha256": "34d28535a080f5c5e21d5ecf037912eac966e3c57dccc42aa7367dcd5c7b4706",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/coverage-reconciliation.json",
-      "size": 6934,
-      "sha256": "07b008fdf8fdd2d5e7ebca26b36bc4135d64d2ea8ff05295a3dab525768bc3db",
+      "size": 12716,
+      "sha256": "c7411d048b404fdeebf81d8ebe3dc6938eabb7c76d54a486184f8e7ab072ee8b",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-error-targeted-repair-attempt-1.json",
+      "size": 15740,
+      "sha256": "6020c31ea30cdc8bac482da85b88a839fe5c8b65f21362153d7e0e0ede999c1a",
+      "retention_grade": "debug_heavy",
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-public-article-judge-targeted-repair-attempt-1.json",
-      "size": 1770,
-      "sha256": "7aa1799858296e86786bb30d02715a02742106694d7ec6a786e9f72863f10a57",
+      "size": 6819,
+      "sha256": "4601dc494647ea3daebd5b1171cca8ccc574b3363e5c2b303639ac658cbba313",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editor-repair-patches-attempt-1.json",
-      "size": 817,
-      "sha256": "e9564152c0dca0a640d1c4950749c672d33b899aa163dfe3d228aa33af8b1c2e",
+      "size": 997,
+      "sha256": "f6513178b4169c168bbd159a64d91a1ec0d43e1394c53bffd9998eeea7bb2b2c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/editorial-plan.json",
-      "size": 43273,
-      "sha256": "f7b7a4ba785b0088e4fb2ea20a259789597351d6617d59dd70fb73f3058f033a",
+      "size": 49747,
+      "sha256": "909f6b46087dc3e07137482dd68cea7e3842ec528f539ef2611e821d8e8bb863",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
-    },
-    {
-      "path": "articles/content/newsroom/2026-11-23/repair-failure.json",
-      "size": 2371,
-      "sha256": "e212a8f06509964a9ab9e81672c827ab55e43690d6545e5238ef8b4642b6f5d3",
-      "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-45038955950"
+      "retention_location": "local-snapshot"
     }
   ],
   "committed_artifacts": [
@@ -2246,6 +1998,14 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/editor-in-chief-brief.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/evidence-validation-report.json",
       "retention_grade": "review_required_compact"
     },
@@ -2282,11 +2042,27 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/image-audit-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/image-audit-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/quality-report.json",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/quirk-ledger-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/quirk-ledger-report.md",
       "retention_grade": "review_required_compact"
     },
     {
@@ -2326,11 +2102,43 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-11-23/source-effectiveness-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-effectiveness-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-followup-issues.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-followup-issues.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-quality-diagnosis.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/source-quality-diagnosis.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-11-23/source-quality-report.json",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "articles/content/newsroom/2026-11-23/source-quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/stale-claim-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-11-23/stale-claim-report.md",
       "retention_grade": "review_required_compact"
     },
     {
@@ -2362,12 +2170,28 @@
       "retention_grade": "public_source_of_truth"
     },
     {
+      "path": "articles/newsletters/2026-W48/index.html",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W48/issue.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W48/newsletter.md",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
       "path": "articles/sitemap.xml",
       "retention_grade": "public_source_of_truth"
     },
     {
       "path": "state/article-exposure-history.json",
       "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "state/quirk-ledger.json",
+      "retention_grade": "review_required_compact"
     }
   ]
 }

@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
   "date": "2026-11-23",
-  "generated_at": "2026-11-22T15:38:56.596Z",
+  "generated_at": "2026-11-22T18:03:06.792Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 12,
-    "hit_count": 0,
-    "miss_count": 12,
-    "by_url_hit_count": 0,
+    "hit_count": 9,
+    "miss_count": 3,
+    "by_url_hit_count": 9,
     "by_content_hit_count": 0,
     "legacy_hit_count": 0
   },
   "reasons": [
     {
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "count": 11
+      "reason": "url-hit",
+      "count": 9
     },
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "count": 1
+      "count": 3
     }
   ],
   "entries": [
@@ -33,21 +33,21 @@
         "published_date": "November 18, 2026",
         "content_hash": "e93df667af500b9eabc85fa8d07d90cb37092e6e251dccfe21b2d6dacab276b3"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a.json"
     },
     {
-      "title": "CameraX | Jetpack | Android Developers",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "source": "androidx-camerax-release-notes",
-      "published_date": "",
+      "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-19",
       "cache_key": {
-        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
-        "url_hash": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
-        "published_date": "",
-        "content_hash": "19843f6990301fbf88b9167f0587910f1a34a1b4978d7e909938c72a869d257d"
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+        "url_hash": "bd0afdb40015a4b5328ea80100428f6c793ef8bb3f16b27b3c11da55f7330289",
+        "published_date": "2026-11-19",
+        "content_hash": "a4edd4f97fe1db6733f10ac6c47a837544ca0017b62e2e1a1f22deada249f900"
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
@@ -63,10 +63,10 @@
         "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
         "url_hash": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
         "published_date": "2026-11-17",
-        "content_hash": "8d9aee5c3b2722c3eef9ffaba1f36fc638cdae4f58aaf8bb95f7a0293e801ef2"
+        "content_hash": "e5d7ea42d75eddc44844b8e6e0524ee69698abdd84d7598cd1e4bb893f56a870"
       },
       "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },
@@ -79,10 +79,10 @@
         "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
         "url_hash": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
         "published_date": "2026-11-17",
-        "content_hash": "755980f7db292c3438eb477874d548e1befbeb65fe919db6bcd2b24d0f172238"
+        "content_hash": "8624382922529cf032751efdadc4ce93fcd90328cf00533c8402fe3c42a059d1"
       },
       "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },
@@ -95,44 +95,28 @@
         "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
         "url_hash": "5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c",
         "published_date": "2026-11-18",
-        "content_hash": "7a56e1e1390d8daf42b40e1bb444b7865fc3045fd62a9c6810a28af1435a52b6"
+        "content_hash": "2bc9b9de81c71c41acacc0e76350cef4fbc3141e79050a83e6856fd41a49782b"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c.json"
     },
     {
-      "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "source": "AndroidX Gerrit Camera",
-      "published_date": "2026-11-17",
-      "cache_key": {
-        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-        "url_hash": "f4fcd93c70ec223697647342247a749e7dc2d4d74e33db241ddaa5958591e5ac",
-        "published_date": "2026-11-17",
-        "content_hash": "f7f3a31d13a30290c2209517f94b4c2580cac44f804651966f50110d11b032b4"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "Skip HLG10 feature group tests on emulators - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
+      "title": "Honor abort cancellation in still capture control - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
       "source": "AndroidX Gerrit Camera",
       "published_date": "2026-11-19",
       "cache_key": {
-        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4453680",
-        "url_hash": "ae5e659145c1d69bc2964a0786afd593c66e0311a418b8e1acf6dde604afb771",
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
+        "url_hash": "10516fa73a45ba80dd2c59186f2737c6a6f9414b1a728e5bb176d4be51c849fb",
         "published_date": "2026-11-19",
-        "content_hash": "925ddf730fac24afb6609cb8aa68179c26e9c063ac278e21b231d7d8ac996694"
+        "content_hash": "8184aa8526b77ab8c7831cefd67d160a958c125c7b281dd09a11b3587fc47af9"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/10516fa73a45ba80dd2c59186f2737c6a6f9414b1a728e5bb176d4be51c849fb.json"
     },
     {
       "title": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support",
@@ -143,12 +127,12 @@
         "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
         "url_hash": "147e905fcf888ed080353cf08a87f6aa25f76548c3fdff262e20ab477967c556",
         "published_date": "2026-11-17",
-        "content_hash": "b31f2ded7997853ba11c2e021d9bc1fcf357f65b3af965a3ec908a7a37310986"
+        "content_hash": "709f1fe6a4b9fbca03be89e181d09d06518db4f8b993590bce972f7edce8a6b5"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/147e905fcf888ed080353cf08a87f6aa25f76548c3fdff262e20ab477967c556.json"
     },
     {
       "title": "Claude Code v2.1.327",
@@ -161,10 +145,26 @@
         "published_date": "2026-11-17T23:17:45Z",
         "content_hash": "8c053cf9b6e48f83e734ff0173309969d6de969aedc1b516da93ee3380bcdf5c"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8f7a055a1b360233ad87f8f6e9ed14545bc77431e59e77c825c7cd5ff6f24435.json"
+    },
+    {
+      "title": "Suspend video encoder input surface until start - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-20",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+        "url_hash": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
+        "published_date": "2026-11-20",
+        "content_hash": "801aeab1639dc502c5160ba105834e4070e652ad73887fe601ac408a12efadc6"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474.json"
     },
     {
       "title": "[PATCH 0/3] media: Add Sony IMX175 sensor driver (Lenovo ThinkPad 10 rear camera)",
@@ -177,10 +177,10 @@
         "published_date": "2026-11-16T17:52:03Z",
         "content_hash": "70adc4287db65e53f06316b568a715f5bd1fbf5d43f75f921045033b1918b139"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8bc23770060fdb15a34b9eb456159005cbb6fbcc65671b643824e392e43fd69e.json"
     },
     {
       "title": "[PATCH v3 0/2] media: i2c: Add Samsung S5K5E8 camera sensor driver",
@@ -193,26 +193,26 @@
         "published_date": "2026-11-22T03:47:01Z",
         "content_hash": "d7dc97c2be3e2b8e971641846b9fc5c589d91d6acf85e366dd0128cedabba6f9"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6a8e794d45cf5f2de48e0977f46e3a4d2b429f841ece3797be15d06845abe79f.json"
     },
     {
-      "title": "[PATCH v6 0/2] media: i2c: Samsung S5K3T2 image sensor",
-      "url": "https://lore.kernel.org/linux-media/20261120-upstream-s5k3t2-v6-0-dd345fa4201c@proton.me/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-11-20T18:04:29Z",
+      "title": "media: exynos4-is: Fix a race between s_stream(0) and the interrupt handler (android17-6.18-lts)",
+      "url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+      "source": "Android common kernel Exynos camera integrations",
+      "published_date": "2026-11-16T11:11:03.000Z",
       "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/20261120-upstream-s5k3t2-v6-0-dd345fa4201c@proton.me",
-        "url_hash": "1cc7ca26f6e1991efc2142af48c1c1491f3879086bb828bee520165cfe898555",
-        "published_date": "2026-11-20T18:04:29Z",
-        "content_hash": "380d22b5da42ba2e4225bf97217bc8cc592acd2c82a88d4f8054cf710d4cc406"
+        "normalized_url": "https://android-review.googlesource.com/c/kernel/common/+/4445101",
+        "url_hash": "764a52e4256164fbdd54f5c88b3c4e4722acda6ea945dc8de84677d121fecf8e",
+        "published_date": "2026-11-16T11:11:03.000Z",
+        "content_hash": "fe882e8e8cc53b2db31dffebbd2b9e29811a389ca7a1974fb15cbdedc718f8c6"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/764a52e4256164fbdd54f5c88b3c4e4722acda6ea945dc8de84677d121fecf8e.json"
     }
   ]
 }

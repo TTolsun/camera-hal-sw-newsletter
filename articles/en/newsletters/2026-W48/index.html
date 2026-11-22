@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W48/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W47 Camera SW Newsletter (Published W48)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W48/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W48/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W48/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="CameraX 1.7.0 lets apps select a physical camera directly. On the OPPO Find N3 Flip, CameraX hides two physical IDs that could stall the camera service when targeted. We look at a stalled zoom switch on the SM-F971 and a CameraPipe change that rejects unsupported 3A requests immediately. Logging the first video frame’s PTS separately from its output callback helps distinguish a queued frame from delayed delivery." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W48/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W47 Camera SW Newsletter (Published W48)" />
+  <meta property="og:description" content="CameraX 1.7.0 lets apps select a physical camera directly. On the OPPO Find N3 Flip, CameraX hides two physical IDs that could stall the camera service when targeted. We look at a stalled zoom switch on the SM-F971 and a CameraPipe change that rejects unsupported 3A requests immediately. Logging the first video frame’s PTS separately from its output callback helps distinguish a queued frame from delayed delivery." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W48/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W47 Camera SW Newsletter (Published W48)" />
+  <meta name="twitter:description" content="CameraX 1.7.0 lets apps select a physical camera directly. On the OPPO Find N3 Flip, CameraX hides two physical IDs that could stall the camera service when targeted. We look at a stalled zoom switch on the SM-F971 and a CameraPipe change that rejects unsupported 3A requests immediately. Logging the first video frame’s PTS separately from its output callback helps distinguish a queued frame from delayed delivery." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.11.16 – 11.22</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W47</span></h1>
+        <p class="issue-publish-badge">Published W48</p>
+        
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera">CameraX 1.7.0 lets apps bind to a specific physical camera</a>
+            <p class="reader-brief-takeaway">Record the advertised lens IDs and the binding result together to locate the failure.</p>
+          </li><li>
+            <a href="#article-when-a-3a-request-fails-immediately-check-the-camera-id">When a 3A request fails immediately, check the camera ID</a>
+            <p class="reader-brief-takeaway">An unsupported request and an accepted request that is slow to converge leave different traces.</p>
+          </li><li>
+            <a href="#article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971">Why the second lens switch stalled on the Samsung SM-F971</a>
+            <p class="reader-brief-takeaway">Compare the first capture result after the same lens switch with ZSL enabled and disabled.</p>
+          </li><li>
+            <a href="#article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip">Why CameraX hides two physical cameras on the OPPO Find N3 Flip</a>
+            <p class="reader-brief-takeaway">Match the app’s disconnect with the configured physical ID and the last HAL flush record.</p>
+          </li><li>
+            <a href="#article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens">When does the first video frame arrive? CameraX changes when encoder input opens</a>
+            <p class="reader-brief-takeaway">Log the first output’s PTS separately from its callback arrival time to distinguish a queued frame from delayed delivery.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">CameraX 1.7.0 lets apps select a physical camera directly. On the OPPO Find N3 Flip, CameraX hides two physical IDs that could stall the camera service when targeted. We look at a stalled zoom switch on the SM-F971 and a CameraPipe change that rejects unsupported 3A requests immediately. Logging the first video frame’s PTS separately from its output callback helps distinguish a queued frame from delayed delivery.</p></details>
+        </div>
+        
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera" tabindex="-1" aria-labelledby="article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera-title" class="article-title">CameraX 1.7.0 lets apps bind to a specific physical camera</h2>
+        <p class="article-source-subtitle">Android Developers Latest Updates</p>
+        <p class="article-lead">Was the lens missing from the list, or did it fail to open after the app selected it? CameraX 1.7.0 gives developers a way to tell.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Record the advertised lens IDs and the binding result together to locate the failure.</p></div>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.7.0 release notes on Camera2Interop V2 and physical camera binding" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0">CameraX Release Notes - CameraX 1.7.0</a></figcaption>
+        </figure>
+        <p>Released on November 18, CameraX 1.7.0 lets an app obtain a CameraSelector from the physical camera information returned by CameraInfo.getPhysicalCameraInfos(). The app can use that selector to bind capture use cases to a particular camera.</p>
+        <p>Camera2Interop V2 is now stable and needs no opt-in. When building a focus and metering request, apps can also use FocusMeteringAction.Builder.setLockingMode() to request exposure and white-balance locks.</p>
+        <p>When migrating a lens picker, log the physical IDs the device returned alongside the ID the app requested for binding. Those two records distinguish a lens that was never offered from one that was selected but failed when capture began.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0">CameraX Release Notes - CameraX 1.7.0</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-when-a-3a-request-fails-immediately-check-the-camera-id" aria-label="Next article: When a 3A request fails immediately, check the camera ID">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-when-a-3a-request-fails-immediately-check-the-camera-id" tabindex="-1" aria-labelledby="article-when-a-3a-request-fails-immediately-check-the-camera-id-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-when-a-3a-request-fails-immediately-check-the-camera-id-title" class="article-title">When a 3A request fails immediately, check the camera ID</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera</p>
+        <p class="article-lead">CameraPipe now checks which modes a camera advertises before waiting for focus or exposure to change.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>An unsupported request and an accepted request that is slow to converge leave different traces.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="When a 3A request fails immediately, check the camera ID image" loading="lazy" decoding="async">
+        </figure>
+        <p>A change merged on November 19 makes Controller3A check the requested exposure (AE), focus (AF), white-balance (AWB), control and flash modes against that camera’s CameraMetadata. The check runs when updating, submitting or locking 3A.</p>
+        <p>If a requested mode is absent, CameraPipe logs a warning and returns SUBMIT_FAILED immediately. The previous 3A state is preserved. The change record does not identify a released CameraX artifact or device build containing the fix.</p>
+        <p>On a build containing the patch, compare the camera ID and mode in the warning with the values the app requested. If the request was accepted but the lock was slow, follow the 3A states in subsequent capture results.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488">Check if 3A modes are supported in Controller3A - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera" aria-label="Previous article: CameraX 1.7.0 lets apps bind to a specific physical camera">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971" aria-label="Next article: Why the second lens switch stalled on the Samsung SM-F971">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971" tabindex="-1" aria-labelledby="article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971-title" class="article-title">Why the second lens switch stalled on the Samsung SM-F971</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera</p>
+        <p class="article-lead">The same zoom sequence on the same phone completed in a regular session. With ZSL enabled, the last switch stalled.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Compare the first capture result after the same lens switch with ZSL enabled and disabled.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Why the second lens switch stalled on the Samsung SM-F971 image" loading="lazy" decoding="async">
+        </figure>
+        <p>The report describes a Samsung SM-F971U1 using PRIVATE reprocessing for zero shutter lag (ZSL). After zoom changed from 2.0× to 0.6× and back to 2.0×, no TotalCaptureResult arrived for the new repeating request. The setZoomRatio() call then timed out.</p>
+        <p>In a regular capture session, both the zoom transitions and still capture completed. A patch merged on November 17 disables ZSL for models with the SM-F971 prefix and uses regular still capture instead. The change record does not establish which CameraX release or shipping device build includes this workaround.</p>
+        <p>When investigating a similar timeout, keep the lens-switch sequence fixed and vary only ZSL. Match each zoom request with its first subsequent capture result to see which transition stopped producing results.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195">Disable ZSL on Samsung SM-F971 - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-when-a-3a-request-fails-immediately-check-the-camera-id" aria-label="Previous article: When a 3A request fails immediately, check the camera ID">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip" aria-label="Next article: Why CameraX hides two physical cameras on the OPPO Find N3 Flip">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip" tabindex="-1" aria-labelledby="article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip-title" class="article-title">Why CameraX hides two physical cameras on the OPPO Find N3 Flip</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera</p>
+        <p class="article-lead">On the PHT110, physical IDs 2 and 3 appeared in the list. Targeting either one could bring down the camera service.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Match the app’s disconnect with the configured physical ID and the last HAL flush record.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Why CameraX hides two physical cameras on the OPPO Find N3 Flip image" loading="lazy" decoding="async">
+        </figure>
+        <p>When an output targeted physical ID 2 or 3 on rear logical camera 0, capture stalled in the vendor HAL’s P2StreamingNode. The session’s BasicSession::flush call then failed to return.</p>
+        <p>After the watchdog terminated the camera services, the app saw ERROR_CAMERA_DEVICE and CAMERA_DISCONNECTED. A CameraX patch merged on November 17 removes both IDs from the results of getPhysicalCameraInfos() on the PHT110. The change is merged into androidx-main. Inclusion in a CameraX release or a product build still needs verification.</p>
+        <p>For an existing incident, work back from the disconnect. Match the physical ID in the output configuration with the capture stall and the last flush record. On a patched build, first check whether the two IDs have disappeared from the lens list.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995">Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971" aria-label="Previous article: Why the second lens switch stalled on the Samsung SM-F971">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens" aria-label="Next article: When does the first video frame arrive? CameraX changes when encoder input opens">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens" tabindex="-1" aria-labelledby="article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens-title" class="article-title">When does the first video frame arrive? CameraX changes when encoder input opens</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera</p>
+        <p class="article-lead">The camera can deliver frames before recording starts. A CameraX patch merged on November 20 changes what the video encoder does with those early frames.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Log the first output’s PTS separately from its callback arrival time to distinguish a queued frame from delayed delivery.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="When does the first video frame arrive? CameraX changes when encoder input opens image" loading="lazy" decoding="async">
+        </figure>
+        <h3 class="article-subheading">What the patch changes</h3>
+        <p>EncoderImpl configures MediaCodec and attaches its persistent input surface ahead of recording. It does so again after a stop to prepare for the next recording. Previously, GraphicBufferSource held frames received while the codec was CONFIGURED. It could submit them inside MediaCodec.start() before the output buffer pools had finished initializing.</p>
+        <p>On API 29 and later, the patched encoder sets KEY_CREATE_INPUT_SURFACE_SUSPENDED at configuration. It drops frames received in that state and resumes input via PARAMETER_KEY_SUSPEND immediately after MediaCodec.start() returns. The added test feeds frames before start and checks that the first encoded output has a presentation timestamp (PTS) at or after a recorded cutoff and is a keyframe. The patch reports no measured reduction in startup latency. The change is merged into androidx-main. The record identifies no CameraX release or device build that includes it.</p>
+        <h3 class="article-subheading">What to trace on a device</h3>
+        <p>Trace the first recording and a restart immediately after stopping as separate runs. Record camera frame arrival, entry to and return from codec start, and the first output callback. Record the first output’s PTS and keyframe flag as well. PTS identifies the frame’s place on the media timeline. The callback time tells you when the app received it. Match clock domains and units before comparing camera and encoder timestamps.</p>
+        <p>If the first output carries an old PTS from before recording began, investigate whether a frame queued during configuration survived into the output. If the PTS is in the expected range but the callback arrives late, measure time inside codec start separately from the interval between its return and output delivery. The device trace determines which explanation fits.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407">Suspend video encoder input surface until start - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip" aria-label="Previous article: Why CameraX hides two physical cameras on the OPPO Find N3 Flip">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          
+        </nav>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679">Honor abort cancellation in still capture control - platform/frameworks/support</a><span class="reference-meta">AndroidX Gerrit Camera (2026-11-19) · AOSP Camera framework reference</span></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276">Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support</a><span class="reference-meta">AndroidX Gerrit Camera (2026-11-18) · AOSP Camera framework reference</span></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746">Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support</a><span class="reference-meta">AndroidX Gerrit Camera (2026-11-17) · AOSP Camera framework reference</span></li><li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.327">Claude Code v2.1.327</a><span class="reference-meta">Claude Code Changelog (2026-11-17) · C++ and AI native tooling reference</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0">CameraX Release Notes - CameraX 1.7.0</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488">Check if 3A modes are supported in Controller3A - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195">Disable ZSL on Samsung SM-F971 - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995">Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407">Suspend video encoder input surface until start - platform/frameworks/support</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

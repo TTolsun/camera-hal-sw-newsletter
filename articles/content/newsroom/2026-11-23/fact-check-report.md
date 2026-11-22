@@ -2,18 +2,15 @@
 
 ## 상태
 
-NEEDS_FIX
+PASS
 
 ## 반드시 수정할 항목
 
-- 위치: sections[2].claims[1].impact_level
-  - 문제: claims[1]의 claim text는 OPPO PHT110 기기에서 물리 카메라 ID 2 또는 3을 타깃팅할 때 벤더 HAL 내부의 P2StreamingNode 및 BasicSession::flush 단계에서 멈추는 현상을 기술하고 있습니다. 이는 HAL 인터페이스 계약 자체의 변경이 아니라 벤더 HAL 내부 구현 및 파이프라인의 멈춤 현상에 해당하므로 direct_hal_contract 분류 기준에 부합하지 않습니다.
-  - 제안: 해당 claim의 impact_level을 driver_image_pipeline 또는 camera_framework_behavior로 수정하세요.
-  - 출처: https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995
+- 없음
 
 ## 권장 수정
 
-- sections[1] 및 sections[2]: 프레임워크 레이어의 쿼크 등록은 상위 앱 크래시를 막기 위한 우회책이므로, 벤더 HAL 및 ISP 파이프라인 개발자가 펌웨어 레벨에서 해당 노드 락업 문제를 근본 해결해야 한다는 기술적 권고를 보강하면 더욱 유익합니다.
+- sections[4].source_verification_notes의 원문 URL 및 상태 표기가 다소 혼재되어 있으므로, 다른 섹션과 일관되게 'Source URL: ...', 'Evidence ID: ...', 'Primary source: ...' 형태로 정리할 것을 권장합니다.
 
 ## 출처 공백
 
@@ -21,4 +18,4 @@ NEEDS_FIX
 
 ## 최종 의견
 
-전체 5개 기사 모두 원문 Gerrit diff 및 공식 릴리스 노트와 완벽하게 일치하며, 금지된 Markdown 문법 없이 고품질로 작성되었습니다. 다만 section 2의 oppo_pht110_hal_hang 클레임에 지정된 impact_level이 direct_hal_contract로 분류되어 있으므로, 실제 계층에 부합하는 driver_image_pipeline 또는 camera_framework_behavior로 수정이 완료되면 즉시 발행 가능합니다.
+모든 기사가 공식 출처 및 전체 패치 diff에 기반하여 사실 관계를 충실히 반영하고 있으며, 과장된 결론 없이 적용 한계와 엔지니어 진단 포인트를 정확히 분리하여 기술했습니다. Markdown 린트 규칙과 편집 정책을 모두 통과하므로 즉시 발행 가능합니다.

@@ -2,16 +2,16 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-11-23",
-  "generated_at": "2026-11-22T15:59:46.528Z",
-  "status": "NEEDS_FIX",
-  "input_completeness": "partial",
+  "generated_at": "2026-11-22T18:06:33.707Z",
+  "status": "PASS",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
-    "evidence_pack_summary": "input_unavailable",
+    "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
   },
   "inputs": {
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "articles/content/newsroom/2026-11-23/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -45,7 +45,7 @@
       },
       "evidence_pack_summary": {
         "path": "articles/content/newsroom/2026-11-23/evidence-pack-summary.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "merged_candidate_manifest": {
@@ -55,12 +55,9 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report",
-      "evidence_pack_summary"
-    ]
+    "unavailable_optional": []
   },
-  "quality_status": "NEEDS_FIX",
+  "quality_status": "PASS",
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 5,
@@ -71,7 +68,7 @@
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 5,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_owner_metric_log": 2,
     "main_articles_with_concrete_action": 5,
     "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
@@ -80,18 +77,17 @@
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "framework_hal_contract": 5,
+      "framework_hal_contract": 4,
       "stream_buffer_metadata": 5,
-      "camerax_app_compatibility": 5,
-      "driver_image_pipeline": 1
+      "camerax_app_compatibility": 4
     },
     "actionability_level_counts": {
-      "owner_metric_log": 1,
-      "measurable_test": 4
+      "owner_metric_log": 2,
+      "measurable_test": 3
     },
     "effective_actionability_level_counts": {
-      "owner_metric_log": 1,
-      "measurable_test": 4
+      "owner_metric_log": 2,
+      "measurable_test": 3
     },
     "signal_quality_status_counts": {
       "strong_signal": 5
@@ -100,7 +96,7 @@
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "title": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -121,15 +117,13 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "Camera HAL 인터페이스 버전이 변경되었다고 주장하지 않습니다.",
-        "아티팩트 버전 테이블을 동작 변경 근거로 혼용하지 않습니다.",
+        "CameraX 신규 기능 추가를 HAL 인터페이스 구조체의 직접 변경으로 해석하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-        "Do not use artifact version tables as behavior-change evidence.",
-        "CameraX 1.7.0 출시가 Camera HAL3 AIDL 인터페이스 자체의 변경을 의미한다고 확대하지 않습니다."
+        "Do not use artifact version tables as behavior-change evidence."
       ],
       "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
+      "camera_pipeline_link": "CameraX 프레임워크 추상화 계층",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -138,7 +132,40 @@
     },
     {
       "index": 2,
-      "title": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "title": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "HAL3 3A 알고리즘 처리 변경이나 카메라 서버 내부의 동작 변경으로 확대 해석하지 마십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "CameraPipe Controller3A 및 CameraMetadata",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -148,7 +175,7 @@
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_framework_owner",
+        "camera_driver_owner",
         "camerax_app_compat_owner"
       ],
       "actionability_level": "measurable_test",
@@ -159,13 +186,11 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 패치가 벤더 CamX 드라이버나 ISP 버그를 직접 수정했다고 주장하지 않습니다.",
-        "모든 Samsung 단말에서 ZSL이 비활성화된다고 일반화하지 않습니다.",
-        "벤더 파이프라인 멈춤의 근본 원인이 해결되었다거나 모든 기기에서 ZSL이 비활성화된다고 확대하지 않습니다."
+        "벤더 CamX HAL 자체의 수정이 아니며 CameraX 프레임워크 수준의 쿼크 등록임을 인지해야 합니다."
       ],
       "soc_signal_type": "platform_signal",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
+      "camera_pipeline_link": "CameraX ZSL 재처리 및 CamX SAT 파이프라인",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -173,8 +198,8 @@
       "hard_blocker_reason_codes": []
     },
     {
-      "index": 3,
-      "title": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "index": 4,
+      "title": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -184,8 +209,7 @@
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner"
+        "camera_framework_owner"
       ],
       "actionability_level": "measurable_test",
       "effective_actionability_level": "measurable_test",
@@ -195,49 +219,11 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "벤더 P2StreamingNode의 소스 코드가 수정되었다고 주장하지 않습니다.",
-        "모든 OPPO 기기에서 물리 카메라 지원이 중단되었다고 일반화하지 않습니다.",
-        "MediaTek HAL의 스트림 플러시 락업 결함 자체가 근본적으로 해결된 것이 아니라 프레임워크에서 호출을 차단한 것임을 명확히 합니다."
+        "미디어텍 또는 오포의 벤더 HAL 소프트웨어가 직접 패치된 것으로 오해하지 않도록 주의하십시오."
       ],
       "soc_signal_type": "platform_signal",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 4,
-      "title": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-      "relevance_bucket": "direct_aosp_camera",
-      "hal_impact_axes": [
-        "framework_hal_contract",
-        "stream_buffer_metadata",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_hal_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 4,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Samsung Extensions 라이브러리 바이너리가 수정되었다고 주장하지 않습니다.",
-        "전면 카메라 야간 모드 문제까지 모두 해결되었다고 과장하지 않습니다.",
-        "벤더 Extensions 파이프라인의 내부 누수가 해결된 것이 아니라 프레임워크 레벨에서 장치 재오픈을 수행하는 조치임을 명시합니다."
-      ],
-      "soc_signal_type": "platform_signal",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
+      "camera_pipeline_link": "Camera2 OutputConfiguration 및 벤더 P2StreamingNode",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -246,20 +232,14 @@
     },
     {
       "index": 5,
-      "title": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
-      "relevance_bucket": "direct_aosp_camera",
+      "title": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "camerax_app_compatibility"
+        "stream_buffer_metadata"
       ],
       "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner"
+        "camera_framework_owner"
       ],
       "actionability_level": "measurable_test",
       "effective_actionability_level": "measurable_test",
@@ -267,14 +247,13 @@
       "signal_quality_status": "strong_signal",
       "concrete_action_signal_count": 4,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 84): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 72): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 6 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "Pixel 기기의 카메라 드라이버나 하드웨어 스트림 지원 테이블이 바뀌었다고 주장하지 않습니다.",
-        "프레임워크 내부 스트림 크기 지연 평가 패치이며 HAL 드라이버 파이프라인의 변경이 아님을 명시합니다."
+        "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다."
       ],
-      "soc_signal_type": "platform_signal",
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
+      "camera_pipeline_link": "Recorder → EncoderImpl → MediaCodec",
       "has_hal_signal_capsule": true,
       "hal_signal_capsule_complete": true,
       "hal_signal_capsule_missing_keys": [],
@@ -315,8 +294,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report",
-    "Optional input_unavailable: evidence_pack_summary"
-  ]
+  "warnings": []
 }
