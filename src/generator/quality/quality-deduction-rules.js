@@ -364,6 +364,23 @@ function primaryGerritChangeId(url) {
   try { return gerritTarget(String(url || ''))?.number || ''; } catch { return ''; }
 }
 
+// The source reader splits one long Gerrit revision into numbered parts. Accept split
+// labels only if every part of that same primary revision is present exactly once.
+function labeledPrimaryDocuments(documents, sourceLabels, evidenceLabels) {
+  if (sourceLabels.length !== 1 || !evidenceLabels.length) return [];
+  const url = sourceLabels[0].replace(/^Source URL:\s*/i, '').trim();
+  const ids = evidenceLabels.map(label => label.replace(/^Evidence ID:\s*/i, '').trim());
+  const found = ids.map(id => documents.find(doc => doc.url === url && doc.evidence_id === id));
+  if (found.some(doc => !doc)) return [];
+  if (found.length === 1) return (found[0].parts || 1) === 1 ? found : [];
+  const revision = found[0].revision;
+  const parts = found.map(doc => doc.part);
+  if (!revision || !found.every(doc => doc.revision === revision && doc.parts === found.length &&
+    Number.isInteger(doc.part) && doc.part >= 1 && doc.part <= found.length) ||
+    new Set(parts).size !== found.length) return [];
+  return found;
+}
+
 function hasUnresolvedConfirmationClaim(section, candidate) {
   const documents = candidate?.article_source_reading?.status === 'read'
     ? ensureArray(candidate.article_source_reading.documents).filter(doc =>
@@ -378,20 +395,17 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     // other prose must still establish its own scope and is checked below.
     const sourceLabels = verificationNotes.filter(note => /^Source URL:\s*https?:\/\/\S+\s*$/i.test(note));
     const evidenceLabels = verificationNotes.filter(note => /^Evidence ID:\s*source-body:[a-zA-Z0-9_-]+\s*$/i.test(note));
-    const labeledDocument = sourceLabels.length === 1 && evidenceLabels.length === 1
-      ? documents.find(doc => sourceLabels[0].replace(/^Source URL:\s*/i, '').trim() === doc.url &&
-        evidenceLabels[0].replace(/^Evidence ID:\s*/i, '').trim() === doc.evidence_id)
-      : null;
+    const labeledDocuments = labeledPrimaryDocuments(documents, sourceLabels, evidenceLabels);
     const notes = verificationNotes.filter(note => {
     const value = text(note);
     const urls = value.match(/https?:\/\/[^\s<>"')]+/g) || [];
     const evidenceIds = value.match(/source-body:[a-zA-Z0-9_-]+/g) || [];
       // A document whose diff was omitted cannot back a note that says the diff was read.
       const readsOmittedDiff = /\bdiff\b/i.test(value) &&
-        documents.some(doc => doc.diff_omitted && (doc === labeledDocument || doc.evidence_id === evidenceIds[0]));
+        documents.some(doc => doc.diff_omitted && (labeledDocuments.includes(doc) || doc.evidence_id === evidenceIds[0]));
       const primaryOnly = !readsOmittedDiff && /primary source|원문|\bfrom\b|\bpatch details\b|\bcommit message\b/i.test(value) &&
       !/linked|모든|전체|\ball\b|\bevery\b|\bentire\b/i.test(value);
-      if (primaryOnly && labeledDocument && evidenceIds.length === 0 && urls.length === 0) return false;
+      if (primaryOnly && labeledDocuments.length && evidenceIds.length === 0 && urls.length === 0) return false;
     return !(primaryOnly && evidenceIds.length === 1 && urls.length <= 1 && documents.some(doc =>
       evidenceIds[0] === doc.evidence_id &&
       (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));

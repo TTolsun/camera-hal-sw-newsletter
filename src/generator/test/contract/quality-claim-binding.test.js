@@ -777,6 +777,21 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
   const splitNotes = [`Source URL: ${url}`, 'Evidence ID: source-body:primary',
     'Verified patch details and commit message in Gerrit.'];
   const splitArticle = { ...article, source_verification_notes: splitNotes };
+  const parts = [1, 2].map(part => ({ ...document, revision: 'same-primary-revision', part, parts: 2,
+    evidence_id: 'source-body:part' + part }));
+  const multipartNotes = splitNotes.flatMap(line => line.startsWith('Evidence ID:')
+    ? parts.map(doc => 'Evidence ID: ' + doc.evidence_id) : [line]);
+  const multipartBlockers = (docs, notes) => linkedDeductions(reportWithTargetSection(
+    { ...article, source_verification_notes: notes },
+    { ...candidate, article_source_reading: { status: 'read', documents: docs } }
+  ), 'linked-evidence-overclaim');
+  assert.equal(multipartBlockers(parts, multipartNotes).length, 0);
+  for (const docs of [
+    parts.slice(0, 1), [parts[0], { ...parts[1], part: 1 }],
+    [parts[0], { ...parts[1], revision: 'other-revision' }],
+    [parts[0], { ...parts[1], truncated: true }], [parts[0], { ...parts[1], url: url + '/other' }]
+  ]) assert.ok(multipartBlockers(docs, multipartNotes).some(finding => finding.blocking));
+  assert.ok(multipartBlockers(parts, [...multipartNotes, 'Gerrit linked evidence verified']).some(finding => finding.blocking));
   assert.equal(linkedDeductions(reportWithTargetSection(splitArticle, candidate), 'linked-evidence-overclaim').length, 0);
   for (const badNotes of [
     splitNotes.slice(1), splitNotes.filter(note => !note.startsWith('Evidence ID:')),
