@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "generated_at": "2026-11-22T15:59:47.725Z",
+  "date": "2026-11-23",
+  "window": {
+    "start_date": "2026-11-16",
+    "end_date": "2026-11-22",
+    "source": "coverage_week"
+  },
+  "status": "ok",
+  "query_url": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20status%3Amerged%20after%3A2026-11-15%20dir%3Acamera&n=500&o=CURRENT_REVISION&o=CURRENT_FILES&o=CURRENT_COMMIT",
+  "list_truncated": false,
+  "counts": {
+    "listed_changes": 54,
+    "quirk_file_changes": 6,
+    "entries": 4,
+    "excluded": 2
+  },
+  "entries": [
+    {
+      "change_number": 4440995,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "submitted_date": "2026-11-17",
+      "subject": "Exclude OPPO PHT110 physical camera IDs 2 and 3",
+      "quirk_classes": [
+        {
+          "name": "ExcludePhysicalCameraIdQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "PHT110",
+          "source": "diff_code"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4441195,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "submitted_date": "2026-11-17",
+      "subject": "Disable ZSL on Samsung SM-F971",
+      "quirk_classes": [
+        {
+          "name": "ZslDisablerQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "SM-F971",
+          "source": "diff_code"
+        },
+        {
+          "identifier": "SM-F971U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F936",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F731",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F721",
+          "source": "commit_message"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4445746,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
+      "submitted_date": "2026-11-17",
+      "subject": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max",
+      "quirk_classes": [
+        {
+          "name": "DolbyVisionStreamIncorrectColorQuirk",
+          "change": "added"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "2509FPN0BC",
+          "source": "diff_code"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    },
+    {
+      "change_number": 4441276,
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "submitted_date": "2026-11-18",
+      "subject": "Extend Samsung Extensions close quirk to API 35+",
+      "quirk_classes": [
+        {
+          "name": "CloseCameraDeviceOnCameraGraphCloseQuirk",
+          "change": "modified"
+        }
+      ],
+      "devices": [
+        {
+          "identifier": "SM-F966U",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-F968U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-S942U1",
+          "source": "commit_message"
+        },
+        {
+          "identifier": "SM-S947U1",
+          "source": "commit_message"
+        }
+      ],
+      "no_device": false,
+      "exynos": false,
+      "exynos_evidence": []
+    }
+  ],
+  "excluded": [
+    {
+      "change_number": 4459688,
+      "subject": "Merge empty history for sparse-16848682-L69900030233478695",
+      "reason": "noise_subject"
+    },
+    {
+      "change_number": 4458028,
+      "subject": "Snap for 16740496 from 737fa4d135b1f389bbcd82f6e8c0db8390246cab to androidx-text-release",
+      "reason": "noise_subject"
+    }
+  ],
+  "diagnostics": []
+}

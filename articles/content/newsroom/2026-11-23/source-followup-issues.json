@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "report_type": "source-followup-issues",
+  "date": "2026-11-23",
+  "minimum_consecutive_runs": 10,
+  "runs_examined": 40,
+  "actionable_recommendation_count": 21,
+  "items": [
+    {
+      "scope": "source",
+      "title": "[Source] 소스 풀 보강 검토: Claude Code Changelog",
+      "reason": "Claude Code Changelog에 REVIEW_SOURCE_GAP 권고가 10회 연속 붙었습니다. 진단이 적은 사유: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "consecutive_runs": 10,
+      "recommended_action": "REVIEW_SOURCE_GAP",
+      "source_ids": [
+        "claude-code-changelog"
+      ],
+      "source_effectiveness_recommendation": "REVIEW_SOURCE_OR_PARSER",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "diagnosis_refs": [
+        "source-quality-diagnosis.json",
+        "source-effectiveness-report.json"
+      ],
+      "suggested_labels": [
+        "area:newsroom",
+        "source-coverage"
+      ],
+      "suggested_workflow": [
+        "이 소스가 내는 신호가 실제로 카메라 범위인지 1차 출처로 확인한다",
+        "evidence 추출이 api_or_component를 채우는지 본다",
+        "범위 밖이면 등록부에서 우선순위를 내린다"
+      ]
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,2426 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-23",
+  "score": 48,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-overclaim",
+      "points": 8,
+      "reason": "Article describes unresolved linked evidence as confirmed detail.",
+      "location": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-overclaim",
+      "points": 8,
+      "reason": "Article describes unresolved linked evidence as confirmed detail.",
+      "location": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-overclaim",
+      "points": 8,
+      "reason": "Article describes unresolved linked evidence as confirmed detail.",
+      "location": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-overclaim",
+      "points": 8,
+      "reason": "Article describes unresolved linked evidence as confirmed detail.",
+      "location": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 5,
+      "reason": "Fact checker returned 1 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [
+    {
+      "section_index": 2,
+      "headline": "OPPO Find N3 Flip 물리 카메라 ID 제외: 스트림 구성 시 발생하는 카메라 서버 강제 종료 차단",
+      "confidence": "high",
+      "reason": "특정 플랫폼 및 단말 조합에서 물리 스트림 플러시 시 발생하는 서버 강제 종료 결함과 프레임워크 대응 방식을 구체적으로 제시하여 유용합니다. / 공개 본문에 버그 수정 효과를 확인할 수 있는 구체적인 점검 조건과 예상 관찰 결과가 기술되지 않아 검증 필수 요건을 충족하지 못했습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995 (원문 구절: 'CameraInfo.getPhysicalCameraInfos() does not expose them', 'Test: ExcludePhysicalCameraIdQuirkTest, PhysicalCameraDeviceTest'): PHT110 기기 환경에서 CameraInfo.getPhysicalCameraInfos() 호출 시 물리 ID 2와 3이 반환 목록에서 누락되는지 확인하는 구체적인 점검 조건과 관찰 대상, 그리고 이것이 완료된 테스트가 아닌 편집 제안이라는 구분이 공개 본문에 기술되어야 합니다. / public_verification: 테이크어웨이에 일반적인 락업 점검 권고만 제시되었을 뿐, 독자가 수행해 볼 수 있는 구체적인 입력 조건(PHT110에서 getPhysicalCameraInfos 호출)과 관찰 결과(물리 ID 2, 3 제외 확인)를 담은 점검 제안이 본문에 누락되었습니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "Samsung Extensions 닫기 쿼크 API 35 이상 확장: 재바인딩 후 야간 촬영 멈춤 방지",
+      "confidence": "high",
+      "reason": "최신 OS 버전 단말에서도 지속되는 Extensions 파이프라인 재구성 락업과 디바이스 수명주기 강제 재오픈의 실무적 영향을 균형 있게 설명했습니다. / 소프트웨어 변경 원리와 범위는 충실히 설명되었으나, 소스 병합 외 라이브러리 릴리스 및 제품 반영 미확인 한계와 구체적 점검 제안이 공개 본문에 빠져 있습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('BindUnbindUseCasesStressTest'): API 35 이상 삼성 기기에서 Extensions 야간 모드 UseCase를 반복 바인딩/해제한 후 캡처 멈춤이 재발하는지 확인하는 점검 방법과, 이것이 원문 기반 확인 제안이라는 설명의 누락. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('status: MERGED'): Gerrit 소스 트리에 병합된 상태만 확인되었으며 실제 CameraX/Camera2 배포 라이브러리 릴리스나 제품 빌드 반영은 확인되지 않았다는 반영 한계 설명의 누락. / public_verification: 원문의 원격 측정 및 스트레스 테스트 언급만 전달했을 뿐, 독자가 해당 환경에서 재바인딩 후 캡처 성공 여부를 관찰할 수 있는 점검 방법과 이것이 검증 제안이라는 설명이 공개 본문에 누락되었습니다. / release_limitations: 2026년 11월 18일 패치 병합 사실만 서술하고 있으며, 실제 배포 라이브러리 릴리스 버전 포함 및 제품 빌드 탑재 여부는 별도 확인이 필요하다는 미확인 한계를 명시하지 않았습니다."
+    }
+  ],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "source_candidate_hash": "0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "direct_check",
+      "effective_actionability_level": "direct_check",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "source_candidate_hash": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "direct_check",
+      "effective_actionability_level": "direct_check",
+      "hard_fail_reasons": [
+        "Article describes unresolved linked evidence as confirmed detail."
+      ],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "source_candidate_hash": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "direct_check",
+      "effective_actionability_level": "direct_check",
+      "hard_fail_reasons": [
+        "Article describes unresolved linked evidence as confirmed detail.",
+        "Fact-check must_fix item mentions this section."
+      ],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+        "source_candidate_hash": "5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "direct_check",
+      "effective_actionability_level": "direct_check",
+      "hard_fail_reasons": [
+        "Article describes unresolved linked evidence as confirmed detail."
+      ],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Lazily resolve HLG10 sizes in checkSupported - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
+        "source_candidate_hash": "f4fcd93c70ec223697647342247a749e7dc2d4d74e33db241ddaa5958591e5ac",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "direct_check",
+      "effective_actionability_level": "direct_check",
+      "hard_fail_reasons": [
+        "Article describes unresolved linked evidence as confirmed detail."
+      ],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 32,
+    "total_claims": 32,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_rel_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.7.0은 2026년 11월 18일 공식 출시되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_interop_v2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Camera2Interop V2가 안정화되었으며 ImageWrapper, ImagePlane, CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResultWrapper와 Fake 테스트 객체를 제공합니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_physical_cam",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CameraInfo.getPhysicalCameraInfos()를 통해 물리 카메라용 CameraSelector를 얻고 UseCase를 물리 카메라에 직접 바인딩할 수 있습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_3a_locking",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "FocusMeteringAction에 setLockingMode(int)가 추가되어 연속 AF 모드를 유지한 채 AE와 AWB를 개별 잠금하거나 측정 영역을 갱신할 수 있습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_night_mode_indicator",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Night Mode Indicator가 추가되어 저조도 장면 감지 상태(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED)를 제공합니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_auto_rotation",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "SessionConfig.Builder와 CameraController에 setAutoRotationEnabled가 추가되어 디바이스 센서 기반 출력 회전 자동 갱신을 제어할 수 있습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_low_light_torch",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "저조도 부스트와 토치는 요청을 거부하는 대신 마지막 설정을 우선 적용하도록 변경되었으며 저조도 부스트 동작 중 ImageCapture 시 플래시 발광이 허용됩니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "claim_id": "camerax_170_extensions_deprecate",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "ExtensionsManager.getExtensionEnabledCameraSelector()가 Deprecated되고 ExtensionSessionConfig로 대체되었습니다.",
+      "evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147"
+      ],
+      "resolved_evidence_ids": [
+        "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147",
+          "resolved_evidence_id": "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_zsl_merged",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4441195가 2026년 11월 17일 androidx-main 브랜치에 병합(MERGED)되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_zsl_camx_stall",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "Samsung SM-F971U1 기기에서 재처리 가능한 PRIVATE ZSL 세션 구성 중 물리 렌즈 간 줌 비율(예: 0.6x에서 2.0x)을 전환할 때 CamX SAT 파이프라인이 멈추었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_zsl_timeout",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "파이프라인이 멈추면 새로운 반복 요청에 대해 TotalCaptureResult 콜백이 전달되지 않아 CameraControl.setZoomRatio() 비동기 호출이 타임아웃되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_non_zsl_ok",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "일반 비-ZSL 세션에서는 모든 줌 전환과 스틸 이미지 캡처가 멈춤 없이 정상 완료되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_zsl_disabler_added",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ZslDisablerQuirk에 SM-F971 접두사가 등록되어 해당 기기 제품군에서 ZSL이 비활성화되고 일반 스틸 캡처가 사용됩니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "claim_id": "sm_f971_zsl_test_added",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "테스트 코드로 ZslDisablerQuirkTest에 samsungSmF971_loadsQuirk()가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:b7ee8549e1606c1901c3"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "resolved_evidence_id": "source-body:b7ee8549e1606c1901c3",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_merged",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4440995가 2026년 11월 17일 androidx-main 브랜치에 병합(MERGED)되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_hal_hang",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "direct_hal_contract",
+      "overclaim_risk": "low",
+      "text": "OPPO Find N3 Flip(PHT110, MediaTek mt6985)에서 후면 논리 카메라 0의 물리 카메라 ID 2 또는 3을 타깃으로 스트림을 구성하면 벤더 HAL이 P2StreamingNode 캡처 및 BasicSession::flush 단계에서 멈추었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_watchdog_abort",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이 멈춤 현상으로 인해 camerahalserver 및 cameraserver 워치독이 동작하여 ERROR_CAMERA_DEVICE 및 CAMERA_DISCONNECTED 에러와 함께 강제 종료되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_quirk_added",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ExcludePhysicalCameraIdQuirk의 OPPO_PROBLEM_MODELS에 PHT110 모델과 물리 카메라 ID 세트(2, 3)가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_info_hidden",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "이 변경으로 CameraInfo.getPhysicalCameraInfos()에서 해당 물리 카메라 식별자가 숨겨져 상위 앱이 문제의 스트림을 구성하지 않도록 차단합니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "claim_id": "oppo_pht110_test_verified",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ExcludePhysicalCameraIdQuirkTest에 PHT110 모델에 대한 매핑 검증 테스트가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:9abc88eb2578c58b7eea"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "resolved_evidence_id": "source-body:9abc88eb2578c58b7eea",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_merged",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4441276이 2026년 11월 18일 androidx-main 브랜치에 병합(MERGED)되었습니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_cap_removed",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "기존 CloseCameraDeviceOnCameraGraphCloseQuirk는 Samsung 단말의 쿼크 적용 대상을 API 34 이하로 제한하고 있었습니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_api36_failures",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "API 36 Samsung 모델들에서 UseCase 재바인딩 스트레스 테스트(BindUnbindUseCasesStressTest) 중 후면 카메라 NIGHT 모드 실패가 지속적으로 관찰되었습니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_models_restored",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "API 35 이상에 대해 쿼크를 다시 활성화하자 SM-F966U, SM-F968U1, SM-S942U1, SM-S947U1 단말에서 후면 카메라 NIGHT 캡처가 정상 복원되었습니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_scope",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이 쿼크는 Extensions가 활성화된 세션에 한해 새로운 캡처 세션을 생성하기 전 카메라 장치를 완전히 닫고 다시 열도록 동작합니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643",
+        "source-body:f87b0744b5a641b5333d"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643",
+        "source-body:f87b0744b5a641b5333d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:f87b0744b5a641b5333d",
+          "resolved_evidence_id": "source-body:f87b0744b5a641b5333d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "claim_id": "samsung_ext_close_front_residual",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "단, SM-S947U1의 전면 카메라(cameraId=1) NIGHT 모드에서 발생하는 잔여 광원 맵 누락(no light map!) 타임아웃은 별도 버그로 추적 중입니다.",
+      "evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:6a2a0ed8524b780fc643"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "resolved_evidence_id": "source-body:6a2a0ed8524b780fc643",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_merged",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit 변경 4447086이 2026년 11월 17일 androidx-main 브랜치에 병합(MERGED)되었습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_npe_cause",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이전 패치(aosp/4425978)에서 CameraCrashWhenHlg10UhdWithVideoStabilizationQuirk 검사 전 모든 스트림에 대해 SurfaceConfig.getResolution()을 조기 호출하여 NPE가 발생했습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_pixel_jpegr",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Android 15 이상 Google Pixel 기기에서 벤더 Extensions(야간 모드 등)는 CameraExtensionCharacteristics를 통해 Ultra HDR(JPEG_R) 크기를 광고할 수 있지만, 일반 모드 SCALER_STREAM_CONFIGURATION_MAP에는 JPEG_R 포맷이 누락될 수 있습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_null_max_size",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이 경우 SurfaceSizeDefinition.getMaximumSize(JPEG_R)가 null로 남아 조기 해상도 조회 시 크래시가 발생했습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_validator_updated",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "수정된 Hlg10UhdVideoStabilizationValidator.isUnsupported()는 쿼크가 켜져 있고 비디오 안정화가 ON이며 해당 스트림의 동적 범위가 HLG_10_BIT일 때만 해상도 프로바이더를 호출하도록 변경되었습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "claim_id": "hlg10_lazy_test_verified",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "단위 테스트로 SupportedSurfaceCombinationTest 및 Hlg10UhdVideoStabilizationValidatorTest에 비-HLG10 스트림에 대해 해상도 프로바이더가 호출되지 않음을 확인하는 케이스가 추가되었습니다.",
+      "evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb",
+        "source-body:fca20097a1b9ce55a5dd"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:d69c3d7fbf48388e43cb",
+        "source-body:fca20097a1b9ce55a5dd"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "resolved_evidence_id": "source-body:d69c3d7fbf48388e43cb",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:fca20097a1b9ce55a5dd",
+          "resolved_evidence_id": "source-body:fca20097a1b9ce55a5dd",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 5,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 5,
+      "stream_buffer_metadata": 5,
+      "camerax_app_compatibility": 5,
+      "driver_image_pipeline": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 4
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 4
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 5
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "CameraX 1.7.0 출시가 Camera HAL3 AIDL 인터페이스 자체의 변경을 의미한다고 확대하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "벤더 파이프라인 멈춤의 근본 원인이 해결되었다거나 모든 기기에서 ZSL이 비활성화된다고 확대하지 않습니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "MediaTek HAL의 스트림 플러시 락업 결함 자체가 근본적으로 해결된 것이 아니라 프레임워크에서 호출을 차단한 것임을 명확히 합니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_hal_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "벤더 Extensions 파이프라인의 내부 누수가 해결된 것이 아니라 프레임워크 레벨에서 장치 재오픈을 수행하는 조치임을 명시합니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 84): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "프레임워크 내부 스트림 크기 지연 평가 패치이며 HAL 드라이버 파이프라인의 변경이 아님을 명시합니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 5,
+    "legacy_regex_camera_article_count": 5,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 5,
+    "camera_driver_image_pipeline_count": 0,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 5,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 5,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "source_candidate_hash": "0d96eee1501c272d55c621920bc7b2e33a6e997c644b1a89b7844ed2db28512a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "source_candidate_hash": "d69a44184544b72a04cac20445d536d2f9edb5e6579cb1d64e42fce2db004dbf",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "source_candidate_hash": "07e3b601f5652aa72438f61cd159aef047f85915d90cc3f37045f9c2fe838152",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+        "source_candidate_hash": "5314ee226c5b3430a2c1f574efddc692f854845eb87dd1d5d7060561163dfd0c",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 5,
+        "headline": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
+        "source_candidate_hash": "f4fcd93c70ec223697647342247a749e7dc2d4d74e33db241ddaa5958591e5ac",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 5,
+      "camera_driver_image_pipeline": 0,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 5,
+      "supporting": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 1,
+    "source_gap_count": 0,
+    "stale_claim_status": "UNKNOWN",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 5,
+    "blocking_deduction_categories": [
+      "linked-evidence-overclaim",
+      "source-integrity"
+    ],
+    "hard_fail_count": 5,
+    "soft_deduction_count": 11,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 4
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "known_limitations": 5,
+        "watch_items": 5,
+        "do_not_claim": 5
+      },
+      "limitation_visibility_counts": {
+        "public-limitation": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 32,
+      "total_claims": 32,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 5,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 5,
+        "stream_buffer_metadata": 5,
+        "camerax_app_compatibility": 5,
+        "driver_image_pipeline": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 4
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 4
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 5
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "CameraX 1.7.0 출시가 Camera HAL3 AIDL 인터페이스 자체의 변경을 의미한다고 확대하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Samsung SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 CamX SAT 파이프라인 멈춤 대응",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "벤더 파이프라인 멈춤의 근본 원인이 해결되었다거나 모든 기기에서 ZSL이 비활성화된다고 확대하지 않습니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "OPPO Find N3 Flip 물리 카메라 제외: ID 2·3 스트림 구성 시 발생하는 HAL 비정상 종료 수정",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "MediaTek HAL의 스트림 플러시 락업 결함 자체가 근본적으로 해결된 것이 아니라 프레임워크에서 호출을 차단한 것임을 명확히 합니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "Samsung Extensions 카메라 장치 닫기 쿼크 API 35 이상 확장: 세션 재바인딩 후 캡처 타임아웃 방지",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_hal_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "벤더 Extensions 파이프라인의 내부 누수가 해결된 것이 아니라 프레임워크 레벨에서 장치 재오픈을 수행하는 조치임을 명시합니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "HLG10 크기 확인 지연 로딩: Android 15 이상 Pixel 기기의 Ultra HDR 충돌 해결",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4447086",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 84): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "프레임워크 내부 스트림 크기 지연 평가 패치이며 HAL 드라이버 파이프라인의 변경이 아님을 명시합니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 4
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 4
+      },
+      {
+        "category": "linked-evidence-overclaim",
+        "count": 4
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": [],
+    "prose_style": {
+      "reference_only": true,
+      "long_sentence_threshold": 120,
+      "article_count": 5,
+      "sentence_count": 75,
+      "avg_sentence_length": 76.2,
+      "long_sentence_count": 3,
+      "long_sentence_ratio": 0.04,
+      "lead_count": 5,
+      "purpose_clause_lead_count": 0,
+      "purpose_clause_lead_ratio": 0,
+      "translationese_counts": {
+        "about": 3,
+        "through": 3,
+        "in_terms_of": 0,
+        "double_passive": 0,
+        "for_purpose": 2,
+        "comma_after_connective": 5
+      }
+    }
+  }
+}

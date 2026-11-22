@@ -1,0 +1,388 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[2].claims[1].impact_level",
+      "problem": "claims[1]의 claim text는 OPPO PHT110 기기에서 물리 카메라 ID 2 또는 3을 타깃팅할 때 벤더 HAL 내부의 P2StreamingNode 및 BasicSession::flush 단계에서 멈추는 현상을 기술하고 있습니다. 이는 HAL 인터페이스 계약 자체의 변경이 아니라 벤더 HAL 내부 구현 및 파이프라인의 멈춤 현상에 해당하므로 direct_hal_contract 분류 기준에 부합하지 않습니다.",
+      "suggestion": "해당 claim의 impact_level을 driver_image_pipeline 또는 camera_framework_behavior로 수정하세요.",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+    }
+  ],
+  "recommended_fixes": [
+    "sections[1] 및 sections[2]: 프레임워크 레이어의 쿼크 등록은 상위 앱 크래시를 막기 위한 우회책이므로, 벤더 HAL 및 ISP 파이프라인 개발자가 펌웨어 레벨에서 해당 노드 락업 문제를 근본 해결해야 한다는 기술적 권고를 보강하면 더욱 유익합니다."
+  ],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "CameraX 1.7.0 정식 릴리스: 물리 카메라 직접 제어와 3A 잠금 모드 공식 도입",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "CameraX 1.7.0 공식 릴리스를 통해 Camera2Interop V2가 안정화되었으며, CameraInfo.getPhysicalCameraInfos()를 통한 물리 카메라 선택 및 UseCase 직접 바인딩, FocusMeteringAction 3A 잠금 모드(FLAG_AE, FLAG_AWB, FLAG_AF), 저조도 환경 감지를 위한 Night Mode Indicator, 센서 기반 자동 회전 등이 추가되었습니다.",
+        "article_explanation": "공개 기사는 CameraX 1.7.0의 출시일과 핵심 변경점인 물리 카메라 UseCase 바인딩, 3A 세부 잠금 제어, 야간 모드 인디케이터 및 플래시/토치 상호작용 개선을 설명하고, HAL 인터페이스 계약 자체의 변경은 없으나 프레임워크의 단일 물리 스트림 요청 빈도 증가에 따른 점검 사항을 명확히 전달했습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "CameraX 1.7.0 공식 릴리스의 핵심 API 변화와 프레임워크-HAL 간 상호작용 및 물리 카메라 바인딩 시 점검 포인트를 실무 관점에서 충실히 기술했습니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "Samsung SM-F971 기기 ZSL 비활성화: 줌 배율 전환 시 발생하는 카메라 서비스 타임아웃 방지",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Samsung SM-F971 기기에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환 시 발생하는 CamX SAT 파이프라인 멈춤 현상을 방지하기 위해 ZslDisablerQuirk 대상 목록에 SM-F971을 추가하여 일반 스틸 캡처로 폴백하도록 변경함.",
+        "article_explanation": "공개 본문은 SM-F971U1 기기에서 초광각(0.6x)과 망원(2.0x) 물리 렌즈 간 줌 전환 시 TotalCaptureResult 누락 및 타임아웃이 발생하던 문제와 ZslDisablerQuirk를 통한 ZSL 비활성화 및 일반 스틸 캡처 폴백 동작, 물리 렌즈 줌 반복 전환 시 setZoomRatio 비동기 작업 완료 여부를 확인하는 제안, 소스 병합 완료 및 배포·펌웨어 반영 미확인 상태를 구체적으로 설명함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:1",
+              "1:body_markdown:2",
+              "1:body_markdown:3"
+            ],
+            "reason": "SM-F971U1 모델에서 0.6배율과 2.0배율 물리 렌즈 전환 시의 문제 조건과 ZSL 비활성화 후 표준 스틸 캡처 폴백 동작을 명확히 설명함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:1",
+                "text": "문제는 재처리 가능한 PRIVATE ZSL 세션에서 발생했습니다. SM-F971U1 단말에서 초광각인 0.6배율과 망원인 2.0배율 사이를 오가며 물리 렌즈 간 줌을 전환할 때 벤더의 CamX SAT 파이프라인이 응답을 멈췄습니다. 이로 인해 프레임워크로 새 반복 요청에 대한 TotalCaptureResult 결과가 전혀 전달되지 않았고, CameraControl의 줌 배율 변경 비동기 작업이 타임아웃되었습니다."
+              },
+              {
+                "id": "1:body_markdown:2",
+                "text": "반면 ZSL을 사용하지 않는 일반 캡처 세션에서는 렌즈 전환과 사진 촬영이 아무런 문제 없이 동작했습니다. 중간 세션 재시도나 그래프 재오픈으로도 멈춘 상태를 복구할 수 없었기 때문에, 프레임워크는 해당 모델을 ZslDisablerQuirk 대상 목록에 추가하기로 결정했습니다."
+              },
+              {
+                "id": "1:body_markdown:3",
+                "text": "이번 패치로 SM-F971 기기 제품군은 ZSL 기능이 비활성화되며 표준 스틸 캡처 경로로 사진을 찍게 됩니다. 셔터 랙 없는 즉시 캡처 기능은 제한되지만 줌 조절 시 세션이 굳어버리는 치명적인 문제를 방지할 수 있습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:4"
+            ],
+            "reason": "SM-F971U1 기기에서 0.6배율과 2.0배율 줌 전환 시 TotalCaptureResult 누락 없이 setZoomRatio 비동기 작업이 타임아웃 없이 완료되는지 확인하는 절차와 관찰 결과를 제안함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:4",
+                "text": "이 변경은 현재 프레임워크 소스 코드에 병합된 상태이며 정식 라이브러리 배포나 기기 펌웨어 반영은 아직 확인되지 않았습니다. 해당 기기를 검증하려면 SM-F971U1 환경에서 초광각 0.6배율과 망원 2.0배율 사이로 물리 렌즈 줌을 반복 전환하면서 TotalCaptureResult 콜백이 누락되지 않고 setZoomRatio 비동기 작업이 타임아웃 없이 완료되는지 확인하는 방법을 제안합니다. 이는 원문의 테스트 조건을 바탕으로 도출한 확인 절차입니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:0",
+              "1:body_markdown:4"
+            ],
+            "reason": "2026년 11월 17일 androidx-main 브랜치에 병합되었으나 정식 라이브러리 배포 및 기기 펌웨어 반영은 미확인 상태임을 분명히 밝힘.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:0",
+                "text": "구글 AndroidX 카메라 팀이 2026년 11월 17일 Samsung SM-F971 기기를 대상으로 ZSL 비활성화 쿼크를 등록하는 패치를 androidx-main 브랜치에 병합했습니다."
+              },
+              {
+                "id": "1:body_markdown:4",
+                "text": "이 변경은 현재 프레임워크 소스 코드에 병합된 상태이며 정식 라이브러리 배포나 기기 펌웨어 반영은 아직 확인되지 않았습니다. 해당 기기를 검증하려면 SM-F971U1 환경에서 초광각 0.6배율과 망원 2.0배율 사이로 물리 렌즈 줌을 반복 전환하면서 TotalCaptureResult 콜백이 누락되지 않고 setZoomRatio 비동기 작업이 타임아웃 없이 완료되는지 확인하는 방법을 제안합니다. 이는 원문의 테스트 조건을 바탕으로 도출한 확인 절차입니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:3",
+              "1:camera_hal_takeaway:0"
+            ],
+            "reason": "HAL 파이프라인의 근본 수정이 아닌 프레임워크 차원에서 ZSL을 포기하고 일반 캡처로 우회하는 조치임을 한계와 함께 명시함.",
+            "source_behavior": "Samsung SM-F971 기기에서 ZSL 세션 중 물리 렌즈 간 줌 전환 시 CamX SAT가 정지되므로, ZslDisablerQuirk에 접두사를 추가하여 ImageCapture가 표준 스틸 캡처로 폴백하도록 함.",
+            "article_behavior": "ZSL 비활성화로 셔터 랙 방지 혜택은 제한되지만 줌 전환 시 세션 멈춤을 방지하며 일반 스틸 캡처 경로로 동작함을 명시함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:3",
+                "text": "이번 패치로 SM-F971 기기 제품군은 ZSL 기능이 비활성화되며 표준 스틸 캡처 경로로 사진을 찍게 됩니다. 셔터 랙 없는 즉시 캡처 기능은 제한되지만 줌 조절 시 세션이 굳어버리는 치명적인 문제를 방지할 수 있습니다."
+              },
+              {
+                "id": "1:camera_hal_takeaway:0",
+                "text": "CamX 기반 멀티카메라 파이프라인에서 물리 렌즈 전환 시 PRIVATE 재처리 스트림과 SAT 태그 조회가 멈추는 현상을 프레임워크 레벨에서 ZSL 포기로 우회했습니다. 벤더 HAL 엔지니어는 렌즈 스위칭 과정에서 SAT 노드의 결과 메타데이터 전달 누락 여부를 하위 드라이버에서 검증해야 합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "멀티카메라 SAT 파이프라인의 렌즈 스위칭 멈춤 결함과 프레임워크 우회 조치를 기술적으로 깊이 있게 분석하여 현업 검증에 실질적인 가치를 제공합니다. / 원문의 물리 렌즈 줌 전환 실패 조건, ZslDisablerQuirk 등록을 통한 일반 스틸 캡처 폴백, 관찰 대상과 배포 반영 한계가 공개 본문에 정확하게 서술되었습니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "OPPO Find N3 Flip 물리 카메라 ID 제외: 스트림 구성 시 발생하는 카메라 서버 강제 종료 차단",
+      "publishable": false,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "원문은 OPPO Find N3 Flip(PHT110, mt6985)에서 후면 논리 카메라 0의 물리 카메라 ID 2 또는 3 대상 스트림 구성 시 발생하는 HAL 내부 P2StreamingNode 및 BasicSession::flush 락업에 따른 카메라 서버 워치독 abort를 회피하기 위해, ExcludePhysicalCameraIdQuirk에 PHT110의 물리 ID 2, 3을 등록하여 CameraInfo.getPhysicalCameraInfos() 노출에서 제외하도록 수정한 패치입니다.",
+        "article_explanation": "공개 본문은 적용 대상(PHT110, mt6985)과 변경 전 세션 플러시 멈춤 및 워치독 abort 증상, 변경 후 CameraX Quirk를 통한 물리 카메라 ID 2·3 노출 제외 동작, 그리고 브랜치 병합 대비 라이브러리 릴리스 미완료 및 벤더 HAL 미수정 한계를 상세히 서술했습니다. 그러나 해당 동작을 검증하기 위한 구체적인 확인 입력 조건과 예상 관찰 대상을 설명하는 공개 점검 제안은 누락되었습니다.",
+        "material_omissions": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995 (원문 구절: 'CameraInfo.getPhysicalCameraInfos() does not expose them', 'Test: ExcludePhysicalCameraIdQuirkTest, PhysicalCameraDeviceTest'): PHT110 기기 환경에서 CameraInfo.getPhysicalCameraInfos() 호출 시 물리 ID 2와 3이 반환 목록에서 누락되는지 확인하는 구체적인 점검 조건과 관찰 대상, 그리고 이것이 완료된 테스트가 아닌 편집 제안이라는 구분이 공개 본문에 기술되어야 합니다.",
+          "public_verification: 테이크어웨이에 일반적인 락업 점검 권고만 제시되었을 뿐, 독자가 수행해 볼 수 있는 구체적인 입력 조건(PHT110에서 getPhysicalCameraInfos 호출)과 관찰 결과(물리 ID 2, 3 제외 확인)를 담은 점검 제안이 본문에 누락되었습니다."
+        ],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:1",
+              "2:body_markdown:2",
+              "2:body_markdown:3"
+            ],
+            "reason": "OPPO PHT110 기기에서 물리 ID 2, 3 스트림 구성 시 발생하는 세션 플러시 멈춤 및 워치독 abort 증상과 Quirk 등록을 통해 CameraInfo 노출을 제외하는 변경 전후 동작을 정확히 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:1",
+                "text": "대상 기기는 미디어텍 mt6985 프로세서를 탑재한 OPPO PHT110 모델입니다. 이 기기에서 후면 논리 카메라 0에 속한 물리 카메라 ID 2번이나 3번을 대상으로 스트림 출력을 구성하면, 벤더 HAL 내부의 P2StreamingNode 노드와 세션 종료 시 호출되는 BasicSession 플러시 단계에서 파이프라인이 멈추는 결함이 있었습니다."
+              },
+              {
+                "id": "2:body_markdown:2",
+                "text": "파이프라인이 응답하지 않으면 안드로이드 시스템 워치독이 동작합니다. 그 결과 camerahalserver와 cameraserver 프로세스가 강제 중단되면서 앱에는 치명적인 카메라 장치 에러와 연결 끊김 상태가 통보되었습니다."
+              },
+              {
+                "id": "2:body_markdown:3",
+                "text": "구글은 이 문제를 방지하기 위해 ExcludePhysicalCameraIdQuirk 목록에 PHT110 모델의 2번과 3번 ID를 등록했습니다. 이제 CameraX의 CameraInfo에서 물리 카메라 목록을 조회할 때 해당 번호들이 프레임워크 단계에서 사전에 제외됩니다. 상위 앱이 문제의 물리 렌즈 스트림을 열지 못하도록 막아 카메라 서비스 강제 종료를 피하는 방식입니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": false,
+            "evidence_passage_ids": [],
+            "reason": "테이크어웨이에 일반적인 락업 점검 권고만 제시되었을 뿐, 독자가 수행해 볼 수 있는 구체적인 입력 조건(PHT110에서 getPhysicalCameraInfos 호출)과 관찰 결과(물리 ID 2, 3 제외 확인)를 담은 점검 제안이 본문에 누락되었습니다."
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:4"
+            ],
+            "reason": "androidx-main 브랜치에 병합된 상태와 향후 CameraX 정식 배포 라이브러리 반영 예정 상태를 구분하여 제품 및 정식 릴리스 반영의 미확인 범위를 명시했습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:4",
+                "text": "이번 수정은 프레임워크 코드에 병합된 단계입니다. 향후 CameraX 라이브러리 정식 업데이트에 포함되어 배포될 예정이며, 벤더 HAL 자체의 플러시 락업 문제를 근본 수정한 것은 아니라는 점을 염두에 두어야 합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:3",
+              "2:body_markdown:4"
+            ],
+            "reason": "프레임워크 단계의 우회 제외 조치임을 명시하고 벤더 HAL 자체의 플러시 락업 결함이 근본적으로 수정된 것은 아니라는 경계를 올바르게 한정했습니다.",
+            "source_behavior": "OPPO PHT110의 ExcludePhysicalCameraIdQuirk 등록을 통해 CameraInfo.getPhysicalCameraInfos()에서 물리 카메라 ID 2, 3을 제외함으로써 앱의 물리 스트림 구성을 사전에 차단함.",
+            "article_behavior": "CameraX 상위에서 물리 카메라 번호 노출을 제외해 스트림 구성을 차단하는 우회 방식이며 벤더 HAL 자체의 결함 수정은 아니라고 범위를 제한하여 설명함.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:3",
+                "text": "구글은 이 문제를 방지하기 위해 ExcludePhysicalCameraIdQuirk 목록에 PHT110 모델의 2번과 3번 ID를 등록했습니다. 이제 CameraX의 CameraInfo에서 물리 카메라 목록을 조회할 때 해당 번호들이 프레임워크 단계에서 사전에 제외됩니다. 상위 앱이 문제의 물리 렌즈 스트림을 열지 못하도록 막아 카메라 서비스 강제 종료를 피하는 방식입니다."
+              },
+              {
+                "id": "2:body_markdown:4",
+                "text": "이번 수정은 프레임워크 코드에 병합된 단계입니다. 향후 CameraX 라이브러리 정식 업데이트에 포함되어 배포될 예정이며, 벤더 HAL 자체의 플러시 락업 문제를 근본 수정한 것은 아니라는 점을 염두에 두어야 합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "특정 플랫폼 및 단말 조합에서 물리 스트림 플러시 시 발생하는 서버 강제 종료 결함과 프레임워크 대응 방식을 구체적으로 제시하여 유용합니다. / 공개 본문에 버그 수정 효과를 확인할 수 있는 구체적인 점검 조건과 예상 관찰 결과가 기술되지 않아 검증 필수 요건을 충족하지 못했습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995 (원문 구절: 'CameraInfo.getPhysicalCameraInfos() does not expose them', 'Test: ExcludePhysicalCameraIdQuirkTest, PhysicalCameraDeviceTest'): PHT110 기기 환경에서 CameraInfo.getPhysicalCameraInfos() 호출 시 물리 ID 2와 3이 반환 목록에서 누락되는지 확인하는 구체적인 점검 조건과 관찰 대상, 그리고 이것이 완료된 테스트가 아닌 편집 제안이라는 구분이 공개 본문에 기술되어야 합니다. / public_verification: 테이크어웨이에 일반적인 락업 점검 권고만 제시되었을 뿐, 독자가 수행해 볼 수 있는 구체적인 입력 조건(PHT110에서 getPhysicalCameraInfos 호출)과 관찰 결과(물리 ID 2, 3 제외 확인)를 담은 점검 제안이 본문에 누락되었습니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "Samsung Extensions 닫기 쿼크 API 35 이상 확장: 재바인딩 후 야간 촬영 멈춤 방지",
+      "publishable": false,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "AndroidX Camera2의 CloseCameraDeviceOnCameraGraphCloseQuirk에서 Samsung 기기 적용 상한선인 API 34(UPSIDE_DOWN_CAKE)를 제거하여 API 35 이상에서도 Extensions 활성화 시 세션 재구성 과정에서 카메라 장치를 닫고 재오픈하도록 확장함.",
+        "article_explanation": "적용 조건(Samsung 기기, API 35 이상, Extensions 활성화 시)과 변경 전후(기존 API 34 상한 삭제 및 후면 야간 모드 캡처 복원), 효과의 한계(전면 카메라 라이트 맵 타임아웃 별도 추적 및 HAL 근본 수정이 아닌 프레임워크 우회 조치)를 충실히 설명했으나, 독자를 위한 점검 제안 및 라이브러리 릴리스/제품 반영의 미확인 범위 서술은 누락되었습니다.",
+        "material_omissions": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('BindUnbindUseCasesStressTest'): API 35 이상 삼성 기기에서 Extensions 야간 모드 UseCase를 반복 바인딩/해제한 후 캡처 멈춤이 재발하는지 확인하는 점검 방법과, 이것이 원문 기반 확인 제안이라는 설명의 누락.",
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('status: MERGED'): Gerrit 소스 트리에 병합된 상태만 확인되었으며 실제 CameraX/Camera2 배포 라이브러리 릴리스나 제품 빌드 반영은 확인되지 않았다는 반영 한계 설명의 누락.",
+          "public_verification: 원문의 원격 측정 및 스트레스 테스트 언급만 전달했을 뿐, 독자가 해당 환경에서 재바인딩 후 캡처 성공 여부를 관찰할 수 있는 점검 방법과 이것이 검증 제안이라는 설명이 공개 본문에 누락되었습니다.",
+          "release_limitations: 2026년 11월 18일 패치 병합 사실만 서술하고 있으며, 실제 배포 라이브러리 릴리스 버전 포함 및 제품 빌드 탑재 여부는 별도 확인이 필요하다는 미확인 한계를 명시하지 않았습니다."
+        ],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:0",
+              "3:body_markdown:1",
+              "3:body_markdown:3"
+            ],
+            "reason": "Samsung API 31+ 기기에서 isSamsungProblematicDevice의 API 34 상한을 제거해 API 35 이상으로 쿼크 적용 범위를 넓히고 세션 재구성 시 장치 재오픈을 수행하는 변경 전후 동작을 정확히 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:0",
+                "text": "구글 AndroidX 팀이 2026년 11월 18일 Samsung 단말에서 Extensions 세션을 닫을 때 카메라 장치를 완전히 닫고 다시 열도록 강제하는 쿼크의 상한선을 제거하는 패치를 병합했습니다."
+              },
+              {
+                "id": "3:body_markdown:1",
+                "text": "해당 쿼크인 CloseCameraDeviceOnCameraGraphCloseQuirk는 기존에 API 34 이하로 상한이 걸려 있었습니다. 상위 안드로이드 버전에서는 벤더 HAL의 내부 상태 처리가 개선되었을 것으로 보고 제한을 두었던 것입니다. 하지만 7일간의 플릿 원격 측정 데이터에 따르면, API 36이 구동되는 최신 삼성 기기에서도 UseCase 재바인딩 스트레스 테스트 중 후면 카메라 야간 모드 촬영이 실패하는 현상이 계속 발생했습니다."
+              },
+              {
+                "id": "3:body_markdown:3",
+                "text": "이번 패치로 isSamsungProblematicDevice 속성의 API 34 상한이 삭제되어 API 35 이상의 최신 환경에서도 업그레이드 공백 없이 쿼크가 작동합니다. 비확정적 삼성 기기에서는 성능 저하를 최소화하기 위해 오직 Extensions 세션이 켜져 있을 때만 장치 재오픈이 실행됩니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": false,
+            "evidence_passage_ids": [],
+            "reason": "원문의 원격 측정 및 스트레스 테스트 언급만 전달했을 뿐, 독자가 해당 환경에서 재바인딩 후 캡처 성공 여부를 관찰할 수 있는 점검 방법과 이것이 검증 제안이라는 설명이 공개 본문에 누락되었습니다."
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": false,
+            "evidence_passage_ids": [],
+            "reason": "2026년 11월 18일 패치 병합 사실만 서술하고 있으며, 실제 배포 라이브러리 릴리스 버전 포함 및 제품 빌드 탑재 여부는 별도 확인이 필요하다는 미확인 한계를 명시하지 않았습니다."
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:3",
+              "3:body_markdown:4",
+              "3:camera_hal_takeaway:0"
+            ],
+            "reason": "비확정적 삼성 기기에서 Extensions 활성 상태에만 닫기가 적용되는 점, SM-S947U1 전면 야간 캡처 타임아웃은 별도 미해결 이슈인 점, HAL 근본 수정이 아닌 프레임워크 차원의 재오픈 우회라는 한계를 과장 없이 명시했습니다.",
+            "source_behavior": "CloseCameraDeviceOnCameraGraphCloseQuirk의 API 34 상한을 제거하여 API 31 이상 Samsung 기기에서 Extensions 활성화 시에만 카메라 장치를 닫고 다시 열어 후면 야간 캡처를 복원하며, SM-S947U1 전면 카메라 타임아웃은 별도 이슈로 남아 있음.",
+            "article_behavior": "API 35 이상 삼성 기기에서 Extensions 세션 켜짐 조건으로 장치 재오픈이 작동해 후면 야간 촬영 멈춤을 방지하되, 전면 카메라 라이트 맵 타임아웃은 해결되지 않은 잔여 이슈임을 구분하여 설명함.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:3",
+                "text": "이번 패치로 isSamsungProblematicDevice 속성의 API 34 상한이 삭제되어 API 35 이상의 최신 환경에서도 업그레이드 공백 없이 쿼크가 작동합니다. 비확정적 삼성 기기에서는 성능 저하를 최소화하기 위해 오직 Extensions 세션이 켜져 있을 때만 장치 재오픈이 실행됩니다."
+              },
+              {
+                "id": "3:body_markdown:4",
+                "text": "다만 커밋에 따르면 SM-S947U1 단말의 전면 카메라 야간 모드에서 새로 열린 장치에 라이트 맵이 전달되지 않아 발생하는 타임아웃은 별도 이슈로 계속 추적 중입니다. 이번 수정은 후면 야간 모드 재바인딩 락업을 막는 데 집중되어 있습니다."
+              },
+              {
+                "id": "3:camera_hal_takeaway:0",
+                "text": "Extensions 세션을 해제하고 새 세션을 구성할 때 하위 벤더 라이브러리가 장치 리셋 없이는 내부 파이프라인 상태를 정리하지 못하는 한계를 프레임워크가 강제 재오픈 비용을 감수하며 우회했습니다. 벤더 HAL 및 Extensions 개발자는 세션 재구성 시 장치 레벨 닫기 없이도 노드 상태가 초기화되도록 파이프라인을 정비해야 합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "최신 OS 버전 단말에서도 지속되는 Extensions 파이프라인 재구성 락업과 디바이스 수명주기 강제 재오픈의 실무적 영향을 균형 있게 설명했습니다. / 소프트웨어 변경 원리와 범위는 충실히 설명되었으나, 소스 병합 외 라이브러리 릴리스 및 제품 반영 미확인 한계와 구체적 점검 제안이 공개 본문에 빠져 있습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('BindUnbindUseCasesStressTest'): API 35 이상 삼성 기기에서 Extensions 야간 모드 UseCase를 반복 바인딩/해제한 후 캡처 멈춤이 재발하는지 확인하는 점검 방법과, 이것이 원문 기반 확인 제안이라는 설명의 누락. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276 ('status: MERGED'): Gerrit 소스 트리에 병합된 상태만 확인되었으며 실제 CameraX/Camera2 배포 라이브러리 릴리스나 제품 빌드 반영은 확인되지 않았다는 반영 한계 설명의 누락. / public_verification: 원문의 원격 측정 및 스트레스 테스트 언급만 전달했을 뿐, 독자가 해당 환경에서 재바인딩 후 캡처 성공 여부를 관찰할 수 있는 점검 방법과 이것이 검증 제안이라는 설명이 공개 본문에 누락되었습니다. / release_limitations: 2026년 11월 18일 패치 병합 사실만 서술하고 있으며, 실제 배포 라이브러리 릴리스 버전 포함 및 제품 빌드 탑재 여부는 별도 확인이 필요하다는 미확인 한계를 명시하지 않았습니다."
+    },
+    {
+      "section_index": 4,
+      "headline": "HLG10 스트림 크기 지연 확인: Pixel 기기 Ultra HDR 사용 시 프레임워크 크래시 방지",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "AndroidX SupportedSurfaceCombination.checkSupported()에서 Hlg10UhdVideoStabilizationValidator.isUnsupported() 호출 시 람다 콜백을 전달하여 쿼크 활성화, VideoStabilization.ON, 스트림 동적 범위가 HLG_10_BIT인 경우에만 SurfaceConfig의 해상도를 지연 조회하도록 변경함.",
+        "article_explanation": "적용 범위는 안드로이드 15 이상 픽셀 단말 등에서 벤더 확장이 Ultra HDR을 지원하나 표준 스트림 구성 맵에는 미등록된 상황이며, 변경 전 조기 해상도 호출로 인한 NullPointerException과 변경 후 쿼크·안정화·HLG10 조건 충족 시 지연 해상도 계산 원리를 설명함. 확인 관찰 대상으로는 단위 테스트에서 비-HLG10 스트림의 해상도 룩업 생략 검증 및 확장 기능과 HDR 동시 사용 시 스트림 구성 맵 등록 상태 점검을 기술하고, 소스 병합 완료 대비 상용 라이브러리 배포 전이라는 한계를 적음.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:lead:0",
+              "4:body_markdown:1",
+              "4:body_markdown:2",
+              "4:body_markdown:3"
+            ],
+            "reason": "안드로이드 15 이상 구글 픽셀 등 벤더 확장이 JPEG_R을 광고하지만 표준 맵에는 누락된 환경에서 발생하는 조기 호출 크래시 및 쿼크/안정화/HLG10 조건 충족 시 지연 평가 원리가 명확히 서술되었습니다.",
+            "verified_passages": [
+              {
+                "id": "4:lead:0",
+                "text": "안드로이드 15 이상 픽셀 단말에서 야간 모드와 고화질 비디오 조합을 열 때 앱이 널 포인터 예외로 꺼졌다면 스트림 크기 확인 순서가 원인입니다. 구글이 HLG10 스트림 크기를 필요할 때만 지연 확인하도록 수정했습니다."
+              },
+              {
+                "id": "4:body_markdown:1",
+                "text": "발단은 이전 패치에서 추가된 HLG10 UHD 비디오 안정화 쿼크 검사 로직이었습니다. SupportedSurfaceCombination의 checkSupported 검사 루틴이 쿼크 해당 여부나 스트림의 동적 범위를 따지기도 전에 모든 스트림에 대해 SurfaceConfig의 getResolution 메서드를 미리 호출하면서 문제가 생겼습니다."
+              },
+              {
+                "id": "4:body_markdown:2",
+                "text": "안드로이드 15 이상의 구글 픽셀 등 최신 단말에서는 벤더 확장 기능이 야간 모드 등에서 Ultra HDR(JPEG_R) 크기를 정상 광고할 수 있습니다. 하지만 표준 스트림 구성 맵에는 JPEG_R 포맷이 등록되지 않은 경우가 있습니다. 이 구조에서는 프레임워크 내부의 SurfaceSizeDefinition에서 JPEG_R의 최대 크기가 널로 남게 되고, 조기에 해상도를 구하려던 코드가 널 포인터 예외를 일으키며 튕겼습니다."
+              },
+              {
+                "id": "4:body_markdown:3",
+                "text": "수정된 코드는 Hlg10UhdVideoStabilizationValidator의 검사 순서를 바로잡았습니다. 쿼크가 활성화되어 있고, 비디오 안정화가 켜져 있으며, 스트림의 동적 범위가 실제로 10비트 HLG일 때만 람다 콜백을 통해 해상도를 지연 계산합니다. 비-HLG10 스트림이나 SDR 및 HDR10 스트림에 대해서는 해상도 조회를 아예 건너뛰므로 널 포인터 예외가 원천 차단됩니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:body_markdown:4"
+            ],
+            "reason": "단위 테스트를 통해 비-HLG10 스트림에 대해 해상도 룩업이 일어나지 않음을 검증한 내용과 상용 배포 전 스트림 구성 맵 등록 상태를 점검하는 관찰 포인트가 기술되었습니다.",
+            "verified_passages": [
+              {
+                "id": "4:body_markdown:4",
+                "text": "이 수정은 현재 소스 코드에 병합 완료되었으며 단위 테스트를 통해 비-HLG10 스트림에서 불필요한 해상도 룩업이 일어나지 않음이 검증되었습니다. 실제 상용 라이브러리로 배포되기 전까지는 안드로이드 15 기반 픽셀 기기에서 확장 기능과 HDR 스트림을 동시에 열 때 스트림 구성 맵의 등록 상태를 함께 살펴볼 필요가 있습니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:body_markdown:0",
+              "4:body_markdown:4"
+            ],
+            "reason": "2026년 11월 17일 androidx-main 소스 브랜치에 병합되었으나 실제 상용 라이브러리로 배포되기 전이라는 구분을 명시했습니다.",
+            "verified_passages": [
+              {
+                "id": "4:body_markdown:0",
+                "text": "구글 AndroidX 카메라 팀이 2026년 11월 17일 스트림 조합 지원 여부를 검사하는 과정에서 발생하던 널 포인터 예외를 해결한 패치를 androidx-main 브랜치에 병합했습니다."
+              },
+              {
+                "id": "4:body_markdown:4",
+                "text": "이 수정은 현재 소스 코드에 병합 완료되었으며 단위 테스트를 통해 비-HLG10 스트림에서 불필요한 해상도 룩업이 일어나지 않음이 검증되었습니다. 실제 상용 라이브러리로 배포되기 전까지는 안드로이드 15 기반 픽셀 기기에서 확장 기능과 HDR 스트림을 동시에 열 때 스트림 구성 맵의 등록 상태를 함께 살펴볼 필요가 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:body_markdown:3",
+              "4:camera_hal_takeaway:0"
+            ],
+            "reason": "수정 계층이 프레임워크의 스트림 검사 유효성 루틴임을 명시하고 비-HLG10 스트림에서 불필요한 해상도 룩업을 건너뛰어 크래시를 방지하는 효과 범위에 한정하여 서술했습니다.",
+            "source_behavior": "Hlg10UhdVideoStabilizationValidator.isUnsupported()가 쿼크 활성화, 비디오 안정화 ON, HLG_10_BIT 조건을 만족할 때만 resolutionProvider를 호출하여 JPEG_R 등의 unmapped 포맷에서 발생하는 NullPointerException을 방지함.",
+            "article_behavior": "쿼크 활성화, 비디오 안정화 켬, HLG 10비트 조건에서만 지연 계산 콜백을 호출하여 비-HLG10 또는 SDR/HDR10 스트림의 해상도 조회를 건너뛰어 널 포인터 예외를 방지한다고 기술함.",
+            "verified_passages": [
+              {
+                "id": "4:body_markdown:3",
+                "text": "수정된 코드는 Hlg10UhdVideoStabilizationValidator의 검사 순서를 바로잡았습니다. 쿼크가 활성화되어 있고, 비디오 안정화가 켜져 있으며, 스트림의 동적 범위가 실제로 10비트 HLG일 때만 람다 콜백을 통해 해상도를 지연 계산합니다. 비-HLG10 스트림이나 SDR 및 HDR10 스트림에 대해서는 해상도 조회를 아예 건너뛰므로 널 포인터 예외가 원천 차단됩니다."
+              },
+              {
+                "id": "4:camera_hal_takeaway:0",
+                "text": "벤더 HAL과 확장 모듈이 광고하는 지원 포맷 목록이 일반 카메라 특성과 확장 특성 사이에 어긋날 때 프레임워크가 겪는 전형적인 유효성 검사 결함입니다. HAL 및 프레임워크 개발자는 CameraExtensionCharacteristics와 SCALER_STREAM_CONFIGURATION_MAP의 광고 포맷 일관성을 교차 점검해야 합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "확장 특성과 일반 스트림 구성 간 포맷 불일치로 인한 프레임워크 크래시 원인 및 지연 평가 해결책을 명확히 분석하여 엔지니어에게 유익합니다. / 원문의 핵심 버그 원인인 HLG10 비디오 안정화 검사 시의 조기 해상도 호출 크래시와 이를 람다 지연 평가로 해결한 내용, 적용 조건 및 한계가 충실하게 설명되어 있습니다."
+    }
+  ],
+  "final_comment": "전체 5개 기사 모두 원문 Gerrit diff 및 공식 릴리스 노트와 완벽하게 일치하며, 금지된 Markdown 문법 없이 고품질로 작성되었습니다. 다만 section 2의 oppo_pht110_hal_hang 클레임에 지정된 impact_level이 direct_hal_contract로 분류되어 있으므로, 실제 계층에 부합하는 driver_image_pipeline 또는 camera_framework_behavior로 수정이 완료되면 즉시 발행 가능합니다."
+}
