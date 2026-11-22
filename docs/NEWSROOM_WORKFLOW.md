@@ -305,7 +305,7 @@ repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동�
   - 그중 public files가 준비된 review publication PR에는 `review-only-publication`을, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다.
   - 이 두 세부 label은 동시에 붙으면 안 됩니다.
 - `final_publish_ready=false`: 자동 발행 기준을 못 채웠다는 뜻입니다. 다만 이 값 하나만으로 `review_publication_ready=true`인 PR의 공개 가능성을 막지는 않습니다.
-- `2-01 사이트·이미지 자동 검증 (PR·main)` (`.github/workflows/site-01-validate.yml`): 구조 검증(structural validation)은 blocking으로 유지하고, quality/fact-check 문제는 발행을 막지 않는(non-blocking) annotation으로 보고합니다.
+- `2-01 Auto - Check site and images (PRs and main)` (`.github/workflows/site-01-validate.yml`): 구조 검증(structural validation)은 blocking으로 유지하고, quality/fact-check 문제는 발행을 막지 않는(non-blocking) annotation으로 보고합니다.
 
 ## URL Summary Cache
 
@@ -483,7 +483,7 @@ PR마다 failure classification(실패 분류)을 다음 중 하나로 기록합
 
 ### 주간 RAW 후보 수집
 
-`1-01 기사 후보 자동 수집` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow 자체에는 schedule이 없습니다. `workflow_dispatch`(수동)와 `workflow_call`(다른 workflow가 호출)만 있습니다. 예약 경로에서는 아래 00 orchestrator가 주 1회 월요일 09:17 KST에 이 workflow를 호출합니다.
+`1-01 Auto - Collect news` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow 자체에는 schedule이 없습니다. `workflow_dispatch`(수동)와 `workflow_call`(다른 workflow가 호출)만 있습니다. 예약 경로에서는 아래 00 orchestrator가 주 1회 월요일 09:17 KST에 이 workflow를 호출합니다.
 
 ```text
 KST Mon 09:17 = UTC Mon 00:17
@@ -494,15 +494,15 @@ workflow는 `main`에 직접 push하지 않습니다. 수동 실행 시에는 RA
 
 ### 3-stage RAW workflow
 
-현재 schedule entrypoint는 `1-00 주간호 시작 (월요일 자동 / 수동 가능)` (`.github/workflows/newsletters-00-orchestrator.yml`)입니다. cron(`17 0 * * 1`)을 가진 workflow는 00 하나뿐이고, 00이 collect(01) → discover(02) → generate(03)를 순서대로 호출합니다. 따라서 final newsletter generation도 예약 경로에서 자동 실행됩니다. 단, 그보다 먼저 `published-guard` job이 대상 날짜나 그 주가 main에 이미 발행돼 있는지 보고, 발행돼 있으면 세 단계를 모두 돌리지 않습니다(#1167, 자세한 내용은 `docs/workflows/RAW_TO_GENERATE_ARTIFACT_CONTRACT.md`). 각 단계를 따로 돌리려면 `workflow_dispatch`로 수동 실행합니다.
+현재 schedule entrypoint는 `1-00 Start the weekly issue (Mondays or on demand)` (`.github/workflows/newsletters-00-orchestrator.yml`)입니다. cron(`17 0 * * 1`)을 가진 workflow는 00 하나뿐이고, 00이 collect(01) → discover(02) → generate(03)를 순서대로 호출합니다. 따라서 final newsletter generation도 예약 경로에서 자동 실행됩니다. 단, 그보다 먼저 `published-guard` job이 대상 날짜나 그 주가 main에 이미 발행돼 있는지 보고, 발행돼 있으면 세 단계를 모두 돌리지 않습니다(#1167, 자세한 내용은 `docs/workflows/RAW_TO_GENERATE_ARTIFACT_CONTRACT.md`). 각 단계를 따로 돌리려면 `workflow_dispatch`로 수동 실행합니다.
 
-- `1-01 기사 후보 자동 수집` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. `GEMINI_API_KEY`는 수집 step에만 주며 후보 1차 선별에만 씁니다. 키가 없거나 호출이 실패하면 키워드 순서로 폴백하고, 결과는 `candidates.json`의 `candidate_triage`에 남습니다.
-- `1-02 추가 출처 자동 탐색` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → seed evidence 확장(결정론) → linked evidence 선택(Gemini 호출은 이 하나) → seed·파생 후보를 `merged-candidates.json`에 반영, 입니다. Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거했습니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
+- `1-01 Auto - Collect news` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. `GEMINI_API_KEY`는 수집 step에만 주며 후보 1차 선별에만 씁니다. 키가 없거나 호출이 실패하면 키워드 순서로 폴백하고, 결과는 `candidates.json`의 `candidate_triage`에 남습니다.
+- `1-02 Auto - Find more sources` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → seed evidence 확장(결정론) → linked evidence 선택(Gemini 호출은 이 하나) → seed·파생 후보를 `merged-candidates.json`에 반영, 입니다. Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거했습니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
   - `source-clusters.json` (`source_clusters` 필드)
   - `evidence-validation-report.json` (`evidence_validation_report` 필드)
   - `extracted-source-facts.json` (소스 사실 추출 결과)
-- `1-03 한글판 편집 PR 자동 작성 → 사람 검토` (`.github/workflows/newsletters-03-editor-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
+- `1-03 Auto - Open Korean PR for review` (`.github/workflows/newsletters-03-editor-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
 Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
 
@@ -538,7 +538,7 @@ NEWSROOM_MAX_COST_USD=0.7
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `1-03 한글판 편집 PR 자동 작성 → 사람 검토` (`.github/workflows/newsletters-03-editor-pr.yml`) 워크플로를 선택하고 `Run workflow`를 누릅니다. 입력과 동작은 다음과 같습니다.
+GitHub Actions에서 `1-03 Auto - Open Korean PR for review` (`.github/workflows/newsletters-03-editor-pr.yml`) 워크플로를 선택하고 `Run workflow`를 누릅니다. 입력과 동작은 다음과 같습니다.
 
 - `newsletter_date`는 optional입니다. 비워 두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다.
 - 특정 날짜를 다시 생성하려면 `newsletter_date`만 입력하면 됩니다. candidate artifact path는 더 이상 input으로 받지 않습니다.

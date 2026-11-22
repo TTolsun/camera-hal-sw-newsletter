@@ -1,4 +1,4 @@
-name: 1-00 주간호 시작 (월요일 자동 / 수동 가능)
+name: 1-00 Start the weekly issue (Mondays or on demand)
 
 on:
   schedule:

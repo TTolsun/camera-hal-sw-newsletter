@@ -1,4 +1,4 @@
-name: 2-01 사이트·이미지 자동 검증 (PR·main)
+name: 2-01 Auto - Check site and images (PRs and main)
 
 on:
   push:

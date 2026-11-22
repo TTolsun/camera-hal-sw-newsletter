@@ -1,4 +1,4 @@
-name: 3-01 편집 스키마 호환성 수동 점검
+name: 3-01 Manual - Check editor schema
 
 # editor 단계의 세 모델이 현재 editorSchema를 실제로 받아주는지 라이브로 잽니다.
 # Gemini의 constrained decoding 한계(too many states)는 문서화된 수치가 없고 모델

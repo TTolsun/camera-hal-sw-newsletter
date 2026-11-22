@@ -12,12 +12,12 @@ Secret과 Variable은 따로 관리합니다. Secret은 로그, commit, PR 본�
 
 ## LLM provider 설정
 
-기본 provider는 `gemini`입니다. 주간 예약은 `1-00 주간호 시작 (월요일 자동 / 수동 가능)` 워크플로가 담당하며 후보 수집, 출처 탐색, 편집 PR 작성을 차례로 호출합니다. 예약 실행은 코드에 정의한 provider와 모델을 사용합니다.
+기본 provider는 `gemini`입니다. 주간 예약은 `1-00 Start the weekly issue (Mondays or on demand)` 워크플로가 담당하며 후보 수집, 출처 탐색, 편집 PR 작성을 차례로 호출합니다. 예약 실행은 코드에 정의한 provider와 모델을 사용합니다.
 
 LLM provider/model 설정은 LLM을 실제로 호출하는 수동 workflow에서만 적용됩니다.
 
-- `1-02 추가 출처 자동 탐색` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): optional source discovery가 켜졌을 때 provider를 씁니다.
-- `1-03 한글판 편집 PR 자동 작성 → 사람 검토` (`.github/workflows/newsletters-03-editor-pr.yml`): final generation에서 provider를 씁니다.
+- `1-02 Auto - Find more sources` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): optional source discovery가 켜졌을 때 provider를 씁니다.
+- `1-03 Auto - Open Korean PR for review` (`.github/workflows/newsletters-03-editor-pr.yml`): final generation에서 provider를 씁니다.
 
 Stage 2/3 manual 입력의 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`가 비어 있으면 `src/shared/common/runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`를 따릅니다. 기본 provider/model을 바꾸려면 GitHub variable이 아니라 code default를 고쳐야 합니다.
 
@@ -80,7 +80,7 @@ Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-cred
 | `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN` | 선택 | `40` | newsroom run 전체에서 network resolve를 시도할 최대 linked evidence 수입니다. | 한 주차에 candidate가 많아 resolve 시도가 과도할 때 상한을 조정합니다. | 초과 링크는 fetch하지 않습니다. publication score나 HAL impact를 추정하는 근거로 쓰면 안 됩니다. |
 | `NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS` | 선택 | `5000` | linked evidence 한 건의 fetch timeout입니다. | 공식 source가 느리지만 diagnostics 가치가 확인됐을 때만 조정합니다. | timeout은 non-fatal diagnostics입니다. 값을 높이면 CI 대기 시간이 증가합니다. |
 | `NEWSROOM_LINKED_EVIDENCE_MAX_BYTES` | 선택 | `200000` | linked evidence response에서 읽고 분석할 최대 byte 수입니다. | 공식 release/docs page가 구조적으로 크고 capped excerpt만으로 부족할 때 조정합니다. | 초과 response는 resolved content로 사용하지 않고 `skipped` diagnostics로만 남깁니다. raw HTML full body를 artifact로 저장하지 않습니다. |
-| `NEWSROOM_CANDIDATE_INPUT_MODE` | 선택 | `default` | Final Generation이 candidate를 읽는 mode입니다. 새 Stage 3 workflow에서는 `artifact`로 설정해 approved candidate artifact만 사용합니다. | `1-03 한글판 편집 PR 자동 작성 → 사람 검토` (`.github/workflows/newsletters-03-editor-pr.yml`)에서 RAW/merged artifact replay를 실행할 때만 `artifact`를 사용합니다. | `artifact` mode에서는 manifest hash와 `llm_used=false` 계약을 검증합니다. 실패하면 generation을 진행하지 않습니다. |
+| `NEWSROOM_CANDIDATE_INPUT_MODE` | 선택 | `default` | Final Generation이 candidate를 읽는 mode입니다. 새 Stage 3 workflow에서는 `artifact`로 설정해 approved candidate artifact만 사용합니다. | `1-03 Auto - Open Korean PR for review` (`.github/workflows/newsletters-03-editor-pr.yml`)에서 RAW/merged artifact replay를 실행할 때만 `artifact`를 사용합니다. | `artifact` mode에서는 manifest hash와 `llm_used=false` 계약을 검증합니다. 실패하면 generation을 진행하지 않습니다. |
 | `NEWSROOM_CANDIDATE_INPUT_PATH` | 선택 | empty | Stage 3에서 명시적으로 읽을 approved candidate artifact path입니다. 허용 값은 해당 날짜의 `manual-candidates.json` 또는 `merged-candidates.json`뿐입니다. 비워 두면 `merged-candidates.json`, `manual-candidates.json`, legacy `candidates.json` 순서로 선택합니다. | 특정 RAW 또는 merged artifact를 재실행해야 할 때만 internal/backcompat 경로로 지정합니다. Stage 3 workflow input으로는 더 이상 노출하지 않고, 비워 두면 자동 fallback이 동작합니다. Legacy `candidates.json`는 explicit path로 지정하지 않고 automatic transition fallback으로만 사용합니다. | repository 밖 path, 임의 JSON, manifest missing/mismatch는 실패합니다. `manual-candidates.json`은 `llm_used=false`, Stage 2 enabled `merged-candidates.json`은 manifest v2의 `llm_used=true`도 허용합니다. failed Stage 2 report만으로는 generation input이 될 수 없습니다. |
 | `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY` | 선택 | `true` | Stage 2 Optional Gemini Source Discovery engine을 켤지 결정합니다. `false`에서는 LLM credential 없이 disabled pass-through만 실행합니다. | Stage 2 source discovery workflow는 이 값을 `true`로 고정 실행하므로 별도 toggle input이 없습니다. `false` disabled pass-through는 code-level/backcompat 경로로만 남습니다. | `true`에서는 selected LLM provider credential이 필요합니다. Stage 2의 LLM 호출은 linked evidence 선택 하나이고(#1186이 Gemini URL 제안 단계를 제거), 선택된 링크는 파생 후보로 `merged-candidates.json`에 반영됩니다. |
 
