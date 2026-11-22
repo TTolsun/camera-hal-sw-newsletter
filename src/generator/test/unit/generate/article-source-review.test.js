@@ -181,3 +181,27 @@ test('malformed passage references and missing behavioral comparisons fail close
     assert.match(result.article_quality[0].reason, /Incomplete article briefing review/);
   }
 });
+
+test('a test assertion presented as a field measurement blocks the public article for repair', async () => {
+  const review = verdict();
+  review.briefing_checks.diagnostic_attribution = { applicable: true, satisfied: false,
+    evidence_passage_ids: ['0:lead:0'], reason: 'The test asserts output ordering. No device latency was measured.' };
+  const result = await reviewArticleSources(editor, capsules, { article_quality: [verdict()] },
+    async () => ({ article_quality: [review] }));
+  assert.equal(result.article_quality[0].publishable, false);
+  assert.match(result.article_quality[0].reason, /diagnostic_attribution/);
+});
+
+test('release-note review requires matching source identity and actual quoted source text', () => {
+  const section = editor.sections[0];
+  const url = section.source_candidate_url || section.sources[0].url;
+  const extraction = { source_type: 'release_note', source: { url }, release: { sections: [
+    { items: [{ source_text: 'An official release excerpt.' }, { text: 'Unverified summary.' }] }
+  ] } };
+  const input = source => sourceReviewInput(editor, { shortlisted_capsules: [{ url, source_extraction: source }] });
+  const [row] = input(extraction);
+  assert.match(row.source_documents[0].text, /official release excerpt/);
+  assert.doesNotMatch(row.source_documents[0].text, /Unverified summary/);
+  assert.deepEqual(input({ ...extraction, source: { url: url + '/other' } }), []);
+  assert.deepEqual(input({ ...extraction, release: { sections: [] } }), []);
+});

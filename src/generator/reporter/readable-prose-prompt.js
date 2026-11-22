@@ -3,6 +3,7 @@
 // Shared by Korean writing/repair and English translation to keep clarity rules aligned.
 function readableProsePrompt() {
   return [
+    '한국어 기사에서는 동료 개발자가 실제로 볼 호출·로그·상태를 주어와 동사에 붙이세요. “지연에 대한 확인이 필요합니다”처럼 대상을 감춘 문장은 무엇이 늦었고 무엇을 기록할지 풀어 쓰세요. 모든 기사를 같은 권고로 끝내지 말고, 이미 본문에서 설명한 결론은 반복하지 마세요. 영어 번역에서도 관찰·테스트 단언·편집 제안의 차이를 보존하세요.',
     'Reader-friendly technical prose: help a busy engineer who is unfamiliar with this particular topic understand it on the first reading. Keep the requested output language.',
     'Put the concrete change, who it affects, and its current status early. Use a descriptive headline and a self-contained lead; do not hide the main point behind a hook.',
     'Use short sentences and short paragraphs, with one main idea per paragraph. Aim for one to three sentences per paragraph when practical, without a rigid length quota or dropping necessary detail. Split chains of conditions into connected sentences and name the subject instead of using ambiguous pronouns.',
