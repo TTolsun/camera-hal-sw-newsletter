@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "newsletter_date": "2026-11-23",
+  "generated_at": "2026-11-22T15:54:45.620Z",
+  "seed_urls": [
+    {
+      "seed_id": "seed-01-bd0afdb400",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    },
+    {
+      "seed_id": "seed-02-0d96eee150",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    },
+    {
+      "seed_id": "seed-03-ea61dc10a1",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    },
+    {
+      "seed_id": "seed-04-2c797ac4b4",
+      "url": "https://news.samsung.com/kr/%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90-%EA%B0%A4%EB%9F%AD%EC%8B%9C-s26-%EC%8B%9C%EB%A6%AC%EC%A6%88-%EB%8C%80%EC%83%81-one-ui-9-5-%EB%B2%A0%ED%83%80-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-%EC%9A%B4",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    },
+    {
+      "seed_id": "seed-05-f67b5a44dc",
+      "url": "https://news.samsung.com/global/samsung-begins-one-ui-9-5-beta-program",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    },
+    {
+      "seed_id": "seed-06-e237e0bcf3",
+      "url": "https://discourse.llvm.org/t/llvm-23-1-6-released/92877",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    }
+  ],
+  "keyword_hints": [],
+  "policy": {
+    "keyword_hints_are_facts": false,
+    "source_backed_facts_must_come_from_evidence_pack": true
+  }
+}

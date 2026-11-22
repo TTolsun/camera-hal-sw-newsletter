@@ -5,12 +5,12 @@
 - monitored source count: 4
 - snapshot page count: 6
 - new page count: 0
-- updated page count: 1
-- release row added count: 1
+- updated page count: 0
+- release row added count: 0
 - release row changed count: 0
 - anchor added count: 0
 - material content change count: 0
-- no meaningful change count: 5
+- no meaningful change count: 6
 
 ## Source Change Events
 
@@ -21,13 +21,13 @@
 | no_meaningful_change | aosp-camera-its-release-notes | no | missing | 0 | Android 17 Camera Image Test Suite release notes \| Android Open Source Project |
 | no_meaningful_change | android-version-features | no | missing | 0 | Features and APIs \| Android Developers |
 | no_meaningful_change | android-version-features | no | missing | 0 | Features and APIs \| Android Developers |
-| release_row_added | androidx-camerax-release-notes | yes | release_row_date | 95 | CameraX \| Jetpack \| Android Developers |
+| no_meaningful_change | androidx-camerax-release-notes | no | missing | 0 | CameraX \| Jetpack \| Android Developers |
 
 ## Evidence Identity / Duplicate Guard
 
-- generated candidate count: 1
-- candidate allowed count: 1
-- main article allowed count: 1
+- generated candidate count: 0
+- candidate allowed count: 0
+- main article allowed count: 0
 - watchlist only count: 0
 - duplicate event/evidence count: 0
 - `processed_source_event_ids`: prevents repeated diagnostic/source event reporting for the same change.
@@ -43,4 +43,4 @@
 | source-event-9d4641446c771b77009b987b52197aa9 | - | missing | 0 | yes | no |
 | source-event-9e4662d95539633c38bfc32107a70d53 | - | missing | 0 | yes | no |
 | source-event-b700fe783a8fd44f2a7d8c48c3fca253 | - | missing | 0 | yes | no |
-| source-event-09e95d3471c083d3f67006b1759eb36e | 2026-11-18 | release_row_date | 95 | no | yes |
+| source-event-3476439886458dc491e09461b6c23bc3 | - | missing | 0 | yes | no |
