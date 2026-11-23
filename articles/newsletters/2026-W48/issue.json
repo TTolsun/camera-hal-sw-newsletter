@@ -3,64 +3,61 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W47 (11.16 ~ 11.22)",
-  "summary": "CameraX 1.7.0에서는 앱이 물리 카메라를 직접 고릅니다. OPPO Find N3 Flip에서는 출력 대상으로 지정하면 카메라 서비스가 멈출 수 있는 물리 ID 두 개를 목록에서 뺐습니다. SM-F971에서 줌 전환이 멈춘 사례와 3A 요청을 곧바로 거절하는 CameraPipe 변경도 살펴봅니다. 녹화 첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
+  "summary": "이번 주 뉴스레터에서는 CameraX 1.7.0 릴리스와 Camera2 Pipe 3A 제어 변경 등 상위 프레임워크의 중요한 업데이트를 다룹니다. 특히 CameraX 1.7.0은 Camera2Interop V2를 안정화하여 물리 카메라 직접 바인딩을 지원합니다. 삼성 SM-F971 단말의 ZSL 비활성화와 오포 Find N3 Flip의 물리 카메라 노출 제외 사례는 특정 기기에서 발생하는 HAL 및 드라이버 수준의 문제를 보여줍니다. 또한, 비디오 녹화 시작 전 프레임 충돌 방지를 위한 인코더 입력 서피스 일시 중단 처리 소식도 함께 전해드립니다.",
   "briefing": [
-    "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
-    "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
-    "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
-    "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
-    "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점"
+    "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩",
+    "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환",
+    "삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지",
+    "오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결",
+    "비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리"
   ],
   "sections": [
     {
-      "category": "Camera Framework",
-      "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
-      "what_changed": "CameraX 1.7.0 공식 릴리스를 통해 Camera2Interop V2가 별도 옵트인 없이 안정화되었으며 ImageWrapper, ImagePlane 등 공통 래퍼가 재설계되었습니다. 또한 저조도 감지를 위한 NightModeIndicator, 3A 잠금 모드, 물리 카메라 직접 바인딩 및 자동 센서 기반 회전 기능이 추가되었습니다.",
+      "category": "direct_aosp_camera",
+      "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 바인딩 지원",
+      "what_changed": "CameraX 1.7.0 릴리스에서 Camera2Interop V2가 별도 opt-in 없이 안정화되었고, 물리 카메라 직접 바인딩, 야간 모드 표시자, 3A 잠금 제어가 공식 추가되었습니다.",
       "confirmed_facts": [
-        "CameraX 1.7.0 버전이 2026년 11월 18일 공식 릴리스되었습니다.",
-        "Camera2Interop V2가 안정화되어 별도 옵트인 없이 사용 가능하며 ImageWrapper, ImagePlane, CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResultWrapper가 재설계되었습니다.",
+        "CameraX 1.7.0이 2026년 11월 18일 공식 릴리스되었습니다.",
+        "Camera2Interop V2가 안정화되었으며, ImageWrapper, ImagePlane(non-nullable ByteBuffer 포함), CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResultWrapper를 제공합니다.",
         "CameraInfo.isNightModeIndicatorSupported(), CameraInfo.getNightModeIndicator(), NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED)가 추가되었습니다.",
-        "FocusMeteringAction에 3A 잠금 모드 설정(FLAG_AE, FLAG_AWB, FLAG_AF)이 추가되어 CAF 상태를 유지하면서 측광 영역 갱신이 가능해졌습니다.",
-        "CameraInfo.getPhysicalCameraInfos()에서 물리 카메라용 CameraSelector를 획득하여 UseCase를 물리 카메라에 직접 바인딩할 수 있게 되었습니다.",
-        "SessionConfig.Builder 등에 setAutoRotationEnabled(boolean)가 추가되어 디바이스 센서 기반 회전 처리가 가능해졌습니다.",
-        "Low Light Boost와 Torch가 last setting wins 방식으로 상호 운용되도록 조정되었습니다.",
-        "ExtensionsManager.getExtensionEnabledCameraSelector()가 ExtensionSessionConfig 도입에 따라 지원 중단(Deprecated)되었습니다."
+        "FocusMeteringAction에 3A 잠금 모드(FLAG_AE, FLAG_AWB, FLAG_AF)를 설정할 수 있는 setLockingMode가 도입되었습니다.",
+        "CameraInfo.getPhysicalCameraInfos()로 획득한 CameraSelector를 통해 UseCase를 물리 카메라에 직접 바인딩할 수 있습니다.",
+        "SessionConfig.Builder 등에 setAutoRotationEnabled/isAutoRotationEnabled가 추가되었습니다.",
+        "Low Light Boost와 Torch가 상호 배타적인 last setting wins 정책을 따르고, Low Light Boost 중에도 플래시가 발광할 수 있도록 변경되었습니다."
       ],
-      "evidence_summary": "Android Developers 공식 릴리스 노트를 통해 2026년 11월 18일 배포된 CameraX 1.7.0의 변경 사항을 확인했습니다. Camera2Interop V2 안정화, 물리 카메라 바인딩, 3A 잠금 모드, 자동 회전 제어 및 저조도 부스트 상호운용성 정책 변경이 명시되어 있습니다.",
+      "evidence_summary": "Android Developers 공식 릴리스 노트(CameraX 1.7.0, 2026년 11월 18일)에 따르면 Camera2Interop V2 안정화와 물리 카메라 바인딩 등 주요 기능이 정식 배포되었습니다.",
       "specificity_checks": [
-        "Version: CameraX 1.7.0",
+        "Component: CameraX / androidx.camera",
+        "Release Version: CameraX 1.7.0",
         "Release Date: November 18, 2026",
-        "Component: androidx.camera",
-        "Behavior change: Camera2Interop V2 stabilization, physical camera binding, 3A locking modes"
+        "Behavior Change: Camera2Interop V2 안정화, 물리 카메라 UseCase 바인딩, 3A Locking Mode 및 Night Mode Indicator 추가"
       ],
       "source_verification_notes": [
         "Source URL: https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
-        "Evidence ID: sx:0d96eee1501c272d:325d12199944:f81573dd549fda29",
-        "Primary source: Android Developers 공식 릴리스 노트의 2026-11-18 배포 내역을 확인함."
+        "Evidence ID: sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9",
+        "Primary source: Android Developers 공식 릴리스 노트에서 버전 1.7.0 배포 사실을 확인함."
       ],
       "public_article": {
-        "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
-        "lead": "원하는 렌즈가 목록에 없었을까, 골랐는데 열리지 않았을까? CameraX 1.7.0에서는 두 경우를 나눠 볼 수 있습니다.",
-        "body_markdown": "11월 18일 출시된 CameraX 1.7.0에서는 CameraInfo.getPhysicalCameraInfos()가 돌려준 물리 카메라 정보에서 CameraSelector를 얻습니다. 앱은 그 선택자로 원하는 카메라에 촬영 유스케이스를 바인딩할 수 있습니다.\n\nCamera2Interop V2도 이번 버전에서 안정화됐습니다. 별도 opt-in 없이 쓸 수 있고, 초점·측광 요청을 만들 때는 FocusMeteringAction.Builder.setLockingMode()로 노출과 화이트밸런스 잠금을 지정할 수 있습니다.\n\n렌즈 선택 기능을 옮기는 팀이라면 바인딩 성공 여부만 남기기 아깝습니다. 단말이 열거한 물리 ID와 앱이 바인딩을 요청한 ID를 함께 기록해 두면, 렌즈가 처음부터 빠져 있었는지 촬영을 시작하면서 문제가 생겼는지 구별하기 쉽습니다.",
-        "camera_hal_takeaway": "렌즈 목록과 바인딩 결과를 함께 남기면 실패 지점을 좁힐 수 있습니다.",
+        "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩",
+        "lead": "CameraX 1.7.0이 정식 출시되며 Camera2Interop V2가 기본 안정화 단계로 전환되었습니다. 이제 개발자는 추가 옵트인 없이 상위 앱 인터페이스에서 물리 카메라를 직접 선택하고 바인딩할 수 있습니다.",
+        "body_markdown": "구글이 2026년 11월 18일 배포한 CameraX 1.7.0 릴리스는 상위 프레임워크와 하위 Camera2 사이의 상호 운용성을 크게 손질했습니다. 이번 판에서는 이전 실험 단계에 머물렀던 Camera2Interop V2가 안정화되어 별도 opt-in 없이 기본 제공됩니다.\n\n재설계된 인터페이스는 ImageWrapper와 non-nullable ByteBuffer를 갖는 ImagePlane을 도입했습니다. ImageProxy와 ImageProxy.PlaneProxy가 이 래퍼 규격을 구현하며, FakeImage나 FakeCameraCharacteristics 같은 테스트용 객체도 함께 제공됩니다.\n\n멀티 카메라 제어 경로에도 큰 변화가 적용되었습니다. 개발자는 CameraInfo.getPhysicalCameraInfos 호출로 물리 카메라 전용 CameraSelector를 얻고, 개별 UseCase를 특정 물리 센서에 직접 바인딩할 수 있습니다. 해당 Selector로 getCameraInfo를 조회하면 논리 카메라 대신 실제 물리 카메라 정보가 반환됩니다.\n\n3A 제어 측면에서는 FocusMeteringAction에 잠금 모드가 추가되었습니다. FLAG_AE와 FLAG_AWB를 잠그거나 연속 자동 초점 모드를 유지한 채 측정 영역만 갱신하는 FLAG_AF 동작을 구분해 지정할 수 있습니다. 또한 저조도 환경을 판별하는 NightModeIndicator와 토치 및 저조도 부스트 간 충돌 방지 로직도 공식 포함되었습니다.\n\n이 변경은 Jetpack CameraX 라이브러리의 프레임워크 계층 동작입니다. 하위 Camera HAL3 인터페이스 규격 자체가 바뀐 것은 아니지만, 앱이 요청하는 물리 스트림 분기나 3A 메타데이터 조합이 실제 벤더 HAL로 직결되므로 상호 작용을 주의 깊게 살펴야 합니다.",
+        "camera_hal_takeaway": "HAL 직접 변경은 아니지만, 상위 프레임워크가 논리 카메라 하위의 물리 스트림에 UseCase를 직접 연결하기 시작합니다. 벤더 파이프라인에서 물리 카메라별 OutputConfiguration 구성과 메타데이터 반환 누락이 없는지 사전 점검이 필요합니다.",
         "reader_checkpoints": [
-          "Camera2Interop V2 래퍼 변경에 따른 커스텀 CaptureRequest 메타데이터 전달 경로 영향 확인",
-          "물리 카메라 직접 바인딩 UseCase 실행 시 멀티카메라 HAL의 스트림 설정 및 동시 동작 확인"
+          "물리 카메라 바인딩 시 HAL3 processCaptureResult 콜백에서 물리 카메라 메타데이터가 누락 없이 전달되는지 확인",
+          "FocusMeteringAction의 3A 잠금 모드 플래그가 하위 CaptureRequest의 CONTROL_AE_LOCK 및 AF 모드와 충돌하지 않는지 검증"
         ],
         "source_links": [
           {
             "title": "CameraX Release Notes - CameraX 1.7.0",
             "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
-            "publisher": "Android Developers",
-            "source_role": "primary",
-            "checked_at": "2026-11-23"
+            "source_role": "primary"
           }
         ],
         "story_contract_version": 2,
         "source_subtitle": "Android Developers Latest Updates",
         "editorial_story": {
-          "not_to_overclaim": "CameraX 1.7.0 릴리스는 프레임워크 API 확장이며 드라이버나 HAL3 인터페이스 자체의 변경을 의미하지 않습니다.",
-          "editor_take": "Camera2 하위 제어와 물리 카메라 접근이 프레임워크 표준으로 자리 잡으면서 HAL 계층의 복합 세션 처리 안정성이 더욱 중요해졌습니다."
+          "not_to_overclaim": "CameraX 상위 프레임워크의 API 안정화이며 Camera HAL API나 AIDL 인터페이스 정의가 변경된 것은 아닙니다.",
+          "editor_take": "상위 라이브러리의 물리 카메라 직접 바인딩 허용은 멀티 카메라 HAL 파이프라인의 숨은 엣지 케이스를 더 빠르게 표면화할 것입니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -80,70 +77,41 @@
       },
       "article_sections": {
         "verified_facts": [
-          "CameraX 1.7.0 버전이 2026년 11월 18일 공식 릴리스되었습니다.",
-          "Camera2Interop V2가 재설계되어 안정화되었으며 옵트인 없이 사용 가능합니다.",
-          "NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED) 인터페이스가 추가되었습니다.",
-          "FocusMeteringAction에 3A 잠금 모드(FLAG_AE, FLAG_AWB, FLAG_AF) 설정 API가 도입되었습니다.",
-          "물리 카메라용 CameraSelector 획득 및 UseCase 직접 바인딩이 지원됩니다.",
-          "SessionConfig 등에 디바이스 센서 기반 회전 처리를 위한 setAutoRotationEnabled가 추가되었습니다.",
-          "Low Light Boost와 Torch가 last setting wins 방식으로 동작하도록 개선되었습니다.",
-          "ExtensionSessionConfig 도입으로 ExtensionsManager.getExtensionEnabledCameraSelector()가 폐기 예정으로 지정되었습니다."
+          "CameraX 1.7.0이 2026년 11월 18일 공식 릴리스되었습니다.",
+          "Camera2Interop V2가 안정화되었으며 ImageWrapper, non-nullable ByteBuffer를 가진 ImagePlane, CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResultWrapper를 제공합니다.",
+          "CameraInfo.getPhysicalCameraInfos()에서 얻은 CameraSelector를 통해 UseCase를 물리 카메라에 직접 바인딩할 수 있습니다.",
+          "FocusMeteringAction에 setLockingMode가 추가되어 FLAG_AE, FLAG_AWB 잠금 및 CAF 유지 상태의 초점 영역 갱신이 지원됩니다.",
+          "NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED) 지원 여부 및 상태 조회 API가 추가되었습니다."
         ],
-        "background_context": "CameraX는 Camera2 API를 추상화하여 일관된 캡처 세션을 제공하는 Jetpack 라이브러리입니다. 상위 프레임워크의 세션 설정 및 메타데이터 주입 방식이 정교해질수록 HAL과의 상호작용 형태가 변화합니다.",
-        "hal_driver_impact": "물리 카메라 UseCase 바인딩과 동적 3A 잠금 모드 확장에 따라 멀티카메라 세션 처리와 반복 요청 내 메타데이터 반영의 견고성이 중요해집니다. 이번 변경은 앱 프레임워크 계층의 개편으로 HAL 자체 계약 수정은 아닙니다.",
+        "background_context": "CameraX는 Camera2 API 위에 구축된 고수준 추상화 계층으로, 앱 개발자에게 단순화된 수명 주기 바인딩과 UseCase 모델을 제공합니다. 1.7.0 릴리스는 멀티 카메라 및 저조도 제어 기능을 프레임워크 표준 기능으로 끌어올렸습니다.",
+        "hal_driver_impact": "직접적인 HAL API 변경은 없으나, 물리 카메라 UseCase 바인딩이 일반 앱에 노출됨에 따라 벤더 HAL이 멀티 카메라 물리 스트림 타깃 요청을 처리하는 빈도가 늘어납니다. 물리 메타데이터 및 스트림 동기화 안정성이 요구됩니다.",
         "action_items": [
-          "CameraX 1.7.0 신규 API를 적용하는 애플리케이션에 대비하여 물리 카메라 스트림 구성 조합 테스트를 보강합니다.",
-          "FocusMeteringAction의 3A 잠금 모드 갱신 시 HAL3 CONTROL_AF_MODE 및 제어 태그 수신 동작을 확인합니다."
+          "멀티 카메라 지원 기기에서 CameraX 1.7.0 샘플을 통해 물리 카메라 단독 바인딩 시 HAL 프레임 드롭 여부 확인",
+          "Low Light Boost와 토치 전환 시 벤더 노출 보정 파이프라인의 AE 상태 머신 동작 검증"
         ],
-        "team_share_points": "CameraX 1.7.0에서 Camera2Interop V2와 물리 카메라 바인딩이 안정화되어, 앱 레벨에서 하위 제어와 다중 렌즈 직접 접근을 더 쉽게 구성할 수 있게 되었습니다."
+        "team_share_points": "CameraX 1.7.0 정식 배포로 물리 카메라 UseCase 바인딩과 세분화된 3A 잠금 모드가 공식화되었습니다."
       },
       "hal_signal_capsule": {
-        "why_now": "2026년 11월 18일 CameraX 1.7.0이 공식 배포되어 상위 카메라 개발 생태계에 즉시 반영되기 시작했습니다.",
+        "why_now": "2026년 11월 18일 CameraX 1.7.0이 정식 릴리스되어 상위 앱들의 멀티 카메라 및 3A 제어 패턴이 즉시 변경될 수 있습니다.",
         "reader_owners": [
+          "camera_hal_owner",
           "camera_framework_owner",
-          "camerax_app_compat_owner",
-          "camera_hal_owner"
+          "camerax_app_compat_owner"
         ],
-        "check_within_2_weeks": "물리 카메라 UseCase 바인딩 시 HAL 멀티카메라 파이프라인 및 3A 메타데이터 처리 점검",
+        "check_within_2_weeks": "물리 카메라 UseCase 바인딩 구성 시 벤더 HAL의 물리 스트림 OutputConfiguration 정상 생성 여부 검토",
         "impact_axes": [
           "framework_hal_contract",
           "stream_buffer_metadata",
           "camerax_app_compatibility"
         ],
         "do_not_overstate": [
-          "CameraX 신규 기능 추가를 HAL 인터페이스 구조체의 직접 변경으로 해석하지 마십시오."
+          "CameraX 1.7.0 릴리스가 Camera HAL AIDL 인터페이스 정의를 직접 변경한 것으로 해석하지 마십시오."
         ]
       },
       "claims": [
         {
-          "claim_id": "c1_release_date",
-          "text": "CameraX 1.7.0 버전이 2026년 11월 18일 공식 릴리스되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
-          ],
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c1_interop_v2",
-          "text": "Camera2Interop V2가 재설계되어 안정화되었으며 옵트인 없이 사용 가능합니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
-          ],
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c1_night_mode",
-          "text": "NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED) 인터페이스가 추가되었습니다.",
+          "claim_id": "camerax_170_release_date",
+          "text": "CameraX 1.7.0이 2026년 11월 18일 공식 릴리스되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
@@ -155,11 +123,11 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c1_3a_locking",
-          "text": "FocusMeteringAction에 3A 잠금 모드(FLAG_AE, FLAG_AWB, FLAG_AF) 설정 API가 도입되었습니다.",
+          "claim_id": "camerax_170_camera2interop_v2",
+          "text": "Camera2Interop V2가 안정화되었으며 ImageWrapper, non-nullable ByteBuffer를 가진 ImagePlane, CameraCharacteristicsWrapper, CaptureRequestWrapper, CaptureResultWrapper를 제공합니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
+            "sx:0d96eee1501c272d:325d12199944:f81573dd549fda29"
           ],
           "source_urls": [
             "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
@@ -168,8 +136,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c1_physical_binding",
-          "text": "물리 카메라용 CameraSelector 획득 및 UseCase 직접 바인딩이 지원됩니다.",
+          "claim_id": "camerax_170_physical_camera_binding",
+          "text": "CameraInfo.getPhysicalCameraInfos()에서 얻은 CameraSelector를 통해 UseCase를 물리 카메라에 직접 바인딩할 수 있습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "sx:0d96eee1501c272d:010ad74c795f:41ba44a459107198"
@@ -181,11 +149,11 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c1_auto_rotation",
-          "text": "SessionConfig 등에 디바이스 센서 기반 회전 처리를 위한 setAutoRotationEnabled가 추가되었습니다.",
+          "claim_id": "camerax_170_focus_metering_locking",
+          "text": "FocusMeteringAction에 setLockingMode가 추가되어 FLAG_AE, FLAG_AWB 잠금 및 CAF 유지 상태의 초점 영역 갱신이 지원됩니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "sx:0d96eee1501c272d:010ad74c795f:da71429ba33eafbc"
+            "sx:0d96eee1501c272d:010ad74c795f:3a6eab1392f2995d"
           ],
           "source_urls": [
             "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
@@ -194,24 +162,11 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c1_low_light_boost",
-          "text": "Low Light Boost와 Torch가 last setting wins 방식으로 동작하도록 개선되었습니다.",
+          "claim_id": "camerax_170_night_mode_indicator",
+          "text": "NightModeIndicator(UNKNOWN, NOT_RECOMMENDED, RECOMMENDED) 지원 여부 및 상태 조회 API가 추가되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "sx:0d96eee1501c272d:010ad74c795f:0f61d45d3d3b9efa"
-          ],
-          "source_urls": [
-            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
-          ],
-          "impact_level": "app_api_or_framework_adjacent",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c1_extensions_deprecate",
-          "text": "ExtensionSessionConfig 도입으로 ExtensionsManager.getExtensionEnabledCameraSelector()가 폐기 예정으로 지정되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:0d96eee1501c272d:010ad74c795f:f7826612f9e60147"
+            "sx:0d96eee1501c272d:010ad74c795f:04dbbce6bb6fe8c9"
           ],
           "source_urls": [
             "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0"
@@ -221,14 +176,14 @@
         }
       ],
       "camera_hal_checks": [
-        "CameraX 물리 카메라 UseCase 설정 시 logical-physical 메타데이터 라우팅 점검"
+        "물리 카메라 타깃 스트림 구성 시 벤더 HAL의 스트림 설정 성공 여부 점검",
+        "3A 잠금 모드 전환 시 하위 스택으로 전달되는 CaptureRequest 메타데이터 키 일관성 확인"
       ],
       "action_hints": [
-        "신규 3A 잠금 모드 전달 시 vendor 3A 알리고리즘 상태 전이 확인"
+        "물리 카메라 직접 바인딩 UseCase를 활용한 테스트 앱으로 멀티 카메라 프레임 수신 안정성 검증"
       ],
       "action_items": [
-        "CameraX 1.7.0 신규 API를 적용하는 애플리케이션에 대비하여 물리 카메라 스트림 구성 조합 테스트를 보강합니다.",
-        "FocusMeteringAction의 3A 잠금 모드 갱신 시 HAL3 CONTROL_AF_MODE 및 제어 태그 수신 동작을 확인합니다."
+        "물리 카메라 직접 바인딩 지원 기기에서 CameraX 1.7.0 연동 CTS/ITS 회귀 테스트 수행"
       ],
       "is_ai_related": false,
       "article_type": "platform_release",
@@ -280,21 +235,50 @@
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
           "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentType": "image/png",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vc11e4c9d4c060345ba98585d538d4546e842f4a6ee5c5f9e85be4bd345767217/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+          "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": ""
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
       "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
       "imageAttribution": "CameraX Release Notes - CameraX 1.7.0",
-      "imageAlt": "CameraX 1.7.0 정식 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+      "imageAlt": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 바인딩 지원",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "로고 위주의 일반 브랜드 소셜 이미지이므로 기사 본문과 기술적 관련성이 낮아 제외했습니다.",
+      "imageUsageDecisionReason": "적절한 기술 다이어그램이나 16:9 규격 이미지가 없어 선택하지 않음",
       "sources": [
         {
           "title": "CameraX Release Notes - CameraX 1.7.0",
@@ -302,11 +286,6 @@
         }
       ],
       "actionability_level": "low",
-      "actionability_upgrade_reason": "",
-      "camera_pipeline_link": "CameraX 프레임워크 추상화 계층",
-      "do_not_overstate": [
-        "CameraX 신규 기능 추가를 HAL 인터페이스 구조체의 직접 변경으로 해석하지 마십시오."
-      ],
       "effective_actionability_level": "low",
       "hal_impact_axes": [
         "framework_hal_contract",
@@ -314,9 +293,9 @@
         "camerax_app_compatibility"
       ],
       "reader_owners": [
+        "camera_hal_owner",
         "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_hal_owner"
+        "camerax_app_compat_owner"
       ],
       "soc_signal_type": "isp_image_pipeline",
       "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
@@ -364,52 +343,49 @@
       "coverage_type": "fresh"
     },
     {
-      "category": "Camera Framework",
-      "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
-      "what_changed": "Camera-Camera2-Pipe의 Controller3A에서 요청된 AE, AF, AWB, Flash, Control 모드가 기기의 CameraMetadata에서 지원되는지 사전에 검사하는 로직이 추가되었습니다. 지원되지 않는 모드가 포함되면 즉시 SUBMIT_FAILED를 반환하고 기존 3A 상태를 유지합니다.",
+      "category": "direct_aosp_camera",
+      "headline": "Controller3A 검증 로직 변경: 지원되지 않는 3A 모드 요청 시 즉시 SUBMIT_FAILED 반환",
+      "what_changed": "AndroidX Camera2 Pipe의 Controller3A에서 요청된 AE, AF, AWB, Control, Flash 모드가 CameraMetadata에서 지원되는지 사전에 검사하여, 미지원 모드 발견 시 즉시 SUBMIT_FAILED를 반환하고 경고 로그를 남기도록 수정되었습니다.",
       "confirmed_facts": [
-        "Gerrit 변경 4439488이 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 19일 병합되었습니다.",
-        "Controller3A의 lock3A, submit3A, update3A 메서드에서 areModesSupported 검사 함수를 호출하도록 변경되었습니다.",
-        "기기 CameraMetadata에 지원되지 않는 AE, AF, AWB, Flash, Control 모드가 전달될 경우 경고 로그를 출력하고 즉시 Result3A.Status.SUBMIT_FAILED를 반환합니다.",
-        "미지원 모드로 인해 요청이 거부될 때 기존 3A 상태는 변경되지 않고 그대로 보존됩니다.",
-        "Controller3AUpdate3ATest, Controller3ASubmit3ATest, Controller3ALock3ATest 등 단위 테스트가 추가되어 검증되었습니다."
+        "2026년 11월 19일 platform/frameworks/support androidx-main 브랜치에 변경 번호 4439488이 MERGED 상태로 병합되었습니다.",
+        "Controller3A.kt의 lock3A, submit3A, update3A 메서드 진입 시 areModesSupported()를 호출해 지원 여부를 사전에 검사합니다.",
+        "요청된 모드 중 하나라도 지원되지 않으면 기존 3A 상태를 변경하지 않고 deferredResult3ASubmitFailed를 즉시 반환합니다.",
+        "areModesSupported()는 지원되지 않는 각 모드에 대해 Log.TAG 경고 로그(warn)를 출력합니다.",
+        "단위 테스트 Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest를 통해 모드 불일치 시 즉시 실패 및 상태 보존을 검증했습니다."
       ],
-      "evidence_summary": "Gerrit 변경 4439488 커밋 메시지와 완전한 diff를 통해 확인했습니다. Controller3A.kt에 areModesSupported 검사가 도입되어 지원되지 않는 3A 모드 요청 시 SUBMIT_FAILED를 즉시 반환하도록 416줄의 변경이 병합되었습니다.",
+      "evidence_summary": "AndroidX Gerrit 변경사항 4439488의 커밋 메시지와 diff를 통해 Controller3A에 미지원 3A 모드 검사 로직이 추가되고 즉시 실패를 반환하도록 수정된 사실을 확인했습니다.",
       "specificity_checks": [
+        "Component: camera-camera2-pipe/src/main/java/androidx/camera/camera2/pipe/graph/Controller3A.kt",
         "Change Number: 4439488",
-        "Project: platform/frameworks/support",
-        "Component: camera-camera2-pipe",
         "Status: MERGED (2026-11-19)",
-        "Key Method: Controller3A.areModesSupported"
+        "Behavior Change: lock3A/submit3A/update3A 호출 시 CameraMetadata 미지원 모드에 대해 SUBMIT_FAILED 즉시 반환 및 상태 유지"
       ],
       "source_verification_notes": [
         "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
         "Evidence ID: source-body:24b43cd05ef4e7a8f7f2",
-        "Primary source: 원문 메타데이터의 status=MERGED(2026-11-19) 및 전체 diff 패치를 확인함. 라이브러리 공식 릴리스 및 제품 반영 여부는 별도 확인 필요."
+        "Primary source: 원문 메타데이터의 status=MERGED와 전체 diff를 확인함. 제품 빌드 반영 여부는 미확인."
       ],
       "public_article": {
-        "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
-        "lead": "CameraPipe가 지원 모드를 먼저 확인합니다. 초점이나 노출이 움직이기를 기다릴 필요도 없이 요청이 끝나는 경우가 생겼습니다.",
-        "body_markdown": "11월 19일 병합된 변경에서 Controller3A는 노출(AE), 초점(AF), 화이트밸런스(AWB), 제어 모드와 플래시 모드를 해당 카메라의 CameraMetadata와 대조합니다. 3A 상태를 갱신하거나 요청을 제출하거나 잠글 때 이 검사를 거칩니다.\n\n요청한 값이 지원 목록에 없으면 경고를 남기고 즉시 SUBMIT_FAILED를 반환합니다. 직전의 3A 상태는 그대로입니다. 이 변경이 실린 CameraX 배포 버전이나 단말 빌드는 원문에서 확인되지 않습니다.\n\n이 패치가 들어간 빌드에서 잠금이 실패하면 경고에 찍힌 카메라 ID와 요청값을 먼저 맞춰 보세요. 반대로 요청은 받아들여졌는데 잠금이 늦다면, 그때는 이어지는 캡처 결과에서 3A 상태가 어떻게 움직였는지 볼 차례입니다.",
-        "camera_hal_takeaway": "지원 목록에서 거절된 요청과 카메라가 받은 뒤 수렴이 늦어진 요청은 조사할 로그가 다릅니다.",
+        "headline": "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환",
+        "lead": "카메라 앱이 기기에서 지원하지 않는 자동 노출이나 초점 모드를 요청하면 내부 큐에 머물지 않고 즉시 실패를 반환합니다. AndroidX Camera2 Pipe 라이브러리는 하위 스택에 불필요한 요청이 도달하기 전에 차단하는 검증 분기를 병합했습니다.",
+        "body_markdown": "카메라 앱이 벤더 하드웨어가 지원하지 않는 3A 모드를 요청하면 파이프라인 내부에서 지연이나 예측 불가능한 거동이 발생할 수 있습니다. 2026년 11월 19일 AndroidX androidx-main 브랜치에 병합된 변경(Change 4439488)은 이러한 잘못된 요청을 진입 단계에서 걸러냅니다.\n\n수정 전에는 지원되지 않는 모드가 들어와도 반복 요청 큐나 하위 프레임워크로 전달될 위험이 있었습니다. 이번 패치는 Controller3A의 lock3A, submit3A, update3A 메서드 시작부에 areModesSupported 검사를 추가했습니다. 요청된 AE, AF, AWB, Flash, Control 모드가 CameraMetadata의 지원 목록에 없으면 즉시 SUBMIT_FAILED 결과를 반환합니다.\n\n이때 기존의 3A 상태는 변경되지 않고 그대로 유지됩니다. 또한 검사 함수는 미지원 항목마다 경고 로그를 남겨 디버깅 시 어떤 모드가 기기 스펙과 어긋났는지 바로 확인할 수 있게 했습니다.\n\n### 현장 진단과 확인 방법\n\n만약 특정 기기에서 3A 잠금이나 파라미터 갱신이 실패한다면 먼저 logcat에서 Log.TAG로 필터링해 경고 메시지를 확인하는 것이 좋습니다. Unsupported aeMode 또는 Unsupported afMode 로그가 찍힌다면 앱이 CameraCharacteristics의 지원 목록을 벗어난 요청을 보낸 것입니다.\n\n이 변경은 현재 AndroidX 소스 트리에 병합된 상태입니다. 실제 라이브러리 공식 릴리스 아티팩트 배포나 개별 제품 단말 빌드 탑재는 별도 배포 과정을 거쳐야 확인할 수 있습니다.",
+        "camera_hal_takeaway": "HAL이나 드라이버 자체의 계약 변경은 아니지만, 상위 프레임워크가 CameraMetadata에 선언된 3A capabilities를 엄격히 대조하기 시작합니다. CameraCharacteristics에 지원 모드를 잘못 선언하면 상위 앱에서 3A 제어가 즉시 실패하므로 벤더 태그 및 정적 메타데이터 정합성을 검증해야 합니다.",
         "reader_checkpoints": [
-          "기기 CameraMetadata에 선언된 CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES 목록 누락 여부 확인",
-          "Controller3A 호출 실패 시 Logcat에 출력되는 unsupported 모드 경고 로그 확인"
+          "CameraCharacteristics의 CONTROL_AE_AVAILABLE_MODES, AF, AWB 지원 배열이 실제 드라이버 사양과 정확히 일치하는지 확인",
+          "Controller3A 호출 로그에서 미지원 모드로 인한 SUBMIT_FAILED 발생 여부 모니터링"
         ],
         "source_links": [
           {
             "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
             "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
-            "publisher": "Android Open Source Project",
-            "source_role": "primary",
-            "checked_at": "2026-11-23"
+            "source_role": "primary"
           }
         ],
         "story_contract_version": 2,
         "source_subtitle": "AndroidX Gerrit Camera",
         "editorial_story": {
-          "not_to_overclaim": "이 변경은 CameraPipe 프레임워크 로직의 사전 검증 개선이며 HAL 수준의 3A 알고리즘 변경이 아닙니다.",
-          "editor_take": "상위 라이브러리가 정적 메타데이터를 기반으로 3A 요청을 사전 차단하므로, HAL의 정적 메타데이터 정확성이 더욱 중요해졌습니다."
+          "not_to_overclaim": "Camera2 Pipe 내부의 상위 검증 로직 추가이며 HAL3 규격이나 V4L2 드라이버 코드가 직접 변경된 것은 아닙니다.",
+          "editor_take": "상위 스택이 지원되지 않는 파라미터를 조기에 차단해 주므로 드라이버 계층이 쓰레기 3A 요청으로 꼬일 위험이 줄어듭니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -428,40 +404,41 @@
       },
       "article_sections": {
         "verified_facts": [
-          "Gerrit 변경 4439488이 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 19일 병합되었습니다.",
-          "Controller3A의 lock3A, submit3A, update3A 메서드에 areModesSupported 사전 검사가 추가되었습니다.",
-          "CameraMetadata에 없는 미지원 AE, AF, AWB, Flash, Control 모드 요청 시 즉시 Result3A.Status.SUBMIT_FAILED를 반환합니다.",
-          "미지원 모드로 인해 반환된 실패 상황에서는 기존의 3A 상태가 변경되지 않고 유지됩니다.",
-          "Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest 단위 테스트가 함께 추가되었습니다."
+          "2026년 11월 19일 Gerrit Change 4439488이 androidx-main 브랜치에 MERGED되었습니다.",
+          "Controller3A.kt에 areModesSupported 메서드가 추가되어 AE, AF, AWB, Flash, Control 모드를 사전에 확인합니다.",
+          "지원되지 않는 모드 요청 시 SUBMIT_FAILED를 즉시 반환하며 현재 3A 상태는 변경하지 않습니다.",
+          "각 미지원 모드에 대해 Log.TAG 경고 로그를 남기도록 구현되었습니다.",
+          "Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest 단위 테스트가 통과했습니다."
         ],
-        "background_context": "Camera2-Pipe 아키텍처에서 Controller3A는 프레임워크 요청을 캡처 세션 파라미터로 변환하는 핵심 제어기입니다. 비정상적인 파라미터가 HAL로 전달되기 전에 차단하는 방어 로직이 요구됩니다.",
-        "hal_driver_impact": "HAL 드라이버로 유입되는 비정상 3A 모드 요청을 프레임워크가 차단해 주지만, 반대로 HAL 공급업체가 CameraMetadata static 키에 실제 지원 모드를 누락할 경우 프레임워크에서 기능이 원천 차단될 수 있습니다.",
+        "background_context": "Android 카메라 파이프라인에서 3A 파라미터는 CameraCharacteristics에 정의된 지원 목록 내에서만 유효합니다. Camera2 Pipe의 Controller3A는 앱 요청을 받아 CaptureRequest 파라미터로 변환하는 컨트롤러입니다.",
+        "hal_driver_impact": "직접적인 HAL 인터페이스 변경은 없으나, CameraCharacteristics 정적 메타데이터의 중요성이 커졌습니다. 정적 메타데이터에 지원하지 않는 모드를 선언하거나 반대로 지원 모드를 누락할 경우 상위 라이브러리 레벨에서 요청이 즉각 거부됩니다.",
         "action_items": [
-          "디바이스의 static 메타데이터(CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES, CONTROL_AWB_AVAILABLE_MODES)가 HAL 구현과 완전히 일치하는지 재검증합니다.",
-          "CameraPipe 기반 앱 테스트 중 Result3A.Status.SUBMIT_FAILED 발생 시 Logcat에서 areModesSupported 경고 로그를 추적합니다."
+          "벤더 CameraCharacteristics 정적 메타데이터와 드라이버 실제 지원 모드 간 불일치 여부 점검",
+          "Camera2 Pipe 기반 앱 테스트 시 미지원 3A 요청으로 인한 SUBMIT_FAILED 반환 로그 확인"
         ],
-        "team_share_points": "CameraPipe가 지원되지 않는 3A 모드 요청을 조기에 거부하도록 변경되었으므로, HAL static metadata에 지원 태그를 누락 없이 기술해야 합니다."
+        "team_share_points": "Controller3A가 미지원 3A 모드를 하위 파이프라인으로 넘기지 않고 진입 즉시 SUBMIT_FAILED로 차단합니다."
       },
       "hal_signal_capsule": {
-        "why_now": "2026년 11월 19일 androidx-main 브랜치에 3A 사전 검증 로직이 머지되어 후속 라이브러리 릴리스에 포함될 예정입니다.",
+        "why_now": "2026년 11월 19일 AOSP androidx-main에 병합되어 향후 배포될 CameraX 파이프라인의 3A 요청 검증 방식이 변경되었습니다.",
         "reader_owners": [
+          "camera_hal_owner",
           "camera_framework_owner",
-          "camera_hal_owner"
+          "camerax_app_compat_owner"
         ],
-        "check_within_2_weeks": "HAL 정적 메타데이터의 3A 가용 모드 배열과 CameraPipe 요청 일치 여부 확인",
+        "check_within_2_weeks": "기기별 CameraCharacteristics 정적 메타데이터의 3A 지원 모드 배열 정합성 검토",
         "impact_axes": [
           "framework_hal_contract",
           "stream_buffer_metadata",
           "camerax_app_compatibility"
         ],
         "do_not_overstate": [
-          "HAL3 3A 알고리즘 처리 변경이나 카메라 서버 내부의 동작 변경으로 확대 해석하지 마십시오."
+          "Camera HAL 모듈의 process_capture_request 구현 자체가 바뀐 것으로 주장하지 마십시오."
         ]
       },
       "claims": [
         {
-          "claim_id": "c2_merge_status",
-          "text": "Gerrit 변경 4439488이 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 19일 병합되었습니다.",
+          "claim_id": "controller3a_merged_date",
+          "text": "2026년 11월 19일 Gerrit Change 4439488이 androidx-main 브랜치에 MERGED되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:24b43cd05ef4e7a8f7f2"
@@ -469,12 +446,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c2_are_modes_supported",
-          "text": "Controller3A의 lock3A, submit3A, update3A 메서드에 areModesSupported 사전 검사가 추가되었습니다.",
+          "claim_id": "controller3a_are_modes_supported",
+          "text": "Controller3A.kt에 areModesSupported 메서드가 추가되어 AE, AF, AWB, Flash, Control 모드를 사전에 확인합니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:24b43cd05ef4e7a8f7f2"
@@ -482,12 +459,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c2_submit_failed",
-          "text": "CameraMetadata에 없는 미지원 AE, AF, AWB, Flash, Control 모드 요청 시 즉시 Result3A.Status.SUBMIT_FAILED를 반환합니다.",
+          "claim_id": "controller3a_submit_failed_immediate",
+          "text": "지원되지 않는 모드 요청 시 SUBMIT_FAILED를 즉시 반환하며 현재 3A 상태는 변경하지 않습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:24b43cd05ef4e7a8f7f2"
@@ -495,12 +472,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c2_state_retained",
-          "text": "미지원 모드로 인해 반환된 실패 상황에서는 기존의 3A 상태가 변경되지 않고 유지됩니다.",
+          "claim_id": "controller3a_warning_logs",
+          "text": "각 미지원 모드에 대해 Log.TAG 경고 로그를 남기도록 구현되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:24b43cd05ef4e7a8f7f2"
@@ -508,36 +485,34 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c2_unit_tests",
-          "text": "Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest 단위 테스트가 함께 추가되었습니다.",
+          "claim_id": "controller3a_tests_included",
+          "text": "Controller3ALock3ATest, Controller3ASubmit3ATest, Controller3AUpdate3ATest 단위 테스트가 통과했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "source-body:24b43cd05ef4e7a8f7f2",
-            "source-body:b265e56cb8c86249fbb5"
+            "source-body:24b43cd05ef4e7a8f7f2"
           ],
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         }
       ],
       "camera_hal_checks": [
-        "HAL static metadata 내 3A 지원 태그 누락 여부 점검"
+        "기기별 CameraCharacteristics 정적 메타데이터의 3A 지원 모드와 드라이버 실제 지원 범위 일치 확인"
       ],
       "action_hints": [
-        "CameraPipe 통합 환경에서 3A 설정 거부 로그 분석"
+        "Camera2 Pipe 환경에서 지원되지 않는 3A 플래그 요청 시 즉각적인 SUBMIT_FAILED 반환 여부 점검"
       ],
       "action_items": [
-        "디바이스의 static 메타데이터(CONTROL_AE_AVAILABLE_MODES, CONTROL_AF_AVAILABLE_MODES, CONTROL_AWB_AVAILABLE_MODES)가 HAL 구현과 완전히 일치하는지 재검증합니다.",
-        "CameraPipe 기반 앱 테스트 중 Result3A.Status.SUBMIT_FAILED 발생 시 Logcat에서 areModesSupported 경고 로그를 추적합니다."
+        "단말 메타데이터 점검 스크립트를 통해 미지원 3A 모드가 활성화 플래그에 잘못 포함되지 않았는지 점검"
       ],
       "is_ai_related": false,
-      "article_type": "bug_fix",
+      "article_type": "framework_bugfix",
       "imageCandidates": [
         {
           "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
@@ -580,20 +555,6 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 1760
-        },
-        {
-          "url": "https://opengraph.githubassets.com/e467c19d450f45943c4d319e53b510cb01287ebdee8b1040cccc0ee10f915458/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 42919
         }
       ],
       "selectedImage": "",
@@ -601,7 +562,7 @@
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "코드 패치 Gerrit 소스로 제공된 이미지 후보가 없습니다.",
+      "imageUsageDecisionReason": "적절한 기술 다이어그램이나 16:9 규격 이미지가 없어 선택하지 않음",
       "sources": [
         {
           "title": "Check if 3A modes are supported in Controller3A - platform/frameworks/support",
@@ -609,11 +570,6 @@
         }
       ],
       "actionability_level": "medium",
-      "actionability_upgrade_reason": "",
-      "camera_pipeline_link": "CameraPipe Controller3A 및 CameraMetadata",
-      "do_not_overstate": [
-        "HAL3 3A 알고리즘 처리 변경이나 카메라 서버 내부의 동작 변경으로 확대 해석하지 마십시오."
-      ],
       "effective_actionability_level": "medium",
       "hal_impact_axes": [
         "framework_hal_contract",
@@ -621,8 +577,9 @@
         "camerax_app_compatibility"
       ],
       "reader_owners": [
+        "camera_hal_owner",
         "camera_framework_owner",
-        "camera_hal_owner"
+        "camerax_app_compat_owner"
       ],
       "soc_signal_type": "platform_signal",
       "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
@@ -645,8 +602,8 @@
       "evidence_origin": "article_text",
       "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/android.svg",
-        "src": "../../assets/images/fallback/android.svg",
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": true,
@@ -670,59 +627,55 @@
       "coverage_type": "fresh"
     },
     {
-      "category": "Camera Driver & HAL",
-      "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
-      "what_changed": "Samsung SM-F971U1 기기에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환 시 발생하는 파이프라인 멈춤 문제를 회피하기 위해, ZslDisablerQuirk에 SM-F971 모델이 추가되었습니다.",
+      "category": "direct_aosp_camera",
+      "headline": "삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 시 SAT 파이프라인 정지 해결",
+      "what_changed": "Samsung SM-F971U1 기기에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 비율 전환 시 CameraX SAT 파이프라인이 정지되는 문제를 해결하기 위해 ZslDisablerQuirk에 해당 모델을 추가하여 ZSL을 비활성화했습니다.",
       "confirmed_facts": [
-        "Gerrit 변경 4441195가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
-        "Samsung SM-F971U1에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 비율 전환(0.6x -> 2.0x) 시 CamX SAT 파이프라인이 멈추는 현상이 확인되었습니다.",
-        "해당 멈춤 현상 발생 시 새 반복 요청에 대한 TotalCaptureResult가 반환되지 않아 CameraControl.setZoomRatio() 비동기 작업이 타임아웃되었습니다.",
-        "일반적인 비ZSL 세션에서는 동일한 줌 전환과 정지 이미지 촬영이 정상 완료되었습니다.",
-        "ZslDisablerQuirk의 대상 모델 목록에 SM-F971이 추가되어 ImageCapture가 표준 스틸 캡처 경로로 폴백하도록 수정되었습니다.",
-        "ZslDisablerQuirkTest에 SM-F971U1 로드 검증 단위 테스트가 추가되었습니다."
+        "2026년 11월 17일 platform/frameworks/support에 Gerrit 변경 4441195가 MERGED 상태로 병합되었습니다.",
+        "Samsung SM-F971U1에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환(0.6배에서 2.0배 등) 시 TotalCaptureResult 콜백이 중단되고 줌 설정 퓨처가 타임아웃되는 현상이 발생했습니다.",
+        "일반 비-ZSL 세션에서는 해당 줌 전환 및 스틸 이미지 캡처가 멈춤 없이 정상 완료됩니다.",
+        "ZslDisablerQuirk의 AFFECTED_SAMSUNG_MODEL 목록에 SM-F971 접두사가 추가되어 ImageCapture가 표준 스틸 캡처로 폴백합니다.",
+        "ZslDisablerQuirkTest에 samsungSmF971_loadsQuirk 단위 테스트가 추가되어 해당 모델에서 쿼크가 정상 로드됨을 확인했습니다."
       ],
-      "evidence_summary": "Gerrit 변경 4441195의 메타데이터 및 전체 diff를 통해 확인했습니다. Samsung SM-F971U1에서 ZSL 세션 도중 물리 렌즈 줌 전환 시 벤더 SAT 파이프라인이 멈추는 버그(582678183)를 우회하기 위해 ZslDisablerQuirk에 SM-F971이 추가되었습니다.",
+      "evidence_summary": "AndroidX Gerrit 4441195 커밋 내용 및 diff에 근거하여 삼성 SM-F971U1 단말의 ZSL 세션 줌 전환 정지 문제를 해결하기 위해 쿼크를 적용한 사실을 확인했습니다.",
       "specificity_checks": [
+        "Component: camera-camera2/src/main/java/androidx/camera/camera2/compat/quirk/ZslDisablerQuirk.kt",
         "Change Number: 4441195",
-        "Device: Samsung SM-F971U1",
-        "Component: androidx.camera.camera2.compat.quirk.ZslDisablerQuirk",
+        "Device: Samsung SM-F971U1 (prefix SM-F971)",
         "Status: MERGED (2026-11-17)",
-        "Bug ID: 582678183"
+        "Behavior Change: 재처리 PRIVATE ZSL 세션 비활성화 및 일반 스틸 캡처 폴백"
       ],
       "source_verification_notes": [
         "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
         "Evidence ID: source-body:b7ee8549e1606c1901c3",
-        "Primary source: 원문 메타데이터 status=MERGED(2026-11-17) 및 commit message/diff를 확인함. 라이브러리 공식 릴리스 및 제품 반영 여부는 별도 확인 필요."
+        "Primary source: 원문 diff와 MERGED 상태를 확인함. 링크된 버그 세부 내용은 미확인."
       ],
       "public_article": {
-        "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
-        "lead": "같은 단말에서 같은 순서로 줌을 바꿨는데, 일반 촬영은 끝까지 됐고 ZSL 촬영은 마지막 전환에서 멈췄습니다.",
-        "body_markdown": "원문에서 문제를 재현한 단말은 Samsung SM-F971U1입니다. PRIVATE 재처리 기반 ZSL(제로 셔터 랙)을 켜고 줌을 2.0배에서 0.6배로, 다시 2.0배로 바꾸자 마지막 전환 뒤 새 반복 요청의 TotalCaptureResult가 오지 않았습니다. 그 뒤 setZoomRatio()가 시간 초과됐습니다.\n\n일반 촬영 세션에서는 같은 줌 전환과 사진 촬영이 모두 끝났습니다. 11월 17일 병합된 패치는 모델명이 SM-F971로 시작하는 단말에서 ZSL을 끄고 일반 촬영을 사용합니다. 어느 CameraX 릴리스부터 받을 수 있는지, 실제 판매 단말에 적용됐는지는 아직 확인할 수 없습니다.\n\n비슷한 로그를 만났다면 마지막 타임아웃보다 한 줄 앞을 보는 게 좋습니다. 렌즈 전환 순서를 고정한 상태에서 ZSL만 바꿔 각 줌 요청과 그 뒤 첫 캡처 결과를 짝지으면, 어느 전환부터 결과가 끊겼는지 드러납니다.",
-        "camera_hal_takeaway": "ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과가 돌아오는지 비교할 수 있습니다.",
+        "headline": "삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지",
+        "lead": "삼성 SM-F971 단말에서 카메라 줌을 넘나들 때 화면이 멈추는 현상을 막기 위해 제로 셔터 랙 기능이 비활성화되었습니다. 재처리 세션에서 벤더 파이프라인 콜백이 끊기던 문제를 우회 조치한 것입니다.",
+        "body_markdown": "여러 물리 렌즈를 전환하며 사진을 찍을 때 재처리 버퍼 관리가 어긋나면 파이프라인 전체가 정지될 수 있습니다. 2026년 11월 17일 병합된 AndroidX 변경(Change 4441195)은 삼성 SM-F971U1 단말에서 발견된 줌 전환 멈춤 현상을 다룹니다.\n\n해당 단말은 PRIVATE 재처리 ZSL 세션으로 구성된 상태에서 물리 렌즈 간 줌 비율을 전환하면 CamX SAT 파이프라인이 정지했습니다. 예컨대 0.6배 광각에서 2.0배 망원으로 넘어갈 때 새로운 반복 요청에 대한 TotalCaptureResult가 전달되지 않아 setZoomRatio 비동기 작업이 타임아웃되었습니다.\n\n원문 커밋에 따르면 일반 비-ZSL 세션에서는 모든 줌 전환과 촬영이 지연 없이 정상 동작했습니다. 이에 따라 개발팀은 ZslDisablerQuirk의 대상 목록에 SM-F971 모델 접두사를 추가했습니다. 이제 해당 단말의 ImageCapture는 ZSL 대신 표준 스틸 캡처 방식으로 전환됩니다.\n\n### 현장 진단과 반영 한계\n\n특정 단말에서 줌 조절 시 화면 갱신이 멈추고 타임아웃이 발생한다면 기존 로그에서 TotalCaptureResult 전달 여부와 ZSL 활성화 상태를 확인해 원인을 가를 수 있습니다. 일반 캡처 모드로 강제했을 때 정지가 사라진다면 ZSL 재처리 파이프라인 충돌일 가능성이 높습니다. 우회 조치 적용 여부는 CameraInfo.isZslSupported 반환값이 false인지 조회하여 확인할 수 있습니다.\n\n이 패치는 AndroidX Gerrit에 병합된 소스 코드 수정입니다. 라이브러리 정식 릴리스 및 실제 기기 상용 펌웨어 빌드 반영 여부는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "벤더 HAL 내부의 재처리 스트림과 멀티 카메라 SAT 전환 로직 간 충돌 사례입니다. 재처리 세션에서 물리 렌즈 전환 시 벤더 HAL이 프레임 결과 콜백을 누락하거나 플러시 중 멈추지 않도록 HAL 드라이버 버퍼 관리를 점검해야 합니다.",
         "reader_checkpoints": [
-          "Samsung SM-F971 기기에서 PRIVATE 재처리 세션 중 물리 렌즈 전환(0.6x -> 2.0x) 시 TotalCaptureResult 누락 여부 확인",
-          "ZslDisablerQuirk 활성화 후 ImageCapture가 표준 스틸 모드로 정상 폴백되는지 관찰"
+          "재처리 가능한 PRIVATE 스트림 구성 시 물리 렌즈 간 줌 전환 반복 테스트 수행",
+          "SAT 파이프라인에서 TotalCaptureResult 콜백 누락 여부 및 watchdog 동작 확인"
         ],
         "source_links": [
           {
             "title": "Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
             "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
-            "publisher": "Android Open Source Project",
-            "source_role": "primary",
-            "checked_at": "2026-11-23"
+            "source_role": "primary"
           }
         ],
         "story_contract_version": 2,
         "source_subtitle": "AndroidX Gerrit Camera",
         "editorial_story": {
-          "not_to_overclaim": "이 패치는 특정 모델에 대한 프레임워크 우회 패치이며 삼성 벤더 CamX SAT 파이프라인의 근본적인 버그 수정을 포함하지 않습니다.",
-          "editor_take": "멀티카메라와 재처리 세션의 결합은 벤더 파이프라인에서 타이밍 이슈를 자주 유발하므로, HAL 레벨의 심층적인 동기화 테스트가 지속되어야 합니다."
+          "not_to_overclaim": "프레임워크 차원의 ZSL 비활성화 쿼크이며 벤더 HAL 내부의 근본 버그가 드라이버 패치로 수정된 것은 아닙니다.",
+          "editor_take": "멀티 카메라 기기에서 ZSL 재처리와 줌 렌즈 스위칭의 조합은 벤더 HAL 버퍼 풀에 큰 부담을 주는 대표적인 취약 지점입니다."
         },
         "decision_metadata": {
           "impact": "High",
           "scope": [
             "HAL",
-            "Driver",
             "Framework",
             "SoC"
           ],
@@ -736,41 +689,41 @@
       },
       "article_sections": {
         "verified_facts": [
-          "Gerrit 변경 4441195가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
-          "Samsung SM-F971U1에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환 시 CamX SAT 파이프라인이 멈추는 문제가 발생했습니다.",
-          "파이프라인 멈춤으로 인해 TotalCaptureResult가 전달되지 않아 CameraControl.setZoomRatio()가 타임아웃되었습니다.",
-          "비ZSL 세션에서는 줌 전환과 스틸 이미지 캡처가 정상 작동했습니다.",
-          "ZslDisablerQuirk에 SM-F971이 추가되어 해당 기기에서 ZSL을 끄고 표준 스틸 캡처로 폴백하도록 처리되었습니다."
+          "2026년 11월 17일 Gerrit Change 4441195가 MERGED 상태로 병합되었습니다.",
+          "Samsung SM-F971U1에서 PRIVATE 재처리 ZSL 세션 중 물리 렌즈 줌 전환 시 TotalCaptureResult 미전달로 파이프라인이 정지했습니다.",
+          "일반 비-ZSL 세션에서는 해당 문제가 발생하지 않았습니다.",
+          "ZslDisablerQuirk에 SM-F971 접두사가 추가되어 ZSL 대신 표준 스틸 캡처로 폴백됩니다.",
+          "ZslDisablerQuirkTest에 samsungSmF971_loadsQuirk 테스트가 추가되었습니다."
         ],
-        "background_context": "ZSL은 셔터 랙을 줄이기 위해 원형 버퍼를 유지하며 PRIVATE 재처리를 활용합니다. 물리 렌즈가 서로 다른 다중 카메라 시스템에서는 렌즈 전환 시 벤더 내부 파이프라인(SAT) 동기화가 깨질 수 있습니다.",
-        "hal_driver_impact": "벤더 HAL 내부 CamX SAT 파이프라인의 재처리 줌 스위칭 결함을 보여주는 사례입니다. 드라이버 및 HAL 개발팀은 물리 렌즈 전환 시 재처리 큐 플러시 및 메타데이터 콜백 처리 경로를 확인해야 합니다.",
+        "background_context": "ZSL은 셔터 지연 없는 촬영을 위해 백그라운드에서 순환 버퍼를 유지하고 캡처 시 과거 프레임을 재처리(reprocess)하는 메커니즘입니다. 멀티 카메라 SAT 파이프라인과 결합될 때 동기화 복잡도가 급격히 증가합니다.",
+        "hal_driver_impact": "직접적인 HAL 수정은 아니며 프레임워크 쿼크 적용입니다. 그러나 벤더 HAL 개발자는 재처리 가능한 세션에서 렌즈 스위칭 시 P2 노드나 벤더 SAT 태그 조회가 블록되지 않도록 파이프라인 설계를 개선해야 합니다.",
         "action_items": [
-          "Samsung SM-F971 및 유사 AP 기반 기기에서 0.6x에서 2.0x로의 물리 렌즈 줌 전환 시 PRIVATE 스트림 동작을 테스트합니다.",
-          "CameraX ZslDisablerQuirk 동작 로그를 확인하여 ZSL 미지원 처리 시 애플리케이션의 캡처 반응성을 점검합니다."
+          "멀티 카메라 기기에서 재처리 PRIVATE 스트림 기반 줌 스위칭 시퀀스 회귀 시험",
+          "SM-F971 계열 단말에서 ZSL 비활성화에 따른 셔터 지연 체감 및 이미지 품질 점검"
         ],
-        "team_share_points": "SM-F971에서 ZSL 세션 중 줌 전환 시 CamX 파이프라인이 멈추는 문제로 인해 CameraX 레벨에서 ZSL이 비활성화되었습니다."
+        "team_share_points": "삼성 SM-F971에서 재처리 ZSL 줌 전환 시 HAL 멈춤 문제를 회피하기 위해 ZslDisablerQuirk가 적용되었습니다."
       },
       "hal_signal_capsule": {
-        "why_now": "2026년 11월 17일 Gerrit에 병합되어 배포 준비 중인 벤더 우회 패치로, 관련 기기 점검이 필요합니다.",
+        "why_now": "2026년 11월 17일 Gerrit에 병합되어 향후 CameraX 업데이트 시 해당 단말군의 ZSL 동작 정책이 변경됩니다.",
         "reader_owners": [
           "camera_hal_owner",
-          "camera_driver_owner",
+          "camera_framework_owner",
           "camerax_app_compat_owner"
         ],
-        "check_within_2_weeks": "SM-F971 기기 줌 변경 시 PRIVATE 재처리 세션 TotalCaptureResult 콜백 확인",
+        "check_within_2_weeks": "유사 폴더블 기기에서 재처리 ZSL 세션 줌 전환 시 TotalCaptureResult 누락 여부 검토",
         "impact_axes": [
           "framework_hal_contract",
           "stream_buffer_metadata",
           "camerax_app_compatibility"
         ],
         "do_not_overstate": [
-          "벤더 CamX HAL 자체의 수정이 아니며 CameraX 프레임워크 수준의 쿼크 등록임을 인지해야 합니다."
+          "삼성 단말의 카메라 드라이버나 벤더 HAL 바이너리가 직접 업데이트된 것으로 단정하지 마십시오."
         ]
       },
       "claims": [
         {
-          "claim_id": "c3_merge_status",
-          "text": "Gerrit 변경 4441195가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
+          "claim_id": "zsl_f971_merged",
+          "text": "2026년 11월 17일 Gerrit Change 4441195가 MERGED 상태로 병합되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:b7ee8549e1606c1901c3"
@@ -778,12 +731,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c3_camx_stall",
-          "text": "Samsung SM-F971U1에서 재처리 가능한 PRIVATE ZSL 세션 중 물리 렌즈 간 줌 전환 시 CamX SAT 파이프라인이 멈추는 문제가 발생했습니다.",
+          "claim_id": "zsl_f971_symptom",
+          "text": "Samsung SM-F971U1에서 PRIVATE 재처리 ZSL 세션 중 물리 렌즈 줌 전환 시 TotalCaptureResult 미전달로 파이프라인이 정지했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:b7ee8549e1606c1901c3"
@@ -791,12 +744,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
           ],
-          "impact_level": "driver_image_pipeline",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c3_result_timeout",
-          "text": "파이프라인 멈춤으로 인해 TotalCaptureResult가 전달되지 않아 CameraControl.setZoomRatio()가 타임아웃되었습니다.",
+          "claim_id": "zsl_f971_non_zsl_ok",
+          "text": "일반 비-ZSL 세션에서는 해당 문제가 발생하지 않았습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:b7ee8549e1606c1901c3"
@@ -804,12 +757,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c3_non_zsl_ok",
-          "text": "비ZSL 세션에서는 줌 전환과 스틸 이미지 캡처가 정상 작동했습니다.",
+          "claim_id": "zsl_f971_quirk_added",
+          "text": "ZslDisablerQuirk에 SM-F971 접두사가 추가되어 ZSL 대신 표준 스틸 캡처로 폴백됩니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:b7ee8549e1606c1901c3"
@@ -817,12 +770,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c3_quirk_applied",
-          "text": "ZslDisablerQuirk에 SM-F971이 추가되어 해당 기기에서 ZSL을 끄고 표준 스틸 캡처로 폴백하도록 처리되었습니다.",
+          "claim_id": "zsl_f971_test_added",
+          "text": "ZslDisablerQuirkTest에 samsungSmF971_loadsQuirk 테스트가 추가되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:b7ee8549e1606c1901c3"
@@ -830,22 +783,21 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         }
       ],
       "camera_hal_checks": [
-        "SM-F971U1 줌 전환 시 CamX SAT 노드 메타데이터 출력 상태 점검"
+        "재처리 세션에서 물리 렌즈 스위칭 시 HAL 캡처 결과 반환 주기 모니터링"
       ],
       "action_hints": [
-        "PRIVATE 재처리 세션에서 다중 렌즈 전환 시 타임아웃 여부 테스트"
+        "SM-F971U1 기기에서 CameraInfo.isZslSupported 값 반환 여부 점검"
       ],
       "action_items": [
-        "Samsung SM-F971 및 유사 AP 기반 기기에서 0.6x에서 2.0x로의 물리 렌즈 줌 전환 시 PRIVATE 스트림 동작을 테스트합니다.",
-        "CameraX ZslDisablerQuirk 동작 로그를 확인하여 ZSL 미지원 처리 시 애플리케이션의 캡처 반응성을 점검합니다."
+        "재처리 ZSL 스트림 테스트 시 0.6배에서 2.0배 줌 전환 구간 스트림 모니터링"
       ],
       "is_ai_related": false,
-      "article_type": "bug_fix",
+      "article_type": "framework_bugfix",
       "imageCandidates": [
         {
           "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
@@ -888,20 +840,6 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 1760
-        },
-        {
-          "url": "https://opengraph.githubassets.com/e467c19d450f45943c4d319e53b510cb01287ebdee8b1040cccc0ee10f915458/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 42919
         }
       ],
       "selectedImage": "",
@@ -909,7 +847,7 @@
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "패치 커밋 소스로 제공된 이미지 후보가 없습니다.",
+      "imageUsageDecisionReason": "적절한 기술 다이어그램이나 16:9 규격 이미지가 없어 선택하지 않음",
       "sources": [
         {
           "title": "Disable ZSL on Samsung SM-F971 - platform/frameworks/support",
@@ -917,11 +855,6 @@
         }
       ],
       "actionability_level": "medium",
-      "actionability_upgrade_reason": "",
-      "camera_pipeline_link": "CameraX ZSL 재처리 및 CamX SAT 파이프라인",
-      "do_not_overstate": [
-        "벤더 CamX HAL 자체의 수정이 아니며 CameraX 프레임워크 수준의 쿼크 등록임을 인지해야 합니다."
-      ],
       "effective_actionability_level": "medium",
       "hal_impact_axes": [
         "framework_hal_contract",
@@ -930,7 +863,7 @@
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_driver_owner",
+        "camera_framework_owner",
         "camerax_app_compat_owner"
       ],
       "soc_signal_type": "platform_signal",
@@ -954,8 +887,8 @@
       "evidence_origin": "article_text",
       "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/android.svg",
-        "src": "../../assets/images/fallback/android.svg",
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": true,
@@ -979,58 +912,57 @@
       "coverage_type": "fresh"
     },
     {
-      "category": "Camera Driver & HAL",
-      "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
-      "what_changed": "OPPO Find N3 Flip (PHT110, MediaTek mt6985)에서 후면 논리 카메라의 물리 카메라 ID 2 또는 3을 대상으로 스트림을 구성할 때 벤더 HAL 멈춤과 서비스 크래시가 발생하는 문제를 방지하기 위해, ExcludePhysicalCameraIdQuirk에 해당 ID들이 추가되었습니다.",
+      "category": "direct_aosp_camera",
+      "headline": "오포 PHT110 물리 카메라 제외: OutputConfiguration 타깃 시 벤더 HAL 멈춤 방지",
+      "what_changed": "OPPO Find N3 Flip (PHT110) 기기에서 후면 논리 카메라 '0'의 물리 카메라 ID '2' 및 '3'을 대상으로 Camera2 OutputConfigurations를 구성할 때 벤더 HAL이 정지하는 문제를 방지하기 위해 ExcludePhysicalCameraIdQuirk에 해당 ID를 등록했습니다.",
       "confirmed_facts": [
-        "Gerrit 변경 4440995가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
-        "OPPO Find N3 Flip(PHT110, MediaTek mt6985)에서 후면 논리 카메라 0의 물리 카메라 ID 2 또는 3을 대상으로 OutputConfiguration을 구성할 경우 벤더 HAL이 P2StreamingNode 캡처 및 BasicSession::flush 해체 중에 멈추는 현상이 확인되었습니다.",
-        "이 멈춤으로 인해 camerahalserver 및 cameraserver 워치독 abort가 유발되어 ERROR_CAMERA_DEVICE 및 CAMERA_DISCONNECTED가 발생했습니다.",
-        "ExcludePhysicalCameraIdQuirk에 PHT110 모델 및 대상 ID 2, 3이 등록되어 CameraInfo.getPhysicalCameraInfos()가 해당 ID를 노출하지 않도록 변경되었습니다.",
-        "ExcludePhysicalCameraIdQuirkTest에 PHT110 기기에 대한 검증 파라미터가 추가되었습니다."
+        "2026년 11월 17일 platform/frameworks/support androidx-main 브랜치에 변경 4440995가 MERGED 상태로 병합되었습니다.",
+        "OPPO Find N3 Flip(PHT110, MediaTek mt6985)에서 후면 논리 카메라 0의 물리 카메라 ID 2 또는 3을 대상으로 OutputConfiguration을 구성하면 벤더 HAL의 P2StreamingNode 및 BasicSession::flush 정리 중 정지가 발생했습니다.",
+        "해당 멈춤 현상으로 인해 camerahalserver 및 cameraserver 워치독이 중단되며 ERROR_CAMERA_DEVICE 및 CAMERA_DISCONNECTED 치명적 에러가 유발되었습니다.",
+        "ExcludePhysicalCameraIdQuirk.kt의 OPPO_PROBLEM_MODELS에 PHT110 모델과 제외 ID '2', '3'이 추가되었습니다.",
+        "이에 따라 CameraInfo.getPhysicalCameraInfos() 호출 시 해당 물리 ID들이 노출되지 않도록 차단되었습니다.",
+        "ExcludePhysicalCameraIdQuirkTest에 PHT110 모델 대상 테스트 케이스가 추가되었습니다."
       ],
-      "evidence_summary": "Gerrit 변경 4440995의 메타데이터와 diff 내용을 통해 확인했습니다. OPPO Find N3 Flip (PHT110)에서 물리 카메라 2, 3번 지정 시 벤더 HAL의 P2StreamingNode 캡처 멈춤 및 서버 크래시(582994049)가 발생하여 ExcludePhysicalCameraIdQuirk로 제외 처리되었습니다.",
+      "evidence_summary": "AndroidX Gerrit 4440995의 커밋 메시지 및 코드 변경사항을 통해 오포 PHT110 단말의 물리 카메라 ID 2, 3 제외 쿼크 적용 사실을 확인했습니다.",
       "specificity_checks": [
+        "Component: camera-camera2/src/main/java/androidx/camera/camera2/compat/quirk/ExcludePhysicalCameraIdQuirk.kt",
         "Change Number: 4440995",
-        "Device: OPPO Find N3 Flip (PHT110)",
-        "SoC: MediaTek mt6985",
+        "Device: OPPO Find N3 Flip (PHT110, MediaTek mt6985)",
+        "Physical Camera IDs: '2', '3'",
         "Status: MERGED (2026-11-17)",
-        "Component: ExcludePhysicalCameraIdQuirk"
+        "Behavior Change: getPhysicalCameraInfos()에서 물리 카메라 ID '2', '3' 제외"
       ],
       "source_verification_notes": [
         "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
         "Evidence ID: source-body:9abc88eb2578c58b7eea",
-        "Primary source: 원문 메타데이터 status=MERGED(2026-11-17) 및 patch diff를 확인함. 단말 배포 여부는 미확인."
+        "Primary source: Gerrit 변경 메타데이터의 MERGED 상태 및 패치 diff를 확인함. 제품 반영은 미확인."
       ],
       "public_article": {
-        "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
-        "lead": "PHT110에서 후면 물리 ID 2와 3은 목록에 있었지만, 출력 대상으로 지정하면 카메라 서비스까지 멈출 수 있었습니다.",
-        "body_markdown": "후면 논리 카메라 0에 속한 물리 ID 2 또는 3을 출력 대상으로 지정하자 vendor HAL의 P2StreamingNode에서 캡처가 멈췄습니다. 이어 세션을 정리하는 BasicSession::flush도 끝나지 않았습니다.\n\nwatchdog이 카메라 서비스를 종료한 뒤 앱이 받은 오류는 ERROR_CAMERA_DEVICE와 CAMERA_DISCONNECTED였습니다. 11월 17일 병합된 CameraX 패치는 PHT110에서 getPhysicalCameraInfos()가 두 ID를 반환하지 않도록 바꿨습니다. 확인된 범위는 androidx-main 병합까지입니다. 배포된 CameraX 버전과 제품 빌드에 들어갔는지는 별도 확인이 필요합니다.\n\n기존 장애를 조사할 때는 연결이 끊긴 시각에서 거꾸로 따라가 보세요. 출력 구성에 들어간 물리 ID와 캡처가 멎은 시점, 마지막 flush 기록을 맞춰 보면 앱의 오류가 어디서 시작됐는지 좁힐 수 있습니다. 수정 빌드에서 가장 먼저 확인할 것은 두 ID가 렌즈 목록에서 빠졌는지입니다.",
-        "camera_hal_takeaway": "앱의 연결 해제 로그를 출력 구성의 물리 ID와 HAL의 마지막 flush 기록에 맞춰 보세요.",
+        "headline": "오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결",
+        "lead": "오포 Find N3 Flip 단말에서 특정 물리 카메라를 직접 지정해 스트림을 열면 카메라 서비스가 강제 종료되던 문제가 해결되었습니다. 라이브러리 차원에서 해당 물리 렌즈 ID를 노출 목록에서 제외하는 패치가 병합되었습니다.",
+        "body_markdown": "멀티 카메라 기기에서 앱이 특정 보조 렌즈로 직접 스트림을 구성할 때 벤더 드라이버가 예상치 못한 교착 상태에 빠지는 사례가 있습니다. 2026년 11월 17일 병합된 AndroidX 변경(Change 4440995)은 오포 Find N3 Flip 단말의 안정성을 확보하기 위한 조치입니다.\n\n미디어텍 mt6985 플랫폼을 사용하는 오포 PHT110 모델에서는 후면 논리 카메라(ID 0) 하위의 물리 카메라 ID 2번 또는 3번을 OutputConfiguration의 타깃으로 지정할 경우 문제가 생겼습니다. 벤더 HAL 내부의 P2StreamingNode 프레임 캡처 및 BasicSession 플러시 정리 단계에서 정지가 발생했습니다. 이로 인해 camerahalserver와 cameraserver 워치독이 동작하며 카메라 연결이 강제로 끊어지는 치명적 장애로 이어졌습니다.\n\n개발팀은 ExcludePhysicalCameraIdQuirk의 문제 모델 목록에 PHT110과 제외 대상 ID인 2번, 3번을 추가했습니다. 패치 적용 후 CameraInfo.getPhysicalCameraInfos를 호출하면 해당 물리 카메라 정보가 목록에서 완전히 숨겨집니다.\n\n### 현장 진단과 확인 방법\n\n단말에서 물리 카메라 스트림을 열 때 ERROR_CAMERA_DEVICE나 CAMERA_DISCONNECTED가 발생한다면 로그캣에서 camerahalserver 워치독 로그와 BasicSession 플러시 타임아웃 기록을 대조해 원인을 확인할 수 있습니다. 우회 조치가 정상 적용되었는지는 CameraInfo.getPhysicalCameraInfos의 반환 목록에 물리 ID 2와 3이 빠져 있는지 확인하면 됩니다.\n\n이 수정은 AndroidX Gerrit에 머지된 소스 코드 상태입니다. 기기 제조사의 공식 시스템 업데이트나 앱의 Jetpack 라이브러리 릴리스 빌드 반영 여부는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "논리 카메라 하위의 특정 물리 센서 스트림을 구성할 때 벤더 HAL의 스트리밍 노드 및 세션 플러시 로직이 교착 상태에 빠질 수 있음을 보여줍니다. 벤더 HAL 개발팀은 물리 스트림 분기 시 세션 종료 시퀀스와 워치독 타임아웃 발생 지점을 정밀 검토해야 합니다.",
         "reader_checkpoints": [
-          "OPPO PHT110에서 CameraInfo.getPhysicalCameraInfos() 조회 시 ID 2, 3이 제외되어 반환되는지 확인",
-          "물리 카메라 ID를 지정한 OutputConfiguration 생성 시 HAL P2StreamingNode 멈춤 로그 발생 여부 모니터링"
+          "물리 카메라 ID 2, 3을 대상으로 OutputConfiguration 설정 시 벤더 HAL 플러시 안정성 점검",
+          "CameraInfo.getPhysicalCameraInfos 반환 결과에서 제외된 물리 카메라 ID 확인"
         ],
         "source_links": [
           {
             "title": "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
             "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
-            "publisher": "Android Open Source Project",
-            "source_role": "primary",
-            "checked_at": "2026-11-23"
+            "source_role": "primary"
           }
         ],
         "story_contract_version": 2,
         "source_subtitle": "AndroidX Gerrit Camera",
         "editorial_story": {
-          "not_to_overclaim": "이 변경은 프레임워크 쿼크를 통한 노출 제외 조치이며 미디어텍 플랫폼 벤더 HAL의 스트리밍 노드 버그를 직접 수정한 것은 아닙니다.",
-          "editor_take": "물리 카메라 직접 지정 기능이 확대됨에 따라 개별 물리 파이프라인의 flush 및 세션 해체 안정성을 HAL 수준에서 보장해야 합니다."
+          "not_to_overclaim": "프레임워크 라이브러리 수준의 쿼크 적용이며 미디어텍 플랫폼이나 오포 벤더 HAL 내부 라이브러리 자체가 수정된 것은 아닙니다.",
+          "editor_take": "물리 카메라 직접 제어 API가 확대되면서 벤더 HAL이 미처 대응하지 못한 보조 센서 경로의 예외가 상위 쿼크로 차단되는 전형적인 사례입니다."
         },
         "decision_metadata": {
           "impact": "High",
           "scope": [
             "HAL",
-            "Driver",
             "Framework",
             "SoC"
           ],
@@ -1044,40 +976,42 @@
       },
       "article_sections": {
         "verified_facts": [
-          "Gerrit 변경 4440995가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
-          "OPPO Find N3 Flip(PHT110)에서 물리 카메라 ID 2 또는 3을 지정할 때 벤더 HAL이 P2StreamingNode 및 BasicSession::flush 중에 멈췄습니다.",
-          "이로 인해 camerahalserver 및 cameraserver watchdog abort(ERROR_CAMERA_DEVICE, CAMERA_DISCONNECTED)가 발생했습니다.",
-          "ExcludePhysicalCameraIdQuirk에 PHT110 모델 및 물리 ID 2, 3이 등록되어 API 노출에서 제외되었습니다.",
-          "ExcludePhysicalCameraIdQuirkTest 단위 테스트가 갱신되었습니다."
+          "2026년 11월 17일 Gerrit Change 4440995가 MERGED 상태로 병합되었습니다.",
+          "OPPO Find N3 Flip (PHT110)에서 후면 논리 카메라 '0'의 물리 ID '2', '3' 타깃 설정 시 P2StreamingNode 및 세션 플러시 정지가 발생했습니다.",
+          "이 정지는 워치독 중단과 ERROR_CAMERA_DEVICE, CAMERA_DISCONNECTED 오류를 유발했습니다.",
+          "ExcludePhysicalCameraIdQuirk.kt에 PHT110 및 ID '2', '3'이 등록되었습니다.",
+          "CameraInfo.getPhysicalCameraInfos()에서 문제의 물리 ID가 제외되었습니다.",
+          "ExcludePhysicalCameraIdQuirkTest 단위 테스트가 함께 추가되었습니다."
         ],
-        "background_context": "논리 카메라가 물리 카메라들을 묶어 제공할 때, 특정 물리 카메라 전용 스트림을 열기 위해서는 HAL 내부의 스트리밍 노드가 올바르게 해당 물리 렌즈 파이프라인을 지원해야 합니다.",
-        "hal_driver_impact": "미디어텍 mt6985 플랫폼 기반 벤더 HAL의 물리 카메라 스트림 바인딩 취약점을 나타냅니다. HAL 개발자는 논리 카메라 구성 내의 모든 물리 ID에 대해 단독 스트림 구성 및 세션 플러시 안정성을 보장해야 합니다.",
+        "background_context": "Android 9 이상에서는 논리적 멀티 카메라에서 특정 물리 센서에 대해 개별 OutputConfiguration을 바인딩할 수 있습니다. 그러나 벤더 HAL 파이프라인이 특정 물리 센서의 단독 스트리밍이나 세션 플러시를 올바르게 처리하지 못하면 시스템 충돌이 발생합니다.",
+        "hal_driver_impact": "직접적인 HAL 코드 수정은 아니나, 벤더 HAL 설계 관점에서 중요한 신호입니다. 물리 카메라 ID별 스트림 매핑 시 특정 하위 파이프라인 노드가 세션 종료 신호를 받지 못해 블록되는 결함을 추적하는 기준이 됩니다.",
         "action_items": [
-          "OPPO PHT110 및 미디어텍 mt6985 플랫폼 기기에서 물리 카메라 스트림 생성 테스트를 수행하여 워치독 크래시 발생 여부를 검증합니다.",
-          "CameraInfo.getPhysicalCameraInfos() 결과에 의존하는 앱 로직이 특정 물리 ID 누락 시에도 안전하게 폴백하는지 확인합니다."
+          "MediaTek SoC 기반 멀티 카메라 단말에서 물리 스트림 생성 및 세션 종료 시퀀스 점검",
+          "OPPO PHT110 모델에서 getPhysicalCameraInfos() 호출 시 반환되는 물리 카메라 ID 검증"
         ],
-        "team_share_points": "OPPO Find N3 Flip에서 물리 카메라 ID 2, 3번 구성 시 벤더 HAL 멈춤과 카메라 서버 크래시가 발생하여 프레임워크 쿼크로 해당 ID 노출이 차단되었습니다."
+        "team_share_points": "오포 PHT110에서 물리 카메라 ID 2, 3으로 스트림 설정 시 발생하는 HAL 정지를 막기 위해 쿼크로 해당 ID가 제외되었습니다."
       },
       "hal_signal_capsule": {
-        "why_now": "2026년 11월 17일 병합된 패치로, 물리 카메라 스트림 구성 시 발생하는 치명적 HAL 크래시를 회피하기 위함입니다.",
+        "why_now": "2026년 11월 17일 Gerrit에 병합되어 향후 릴리스에서 오포 폴더블 기기의 물리 카메라 노출 정책이 변경됩니다.",
         "reader_owners": [
           "camera_hal_owner",
-          "camera_framework_owner"
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
         ],
-        "check_within_2_weeks": "미디어텍 mt6985 기반 멀티카메라 물리 스트림 해체 시 P2StreamingNode 멈춤 여부 확인",
+        "check_within_2_weeks": "물리 카메라 직접 바인딩 시 P2 노드 플러시 안정성 및 워치독 에러 발생 여부 검토",
         "impact_axes": [
           "framework_hal_contract",
           "stream_buffer_metadata",
           "camerax_app_compatibility"
         ],
         "do_not_overstate": [
-          "미디어텍 또는 오포의 벤더 HAL 소프트웨어가 직접 패치된 것으로 오해하지 않도록 주의하십시오."
+          "MediaTek 드라이버나 오포 벤더 HAL 바이너리의 교착 상태가 수정된 것으로 주장하지 마십시오."
         ]
       },
       "claims": [
         {
-          "claim_id": "c4_merge_status",
-          "text": "Gerrit 변경 4440995가 platform/frameworks/support의 androidx-main 브랜치에 2026년 11월 17일 병합되었습니다.",
+          "claim_id": "oppo_pht110_merged",
+          "text": "2026년 11월 17일 Gerrit Change 4440995가 MERGED 상태로 병합되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:9abc88eb2578c58b7eea"
@@ -1089,8 +1023,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c4_hal_hang",
-          "text": "OPPO Find N3 Flip(PHT110)에서 물리 카메라 ID 2 또는 3을 지정할 때 벤더 HAL이 P2StreamingNode 및 BasicSession::flush 중에 멈췄습니다.",
+          "claim_id": "oppo_pht110_symptom",
+          "text": "OPPO Find N3 Flip (PHT110)에서 후면 논리 카메라 '0'의 물리 ID '2', '3' 타깃 설정 시 P2StreamingNode 및 세션 플러시 정지가 발생했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:9abc88eb2578c58b7eea"
@@ -1098,12 +1032,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
           ],
-          "impact_level": "driver_image_pipeline",
+          "impact_level": "direct_hal_contract",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c4_watchdog_abort",
-          "text": "이로 인해 camerahalserver 및 cameraserver watchdog abort(ERROR_CAMERA_DEVICE, CAMERA_DISCONNECTED)가 발생했습니다.",
+          "claim_id": "oppo_pht110_watchdog_error",
+          "text": "이 정지는 워치독 중단과 ERROR_CAMERA_DEVICE, CAMERA_DISCONNECTED 오류를 유발했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:9abc88eb2578c58b7eea"
@@ -1111,12 +1045,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "direct_hal_contract",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c4_quirk_applied",
-          "text": "ExcludePhysicalCameraIdQuirk에 PHT110 모델 및 물리 ID 2, 3이 등록되어 API 노출에서 제외되었습니다.",
+          "claim_id": "oppo_pht110_quirk_added",
+          "text": "ExcludePhysicalCameraIdQuirk.kt에 PHT110 및 ID '2', '3'이 등록되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:9abc88eb2578c58b7eea"
@@ -1124,12 +1058,12 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "c4_test_updated",
-          "text": "ExcludePhysicalCameraIdQuirkTest 단위 테스트가 갱신되었습니다.",
+          "claim_id": "oppo_pht110_exclusion_effect",
+          "text": "CameraInfo.getPhysicalCameraInfos()에서 문제의 물리 ID가 제외되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:9abc88eb2578c58b7eea"
@@ -1137,22 +1071,34 @@
           "source_urls": [
             "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
           ],
-          "impact_level": "camera_framework_behavior",
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "oppo_pht110_test_included",
+          "text": "ExcludePhysicalCameraIdQuirkTest 단위 테스트가 함께 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:9abc88eb2578c58b7eea"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
           "overclaim_risk": "low"
         }
       ],
       "camera_hal_checks": [
-        "PHT110 대상 물리 카메라 ID 스트림 구성 시 P2StreamingNode 예외 점검"
+        "물리 카메라 스트림 타깃 지정 시 벤더 HAL P2StreamingNode 동작 안정성 점검"
       ],
       "action_hints": [
-        "물리 카메라 노출 제외 쿼크 적용 후 프레임워크 스트림 바인딩 점검"
+        "PHT110 단말에서 getPhysicalCameraInfos() 호출 시 반환되는 물리 카메라 ID 목록 확인"
       ],
       "action_items": [
-        "OPPO PHT110 및 미디어텍 mt6985 플랫폼 기기에서 물리 카메라 스트림 생성 테스트를 수행하여 워치독 크래시 발생 여부를 검증합니다.",
-        "CameraInfo.getPhysicalCameraInfos() 결과에 의존하는 앱 로직이 특정 물리 ID 누락 시에도 안전하게 폴백하는지 확인합니다."
+        "멀티 카메라 물리 스트림 종료 시 벤더 세션 플러시 로직의 교착 상태 방지 로직 점검"
       ],
       "is_ai_related": false,
-      "article_type": "bug_fix",
+      "article_type": "framework_bugfix",
       "imageCandidates": [
         {
           "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
@@ -1195,20 +1141,6 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 1760
-        },
-        {
-          "url": "https://opengraph.githubassets.com/e467c19d450f45943c4d319e53b510cb01287ebdee8b1040cccc0ee10f915458/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 42919
         }
       ],
       "selectedImage": "",
@@ -1216,20 +1148,15 @@
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "패치 커밋 소스로 제공된 이미지 후보가 없습니다.",
+      "imageUsageDecisionReason": "적절한 기술 다이어그램이나 16:9 규격 이미지가 없어 선택하지 않음",
       "sources": [
         {
           "title": "Exclude OPPO PHT110 physical camera IDs 2 and 3 - platform/frameworks/support",
           "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995"
         }
       ],
-      "actionability_level": "high",
-      "actionability_upgrade_reason": "",
-      "camera_pipeline_link": "Camera2 OutputConfiguration 및 벤더 P2StreamingNode",
-      "do_not_overstate": [
-        "미디어텍 또는 오포의 벤더 HAL 소프트웨어가 직접 패치된 것으로 오해하지 않도록 주의하십시오."
-      ],
-      "effective_actionability_level": "high",
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
       "hal_impact_axes": [
         "framework_hal_contract",
         "stream_buffer_metadata",
@@ -1237,7 +1164,8 @@
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_framework_owner"
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
       ],
       "soc_signal_type": "platform_signal",
       "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
@@ -1285,58 +1213,105 @@
       "coverage_type": "fresh"
     },
     {
-      "category": "Android Platform",
-      "what_changed": "API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다.",
+      "category": "android",
+      "headline": "비디오 인코더 입력 서피스 일시 중단: MediaCodec 시작 전 프레임 충돌 방지",
+      "what_changed": "AndroidX Camera Video 모듈에서 API 29 이상 기기를 대상으로 MediaCodec.start() 호출 전까지 비디오 인코더의 영구 입력 서피스를 일시 중단(suspend)하여 CONFIGURED 상태 동안 유입되는 프레임을 드롭하도록 수정했습니다.",
       "confirmed_facts": [
-        "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다.",
-        "API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다.",
-        "MediaCodec.start() 반환 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다.",
-        "추가된 테스트는 첫 출력의 presentationTimeUs와 키프레임 여부를 확인합니다."
+        "2026년 11월 20일 platform/frameworks/support androidx-main 브랜치에 변경 4400407이 MERGED 상태로 병합되었습니다.",
+        "EncoderImpl은 MediaCodec을 미리 구성하고 영구 입력 서피스를 연결하지만, Recorder가 오디오를 설정하고 start()를 부르기 전에 스트림을 ACTIVE로 선언했습니다.",
+        "이로 인해 MediaCodec이 CONFIGURED 상태일 때 렌더링된 프레임이 GraphicBufferSource에 누적되었다가 MediaCodec.start() 내부에서 제출되어 출력 풀 초기화 전 처리되는 결함이 있었습니다.",
+        "Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q 조건에서 MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED를 1로 설정하여 시작 전 프레임을 드롭하도록 변경했습니다.",
+        "mMediaCodec.start() 호출 직후 setMediaCodecPaused(false)를 통해 PARAMETER_KEY_SUSPEND로 서피스를 재개합니다.",
+        "VideoEncoderTest에 startVideoEncoderAfterFramesQueuedWhileConfigured_dropsPreStartFramesAndEncodes 계측 테스트가 추가되어 사전 유입 프레임 드롭 및 정상 인코딩을 검증했습니다."
       ],
-      "evidence_summary": "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다. API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다. MediaCodec.start() 반환 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다. 추가된 테스트는 첫 출력의 presentationTimeUs와 키프레임 여부를 확인합니다.",
+      "evidence_summary": "AndroidX Gerrit 4400407의 전체 패치와 테스트 코드를 통해 MediaCodec 시작 전 입력 서피스 프레임 드롭 처리 및 동기화 수정 사실을 확인했습니다.",
       "specificity_checks": [
-        "API 29+",
-        "EncoderImpl",
-        "MediaCodec.start()"
+        "Component: camera-video/src/main/java/androidx/camera/video/internal/encoder/EncoderImpl.java",
+        "Change Number: 4400407",
+        "Status: MERGED (2026-11-20)",
+        "API Level: API 29+ (Build.VERSION_CODES.Q)",
+        "Key: MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED, PARAMETER_KEY_SUSPEND",
+        "Behavior Change: MediaCodec.start() 호출 전까지 입력 서피스 프레임 자동 드롭 및 시작 직후 재개"
       ],
       "source_verification_notes": [
-        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-        "source-body:8929aa5fd76f7373bf07",
-        "MERGED 2026-11-20",
         "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-        "Evidence ID: source-body:8929aa5fd76f7373bf07"
+        "Evidence ID: source-body:8929aa5fd76f7373bf07",
+        "Primary source: 원문 diff와 MERGED 상태를 확인함. 라이브러리 정식 릴리스 반영 여부는 미확인."
       ],
+      "public_article": {
+        "headline": "비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리",
+        "lead": "녹화 버튼을 누르기 직전 카메라 버퍼가 인코더에 먼저 전달되면 비디오 시작 시점에 오류가 생길 수 있습니다. AndroidX Video 라이브러리는 인코더 시작 전 들어오는 프레임을 안전하게 버리도록 동작을 바꿨습니다.",
+        "body_markdown": "카메라 미리보기와 녹화 파이프라인이 동시에 구동될 때 인코더 시작과 프레임 전송 타이밍이 어긋나면 코덱 초기화 단계에서 문제가 생깁니다. 2026년 11월 20일 병합된 AndroidX 변경(Change 4400407)은 이 동기화 결함을 바로잡았습니다.\n\n기존 EncoderImpl은 MediaCodec을 미리 구성하고 영구 입력 서피스를 연결해 둔 상태로 대기했습니다. 그러나 상위 Recorder는 오디오 장치를 초기화하고 start를 호출하기 전에 비디오 스트림을 먼저 활성 상태로 표시했습니다. 그 결과 코덱이 아직 구성 상태일 때 카메라에서 렌더링된 프레임이 GraphicBufferSource에 누적되었습니다.\n\n이 프레임들은 MediaCodec.start 내부에서 즉시 제출되었고, CCodecBufferChannel이 출력 버퍼 풀 초기화를 미처 끝내기 전에 처리되면서 불안정한 상태를 초래했습니다.\n\n해결을 위해 API 29 이상 환경에서 MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED 플래그를 1로 지정했습니다. 코덱이 준비되는 동안 영구 입력 서피스는 들어오는 카메라 프레임을 자동으로 버립니다. 그리고 mMediaCodec.start 호출이 완료된 직후 일시 중단 상태를 해제하여 정상 인코딩을 시작합니다.\n\n### 현장 진단과 확인 방법\n\n비디오 녹화 진입 직후 인코더 오류나 첫 프레임 충돌이 의심된다면 첫 번째 인코딩 결과물의 presentationTimeUs를 확인하는 방법이 유효합니다. 녹화 시작 시점보다 앞선 타임스탬프의 프레임이 인코더에 인입되지 않고 시작 시점 이후의 키 프레임부터 정상 생성되는지 살펴보면 됩니다.\n\n이 수정은 AndroidX Gerrit에 병합된 코드 변경입니다. 커밋에 언급된 연계 버그 내용은 직접 확인되지 않았으며, 실제 배포 라이브러리 탑재와 최종 단말 상용 빌드 반영 여부도 별도의 확인이 필요합니다.",
+        "camera_hal_takeaway": "Camera HAL 자체의 인터페이스 변경은 아니지만, 카메라 프레임 버퍼가 Surface를 통해 비디오 인코더로 전달되는 다운스트림 경로의 중요한 동기화 개선입니다. 카메라 파이프라인에서 인코더 서피스로 프레임을 밀어 넣을 때 코덱 시작 전 드롭 동작이 미치는 영향을 이해하는 데 유용합니다.",
+        "reader_checkpoints": [
+          "비디오 인코딩 시작 시 첫 번째 출력 버퍼의 presentationTimeUs가 녹화 시작 시점 이후인지 확인",
+          "API 29 이상 단말에서 고속 녹화 및 일반 비디오 녹화 시작 시 CCodecBufferChannel 초기화 에러 발생 여부 검증"
+        ],
+        "source_links": [
+          {
+            "title": "Suspend video encoder input surface until start - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+            "source_role": "primary"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit Camera",
+        "editorial_story": {
+          "not_to_overclaim": "MediaCodec과 GraphicBufferSource 간 상위 프레임워크 서피스 관리 로직이며 Camera HAL이나 하드웨어 비디오 인코더 드라이버의 변경은 아닙니다. 커밋에 언급된 버그 문서는 직접 확인되지 않았으므로 1차 원문 패치 내용에 한정해 해석해야 합니다.",
+          "editor_take": "카메라 출력 버퍼가 인코더로 유입되는 경계에서 상태 머신 불일치로 인한 크래시를 깔끔하게 차단한 실무적인 패치입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
       "article_sections": {
         "verified_facts": [
-          "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다.",
-          "API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다.",
-          "MediaCodec.start() 반환 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다.",
-          "추가된 테스트는 첫 출력의 presentationTimeUs와 키프레임 여부를 확인합니다."
+          "2026년 11월 20일 Gerrit Change 4400407이 MERGED 상태로 병합되었습니다.",
+          "EncoderImpl에서 코덱이 CONFIGURED 상태일 때 전달된 프레임이 GraphicBufferSource에 누적되어 출력 풀 초기화 전 제출되는 결함이 있었습니다.",
+          "Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q에서 MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED가 1로 설정됩니다.",
+          "mMediaCodec.start() 호출 직후 setMediaCodecPaused(false)를 통해 서피스 일시 중단이 해제됩니다.",
+          "VideoEncoderTest 계측 테스트가 추가되어 시작 전 프레임 드롭 및 정상 인코딩 동작을 검증했습니다."
         ],
-        "background_context": "Recorder가 인코더 시작 전에 이미 스트림을 활성화할 수 있습니다.",
-        "hal_driver_impact": "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
+        "background_context": "Android 비디오 녹화 경로에서 카메라는 인코더가 생성한 영구 입력 Surface로 프레임을 렌더링합니다. 오디오 설정 및 인코더 기동 시점 사이의 레이스 컨디션으로 인해 코덱이 준비되기 전 프레임이 유입될 수 있습니다.",
+        "hal_driver_impact": "직접적인 Camera HAL 변경은 아니며 카메라 하류(downstream) 멀티미디어 파이프라인의 프레임 흐름에 관한 변경입니다. 카메라 버퍼가 인코더 입력 서피스로 정상 전달되더라도 코덱 시작 전에는 GraphicBufferSource에서 안전하게 드롭됩니다.",
         "action_items": [
-          "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다."
+          "CameraX VideoCapture 녹화 시작 시 첫 프레임 인코딩 지연 및 타임스탬프 일관성 확인",
+          "MediaCodec 출력 풀 초기화 중 크래시가 발생하던 기기에서 해당 패치 적용 후 회귀 시험"
         ],
-        "team_share_points": "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다."
+        "team_share_points": "비디오 인코더가 시작되기 전 유입된 카메라 프레임을 서피스 레벨에서 드롭하도록 수정해 코덱 초기화 충돌을 방지했습니다. 연계 버그 세부 내용은 미확인 상태이며 제품 빌드 반영은 별도 확인이 필요합니다."
       },
       "hal_signal_capsule": {
-        "why_now": "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다.",
+        "why_now": "2026년 11월 20일 Gerrit에 병합되어 향후 배포될 CameraX Video 라이브러리의 녹화 시작 안정성이 개선되었습니다.",
         "reader_owners": [
-          "camera_framework_owner"
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camera_test_owner"
         ],
-        "check_within_2_weeks": "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다.",
+        "check_within_2_weeks": "녹화 시작 직후 첫 인코딩 프레임의 타임스탬프와 키 프레임 수신 안정성 검토",
         "impact_axes": [
+          "camerax_app_compatibility",
           "stream_buffer_metadata"
         ],
         "do_not_overstate": [
-          "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다."
+          "MediaCodec 하드웨어 가속 드라이버나 V4L2 인코더 드라이버 코드가 변경된 것으로 해석하지 마십시오."
         ]
       },
       "claims": [
         {
-          "claim_id": "enc0",
-          "text": "2026년 11월 20일 androidx-main에 비디오 인코더 변경이 병합됐습니다.",
+          "claim_id": "encoder_suspend_merged",
+          "text": "2026년 11월 20일 Gerrit Change 4400407이 MERGED 상태로 병합되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:8929aa5fd76f7373bf07"
@@ -1348,8 +1323,21 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "enc1",
-          "text": "API 29 이상에서 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정해 구성 중 들어온 프레임을 버립니다.",
+          "claim_id": "encoder_suspend_issue_mechanism",
+          "text": "EncoderImpl에서 코덱이 CONFIGURED 상태일 때 전달된 프레임이 GraphicBufferSource에 누적되어 출력 풀 초기화 전 제출되는 결함이 있었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:8929aa5fd76f7373bf07"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "encoder_suspend_api_q_flag",
+          "text": "Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q에서 MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED가 1로 설정됩니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:8929aa5fd76f7373bf07"
@@ -1361,8 +1349,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "enc2",
-          "text": "MediaCodec.start() 반환 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다.",
+          "claim_id": "encoder_suspend_resume_logic",
+          "text": "mMediaCodec.start() 호출 직후 setMediaCodecPaused(false)를 통해 서피스 일시 중단이 해제됩니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:8929aa5fd76f7373bf07"
@@ -1374,8 +1362,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "enc3",
-          "text": "추가된 테스트는 첫 출력의 presentationTimeUs와 키프레임 여부를 확인합니다.",
+          "claim_id": "encoder_suspend_instrumentation_test",
+          "text": "VideoEncoderTest 계측 테스트가 추가되어 시작 전 프레임 드롭 및 정상 인코딩 동작을 검증했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "source-body:8929aa5fd76f7373bf07"
@@ -1388,31 +1376,16 @@
         }
       ],
       "camera_hal_checks": [
-        "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다."
+        "카메라 출력 서피스가 인코더로 프레임을 전송할 때 코덱 기동 전 버퍼 풀 상태 점검"
       ],
       "action_hints": [
-        "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다."
+        "비디오 녹화 시작 시 첫 인코딩 프레임의 타임스탬프와 키 프레임 플래그 확인"
       ],
       "action_items": [
-        "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다."
+        "API 29 이상 단말에서 비디오 녹화 시작 시퀀스의 프레임 드롭 및 인코딩 정상 수행 검증"
       ],
       "is_ai_related": false,
-      "article_type": "bug_fix",
-      "sources": [
-        {
-          "title": "Suspend video encoder input surface until start - platform/frameworks/support",
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
-        }
-      ],
-      "actionability_level": "high",
-      "camera_pipeline_link": "Recorder → EncoderImpl → MediaCodec",
-      "do_not_overstate": [
-        "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다."
-      ],
-      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-      "source_candidate_hash": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
-      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-      "relevance_bucket": "android",
+      "article_type": "framework_bugfix",
       "imageCandidates": [
         {
           "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
@@ -1455,62 +1428,37 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 1760
-        },
-        {
-          "url": "https://opengraph.githubassets.com/e467c19d450f45943c4d319e53b510cb01287ebdee8b1040cccc0ee10f915458/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 42919
         }
       ],
-      "public_article": {
-        "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
-        "lead": "녹화 버튼을 누르기 전에도 카메라는 프레임을 보냅니다. 11월 20일 병합된 CameraX 패치는 이때 들어온 프레임을 비디오 인코더가 어떻게 처리할지 바꿨습니다.",
-        "body_markdown": "### 패치에서 확인된 동작\n\nEncoderImpl은 녹화를 시작하기 전에 MediaCodec을 구성하고 지속 입력 서피스를 연결합니다. 중지 후 다음 녹화를 준비할 때도 마찬가지입니다. 기존에는 코덱이 CONFIGURED일 때 들어온 프레임을 GraphicBufferSource가 보관했습니다. 그러다 MediaCodec.start() 안에서 출력 버퍼 풀 초기화가 끝나기 전에 그 프레임을 제출할 수 있었습니다.\n\n패치가 적용된 API 29 이상에서는 구성할 때 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정합니다. 구성 중 받은 프레임은 버리고 MediaCodec.start()가 반환한 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다. 추가된 테스트는 시작 전에 프레임을 흘려보낸 다음 첫 인코딩 출력의 표시 시각(PTS)이 기록해 둔 기준 시각 이상인지, 첫 출력이 키프레임인지 검사합니다. 시작 지연이 몇 ms 줄었는지 보여주는 측정값은 원문에 없습니다. 원문이 확인해 주는 것은 androidx-main 병합까지입니다. 이 변경을 담은 CameraX 배포 버전이나 단말 빌드는 명시돼 있지 않습니다.\n\n### 현장에서 해볼 진단\n\n첫 녹화와 중지 직후 재녹화를 따로 추적해 보세요. 카메라 프레임 도착, 코덱 시작 호출과 반환, 첫 출력 콜백을 차례로 기록합니다. 첫 출력에는 PTS와 키프레임 여부도 붙입니다. PTS는 어느 프레임이 나왔는지를, 콜백 수신 시각은 앱이 그 출력을 언제 받았는지를 알려줍니다. 센서 타임스탬프와 PTS를 대조하기 전에 시간 기준과 단위부터 맞춰야 합니다.\n\n첫 출력에 녹화 시작 전의 오래된 PTS가 붙었다면, 구성 중에 들어온 프레임이 남았을 가능성을 살펴볼 만합니다. 반대로 PTS는 예상 범위인데 콜백만 늦다면 코덱이 시작 호출 안에서 쓴 시간과 반환 후 첫 출력을 전달하기까지의 시간을 나눠 재보세요. 어느 쪽인지는 해당 단말의 로그로 판단해야 합니다.",
-        "camera_hal_takeaway": "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
-        "reader_checkpoints": [
-          "첫 녹화와 재녹화에서 시작 전 프레임의 PTS와 첫 출력 콜백 시각을 나눠 기록합니다."
-        ],
-        "source_links": [
-          {
-            "title": "Suspend video encoder input surface until start - platform/frameworks/support",
-            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-            "publisher": "Android Open Source Project",
-            "source_role": "primary",
-            "checked_at": "2026-11-23"
-          }
-        ],
-        "story_contract_version": 2,
-        "source_subtitle": "AndroidX Gerrit Camera",
-        "editorial_story": {
-          "not_to_overclaim": "제품 배포 여부와 녹화 지연 개선 수치는 원문이 밝히지 않습니다.",
-          "editor_take": "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다."
-        },
-        "decision_metadata": {
-          "impact": "High",
-          "scope": [
-            "HAL",
-            "Framework",
-            "SoC"
-          ],
-          "action": [
-            "Watch",
-            "Test",
-            "Adopt"
-          ],
-          "overclaim_risk": "Medium"
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 기술 다이어그램이나 16:9 규격 이미지가 없어 선택하지 않음",
+      "sources": [
+        {
+          "title": "Suspend video encoder input surface until start - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
         }
-      },
-      "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+      ],
+      "actionability_level": "medium",
+      "effective_actionability_level": "medium",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camera_test_owner"
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
+      "source_candidate_hash": "ea61dc10a15de657f6b000dc0399b66489dd3405b108af09236bd21d68d9e474",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
       "tooling_workflow_type": "",
+      "relevance_bucket": "android",
       "editorial_priority": 3,
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
@@ -1525,12 +1473,6 @@
       "do_not_claim": [],
       "evidence_origin": "article_text",
       "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "No suitable image with complete HTTPS attribution metadata selected; local fallback visual will be used.",
       "resolvedImage": {
         "url": "../../assets/images/fallback/android.svg",
         "src": "../../assets/images/fallback/android.svg",
@@ -1558,11 +1500,10 @@
     }
   ],
   "action_items": [
-    "렌즈 목록과 바인딩 결과를 함께 남기면 실패 지점을 좁힐 수 있습니다.",
-    "지원 목록에서 거절된 요청과 카메라가 받은 뒤 수렴이 늦어진 요청은 조사할 로그가 다릅니다.",
-    "ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과가 돌아오는지 비교할 수 있습니다.",
-    "앱의 연결 해제 로그를 출력 구성의 물리 ID와 HAL의 마지막 flush 기록에 맞춰 보세요.",
-    "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다."
+    "CameraX 1.7.0 업데이트에 맞춰 물리 카메라 직접 바인딩 시 벤더 HAL OutputConfiguration 처리 안정성 점검",
+    "단말 정적 메타데이터(CameraCharacteristics)의 3A 지원 모드 플래그가 실제 드라이버 사양과 일치하는지 전수 검사",
+    "멀티 카메라 기기에서 재처리 PRIVATE ZSL 세션 및 보조 렌즈 스트림 바인딩 시 세션 플러시 교착 상태 여부 검증",
+    "API 29 이상 환경에서 비디오 녹화 시작 시 인코더 입력 서피스 프레임 동기화 동작 확인"
   ],
   "references": [
     {
@@ -1586,6 +1527,8 @@
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407"
     }
   ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
   "selected_group_count": 5,
   "rendered_group_count": 5,
   "explicitly_demoted_group_count": 0,
@@ -1607,36 +1550,7 @@
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
   "publish_mode": "DEEP",
-  "reference_articles": [
-    {
-      "title": "Honor abort cancellation in still capture control - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679",
-      "source": "AndroidX Gerrit Camera",
-      "published_date": "2026-11-19",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
-    {
-      "title": "Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276",
-      "source": "AndroidX Gerrit Camera",
-      "published_date": "2026-11-18",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
-    {
-      "title": "Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746",
-      "source": "AndroidX Gerrit Camera",
-      "published_date": "2026-11-17",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
-    {
-      "title": "Claude Code v2.1.327",
-      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
-      "source": "Claude Code Changelog",
-      "published_date": "2026-11-17",
-      "note": "C++ / AI 네이티브 툴링 참고"
-    }
-  ],
+  "reference_articles": [],
   "tags": [
     "Camera HAL",
     "Android"
@@ -1646,8 +1560,8 @@
   "coverage_end_date": "2026-11-22",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-11-23",
-  "intro_letter": "CameraX 1.7.0에서는 앱이 물리 카메라를 직접 고릅니다. OPPO Find N3 Flip에서는 출력 대상으로 지정하면 카메라 서비스가 멈출 수 있는 물리 ID 두 개를 목록에서 뺐습니다. SM-F971에서 줌 전환이 멈춘 사례와 3A 요청을 곧바로 거절하는 CameraPipe 변경도 살펴봅니다. 녹화 첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
-  "intro_letter_source_hash": "sha256:e173cddd7477cf9b846d527bbc456fbaaaf5903cc944932fc63797e3b60e8722",
+  "intro_letter": "이번 주 뉴스레터에서는 CameraX 1.7.0 릴리스와 Camera2 Pipe 3A 제어 변경 등 상위 프레임워크의 중요한 업데이트를 다룹니다. 특히 CameraX 1.7.0은 Camera2Interop V2를 안정화하여 물리 카메라 직접 바인딩을 지원합니다. 삼성 SM-F971 단말의 ZSL 비활성화와 오포 Find N3 Flip의 물리 카메라 노출 제외 사례는 특정 기기에서 발생하는 HAL 및 드라이버 수준의 문제를 보여줍니다. 또한, 비디오 녹화 시작 전 프레임 충돌 방지를 위한 인코더 입력 서피스 일시 중단 처리 소식도 함께 전해드립니다.",
+  "intro_letter_source_hash": "sha256:0df0aa5dc52e79be1c144f771ee202042c40fab3278d5160f8f52592f25ae001",
   "weekly_key": "2026-W48",
   "week_start_date": "2026-11-23",
   "week_end_date": "2026-11-29"

@@ -5,7 +5,7 @@
     "weekEndDate": "2026-11-29",
     "date": "2026-11-23",
     "title": "2026 W48",
-    "summary": "CameraX 1.7.0에서 물리 카메라를 직접 고른다\n3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요\nSM-F971에서 두 번째 렌즈 전환이 멈춘 이유\nOPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭\n녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
+    "summary": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩\nCamera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환\n삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지\n오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결\n비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리",
     "html": "newsletters/2026-W48/index.html",
     "md": "newsletters/2026-W48/newsletter.md",
     "tags": [
@@ -19,59 +19,59 @@
     "reader_brief": {
       "schema_version": 1,
       "locale": "ko",
-      "intro": "CameraX 1.7.0에서는 앱이 물리 카메라를 직접 고릅니다. OPPO Find N3 Flip에서는 출력 대상으로 지정하면 카메라 서비스가 멈출 수 있는 물리 ID 두 개를 목록에서 뺐습니다. SM-F971에서 줌 전환이 멈춘 사례와 3A 요청을 곧바로 거절하는 CameraPipe 변경도 살펴봅니다. 녹화 첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
+      "intro": "이번 주 뉴스레터에서는 CameraX 1.7.0 릴리스와 Camera2 Pipe 3A 제어 변경 등 상위 프레임워크의 중요한 업데이트를 다룹니다. 특히 CameraX 1.7.0은 Camera2Interop V2를 안정화하여 물리 카메라 직접 바인딩을 지원합니다. 삼성 SM-F971 단말의 ZSL 비활성화와 오포 Find N3 Flip의 물리 카메라 노출 제외 사례는 특정 기기에서 발생하는 HAL 및 드라이버 수준의 문제를 보여줍니다. 또한, 비디오 녹화 시작 전 프레임 충돌 방지를 위한 인코더 입력 서피스 일시 중단 처리 소식도 함께 전해드립니다.",
       "items": [
         {
           "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
-          "href": "newsletters/2026-W48/index.html#article-camerax-1-7-0",
-          "headline": "CameraX 1.7.0에서 물리 카메라를 직접 고른다",
-          "lead": "원하는 렌즈가 목록에 없었을까, 골랐는데 열리지 않았을까? CameraX 1.7.0에서는 두 경우를 나눠 볼 수 있습니다.",
-          "takeaway": "렌즈 목록과 바인딩 결과를 함께 남기면 실패 지점을 좁힐 수 있습니다.",
+          "href": "newsletters/2026-W48/index.html#article-camerax-1-7-0-camera2interop-v2",
+          "headline": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩",
+          "lead": "CameraX 1.7.0이 정식 출시되며 Camera2Interop V2가 기본 안정화 단계로 전환되었습니다. 이제 개발자는 추가 옵트인 없이 상위 앱 인터페이스에서 물리 카메라를 직접 선택하고 바인딩할 수 있습니다.",
+          "takeaway": "HAL 직접 변경은 아니지만, 상위 프레임워크가 논리 카메라 하위의 물리 스트림에 UseCase를 직접 연결하기 시작합니다. 벤더 파이프라인에서 물리 카메라별 OutputConfiguration 구성과 메타데이터 반환 누락이 없는지 사전 점검이 필요합니다.",
           "tags": [
             "Camera HAL"
           ],
           "image": {
             "src": "https://developer.android.com/static/images/social/android-developers.png",
-            "alt": "CameraX 1.7.0 정식 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원",
+            "alt": "CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 바인딩 지원",
             "is_fallback": false
           }
         },
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
-          "href": "newsletters/2026-W48/index.html#article-3a-id",
-          "headline": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
-          "lead": "CameraPipe가 지원 모드를 먼저 확인합니다. 초점이나 노출이 움직이기를 기다릴 필요도 없이 요청이 끝나는 경우가 생겼습니다.",
-          "takeaway": "지원 목록에서 거절된 요청과 카메라가 받은 뒤 수렴이 늦어진 요청은 조사할 로그가 다릅니다.",
+          "href": "newsletters/2026-W48/index.html#article-camera2-pipe-3a-submit-failed",
+          "headline": "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환",
+          "lead": "카메라 앱이 기기에서 지원하지 않는 자동 노출이나 초점 모드를 요청하면 내부 큐에 머물지 않고 즉시 실패를 반환합니다. AndroidX Camera2 Pipe 라이브러리는 하위 스택에 불필요한 요청이 도달하기 전에 차단하는 검증 분기를 병합했습니다.",
+          "takeaway": "HAL이나 드라이버 자체의 계약 변경은 아니지만, 상위 프레임워크가 CameraMetadata에 선언된 3A capabilities를 엄격히 대조하기 시작합니다. CameraCharacteristics에 지원 모드를 잘못 선언하면 상위 앱에서 3A 제어가 즉시 실패하므로 벤더 태그 및 정적 메타데이터 정합성을 검증해야 합니다.",
           "tags": [
             "Camera HAL"
           ],
           "image": {
-            "src": "assets/images/fallback/android.svg",
+            "src": "assets/images/fallback/newsletter-default.svg",
             "alt": "",
             "is_fallback": true
           }
         },
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
-          "href": "newsletters/2026-W48/index.html#article-sm-f971",
-          "headline": "SM-F971에서 두 번째 렌즈 전환이 멈춘 이유",
-          "lead": "같은 단말에서 같은 순서로 줌을 바꿨는데, 일반 촬영은 끝까지 됐고 ZSL 촬영은 마지막 전환에서 멈췄습니다.",
-          "takeaway": "ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과가 돌아오는지 비교할 수 있습니다.",
+          "href": "newsletters/2026-W48/index.html#article-sm-f971-zsl",
+          "headline": "삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지",
+          "lead": "삼성 SM-F971 단말에서 카메라 줌을 넘나들 때 화면이 멈추는 현상을 막기 위해 제로 셔터 랙 기능이 비활성화되었습니다. 재처리 세션에서 벤더 파이프라인 콜백이 끊기던 문제를 우회 조치한 것입니다.",
+          "takeaway": "벤더 HAL 내부의 재처리 스트림과 멀티 카메라 SAT 전환 로직 간 충돌 사례입니다. 재처리 세션에서 물리 렌즈 전환 시 벤더 HAL이 프레임 결과 콜백을 누락하거나 플러시 중 멈추지 않도록 HAL 드라이버 버퍼 관리를 점검해야 합니다.",
           "tags": [
             "Camera HAL"
           ],
           "image": {
-            "src": "assets/images/fallback/android.svg",
+            "src": "assets/images/fallback/newsletter-default.svg",
             "alt": "",
             "is_fallback": true
           }
         },
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
-          "href": "newsletters/2026-W48/index.html#article-oppo-find-n3-flip",
-          "headline": "OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭",
-          "lead": "PHT110에서 후면 물리 ID 2와 3은 목록에 있었지만, 출력 대상으로 지정하면 카메라 서비스까지 멈출 수 있었습니다.",
-          "takeaway": "앱의 연결 해제 로그를 출력 구성의 물리 ID와 HAL의 마지막 flush 기록에 맞춰 보세요.",
+          "href": "newsletters/2026-W48/index.html#article-find-n3-flip",
+          "headline": "오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결",
+          "lead": "오포 Find N3 Flip 단말에서 특정 물리 카메라를 직접 지정해 스트림을 열면 카메라 서비스가 강제 종료되던 문제가 해결되었습니다. 라이브러리 차원에서 해당 물리 렌즈 ID를 노출 목록에서 제외하는 패치가 병합되었습니다.",
+          "takeaway": "논리 카메라 하위의 특정 물리 센서 스트림을 구성할 때 벤더 HAL의 스트리밍 노드 및 세션 플러시 로직이 교착 상태에 빠질 수 있음을 보여줍니다. 벤더 HAL 개발팀은 물리 스트림 분기 시 세션 종료 시퀀스와 워치독 타임아웃 발생 지점을 정밀 검토해야 합니다.",
           "tags": [
             "Camera HAL"
           ],
@@ -83,10 +83,10 @@
         },
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-          "href": "newsletters/2026-W48/index.html#article-camerax",
-          "headline": "녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점",
-          "lead": "녹화 버튼을 누르기 전에도 카메라는 프레임을 보냅니다. 11월 20일 병합된 CameraX 패치는 이때 들어온 프레임을 비디오 인코더가 어떻게 처리할지 바꿨습니다.",
-          "takeaway": "첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.",
+          "href": "newsletters/2026-W48/index.html#article-vwb7ok",
+          "headline": "비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리",
+          "lead": "녹화 버튼을 누르기 직전 카메라 버퍼가 인코더에 먼저 전달되면 비디오 시작 시점에 오류가 생길 수 있습니다. AndroidX Video 라이브러리는 인코더 시작 전 들어오는 프레임을 안전하게 버리도록 동작을 바꿨습니다.",
+          "takeaway": "Camera HAL 자체의 인터페이스 변경은 아니지만, 카메라 프레임 버퍼가 Surface를 통해 비디오 인코더로 전달되는 다운스트림 경로의 중요한 동기화 개선입니다. 카메라 파이프라인에서 인코더 서피스로 프레임을 밀어 넣을 때 코덱 시작 전 드롭 동작이 미치는 영향을 이해하는 데 유용합니다.",
           "tags": [
             "Android"
           ],
@@ -107,63 +107,63 @@
     "generation_anchor_date": "2026-11-23",
     "en": {
       "title": "2026 W48",
-      "summary": "CameraX 1.7.0 lets apps bind to a specific physical camera\nWhen a 3A request fails immediately, check the camera ID\nWhy the second lens switch stalled on the Samsung SM-F971\nWhy CameraX hides two physical cameras on the OPPO Find N3 Flip\nWhen does the first video frame arrive? CameraX changes when encoder input opens",
+      "summary": "CameraX 1.7.0 Release: Camera2Interop V2 Stabilized and Direct Physical Camera Binding\nCamera2 Pipe 3A Control Change: Unsupported Modes Return SUBMIT_FAILED Immediately\nSamsung SM-F971 ZSL Disabled: Prevents Stalling During Physical Lens Zoom Transitions\nOppo Find N3 Flip Physical Camera Exclusion: Resolves Stalling When Targeting Specific Lenses\nPreventing Frame Collisions Before Video Recording: Suspending Encoder Input Surface",
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "CameraX 1.7.0 lets apps select a physical camera directly. On the OPPO Find N3 Flip, CameraX hides two physical IDs that could stall the camera service when targeted. We look at a stalled zoom switch on the SM-F971 and a CameraPipe change that rejects unsupported 3A requests immediately. Logging the first video frame’s PTS separately from its output callback helps distinguish a queued frame from delayed delivery.",
+        "intro": "This week's newsletter covers significant updates to higher-level frameworks, including the CameraX 1.7.0 release and Camera2 Pipe 3A control changes. Notably, CameraX 1.7.0 stabilizes Camera2Interop V2, supporting direct physical camera binding. Cases like ZSL disabling on the Samsung SM-F971 device and the exclusion of physical cameras on the Oppo Find N3 Flip illustrate HAL and driver-level issues on specific devices. We also report on the temporary suspension of the encoder input surface to prevent frame collisions before video recording starts.",
         "items": [
           {
             "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0",
-            "href": "en/newsletters/2026-W48/index.html#article-camerax-1-7-0-lets-apps-bind-to-a-specific-physical-camera",
-            "headline": "CameraX 1.7.0 lets apps bind to a specific physical camera",
-            "lead": "Was the lens missing from the list, or did it fail to open after the app selected it? CameraX 1.7.0 gives developers a way to tell.",
-            "takeaway": "Record the advertised lens IDs and the binding result together to locate the failure.",
+            "href": "en/newsletters/2026-W48/index.html#article-camerax-1-7-0-release-camera2interop-v2-stabilized-and-direct-physical-camera-bi",
+            "headline": "CameraX 1.7.0 Release: Camera2Interop V2 Stabilized and Direct Physical Camera Binding",
+            "lead": "CameraX 1.7.0 has been officially released, and Camera2Interop V2 has transitioned to a stable state by default. Developers can now directly select and bind physical cameras from the higher-level app interface without additional opt-in.",
+            "takeaway": "Although not a direct HAL change, the higher-level framework now directly connects UseCase objects to physical streams under logical cameras. Prior checks are needed to ensure that vendor pipelines do not omit OutputConfiguration configurations per physical camera or fail to return metadata during physical lens switching.",
             "tags": [
               "Camera HAL"
             ],
             "image": {
               "src": "https://developer.android.com/static/images/social/android-developers.png",
-              "alt": "CameraX 1.7.0 release notes on Camera2Interop V2 and physical camera binding",
+              "alt": "CameraX 1.7.0 Release: Camera2Interop V2 Stabilization and Physical Camera Binding Support",
               "is_fallback": false
             }
           },
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
-            "href": "en/newsletters/2026-W48/index.html#article-when-a-3a-request-fails-immediately-check-the-camera-id",
-            "headline": "When a 3A request fails immediately, check the camera ID",
-            "lead": "CameraPipe now checks which modes a camera advertises before waiting for focus or exposure to change.",
-            "takeaway": "An unsupported request and an accepted request that is slow to converge leave different traces.",
+            "href": "en/newsletters/2026-W48/index.html#article-camera2-pipe-3a-control-change-unsupported-modes-return-submit-failed-immediatel",
+            "headline": "Camera2 Pipe 3A Control Change: Unsupported Modes Return SUBMIT_FAILED Immediately",
+            "lead": "If a camera app requests auto-exposure or focus modes not supported by the device, the request will immediately fail instead of lingering in an internal queue. The AndroidX Camera2 Pipe library has merged a validation branch that blocks unnecessary requests from reaching the lower stack.",
+            "takeaway": "Although not a contract change to the HAL or driver itself, the higher-level framework now strictly compares requested 3A capabilities against those declared in CameraMetadata. If supported modes are incorrectly declared in CameraCharacteristics, 3A control will immediately fail in higher-level apps, requiring validation of vendor tags and static metadata consistency.",
             "tags": [
               "Camera HAL"
             ],
             "image": {
-              "src": "assets/images/fallback/android.svg",
+              "src": "assets/images/fallback/newsletter-default.svg",
               "alt": "",
               "is_fallback": true
             }
           },
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4441195",
-            "href": "en/newsletters/2026-W48/index.html#article-why-the-second-lens-switch-stalled-on-the-samsung-sm-f971",
-            "headline": "Why the second lens switch stalled on the Samsung SM-F971",
-            "lead": "The same zoom sequence on the same phone completed in a regular session. With ZSL enabled, the last switch stalled.",
-            "takeaway": "Compare the first capture result after the same lens switch with ZSL enabled and disabled.",
+            "href": "en/newsletters/2026-W48/index.html#article-samsung-sm-f971-zsl-disabled-prevents-stalling-during-physical-lens-zoom-transit",
+            "headline": "Samsung SM-F971 ZSL Disabled: Prevents Stalling During Physical Lens Zoom Transitions",
+            "lead": "To prevent the screen from freezing when zooming on Samsung SM-F971 devices, the Zero Shutter Lag feature has been disabled. This is a workaround for an issue where vendor pipeline callbacks were interrupted during reprocessing sessions.",
+            "takeaway": "This is an example of a conflict between the reprocessing stream within the vendor HAL and the multi-camera SAT transition logic. Vendor HAL driver buffer management should be checked to ensure that the vendor HAL does not miss frame result callbacks or stall during flush when switching physical lenses in a reprocessing session.",
             "tags": [
               "Camera HAL"
             ],
             "image": {
-              "src": "assets/images/fallback/android.svg",
+              "src": "assets/images/fallback/newsletter-default.svg",
               "alt": "",
               "is_fallback": true
             }
           },
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4440995",
-            "href": "en/newsletters/2026-W48/index.html#article-why-camerax-hides-two-physical-cameras-on-the-oppo-find-n3-flip",
-            "headline": "Why CameraX hides two physical cameras on the OPPO Find N3 Flip",
-            "lead": "On the PHT110, physical IDs 2 and 3 appeared in the list. Targeting either one could bring down the camera service.",
-            "takeaway": "Match the app’s disconnect with the configured physical ID and the last HAL flush record.",
+            "href": "en/newsletters/2026-W48/index.html#article-oppo-find-n3-flip-physical-camera-exclusion-resolves-stalling-when-targeting-spe",
+            "headline": "Oppo Find N3 Flip Physical Camera Exclusion: Resolves Stalling When Targeting Specific Lenses",
+            "lead": "A problem where the camera service would forcibly terminate on Oppo Find N3 Flip devices when directly specifying a particular physical camera to open a stream has been resolved. A patch has been merged at the library level to exclude these physical lens IDs from the exposure list.",
+            "takeaway": "This demonstrates that the vendor HAL's streaming node and session flush logic can deadlock when configuring specific physical sensor streams under a logical camera. Vendor HAL development teams should carefully review the session termination sequence and watchdog timeout points when branching physical streams.",
             "tags": [
               "Camera HAL"
             ],
@@ -175,10 +175,10 @@
           },
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407",
-            "href": "en/newsletters/2026-W48/index.html#article-when-does-the-first-video-frame-arrive-camerax-changes-when-encoder-input-opens",
-            "headline": "When does the first video frame arrive? CameraX changes when encoder input opens",
-            "lead": "The camera can deliver frames before recording starts. A CameraX patch merged on November 20 changes what the video encoder does with those early frames.",
-            "takeaway": "Log the first output’s PTS separately from its callback arrival time to distinguish a queued frame from delayed delivery.",
+            "href": "en/newsletters/2026-W48/index.html#article-preventing-frame-collisions-before-video-recording-suspending-encoder-input-surf",
+            "headline": "Preventing Frame Collisions Before Video Recording: Suspending Encoder Input Surface",
+            "lead": "If camera buffers are delivered to the encoder just before the record button is pressed, errors can occur at the start of video. The AndroidX Video library has changed its behavior to safely discard incoming frames before the encoder starts.",
+            "takeaway": "Although not an interface change to the Camera HAL itself, this is a significant synchronization improvement for the downstream path where camera frame buffers are delivered to the video encoder via a Surface. It is useful for understanding the impact of drop behavior before codec start when the camera pipeline pushes frames to the encoder surface.",
             "tags": [
               "Android"
             ],
