@@ -84,7 +84,7 @@
     },
     {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
-      "title": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
+      "title": "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환",
       "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
       "newsletter_date": "2026-11-23",
       "newsletter_url": "newsletters/2026-W48/index.html",

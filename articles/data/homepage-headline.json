@@ -3,8 +3,8 @@
   "updated_at": "2026-11-23T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
-    "title": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요",
-    "summary": "CameraPipe가 지원 모드를 먼저 확인합니다. 초점이나 노출이 움직이기를 기다릴 필요도 없이 요청이 끝나는 경우가 생겼습니다.",
+    "title": "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환",
+    "summary": "카메라 앱이 기기에서 지원하지 않는 자동 노출이나 초점 모드를 요청하면 내부 큐에 머물지 않고 즉시 실패를 반환합니다. AndroidX Camera2 Pipe 라이브러리는 하위 스택에 불필요한 요청이 도달하기 전에 차단하는 검증 분기를 병합했습니다.",
     "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4439488",
     "newsletter_date": "2026-11-23",
     "newsletter_url": "newsletters/2026-W48/index.html",
@@ -40,9 +40,9 @@
       "category": "direct_aosp_camera",
       "source_name": "AndroidX Gerrit Camera"
     },
-    "newsletter_article_url": "newsletters/2026-W48/index.html#article-3a-id",
-    "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요 image"
+    "newsletter_article_url": "newsletters/2026-W48/index.html#article-camera2-pipe-3a-submit-failed",
+    "image_url": "assets/images/fallback/newsletter-default.svg",
+    "image_alt": "Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환 image"
   },
   "headline_history": [
     {

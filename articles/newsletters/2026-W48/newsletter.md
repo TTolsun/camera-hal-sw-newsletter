@@ -8,54 +8,58 @@
 
 ## 1. 이번 주 핵심
 
-CameraX 1.7.0에서는 앱이 물리 카메라를 직접 고릅니다. OPPO Find N3 Flip에서는 출력 대상으로 지정하면 카메라 서비스가 멈출 수 있는 물리 ID 두 개를 목록에서 뺐습니다. SM-F971에서 줌 전환이 멈춘 사례와 3A 요청을 곧바로 거절하는 CameraPipe 변경도 살펴봅니다. 녹화 첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.
+이번 주 뉴스레터에서는 CameraX 1.7.0 릴리스와 Camera2 Pipe 3A 제어 변경 등 상위 프레임워크의 중요한 업데이트를 다룹니다. 특히 CameraX 1.7.0은 Camera2Interop V2를 안정화하여 물리 카메라 직접 바인딩을 지원합니다. 삼성 SM-F971 단말의 ZSL 비활성화와 오포 Find N3 Flip의 물리 카메라 노출 제외 사례는 특정 기기에서 발생하는 HAL 및 드라이버 수준의 문제를 보여줍니다. 또한, 비디오 녹화 시작 전 프레임 충돌 방지를 위한 인코더 입력 서피스 일시 중단 처리 소식도 함께 전해드립니다.
 
-- [CameraX 1.7.0에서 물리 카메라를 직접 고른다](#article-camerax-1-7-0)
+- [CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩](#article-camerax-1-7-0-camera2interop-v2)
 
-  렌즈 목록과 바인딩 결과를 함께 남기면 실패 지점을 좁힐 수 있습니다.
+  HAL 직접 변경은 아니지만, 상위 프레임워크가 논리 카메라 하위의 물리 스트림에 UseCase를 직접 연결하기 시작합니다. 벤더 파이프라인에서 물리 카메라별 OutputConfiguration 구성과 메타데이터 반환 누락이 없는지 사전 점검이 필요합니다.
 
-- [3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요](#article-3a-id)
+- [Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환](#article-camera2-pipe-3a-submit-failed)
 
-  지원 목록에서 거절된 요청과 카메라가 받은 뒤 수렴이 늦어진 요청은 조사할 로그가 다릅니다.
+  HAL이나 드라이버 자체의 계약 변경은 아니지만, 상위 프레임워크가 CameraMetadata에 선언된 3A capabilities를 엄격히 대조하기 시작합니다. CameraCharacteristics에 지원 모드를 잘못 선언하면 상위 앱에서 3A 제어가 즉시 실패하므로 벤더 태그 및 정적 메타데이터 정합성을 검증해야 합니다.
 
-- [SM-F971에서 두 번째 렌즈 전환이 멈춘 이유](#article-sm-f971)
+- [삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지](#article-sm-f971-zsl)
 
-  ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과가 돌아오는지 비교할 수 있습니다.
+  벤더 HAL 내부의 재처리 스트림과 멀티 카메라 SAT 전환 로직 간 충돌 사례입니다. 재처리 세션에서 물리 렌즈 전환 시 벤더 HAL이 프레임 결과 콜백을 누락하거나 플러시 중 멈추지 않도록 HAL 드라이버 버퍼 관리를 점검해야 합니다.
 
-- [OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭](#article-oppo-find-n3-flip)
+- [오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결](#article-find-n3-flip)
 
-  앱의 연결 해제 로그를 출력 구성의 물리 ID와 HAL의 마지막 flush 기록에 맞춰 보세요.
+  논리 카메라 하위의 특정 물리 센서 스트림을 구성할 때 벤더 HAL의 스트리밍 노드 및 세션 플러시 로직이 교착 상태에 빠질 수 있음을 보여줍니다. 벤더 HAL 개발팀은 물리 스트림 분기 시 세션 종료 시퀀스와 워치독 타임아웃 발생 지점을 정밀 검토해야 합니다.
 
-- [녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점](#article-camerax)
+- [비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리](#article-vwb7ok)
 
-  첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.
-
-
+  Camera HAL 자체의 인터페이스 변경은 아니지만, 카메라 프레임 버퍼가 Surface를 통해 비디오 인코더로 전달되는 다운스트림 경로의 중요한 동기화 개선입니다. 카메라 파이프라인에서 인코더 서피스로 프레임을 밀어 넣을 때 코덱 시작 전 드롭 동작이 미치는 영향을 이해하는 데 유용합니다.
 
 
-<a id="article-camerax-1-7-0"></a>
 
-## 2. CameraX 1.7.0에서 물리 카메라를 직접 고른다
+
+<a id="article-camerax-1-7-0-camera2interop-v2"></a>
+
+## 2. CameraX 1.7.0 릴리스: Camera2Interop V2 안정화와 물리 카메라 직접 바인딩
 
 _Android Developers Latest Updates_
 
-원하는 렌즈가 목록에 없었을까, 골랐는데 열리지 않았을까? CameraX 1.7.0에서는 두 경우를 나눠 볼 수 있습니다.
+CameraX 1.7.0이 정식 출시되며 Camera2Interop V2가 기본 안정화 단계로 전환되었습니다. 이제 개발자는 추가 옵트인 없이 상위 앱 인터페이스에서 물리 카메라를 직접 선택하고 바인딩할 수 있습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-렌즈 목록과 바인딩 결과를 함께 남기면 실패 지점을 좁힐 수 있습니다.
+HAL 직접 변경은 아니지만, 상위 프레임워크가 논리 카메라 하위의 물리 스트림에 UseCase를 직접 연결하기 시작합니다. 벤더 파이프라인에서 물리 카메라별 OutputConfiguration 구성과 메타데이터 반환 누락이 없는지 사전 점검이 필요합니다.
 
 
-![CameraX 1.7.0 정식 릴리스: Camera2Interop V2 안정화 및 물리 카메라 직접 바인딩 지원](https://developer.android.com/static/images/social/android-developers.png)
+![CameraX 1.7.0 릴리스: Camera2Interop V2 안정화 및 물리 카메라 바인딩 지원](https://developer.android.com/static/images/social/android-developers.png)
 
 _이미지: [CameraX Release Notes - CameraX 1.7.0](https://developer.android.com/jetpack/androidx/releases/camera#1.7.0)_
 
 
-11월 18일 출시된 CameraX 1.7.0에서는 CameraInfo.getPhysicalCameraInfos()가 돌려준 물리 카메라 정보에서 CameraSelector를 얻습니다. 앱은 그 선택자로 원하는 카메라에 촬영 유스케이스를 바인딩할 수 있습니다.
+구글이 2026년 11월 18일 배포한 CameraX 1.7.0 릴리스는 상위 프레임워크와 하위 Camera2 사이의 상호 운용성을 크게 손질했습니다. 이번 판에서는 이전 실험 단계에 머물렀던 Camera2Interop V2가 안정화되어 별도 opt-in 없이 기본 제공됩니다.
 
-Camera2Interop V2도 이번 버전에서 안정화됐습니다. 별도 opt-in 없이 쓸 수 있고, 초점·측광 요청을 만들 때는 FocusMeteringAction.Builder.setLockingMode()로 노출과 화이트밸런스 잠금을 지정할 수 있습니다.
+재설계된 인터페이스는 ImageWrapper와 non-nullable ByteBuffer를 갖는 ImagePlane을 도입했습니다. ImageProxy와 ImageProxy.PlaneProxy가 이 래퍼 규격을 구현하며, FakeImage나 FakeCameraCharacteristics 같은 테스트용 객체도 함께 제공됩니다.
 
-렌즈 선택 기능을 옮기는 팀이라면 바인딩 성공 여부만 남기기 아깝습니다. 단말이 열거한 물리 ID와 앱이 바인딩을 요청한 ID를 함께 기록해 두면, 렌즈가 처음부터 빠져 있었는지 촬영을 시작하면서 문제가 생겼는지 구별하기 쉽습니다.
+멀티 카메라 제어 경로에도 큰 변화가 적용되었습니다. 개발자는 CameraInfo.getPhysicalCameraInfos 호출로 물리 카메라 전용 CameraSelector를 얻고, 개별 UseCase를 특정 물리 센서에 직접 바인딩할 수 있습니다. 해당 Selector로 getCameraInfo를 조회하면 논리 카메라 대신 실제 물리 카메라 정보가 반환됩니다.
+
+3A 제어 측면에서는 FocusMeteringAction에 잠금 모드가 추가되었습니다. FLAG_AE와 FLAG_AWB를 잠그거나 연속 자동 초점 모드를 유지한 채 측정 영역만 갱신하는 FLAG_AF 동작을 구분해 지정할 수 있습니다. 또한 저조도 환경을 판별하는 NightModeIndicator와 토치 및 저조도 부스트 간 충돌 방지 로직도 공식 포함되었습니다.
+
+이 변경은 Jetpack CameraX 라이브러리의 프레임워크 계층 동작입니다. 하위 Camera HAL3 인터페이스 규격 자체가 바뀐 것은 아니지만, 앱이 요청하는 물리 스트림 분기나 3A 메타데이터 조합이 실제 벤더 HAL로 직결되므로 상호 작용을 주의 깊게 살펴야 합니다.
 
 [이번 주 핵심으로](#issue-briefing)
 
@@ -65,27 +69,33 @@ Camera2Interop V2도 이번 버전에서 안정화됐습니다. 별도 opt-in �
 
 ---
 
-<a id="article-3a-id"></a>
+<a id="article-camera2-pipe-3a-submit-failed"></a>
 
-## 3. 3A 요청이 곧바로 실패하면 카메라 ID부터 확인하세요
+## 3. Camera2 Pipe 3A 제어 변경: 지원되지 않는 모드는 요청 즉시 SUBMIT_FAILED 반환
 
 _AndroidX Gerrit Camera_
 
-CameraPipe가 지원 모드를 먼저 확인합니다. 초점이나 노출이 움직이기를 기다릴 필요도 없이 요청이 끝나는 경우가 생겼습니다.
+카메라 앱이 기기에서 지원하지 않는 자동 노출이나 초점 모드를 요청하면 내부 큐에 머물지 않고 즉시 실패를 반환합니다. AndroidX Camera2 Pipe 라이브러리는 하위 스택에 불필요한 요청이 도달하기 전에 차단하는 검증 분기를 병합했습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-지원 목록에서 거절된 요청과 카메라가 받은 뒤 수렴이 늦어진 요청은 조사할 로그가 다릅니다.
+HAL이나 드라이버 자체의 계약 변경은 아니지만, 상위 프레임워크가 CameraMetadata에 선언된 3A capabilities를 엄격히 대조하기 시작합니다. CameraCharacteristics에 지원 모드를 잘못 선언하면 상위 앱에서 3A 제어가 즉시 실패하므로 벤더 태그 및 정적 메타데이터 정합성을 검증해야 합니다.
 
 
-![](../../assets/images/fallback/android.svg)
+![](../../assets/images/fallback/newsletter-default.svg)
 
 
-11월 19일 병합된 변경에서 Controller3A는 노출(AE), 초점(AF), 화이트밸런스(AWB), 제어 모드와 플래시 모드를 해당 카메라의 CameraMetadata와 대조합니다. 3A 상태를 갱신하거나 요청을 제출하거나 잠글 때 이 검사를 거칩니다.
+카메라 앱이 벤더 하드웨어가 지원하지 않는 3A 모드를 요청하면 파이프라인 내부에서 지연이나 예측 불가능한 거동이 발생할 수 있습니다. 2026년 11월 19일 AndroidX androidx-main 브랜치에 병합된 변경(Change 4439488)은 이러한 잘못된 요청을 진입 단계에서 걸러냅니다.
 
-요청한 값이 지원 목록에 없으면 경고를 남기고 즉시 SUBMIT_FAILED를 반환합니다. 직전의 3A 상태는 그대로입니다. 이 변경이 실린 CameraX 배포 버전이나 단말 빌드는 원문에서 확인되지 않습니다.
+수정 전에는 지원되지 않는 모드가 들어와도 반복 요청 큐나 하위 프레임워크로 전달될 위험이 있었습니다. 이번 패치는 Controller3A의 lock3A, submit3A, update3A 메서드 시작부에 areModesSupported 검사를 추가했습니다. 요청된 AE, AF, AWB, Flash, Control 모드가 CameraMetadata의 지원 목록에 없으면 즉시 SUBMIT_FAILED 결과를 반환합니다.
 
-이 패치가 들어간 빌드에서 잠금이 실패하면 경고에 찍힌 카메라 ID와 요청값을 먼저 맞춰 보세요. 반대로 요청은 받아들여졌는데 잠금이 늦다면, 그때는 이어지는 캡처 결과에서 3A 상태가 어떻게 움직였는지 볼 차례입니다.
+이때 기존의 3A 상태는 변경되지 않고 그대로 유지됩니다. 또한 검사 함수는 미지원 항목마다 경고 로그를 남겨 디버깅 시 어떤 모드가 기기 스펙과 어긋났는지 바로 확인할 수 있게 했습니다.
+
+### 현장 진단과 확인 방법
+
+만약 특정 기기에서 3A 잠금이나 파라미터 갱신이 실패한다면 먼저 logcat에서 Log.TAG로 필터링해 경고 메시지를 확인하는 것이 좋습니다. Unsupported aeMode 또는 Unsupported afMode 로그가 찍힌다면 앱이 CameraCharacteristics의 지원 목록을 벗어난 요청을 보낸 것입니다.
+
+이 변경은 현재 AndroidX 소스 트리에 병합된 상태입니다. 실제 라이브러리 공식 릴리스 아티팩트 배포나 개별 제품 단말 빌드 탑재는 별도 배포 과정을 거쳐야 확인할 수 있습니다.
 
 [이번 주 핵심으로](#issue-briefing)
 
@@ -95,27 +105,33 @@ CameraPipe가 지원 모드를 먼저 확인합니다. 초점이나 노출이 �
 
 ---
 
-<a id="article-sm-f971"></a>
+<a id="article-sm-f971-zsl"></a>
 
-## 4. SM-F971에서 두 번째 렌즈 전환이 멈춘 이유
+## 4. 삼성 SM-F971 ZSL 비활성화: 물리 렌즈 줌 전환 중 멈춤 방지
 
 _AndroidX Gerrit Camera_
 
-같은 단말에서 같은 순서로 줌을 바꿨는데, 일반 촬영은 끝까지 됐고 ZSL 촬영은 마지막 전환에서 멈췄습니다.
+삼성 SM-F971 단말에서 카메라 줌을 넘나들 때 화면이 멈추는 현상을 막기 위해 제로 셔터 랙 기능이 비활성화되었습니다. 재처리 세션에서 벤더 파이프라인 콜백이 끊기던 문제를 우회 조치한 것입니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과가 돌아오는지 비교할 수 있습니다.
+벤더 HAL 내부의 재처리 스트림과 멀티 카메라 SAT 전환 로직 간 충돌 사례입니다. 재처리 세션에서 물리 렌즈 전환 시 벤더 HAL이 프레임 결과 콜백을 누락하거나 플러시 중 멈추지 않도록 HAL 드라이버 버퍼 관리를 점검해야 합니다.
 
 
-![](../../assets/images/fallback/android.svg)
+![](../../assets/images/fallback/newsletter-default.svg)
 
 
-원문에서 문제를 재현한 단말은 Samsung SM-F971U1입니다. PRIVATE 재처리 기반 ZSL(제로 셔터 랙)을 켜고 줌을 2.0배에서 0.6배로, 다시 2.0배로 바꾸자 마지막 전환 뒤 새 반복 요청의 TotalCaptureResult가 오지 않았습니다. 그 뒤 setZoomRatio()가 시간 초과됐습니다.
+여러 물리 렌즈를 전환하며 사진을 찍을 때 재처리 버퍼 관리가 어긋나면 파이프라인 전체가 정지될 수 있습니다. 2026년 11월 17일 병합된 AndroidX 변경(Change 4441195)은 삼성 SM-F971U1 단말에서 발견된 줌 전환 멈춤 현상을 다룹니다.
 
-일반 촬영 세션에서는 같은 줌 전환과 사진 촬영이 모두 끝났습니다. 11월 17일 병합된 패치는 모델명이 SM-F971로 시작하는 단말에서 ZSL을 끄고 일반 촬영을 사용합니다. 어느 CameraX 릴리스부터 받을 수 있는지, 실제 판매 단말에 적용됐는지는 아직 확인할 수 없습니다.
+해당 단말은 PRIVATE 재처리 ZSL 세션으로 구성된 상태에서 물리 렌즈 간 줌 비율을 전환하면 CamX SAT 파이프라인이 정지했습니다. 예컨대 0.6배 광각에서 2.0배 망원으로 넘어갈 때 새로운 반복 요청에 대한 TotalCaptureResult가 전달되지 않아 setZoomRatio 비동기 작업이 타임아웃되었습니다.
 
-비슷한 로그를 만났다면 마지막 타임아웃보다 한 줄 앞을 보는 게 좋습니다. 렌즈 전환 순서를 고정한 상태에서 ZSL만 바꿔 각 줌 요청과 그 뒤 첫 캡처 결과를 짝지으면, 어느 전환부터 결과가 끊겼는지 드러납니다.
+원문 커밋에 따르면 일반 비-ZSL 세션에서는 모든 줌 전환과 촬영이 지연 없이 정상 동작했습니다. 이에 따라 개발팀은 ZslDisablerQuirk의 대상 목록에 SM-F971 모델 접두사를 추가했습니다. 이제 해당 단말의 ImageCapture는 ZSL 대신 표준 스틸 캡처 방식으로 전환됩니다.
+
+### 현장 진단과 반영 한계
+
+특정 단말에서 줌 조절 시 화면 갱신이 멈추고 타임아웃이 발생한다면 기존 로그에서 TotalCaptureResult 전달 여부와 ZSL 활성화 상태를 확인해 원인을 가를 수 있습니다. 일반 캡처 모드로 강제했을 때 정지가 사라진다면 ZSL 재처리 파이프라인 충돌일 가능성이 높습니다. 우회 조치 적용 여부는 CameraInfo.isZslSupported 반환값이 false인지 조회하여 확인할 수 있습니다.
+
+이 패치는 AndroidX Gerrit에 병합된 소스 코드 수정입니다. 라이브러리 정식 릴리스 및 실제 기기 상용 펌웨어 빌드 반영 여부는 별도로 확인해야 합니다.
 
 [이번 주 핵심으로](#issue-briefing)
 
@@ -125,27 +141,33 @@ ZSL을 켠 세션과 끈 세션에서 같은 렌즈 전환 뒤 첫 캡처 결과
 
 ---
 
-<a id="article-oppo-find-n3-flip"></a>
+<a id="article-find-n3-flip"></a>
 
-## 5. OPPO Find N3 Flip에서 물리 카메라 두 개가 목록에서 빠진 까닭
+## 5. 오포 Find N3 Flip 물리 카메라 노출 제외: 특정 렌즈 타깃 시 멈춤 해결
 
 _AndroidX Gerrit Camera_
 
-PHT110에서 후면 물리 ID 2와 3은 목록에 있었지만, 출력 대상으로 지정하면 카메라 서비스까지 멈출 수 있었습니다.
+오포 Find N3 Flip 단말에서 특정 물리 카메라를 직접 지정해 스트림을 열면 카메라 서비스가 강제 종료되던 문제가 해결되었습니다. 라이브러리 차원에서 해당 물리 렌즈 ID를 노출 목록에서 제외하는 패치가 병합되었습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-앱의 연결 해제 로그를 출력 구성의 물리 ID와 HAL의 마지막 flush 기록에 맞춰 보세요.
+논리 카메라 하위의 특정 물리 센서 스트림을 구성할 때 벤더 HAL의 스트리밍 노드 및 세션 플러시 로직이 교착 상태에 빠질 수 있음을 보여줍니다. 벤더 HAL 개발팀은 물리 스트림 분기 시 세션 종료 시퀀스와 워치독 타임아웃 발생 지점을 정밀 검토해야 합니다.
 
 
 ![](../../assets/images/fallback/android.svg)
 
 
-후면 논리 카메라 0에 속한 물리 ID 2 또는 3을 출력 대상으로 지정하자 vendor HAL의 P2StreamingNode에서 캡처가 멈췄습니다. 이어 세션을 정리하는 BasicSession::flush도 끝나지 않았습니다.
+멀티 카메라 기기에서 앱이 특정 보조 렌즈로 직접 스트림을 구성할 때 벤더 드라이버가 예상치 못한 교착 상태에 빠지는 사례가 있습니다. 2026년 11월 17일 병합된 AndroidX 변경(Change 4440995)은 오포 Find N3 Flip 단말의 안정성을 확보하기 위한 조치입니다.
 
-watchdog이 카메라 서비스를 종료한 뒤 앱이 받은 오류는 ERROR_CAMERA_DEVICE와 CAMERA_DISCONNECTED였습니다. 11월 17일 병합된 CameraX 패치는 PHT110에서 getPhysicalCameraInfos()가 두 ID를 반환하지 않도록 바꿨습니다. 확인된 범위는 androidx-main 병합까지입니다. 배포된 CameraX 버전과 제품 빌드에 들어갔는지는 별도 확인이 필요합니다.
+미디어텍 mt6985 플랫폼을 사용하는 오포 PHT110 모델에서는 후면 논리 카메라(ID 0) 하위의 물리 카메라 ID 2번 또는 3번을 OutputConfiguration의 타깃으로 지정할 경우 문제가 생겼습니다. 벤더 HAL 내부의 P2StreamingNode 프레임 캡처 및 BasicSession 플러시 정리 단계에서 정지가 발생했습니다. 이로 인해 camerahalserver와 cameraserver 워치독이 동작하며 카메라 연결이 강제로 끊어지는 치명적 장애로 이어졌습니다.
 
-기존 장애를 조사할 때는 연결이 끊긴 시각에서 거꾸로 따라가 보세요. 출력 구성에 들어간 물리 ID와 캡처가 멎은 시점, 마지막 flush 기록을 맞춰 보면 앱의 오류가 어디서 시작됐는지 좁힐 수 있습니다. 수정 빌드에서 가장 먼저 확인할 것은 두 ID가 렌즈 목록에서 빠졌는지입니다.
+개발팀은 ExcludePhysicalCameraIdQuirk의 문제 모델 목록에 PHT110과 제외 대상 ID인 2번, 3번을 추가했습니다. 패치 적용 후 CameraInfo.getPhysicalCameraInfos를 호출하면 해당 물리 카메라 정보가 목록에서 완전히 숨겨집니다.
+
+### 현장 진단과 확인 방법
+
+단말에서 물리 카메라 스트림을 열 때 ERROR_CAMERA_DEVICE나 CAMERA_DISCONNECTED가 발생한다면 로그캣에서 camerahalserver 워치독 로그와 BasicSession 플러시 타임아웃 기록을 대조해 원인을 확인할 수 있습니다. 우회 조치가 정상 적용되었는지는 CameraInfo.getPhysicalCameraInfos의 반환 목록에 물리 ID 2와 3이 빠져 있는지 확인하면 됩니다.
+
+이 수정은 AndroidX Gerrit에 머지된 소스 코드 상태입니다. 기기 제조사의 공식 시스템 업데이트나 앱의 Jetpack 라이브러리 릴리스 빌드 반영 여부는 별도로 확인해야 합니다.
 
 [이번 주 핵심으로](#issue-briefing)
 
@@ -155,33 +177,35 @@ watchdog이 카메라 서비스를 종료한 뒤 앱이 받은 오류는 ERROR_C
 
 ---
 
-<a id="article-camerax"></a>
+<a id="article-vwb7ok"></a>
 
-## 6. 녹화 첫 프레임은 언제 들어왔을까? CameraX가 인코더 입력을 여는 시점
+## 6. 비디오 녹화 시작 전 프레임 충돌 방지: 인코더 입력 서피스 일시 중단 처리
 
 _AndroidX Gerrit Camera_
 
-녹화 버튼을 누르기 전에도 카메라는 프레임을 보냅니다. 11월 20일 병합된 CameraX 패치는 이때 들어온 프레임을 비디오 인코더가 어떻게 처리할지 바꿨습니다.
+녹화 버튼을 누르기 직전 카메라 버퍼가 인코더에 먼저 전달되면 비디오 시작 시점에 오류가 생길 수 있습니다. AndroidX Video 라이브러리는 인코더 시작 전 들어오는 프레임을 안전하게 버리도록 동작을 바꿨습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-첫 프레임의 PTS와 첫 출력 콜백을 받은 시각을 따로 남겨야 대기 중이던 프레임과 출력 전달 지연을 구별할 수 있습니다.
+Camera HAL 자체의 인터페이스 변경은 아니지만, 카메라 프레임 버퍼가 Surface를 통해 비디오 인코더로 전달되는 다운스트림 경로의 중요한 동기화 개선입니다. 카메라 파이프라인에서 인코더 서피스로 프레임을 밀어 넣을 때 코덱 시작 전 드롭 동작이 미치는 영향을 이해하는 데 유용합니다.
 
 
 ![](../../assets/images/fallback/android.svg)
 
 
-### 패치에서 확인된 동작
+카메라 미리보기와 녹화 파이프라인이 동시에 구동될 때 인코더 시작과 프레임 전송 타이밍이 어긋나면 코덱 초기화 단계에서 문제가 생깁니다. 2026년 11월 20일 병합된 AndroidX 변경(Change 4400407)은 이 동기화 결함을 바로잡았습니다.
 
-EncoderImpl은 녹화를 시작하기 전에 MediaCodec을 구성하고 지속 입력 서피스를 연결합니다. 중지 후 다음 녹화를 준비할 때도 마찬가지입니다. 기존에는 코덱이 CONFIGURED일 때 들어온 프레임을 GraphicBufferSource가 보관했습니다. 그러다 MediaCodec.start() 안에서 출력 버퍼 풀 초기화가 끝나기 전에 그 프레임을 제출할 수 있었습니다.
+기존 EncoderImpl은 MediaCodec을 미리 구성하고 영구 입력 서피스를 연결해 둔 상태로 대기했습니다. 그러나 상위 Recorder는 오디오 장치를 초기화하고 start를 호출하기 전에 비디오 스트림을 먼저 활성 상태로 표시했습니다. 그 결과 코덱이 아직 구성 상태일 때 카메라에서 렌더링된 프레임이 GraphicBufferSource에 누적되었습니다.
 
-패치가 적용된 API 29 이상에서는 구성할 때 KEY_CREATE_INPUT_SURFACE_SUSPENDED를 설정합니다. 구성 중 받은 프레임은 버리고 MediaCodec.start()가 반환한 직후 PARAMETER_KEY_SUSPEND로 입력을 재개합니다. 추가된 테스트는 시작 전에 프레임을 흘려보낸 다음 첫 인코딩 출력의 표시 시각(PTS)이 기록해 둔 기준 시각 이상인지, 첫 출력이 키프레임인지 검사합니다. 시작 지연이 몇 ms 줄었는지 보여주는 측정값은 원문에 없습니다. 원문이 확인해 주는 것은 androidx-main 병합까지입니다. 이 변경을 담은 CameraX 배포 버전이나 단말 빌드는 명시돼 있지 않습니다.
+이 프레임들은 MediaCodec.start 내부에서 즉시 제출되었고, CCodecBufferChannel이 출력 버퍼 풀 초기화를 미처 끝내기 전에 처리되면서 불안정한 상태를 초래했습니다.
 
-### 현장에서 해볼 진단
+해결을 위해 API 29 이상 환경에서 MediaFormat.KEY_CREATE_INPUT_SURFACE_SUSPENDED 플래그를 1로 지정했습니다. 코덱이 준비되는 동안 영구 입력 서피스는 들어오는 카메라 프레임을 자동으로 버립니다. 그리고 mMediaCodec.start 호출이 완료된 직후 일시 중단 상태를 해제하여 정상 인코딩을 시작합니다.
 
-첫 녹화와 중지 직후 재녹화를 따로 추적해 보세요. 카메라 프레임 도착, 코덱 시작 호출과 반환, 첫 출력 콜백을 차례로 기록합니다. 첫 출력에는 PTS와 키프레임 여부도 붙입니다. PTS는 어느 프레임이 나왔는지를, 콜백 수신 시각은 앱이 그 출력을 언제 받았는지를 알려줍니다. 센서 타임스탬프와 PTS를 대조하기 전에 시간 기준과 단위부터 맞춰야 합니다.
+### 현장 진단과 확인 방법
 
-첫 출력에 녹화 시작 전의 오래된 PTS가 붙었다면, 구성 중에 들어온 프레임이 남았을 가능성을 살펴볼 만합니다. 반대로 PTS는 예상 범위인데 콜백만 늦다면 코덱이 시작 호출 안에서 쓴 시간과 반환 후 첫 출력을 전달하기까지의 시간을 나눠 재보세요. 어느 쪽인지는 해당 단말의 로그로 판단해야 합니다.
+비디오 녹화 진입 직후 인코더 오류나 첫 프레임 충돌이 의심된다면 첫 번째 인코딩 결과물의 presentationTimeUs를 확인하는 방법이 유효합니다. 녹화 시작 시점보다 앞선 타임스탬프의 프레임이 인코더에 인입되지 않고 시작 시점 이후의 키 프레임부터 정상 생성되는지 살펴보면 됩니다.
+
+이 수정은 AndroidX Gerrit에 병합된 코드 변경입니다. 커밋에 언급된 연계 버그 내용은 직접 확인되지 않았으며, 실제 배포 라이브러리 탑재와 최종 단말 상용 빌드 반영 여부도 별도의 확인이 필요합니다.
 
 [이번 주 핵심으로](#issue-briefing)
 
@@ -189,13 +213,6 @@ EncoderImpl은 녹화를 시작하기 전에 MediaCodec을 구성하고 지속 �
 
 - [Suspend video encoder input surface until start - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4400407)
 
-
-## 참고 / 더 읽을거리
-
-- [Honor abort cancellation in still capture control - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4449679>) — AndroidX Gerrit Camera (2026-11-19) · AOSP Camera 프레임워크 관련 참고
-- [Extend Samsung Extensions close quirk to API 35+ - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4441276>) — AndroidX Gerrit Camera (2026-11-18) · AOSP Camera 프레임워크 관련 참고
-- [Use HLG10 camera stream for Dolby Vision on Xiaomi 17 Pro Max - platform/frameworks/support](<https://android-review.googlesource.com/c/platform/frameworks/support/+/4445746>) — AndroidX Gerrit Camera (2026-11-17) · AOSP Camera 프레임워크 관련 참고
-- [Claude Code v2.1.327](<https://github.com/anthropics/claude-code/releases/tag/v2.1.327>) — Claude Code Changelog (2026-11-17) · C++ / AI 네이티브 툴링 참고
 
 ## 참고자료
 
